@@ -4,6 +4,7 @@
     "src/renderer/src/env.d.ts",
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
+    "src/common/**/*.ts",
     "src/preload/*.d.ts"
   ],
   "compilerOptions": {
@@ -12,7 +13,10 @@
     "baseUrl": ".",
     "paths": {
       "@renderer/*": [
-        "src/renderer/src/*"
+        "src/renderer/src/*",
+      ],
+      "@common/*": [
+        "src/common/*",
       ]
     }
   }
