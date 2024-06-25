@@ -19,6 +19,10 @@ class AppModel {
     return AppModel.instance
   }
 
+  public needInitKey() {
+    return this.secret_key === null
+  }
+
   public showMsgErr(msg: string, duration: number = 3000) {
     this.mainWindow?.webContents.send('ShowMsgErr', msg, duration)
   }
