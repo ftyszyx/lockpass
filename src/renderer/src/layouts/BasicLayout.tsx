@@ -6,16 +6,19 @@ import MyHeader from '@renderer/components/admin_header'
 import MyBread from '@renderer/components/admin_bread'
 import { FloatButton } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { PagePath } from '@common/entitys/page.entity'
 
 function BasicLayout(props: ChildProps): JSX.Element {
   console.log('basiclayout render')
   useEffect(() => {
-    window.electron.ipcRenderer.on('bugly-session', (_, bugly_session) => {
-      console.log('get session', bugly_session)
+    console.log('useEffect')
+    window.electron.ipcRenderer.invoke(webToManMsg.needInitKey).then((res) => {
+      console.log('get res', res)
+      if (res === true) {
+        window.location.href = PagePath.initKey
+      }
     })
-    return () => {
-      window.electron.ipcRenderer.removeAllListeners('bugly-session')
-    }
   }, [])
   return (
     <Layout className="w-full min-h-screen" hasSider>

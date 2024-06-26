@@ -1,3 +1,5 @@
-export enum webToManMsg {}
+export enum webToManMsg {
+  needInitKey = 'needInitKey'
+}
 
 export enum MainToWebMsg {}

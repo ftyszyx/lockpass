@@ -1,4 +1,4 @@
-import { PagePath } from './page.entity'
+import { PagePath } from '@common/entitys/page.entity'
 
 export interface MyMenuType {
   id: number // ID,添加时可以没有id
