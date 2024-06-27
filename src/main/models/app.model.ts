@@ -1,6 +1,7 @@
 import { BrowserWindow, session } from 'electron'
 import path from 'path'
 import fs from 'fs'
+import { InitKeyInfo } from '../../common/entitys/app.entity'
 
 class AppModel {
   mainWindow: BrowserWindow | null = null
@@ -22,6 +23,8 @@ class AppModel {
   public needInitKey() {
     return this.secret_key === null
   }
+
+  public InitKey(keyinfo: InitKeyInfo) {}
 
   public showMsgErr(msg: string, duration: number = 3000) {
     this.mainWindow?.webContents.send('ShowMsgErr', msg, duration)

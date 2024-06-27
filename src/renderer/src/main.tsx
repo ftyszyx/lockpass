@@ -1,4 +1,5 @@
 import './assets/main.css'
+import '@renderer/assets/iconfont/iconfont.css'
 import './assets/tailwind_out.css'
 
 import React from 'react'

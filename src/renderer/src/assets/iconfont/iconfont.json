@@ -1,37 +1,23 @@
 {
-  "id": "4582429",
-  "name": "bugly_tool",
+  "id": "4601905",
+  "name": "lockpass",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
   "description": "",
   "glyphs": [
     {
-      "icon_id": "1222006",
-      "name": "set",
-      "font_class": "set",
-      "unicode": "e690",
-      "unicode_decimal": 59024
+      "icon_id": "6151097",
+      "name": "eye-fill",
+      "font_class": "eye-fill",
+      "unicode": "e7ab",
+      "unicode_decimal": 59307
     },
     {
-      "icon_id": "4503662",
-      "name": "crawler",
-      "font_class": "crawler",
-      "unicode": "e6c1",
-      "unicode_decimal": 59073
-    },
-    {
-      "icon_id": "6151301",
-      "name": "search",
-      "font_class": "search",
-      "unicode": "e82e",
-      "unicode_decimal": 59438
-    },
-    {
-      "icon_id": "33516",
-      "name": "home",
-      "font_class": "home",
-      "unicode": "e6b8",
-      "unicode_decimal": 59064
+      "icon_id": "8092166",
+      "name": "eyeclose-fill",
+      "font_class": "eyeclose-fill",
+      "unicode": "e8ff",
+      "unicode_decimal": 59647
     }
   ]
 }
