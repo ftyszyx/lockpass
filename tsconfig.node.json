@@ -3,6 +3,14 @@
   "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*","src/common/**/*"],
   "compilerOptions": {
     "composite": true,
-    "types": ["electron-vite/node"]
+    "target": "ES2022",
+    "emitDecoratorMetadata":true,
+    "experimentalDecorators": true,
+    "strictNullChecks": false,
+    "types": ["electron-vite/node"],
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["src/common/*"]
+    }
   }
 }
