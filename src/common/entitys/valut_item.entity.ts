@@ -1,4 +1,5 @@
 import { Column, Entity } from '@common/decorator/db.decorator'
+import { BaseEntity } from './db.entity'
 export enum PasswordType {
   Login = 0,
   Card = 1, //银行卡
@@ -6,7 +7,7 @@ export enum PasswordType {
 }
 
 @Entity({ name: 'valut_item' })
-export class VaultItem {
+export class VaultItem extends BaseEntity {
   @Column({ type: 'INTEGER', primary: true, unique: true })
   id: number
   @Column({ type: 'INTEGER' })
@@ -24,7 +25,7 @@ export class VaultItem {
   login_phone: string
   @Column({ type: 'VARCHAR' })
   login_email: string
-  @Column({ type: 'ARRAY' })
+  @Column({ type: 'VARCHAR[]' })
   login_url: string[]
 
   @Column({ type: 'VARCHAR' })

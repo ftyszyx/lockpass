@@ -1,6 +1,7 @@
-import { MyEncode } from '../libs/my_encode'
-import { MainViewHelper } from '../libs/view_help'
-import { Log } from '../libs/log'
+import { MyEncode } from '@main/libs/my_encode'
+import { MainViewHelper } from '@main/libs/view_help'
+import { Log } from '@main/libs/log'
+import DbHlper from '@main/libs/db_help'
 
 class AppModel {
   mainview: MainViewHelper | null = null
@@ -9,6 +10,7 @@ class AppModel {
     this.myencode = new MyEncode()
     Log.initialize()
     Log.info('AppModel init')
+    DbHlper.instance().initTables()
   }
 
   private static instance: AppModel

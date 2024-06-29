@@ -2,6 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import { InitKeyInfo } from '@common/entitys/app.entity'
 import { randomBytes, createHash } from 'crypto'
+import DbHlper from './db_help'
+import { User } from '@common/entitys/user.entity'
 export class MyEncode {
   secret_key: string | null = null
   constructor() {
@@ -30,11 +32,15 @@ export class MyEncode {
     this.secret_key = key
     //生成hash
     let pass_hash = this.getPassHash(keyinfo.password)
-
     //存数据库
+    const info = new User()
+    info.username = keyinfo.username
+    info.password = pass_hash
+    info.set = ''
+    DbHlper.instance().AddOne(info)
   }
 
   public getPassHash(password: string) {
-    return createHash('sha256').update(`${this.secret_key}-${password}`)
+    return createHash('sha256').update(`${this.secret_key}-${password}`).digest('base64')
   }
 }

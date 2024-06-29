@@ -12,17 +12,13 @@ export default function InitSystem() {
     <div className=" bg-slate-100">
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
         <Form form={form} layout="vertical" onFinish={() => {}}>
-          <Form.Item label="你的账号名" required name="username" rules={[{ min: 6 }]}>
+          <Form.Item label="你的账号名" required name="username">
             <Input placeholder="请输入你的名字" />
           </Form.Item>
-          <Form.Item label="初始密码" name="password" rules={[{ required: true }, { min: 6 }]}>
+          <Form.Item label="初始密码" name="password" required>
             <Input.Password placeholder="请输入初始密码" size="large" />
           </Form.Item>
-          <Form.Item
-            label="再次输入初始密码"
-            name="password_repeat"
-            rules={[{ required: true }, { min: 6 }]}
-          >
+          <Form.Item label="再次输入初始密码" name="password_repeat" required>
             <Input.Password placeholder="请输入初始密码" size="large" />
           </Form.Item>
         </Form>

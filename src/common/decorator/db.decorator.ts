@@ -1,5 +1,6 @@
 import 'reflect-metadata'
-import { Table_Desc, Column_desc, Table_index_desc } from '@common/gloabl'
+import { Table_Desc, Column_desc, Table_index_desc, Column_Name } from '@common/gloabl'
+import { BaseEntity } from '@common/entitys/db.entity'
 export type ColumnType =
   | 'BIGINT' //   signed eight-byte integer
   | 'INT' //string of 1s and 0s
@@ -22,11 +23,8 @@ export type ColumnType =
   | 'UUID'
   | 'VARCHAR'
   //compose type
-  | 'ARRAY'
-  | 'LIST'
-  | 'MAP'
-  | 'STRUCT'
-  | 'UNION'
+  | 'INTEGER[]'
+  | 'VARCHAR[]'
 
 export interface ColumnOptions {
   type?: ColumnType
@@ -58,7 +56,7 @@ export function Column(options: ColumnOptions): PropertyDecorator {
       col_def += ' UNIQUE'
     }
     Reflect.defineMetadata(Column_desc, col_def, object, propertyName)
-    Reflect.defineMetadata('col_name', col_name, object, propertyName)
+    Reflect.defineMetadata(Column_Name, col_name, object, propertyName)
     for (let key in options) {
       Reflect.defineMetadata(key, options[key], object, propertyName)
     }
@@ -66,26 +64,9 @@ export function Column(options: ColumnOptions): PropertyDecorator {
 }
 
 export function Entity(options: TableOptions): ClassDecorator {
-  return function (target: any) {
+  return function (target) {
     if (!options) options = {} as TableOptions
     const table_name = options.name || target.name
-    let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (`
-    let index_desc = ''
-    for (let key in target) {
-      const col_def = Reflect.getMetadata(Column_desc, target, key)
-      if (col_def) {
-        table_desc += col_def + ','
-      }
-      const index_name = Reflect.getMetadata('index_name', target, key)
-      const col_name = Reflect.getMetadata('col_name', target, key)
-      if (index_name) {
-        const unique_index = Reflect.getMetadata('unique_index', target, key)
-        index_desc += `CREATE ${unique_index ? 'UNIQUE' : ''} INDEX ${index_name} ON ${table_name} (${col_name});\n`
-      }
-    }
-    table_desc += ');'
-    index_desc += ';'
-    Reflect.defineMetadata(Table_Desc, table_desc, target)
-    Reflect.defineMetadata(Table_index_desc, index_desc, target)
+    target.prototype.table_name = table_name
   }
 }
