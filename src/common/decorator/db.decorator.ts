@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Table_Desc, Column_desc, Table_index_desc, Column_Name } from '@common/gloabl'
+import { Table_Desc, Column_desc, Table_index_desc, Column_Name, Column_Type } from '@common/gloabl'
 import { BaseEntity } from '@common/entitys/db.entity'
 export type ColumnType =
   | 'BIGINT' //   signed eight-byte integer
@@ -45,18 +45,8 @@ export function Column(options: ColumnOptions): PropertyDecorator {
     if (!options) options = {} as ColumnOptions
     const col_name = options.name || propertyName.toString()
     const col_type = options.type || 'VARCHAR'
-    let col_def = `${col_name} ${col_type}`
-    if (options.primary) {
-      col_def += ' PRIMARY KEY'
-    }
-    if (options.default) {
-      col_def += ` DEFAULT ${options.default}`
-    }
-    if (options.unique) {
-      col_def += ' UNIQUE'
-    }
-    Reflect.defineMetadata(Column_desc, col_def, object, propertyName)
     Reflect.defineMetadata(Column_Name, col_name, object, propertyName)
+    Reflect.defineMetadata(Column_Type, col_type, object, propertyName)
     for (let key in options) {
       Reflect.defineMetadata(key, options[key], object, propertyName)
     }

@@ -1,3 +1,1 @@
-export class BaseEntity {
-  table_name: string
-}
+export class BaseEntity {}
