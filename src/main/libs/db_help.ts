@@ -43,14 +43,14 @@ class DbHlper {
         if (element == undefined || element == null) {
           sql_str += 'default'
         } else {
-          sql_str += element.toString()
+          sql_str += `'${element.toString()}'`
         }
         if (i < keys.length - 1) {
           sql_str += ','
         }
       }
     }
-    sql_str += ')'
+    sql_str += ');'
     Log.info('sql:', sql_str, JSON.stringify(obj))
     let conn = this.getconnection()
     conn.all(sql_str, (err, row) => {
