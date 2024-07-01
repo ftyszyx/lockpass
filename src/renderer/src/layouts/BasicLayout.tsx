@@ -1,7 +1,7 @@
 import { ChildProps } from '@renderer/entitys/other.entity'
 import Layout, { Content, Footer } from 'antd/es/layout/layout'
 import { useEffect } from 'react'
-import MyMenu from '@renderer/components/admin_menu'
+// import MyMenu from '@renderer/components/admin_menu'
 import MyHeader from '@renderer/components/admin_header'
 import MyBread from '@renderer/components/admin_bread'
 import { FloatButton } from 'antd'
@@ -22,7 +22,7 @@ function BasicLayout(props: ChildProps): JSX.Element {
   }, [])
   return (
     <Layout className="w-full min-h-screen" hasSider>
-      <MyMenu />
+      {/* <MyMenu /> */}
       <Layout>
         <MyHeader />
         <MyBread />

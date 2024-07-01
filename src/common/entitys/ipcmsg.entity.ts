@@ -3,4 +3,7 @@ export enum webToManMsg {
   initKey = 'initKey'
 }
 
-export enum MainToWebMsg {}
+export enum MainToWebMsg {
+  ShowErrorMsg = 'ShowError',
+  ShowInfoMsg = 'ShowInfoMsg'
+}

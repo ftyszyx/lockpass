@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initAllApi } from './api/index.api'
+import AppModel from './models/app.model'
 
 function createWindow(): void {
   // Create the browser window.
@@ -35,6 +36,7 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+  AppModel.getInstance().initMainView(mainWindow)
   initAllApi()
 }
 

@@ -2,6 +2,7 @@ import { MyEncode } from '@main/libs/my_encode'
 import { MainViewHelper } from '@main/libs/view_help'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
+import { BrowserWindow } from 'electron'
 
 class AppModel {
   mainview: MainViewHelper | null = null
@@ -21,8 +22,8 @@ class AppModel {
     return AppModel.instance
   }
 
-  public initMainView(mainview: MainViewHelper) {
-    this.mainview = new MainViewHelper(mainview.mainWindow)
+  public initMainView(mainview: BrowserWindow) {
+    this.mainview = new MainViewHelper(mainview)
   }
 }
 

@@ -19,9 +19,9 @@ export class VaultItem extends BaseEntity {
 
   @Column({ type: 'VARCHAR' })
   login_name: string
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', hide: true })
   login_password: string
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', hide: true })
   login_phone: string
   @Column({ type: 'VARCHAR' })
   login_email: string
@@ -30,15 +30,17 @@ export class VaultItem extends BaseEntity {
 
   @Column({ type: 'VARCHAR' })
   card_bank: string
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', hide: true })
   card_number: string
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', hide: true })
   card_phone: string
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', hide: true })
   card_code: string
   @Column({ type: 'VARCHAR' })
   card_date: string
 
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', hide: true })
   note_txt: string
+  @Column({ type: 'VARCHAR' })
+  desc: string
 }

@@ -7,7 +7,9 @@ export class FileLogWriter {
   constructor(
     private path: string,
     private writeAync: boolean = false
-  ) {}
+  ) {
+    console.log(`log path: ${path}`)
+  }
 
   private writeAyncNext() {
     const file = this
@@ -53,8 +55,12 @@ export class Log {
 
   static initialize() {
     const date = new Date()
-    let log_path =
-      os.homedir() + `/lockpass-${date.getFullYear()}-${date.getMonth()}-${date.getDay()}.log`
+    // let log_path = os.homedir() + `/lockpass-${date.getFullYear()}-${date.getMonth()}-${date.getDay()}.log`
+    let log_dir = `${__dirname}/log`
+    if (!fs.existsSync(log_dir)) {
+      fs.mkdirSync(log_dir)
+    }
+    let log_path = `${log_dir}/lockpass-${date.getFullYear()}-${date.getMonth()}-${date.getDay()}.log`
     Log.logWriter = new FileLogWriter(log_path, true)
   }
 

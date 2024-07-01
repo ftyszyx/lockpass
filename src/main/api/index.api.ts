@@ -6,7 +6,7 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.needInitKey, (_) => {
     return AppModel.getInstance().myencode?.needInitKey()
   })
-  ipcMain.handle(webToManMsg.initKey, (_, info: InitKeyInfo) => {
-    return AppModel.getInstance().myencode?.InitKey(info)
+  ipcMain.handle(webToManMsg.initKey, async (_, info: InitKeyInfo) => {
+    return await AppModel.getInstance().myencode?.InitSystem(info)
   })
 }
