@@ -79,6 +79,12 @@ class DbHlper {
     })
   }
 
+  public UpdateOne(obj: BaseEntity): Promise<void> {
+    return new Promise((resolve, reject) => {
+      resolve()
+    })
+  }
+
   public AddList(objs: BaseEntity[]): Promise<void> {
     const table_name = obj[Table_Name_KEY]
     let sql_str = 'BEGIN TRANSACTION;\n'
