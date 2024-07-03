@@ -1,44 +1,30 @@
 import 'reflect-metadata'
 import { Column_Name_KEY, Column_Type_KEY } from '@common/gloabl'
-// export type ColumnType =
-//   | 'BIGINT' //   signed eight-byte integer
-//   | 'INT' //string of 1s and 0s
-//   | 'BLOB' //variable-length binary data
-//   | 'BOOLEAN' //ogical boolean (true/false)
-//   | 'DATE' //calendar date (year, month day)
-//   | 'DOUBLE' //double precision floating-point number
-//   | 'INTEGER' //signed four-byte integer
-//   | 'HUGEINT' //signed sixteen-byte integer
-//   | 'REAL' //single precision floating-point number
-//   | 'SMALLINT' //signed two-byte integer
-//   | 'TIME' //time of day (no time zone)
-//   | 'TIMESTAMP WITH TIME ZONE' //
-//   | 'TIMESTAMP'
-//   | 'TINYINT'
-//   | 'UBIGINT'
-//   | 'UHUGEINT'
-//   | 'UINTEGER'
-//   | 'USMALLINT'
-//   | 'UUID'
-//   | 'VARCHAR'
-//   //compose type
-//   | 'INTEGER[]'
-//   | 'VARCHAR[]'
+export type ColumnType =
+  | 'BIGINT' //   signed eight-byte integer
+  | 'INT' //string of 1s and 0s
+  | 'BLOB' //variable-length binary data
+  | 'BOOLEAN' //ogical boolean (true/false)
+  | 'DATE' //calendar date (year, month day)
+  | 'DOUBLE' //double precision floating-point number
+  | 'INTEGER' //signed four-byte integer
+  | 'HUGEINT' //signed sixteen-byte integer
+  | 'REAL' //single precision floating-point number
+  | 'SMALLINT' //signed two-byte integer
+  | 'TIME' //time of day (no time zone)
+  | 'TIMESTAMP WITH TIME ZONE' //
+  | 'TIMESTAMP'
+  | 'TINYINT'
+  | 'UBIGINT'
+  | 'UHUGEINT'
+  | 'UINTEGER'
+  | 'USMALLINT'
+  | 'UUID'
+  | 'VARCHAR'
+  //compose type
+  | 'INTEGER[]'
+  | 'VARCHAR[]'
 
-export enum ColumnType {
-  BIGINT = 'BIGINT',
-  INT = 'INT',
-  BOOLEAN = 'BOOLEAN',
-  DATE = 'DATE',
-  DOUBLE = 'DOUBLE',
-  INTEGER = 'INTEGER',
-  HUGEINT = 'HUGEINT',
-  TIME = 'TIME',
-  TIMESTAMP = 'TIMESTAMP',
-  VARCHAR = 'VARCHAR',
-  INTEGER_ARRAY = 'INTEGER[]',
-  VARCHAR_ARRAY = 'VARCHAR[]'
-}
 export interface ColumnOptions {
   type?: ColumnType
   name?: string

@@ -4,8 +4,7 @@ import { Vault } from '@common/entitys/valuts.entity'
 import { Column_Name_KEY, Column_Type_KEY, Column_desc_KEY, Table_Name_KEY } from '@common/gloabl'
 import duckdb from 'duckdb'
 import { Log } from './log'
-import { BaseEntity } from '@common/entitys/db.entity'
-import { Column_type } from '@common/decorator/db.decorator'
+import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 class DbHlper {
   private static _instance: DbHlper
   public user: User
@@ -16,6 +15,7 @@ class DbHlper {
     this.vault = new Vault()
     this.vaultItem = new VaultItem()
   }
+
   public db: duckdb.Database | null = null
   static instance() {
     if (!DbHlper._instance) {
@@ -29,11 +29,11 @@ class DbHlper {
     return DbHlper._instance
   }
 
-  public getconnection() {
+  private getconnection() {
     return this.db?.connect()
   }
 
-  getColumnValue(obj: BaseEntity, key: string, value: any): string {
+  private getColumnValue(obj: BaseEntity, key: string, value: any): string {
     const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)
     if (col_type) {
       if (value == undefined || value == null) {
@@ -45,7 +45,7 @@ class DbHlper {
     return null
   }
 
-  getAddOneSql(obj: BaseEntity, keys: string[]): string {
+  private getAddOneSql(obj: BaseEntity, keys: string[]): string {
     let sql_str = '('
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
@@ -62,15 +62,29 @@ class DbHlper {
     return sql_str
   }
 
-  public DelOne(obj: BaseEntity, key: string, value: string): Promise<void> {
-    const table_name = obj[Table_Name_KEY]
-    const col_value = this.getColumnValue(obj, key, value)
-    let sql_str = `delete from ${table_name} where ${key}=${col_value}`
+  private getupdateOneSql(obj: BaseEntity, keys: string[]): string {
+    let sql_str = ''
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      const element = obj[key]
+      if (element == undefined || element == null) continue
+      const col_value = this.getColumnValue(obj, key, element)
+      if (col_value) {
+        sql_str += `${key}=${col_value}`
+        if (i < keys.length - 1) {
+          sql_str += ','
+        }
+      }
+    }
+    return sql_str
+  }
+
+  private _runSql(sql_str: string, ext_msg: string = ''): Promise<void> {
+    let conn = this.getconnection()
     return new Promise((resolve, reject) => {
-      let conn = this.getconnection()
-      conn.exec(sql_str, (err, row) => {
+      conn.all(sql_str, (err, row) => {
         if (err) {
-          Log.error('del one err:', err.message)
+          Log.error(`run sql:${ext_msg} err:`, err.message)
           reject(new Error(err.message))
         } else {
           resolve()
@@ -79,10 +93,65 @@ class DbHlper {
     })
   }
 
-  public UpdateOne(obj: BaseEntity): Promise<void> {
+  private _runSqlWithResult<T>(
+    obj: BaseEntity,
+    sql_str: string,
+    ext_msg: string = ''
+  ): Promise<T[]> {
+    return this._runSqlWithResult2(
+      obj.constructor as new (...args: any[]) => T,
+      obj,
+      sql_str,
+      ext_msg
+    )
+  }
+
+  private _runSqlWithResult2<T>(
+    obj_type: new (...args: any[]) => T,
+    obj: BaseEntity,
+    sql_str: string,
+    ext_msg: string = ''
+  ): Promise<T[]> {
+    let conn = this.getconnection()
+    const keys = Reflect.ownKeys(obj) as string[]
     return new Promise((resolve, reject) => {
-      resolve()
+      conn.all(sql_str, (err, rows) => {
+        if (err) {
+          Log.error(`run sql:${ext_msg} err:`, err.message)
+          reject(new Error(err.message))
+        } else {
+          let res: T[] = []
+          for (let i = 0; i < rows.length; i++) {
+            const item = new obj_type()
+            for (let j = 0; j < keys.length; j++) {
+              const key = keys[j]
+              const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
+              if (col_name) {
+                item[key] = rows[i][col_name]
+              }
+            }
+            res.push(item)
+          }
+          resolve(res)
+        }
+      })
     })
+  }
+
+  public DelOne(obj: BaseEntity, key: string, value: string | number): Promise<void> {
+    const table_name = obj[Table_Name_KEY]
+    const col_value = this.getColumnValue(obj, key, value)
+    let sql_str = `delete from ${table_name} where ${key}=${col_value}`
+    return this._runSql(sql_str, `del:${table_name}`)
+  }
+
+  public UpdateOne(obj: BaseEntity): Promise<void> {
+    const table_name = obj[Table_Name_KEY]
+    let sql_str = 'update ' + table_name + ' set '
+    const keys = Reflect.ownKeys(obj)
+    sql_str += this.getupdateOneSql(obj, keys as string[])
+    sql_str += ` where id=${obj.id}`
+    return this._runSql(sql_str, `update:${table_name}`)
   }
 
   public AddList(objs: BaseEntity[]): Promise<void> {
@@ -99,18 +168,7 @@ class DbHlper {
     }
     sql_str += ';\n'
     sql_str += 'COMMIT;'
-    // Log.info('sql:', sql_str, JSON.stringify(obj))
-    let conn = this.getconnection()
-    return new Promise((resolve, reject) => {
-      conn.all(sql_str, (err, row) => {
-        if (err) {
-          Log.error('add list err:', err.message)
-          reject(new Error(err.message))
-        } else {
-          resolve()
-        }
-      })
-    })
+    return this._runSql(sql_str)
   }
 
   public AddOne(obj: BaseEntity): Promise<void> {
@@ -119,25 +177,69 @@ class DbHlper {
     const keys = Reflect.ownKeys(obj)
     sql_str += this.getAddOneSql(obj, keys as string[])
     sql_str += ';'
-    // Log.info('sql:', sql_str, JSON.stringify(obj))
-    let conn = this.getconnection()
+    return this._runSql(sql_str)
+  }
+
+  private getWhreSql(obj: BaseEntity, where: WhereDef): string {
+    let sql_str = ''
+    Object.keys(where).every((val, indx, _) => {
+      const col_value = this.getColumnValue(obj, val, where[val])
+      if (col_value) {
+        sql_str += ` ${val}=${col_value}`
+        if (indx < Object.keys(where).length - 1) {
+          sql_str += where.andor
+        }
+      }
+      return true
+    })
+    return sql_str
+  }
+
+  public GetOne<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
+    const table_name = obj[Table_Name_KEY]
+    let sql_str = `select * from ${table_name} where ` //${key}=${col_value} limit 1`
+    sql_str += this.getWhreSql(obj, where)
+    return this._runSqlWithResult(obj, sql_str, `get:${table_name}`)
+  }
+
+  public GetAll<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
+    const table_name = obj[Table_Name_KEY]
+    let sql_str = `select * from ${table_name} `
+    if (where) sql_str += this.getWhreSql(obj, where)
+    return this._runSqlWithResult(obj, sql_str, `get:${table_name}`)
+  }
+
+  public GetTotalCount(obj: BaseEntity, where: WhereDef): Promise<number> {
+    const table_name = obj[Table_Name_KEY]
+    let keystr = 'count(*)'
+    let sql_str = `select ${keystr} from ${table_name} where `
+    sql_str += this.getWhreSql(obj, where)
     return new Promise((resolve, reject) => {
-      conn.all(sql_str, (err, row) => {
+      let conn = this.getconnection()
+      conn.all(sql_str, (err, rows) => {
         if (err) {
-          Log.error('add one err:', err.message)
           reject(new Error(err.message))
         } else {
-          if (row.length !== 1) {
-            reject(new Error('add one error'))
-          } else {
-            resolve()
-          }
+          resolve(rows[0][keystr])
         }
       })
     })
   }
 
-  public initTables() {
+  public async SearchAll<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
+    const total_num = await this.GetTotalCount(obj, where)
+    if (total_num == 0) return []
+    const table_name = obj[Table_Name_KEY]
+    let sql_str = `select count(*) from ${table_name} where `
+    sql_str += this.getWhreSql(obj, where)
+    if (where.page_size && where.page) {
+      const offset = where.page_size * (where.page - 1)
+      sql_str += ` limit ${where.page_size} offset ${offset}`
+    }
+    return this._runSqlWithResult(obj, sql_str, `search:${table_name}`)
+  }
+
+  public InitTables() {
     let conn = this.getconnection()
     const initFunc = (obj: BaseEntity) => {
       let table_name = obj[Table_Name_KEY]
@@ -189,4 +291,5 @@ class DbHlper {
     }
   }
 }
+
 export default DbHlper

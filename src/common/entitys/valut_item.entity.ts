@@ -8,8 +8,6 @@ export enum PasswordType {
 
 @Entity({ name: 'valut_item' })
 export class VaultItem extends BaseEntity {
-  @Column({ type: 'INTEGER', primary: true, unique: true })
-  id: number
   @Column({ type: 'INTEGER' })
   valut_id: number
   @Column({ type: 'INTEGER' })

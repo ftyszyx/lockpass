@@ -11,7 +11,7 @@ class AppModel {
     this.myencode = new MyEncode()
     Log.initialize()
     Log.info('AppModel init')
-    DbHlper.instance().initTables()
+    DbHlper.instance().InitTables()
   }
 
   private static instance: AppModel
