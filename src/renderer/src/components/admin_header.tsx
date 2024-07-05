@@ -9,10 +9,10 @@ export default function MyHeader(): JSX.Element {
   return (
     <div>
       <Header className="bg-white p-0 shadow overflow-hidden flex items-center">
-        <MenuFoldOutlined
+        {/* <MenuFoldOutlined
           className={appstore.fold_menu ? toggle_style : toggle_style + ' rotate-180'}
           onClick={() => appstore.toggleFoldMenu()}
-        />
+        /> */}
         <div className="flex justify-end items-center flex-auto"></div>
       </Header>
     </div>
