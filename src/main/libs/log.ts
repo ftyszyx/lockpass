@@ -88,7 +88,9 @@ export class Log {
     }
     const obj = Object.create(null)
     Error.captureStackTrace(obj)
-    const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')} \n stack:\n ${obj.stack}`
+    Error.stackTraceLimit = 5
+    const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')} 
+    \n stack:\n ${obj.stack}`
     Log.logWriter.writeLine(logstr)
     console.error(logstr)
   }

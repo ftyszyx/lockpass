@@ -7,12 +7,12 @@ export interface AppEntity {
   vaut_items: VaultItem[]
   toggleFoldMenu: () => void
   // valuts
-  FetchAllValuts: (valuts: Vault[]) => void
+  FetchAllValuts: () => void
   UpdateValut: (valut: Vault) => void
   DeleteValut: (valut: Vault) => void
   AddValut: (valut: Vault) => void
   //valut_item
-  FetchValutItems: (vault_id: number) => void
+  FetchValutItems: () => void
   UpdateValutItem: (info: VaultItem) => void
   DeleteValutItem: (info: VaultItem) => void
   AddValutItem: (info: VaultItem) => void

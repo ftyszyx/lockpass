@@ -3,7 +3,6 @@ import DbHlper from '@main/libs/db_help'
 
 export class BaseService<Entity extends BaseEntity> {
   constructor(public entity: Entity) {}
-
   public async GetAll(): Promise<Entity[]> {
     return DbHlper.instance().GetAll(this.entity, null)
   }

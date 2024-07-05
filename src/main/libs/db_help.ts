@@ -5,6 +5,7 @@ import { Column_Name_KEY, Column_Type_KEY, Column_desc_KEY, Table_Name_KEY } fro
 import duckdb from 'duckdb'
 import { Log } from './log'
 import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
+import { ColumnType } from '@common/decorator/db.decorator'
 class DbHlper {
   private static _instance: DbHlper
   public user: User
@@ -34,10 +35,12 @@ class DbHlper {
   }
 
   private getColumnValue(obj: BaseEntity, key: string, value: any): string {
-    const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)
+    const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     if (col_type) {
       if (value == undefined || value == null) {
         return 'default'
+      } else if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+        return `'${value.toString()}'`
       } else {
         return `${value.toString()}`
       }
@@ -84,7 +87,7 @@ class DbHlper {
     return new Promise((resolve, reject) => {
       conn.all(sql_str, (err, row) => {
         if (err) {
-          Log.error(`run sql:${ext_msg} err:`, err.message)
+          Log.error(`run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
           reject(new Error(err.message))
         } else {
           resolve()
@@ -117,7 +120,7 @@ class DbHlper {
     return new Promise((resolve, reject) => {
       conn.all(sql_str, (err, rows) => {
         if (err) {
-          Log.error(`run sql:${ext_msg} err:`, err.message)
+          Log.error(`run sql:${sql_str} ext:${ext_msg} err: ${err.message}`)
           reject(new Error(err.message))
         } else {
           let res: T[] = []

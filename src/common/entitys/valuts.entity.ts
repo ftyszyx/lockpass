@@ -10,5 +10,5 @@ export class Vault extends BaseEntity {
   @Column({ type: 'VARCHAR' })
   icon: string
   @Column({ type: 'VARCHAR' })
-  desc: string
+  info: string
 }

@@ -40,5 +40,5 @@ export class VaultItem extends BaseEntity {
   @Column({ type: 'VARCHAR', hide: true })
   note_txt: string
   @Column({ type: 'VARCHAR' })
-  desc: string
+  info: string
 }
