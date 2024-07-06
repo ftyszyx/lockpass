@@ -1,11 +1,12 @@
 import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/valut_item.entity'
 import { Vault } from '@common/entitys/valuts.entity'
-import { Column_Name_KEY, Column_Type_KEY, Column_desc_KEY, Table_Name_KEY } from '@common/gloabl'
+import { Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
 import duckdb from 'duckdb'
 import { Log } from './log'
 import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 import { ColumnType } from '@common/decorator/db.decorator'
+import { PathHelper } from './path'
 class DbHlper {
   private static _instance: DbHlper
   public user: User
@@ -21,7 +22,7 @@ class DbHlper {
   static instance() {
     if (!DbHlper._instance) {
       DbHlper._instance = new DbHlper()
-      const dbpath = `${__dirname}/lockpass.db`
+      const dbpath = `${PathHelper.getHomeDir()}/lockpass.db`
       DbHlper._instance.db = new duckdb.Database(dbpath, {
         access_mode: 'READ_WRITE',
         max_memory: '512MB'

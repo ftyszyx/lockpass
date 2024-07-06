@@ -1,5 +1,6 @@
 import os from 'os'
 import fs from 'fs'
+import { PathHelper } from './path'
 
 export class FileLogWriter {
   asyncWriteQueue = []
@@ -55,8 +56,7 @@ export class Log {
 
   static initialize() {
     const date = new Date()
-    // let log_path = os.homedir() + `/lockpass-${date.getFullYear()}-${date.getMonth()}-${date.getDay()}.log`
-    let log_dir = `${__dirname}/log`
+    let log_dir = `${PathHelper.getHomeDir()}/log`
     if (!fs.existsSync(log_dir)) {
       fs.mkdirSync(log_dir)
     }

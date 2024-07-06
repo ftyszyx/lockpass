@@ -1,10 +1,11 @@
 export { default as BrowerRouter } from './BrowerRouter'
+export { default as HashRouter } from './HashRouter'
 export { default as Link } from './Link'
 export { default as Route } from './Route'
 export { default as RouterContext } from './RouterContext'
 export * from './history'
 import React from 'react'
-import { History } from './history'
+import { History } from './def'
 import { TokensToRegexpOptions, ParseOptions } from 'path-to-regexp'
 import routerContext from './RouterContext'
 import { PathMatch } from './match'
@@ -40,6 +41,12 @@ export type BrowerRouterProps = {
   children?: React.ReactNode
   debug?: boolean
 }
+
+export type HashRouteProps = {
+  children?: React.ReactNode
+  debug?: boolean
+}
+
 export type LinkProps = {
   children?: React.ReactNode
   to: string

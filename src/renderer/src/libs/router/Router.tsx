@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from 'react'
 import { RouterProps, RouterStoreData } from './index'
 import routerContext from './RouterContext'
 export default function Router(props: RouterProps) {
-  if (props.debug) console.log('router render', props.history?.PathName)
+  if (props.debug) console.log('router render', props.history)
   const [locationState, setLocationState] = useState(props.history?.CurLocation)
   useLayoutEffect(() => {
     const removeListen = props.history?.listen(({ location, action }) => {

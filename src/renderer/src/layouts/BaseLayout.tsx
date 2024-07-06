@@ -1,11 +1,10 @@
 import { ChildProps } from '@renderer/entitys/other.entity'
 import Layout, { Content } from 'antd/es/layout/layout'
 import { useEffect } from 'react'
-// import MyMenu from '@renderer/components/admin_menu'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 
-function BasicLayout(props: ChildProps): JSX.Element {
+function BaseLayout(props: ChildProps): JSX.Element {
   console.log('basiclayout render')
   useEffect(() => {
     console.log('useEffect')
@@ -27,4 +26,4 @@ function BasicLayout(props: ChildProps): JSX.Element {
   )
 }
 
-export default BasicLayout
+export default BaseLayout

@@ -15,6 +15,7 @@ function App(): JSX.Element {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowInfoMsg)
     }
   }, [])
+
   return <RootRouter></RootRouter>
 }
 

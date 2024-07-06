@@ -6,7 +6,8 @@ interface InitFormInfo extends InitKeyInfo {
   password_repeat: string
 }
 
-export default function InitSystem() {
+export default function InitSystem(): JSX.Element {
+  console.log('init system')
   const [form] = useForm<InitFormInfo>()
   return (
     <div className=" bg-slate-100">
