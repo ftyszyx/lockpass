@@ -3,59 +3,48 @@ import routerContext from './RouterContext'
 import { PathMatch } from './match'
 const Route = (props: RouteProps) => {
   const consume_func = (value: RouterStoreData) => {
-    const url = value.history.PathName
-    let true_path = props.path || ''
+    const pathname = value.history.PathName
+    let route_path = props.path || ''
     if (value.match != null) {
-      true_path = url_join(value.match.url, props.path || '')
+      route_path = url_join(value.match.url, props.path || '')
     }
-    // if (value.debug) console.log("route path1 :", props, "path:", true_path, "url:", url);
     let newcontext = value
     if (props.path != null) {
-      const match = PathMatch(true_path, url, props?.match, value.debug)
+      const match = PathMatch(route_path, pathname, props?.match, value.debug)
       if (match == null) return null
       newcontext = { ...value, match } as RouterStoreData
     }
-    const childmatch = matchChild(true_path, props.children, value)
-    // if (value.debug) console.log("route path2:", props, "path:", true_path, "url:", url, "context:", value, "child", childmatch);
-    const child = renderChild(props, childmatch, newcontext)
-    if (value.debug)
-      console.log(
-        'route path3',
-        props.path,
-        'child:',
-        child,
-        'have errElement:',
-        props.errorElement != null
-      )
-    if (child != null)
-      return <routerContext.Provider value={newcontext}>{child}</routerContext.Provider>
+    const childmatch = matchChild(route_path, props.children, value)
+    const render_res = render(props, childmatch, newcontext)
+    if (render_res != null)
+      return <routerContext.Provider value={newcontext}>{render_res}</routerContext.Provider>
     return null
   }
   return <routerContext.Consumer>{consume_func}</routerContext.Consumer>
 }
 Route.displayName = 'Route'
-function renderChild(props: RouteProps, child_match: childMatchRes, ctxvalue: RouterStoreData) {
-  if (props.element != null) {
-    if (typeof props.element == 'function') {
-      // console.log("render func child", child_match.child);
+function render(parnet_props: RouteProps, child_match: childMatchRes, ctxvalue: RouterStoreData) {
+  if (parnet_props.element != null) {
+    if (typeof parnet_props.element == 'function') {
       if (child_match.child == null) {
-        if (props.errorElement != null)
+        if (parnet_props.errorElement != null)
           return (
-            <props.element>
-              <props.errorElement />
-            </props.element>
+            <parnet_props.element>
+              <parnet_props.errorElement />
+            </parnet_props.element>
           )
-        return <props.element />
+        return <parnet_props.element />
       }
-      return <props.element>{child_match.child}</props.element>
+      return <parnet_props.element>{child_match.child}</parnet_props.element>
     }
-    if (typeof props.element == 'object') {
-      return props.element
+    if (typeof parnet_props.element == 'object') {
+      return parnet_props.element
     }
   }
-  if (props.redirect != null) {
+  if (parnet_props.redirect != null) {
     setTimeout(() => {
-      ctxvalue.history?.push(props.redirect as string)
+      console.log('redirect to:', parnet_props.redirect)
+      ctxvalue.history?.push(parnet_props.redirect as string)
     }, 0)
     return null
   }

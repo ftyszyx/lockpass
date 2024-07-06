@@ -1,5 +1,5 @@
 // react-router/RouterContext.js
-import { RouterStoreData } from 'kl_router'
+import { RouterStoreData } from './index'
 import { createContext } from 'react'
 import { createBrowserHistory } from './history'
 const history = createBrowserHistory({ debug: false })

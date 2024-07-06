@@ -115,18 +115,12 @@ export function matchChild(
     if (React.isValidElement(item) == false) continue
     const itemtype = item.type
     if (itemtype != Route) continue
-    // console.log("item_type", itemtype);
-    // const itemtype = item.type as unknown as { [k: string]: string };
-    // console.log("itemdisplay_name", , itemtype === Route);
-    // const typename = (item["type"] as { displayName: string }).displayName;
-    // const item_type = item["type"];
-    // if (displayName && displayName != "Route") continue;
-    // if (typename != "Route") continue;
     const item_props = item.props as RouteProps
     const item_truepath = url_join(parent_path, item_props.path || '')
-    if (value.debug) console.log('item truepath:', item_truepath, 'url', url)
+    // if (value.debug) console.log('item truepath:', item_truepath, 'url', url)
     const match = PathMatch(item_truepath, url, item_props?.match, value.debug)
     if (match != null) {
+      // if (value.debug) console.log(`child match: routepath:${item_truepath}  url:${url}`)
       return { child: item }
     }
   }

@@ -8,7 +8,7 @@ import Vault from './pages/system/Vault'
 
 const RootRouter = () => {
   return (
-    <HashRouter debug={true}>
+    <BrowerRouter debug={false}>
       <Route>
         <Route path={PagePath.initKey} element={InitSystem} match={{ end: true }} />
         <Route path="/" element={BasicLayout} errorElement={NotFound}>
@@ -17,7 +17,7 @@ const RootRouter = () => {
           <Route path={PagePath.Valut_items + '/:id'} element={Vault} />
         </Route>
       </Route>
-    </HashRouter>
+    </BrowerRouter>
   )
 }
 export default RootRouter

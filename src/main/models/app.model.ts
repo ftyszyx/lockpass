@@ -11,8 +11,8 @@ class AppModel {
   vault: ValutService | null = null
   vaultItem: ValutService | null = null
   constructor() {
-    this.myencode = new MyEncode()
     Log.initialize()
+    this.myencode = new MyEncode()
     Log.info('AppModel init')
     DbHlper.instance().InitTables()
     this.vault = new ValutService()

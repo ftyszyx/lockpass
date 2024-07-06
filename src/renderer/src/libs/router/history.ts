@@ -66,11 +66,17 @@ function getHistoryState(location: LocationDef, index: number): HistoryState {
 export function createBrowserHistory(opitons: HistoryOptions): History {
   return getBaseHistory(getCurLocation, createPath, opitons)
 }
+function gethashPathname(hash: string): string {
+  if (hash && hash.startsWith('#')) {
+    return hash.slice(1)
+  }
+  return '/'
+}
 
 export function createHashHistory(options: HistoryOptions): History {
   function createHashLocation(window: Window, globalHistory: Window['history']): LocationDef {
     const res = getCurLocation(window, globalHistory)
-    res.pathname = res.hash || '/'
+    res.pathname = gethashPathname(res.hash)
     return res
   }
   function createUrl(window: Window, to: LocationDef): string {
@@ -82,8 +88,6 @@ export function createHashHistory(options: HistoryOptions): History {
       href = hashIndex === -1 ? url : url.slice(0, hashIndex)
     }
     const res = href + '#' + createPath(window, to)
-
-    console.log('createUrl:', res, href, to)
     return res
   }
   return getBaseHistory(createHashLocation, createUrl, options)
@@ -120,25 +124,18 @@ function getBaseHistory(
   }
 
   function push(to: string, state?: any) {
-    if (debug_flag) console.log('push to ', to, 'listen:', listener != null)
     action = Action.Push
     const location = createLocation(to, state)
     index = getIndex() + 1
     const historyState = getHistoryState(location, index)
     const url = history.createHref(location)
-    // try...catch because iOS limits us to 100 pushState calls :/
     try {
+      console.log('push to ', url)
       globalHistory.pushState(historyState, '', url)
     } catch (error) {
-      // If the exception is because `state` can't be serialized, let that throw
-      // outwards just like a replace call would so the dev knows the cause
-      // https://html.spec.whatwg.org/multipage/nav-history-apis.html#shared-history-push/replace-state-steps
-      // https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializeinternal
       if (error instanceof DOMException && error.name === 'DataCloneError') {
         throw error
       }
-      // They are going to lose state here, but there is no real
-      // way to warn them about it since the page will refresh...
       window.location.assign(url)
     }
     if (listener) {
@@ -152,6 +149,7 @@ function getBaseHistory(
     index = getIndex()
     const historyState = getHistoryState(location, index)
     const url = history.createHref(location)
+    console.log('replace url ', url)
     globalHistory.replaceState(historyState, '', url)
     if (listener) {
       listener({ action, location: history.CurLocation, delta: 0 })

@@ -2,16 +2,18 @@ import { ChildProps } from '@renderer/entitys/other.entity'
 import Layout, { Content } from 'antd/es/layout/layout'
 import { useEffect } from 'react'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { useHistory } from '@renderer/libs/router'
 import { PagePath } from '@common/entitys/page.entity'
 
 function BaseLayout(props: ChildProps): JSX.Element {
   console.log('basiclayout render')
+  const history = useHistory()
   useEffect(() => {
     console.log('useEffect')
     window.electron.ipcRenderer.invoke(webToManMsg.needInitKey).then((res) => {
       console.log('get res', res)
       if (res === true) {
-        window.location.href = PagePath.initKey
+        history.replace(PagePath.initKey)
       }
     })
   }, [])

@@ -5,15 +5,19 @@ import { randomBytes, createHash, createCipheriv, createDecipheriv } from 'crypt
 import DbHlper from './db_help'
 import { User } from '@common/entitys/user.entity'
 import AppModel from '@main/models/app.model'
+import { PathHelper } from './path'
+import { Log } from './log'
 export class MyEncode {
   secret_key: string | null = null
   key_path = 'secret.key'
   encode_alg = 'aes-256-ccm'
+  key_full_path = ''
 
   constructor() {
-    let key_path = path.join(__dirname, this.key_path)
-    if (fs.existsSync(key_path)) {
-      this.secret_key = fs.readFileSync(key_path).toString()
+    this.key_full_path = path.join(PathHelper.getHomeDir(), this.key_path)
+    Log.info('key_path:', this.key_full_path)
+    if (fs.existsSync(this.key_full_path)) {
+      this.secret_key = fs.readFileSync(this.key_full_path).toString()
     }
   }
   public needInitKey() {
@@ -58,8 +62,7 @@ export class MyEncode {
   }
 
   writeKey(key: string) {
-    let key_path = path.join(__dirname, this.key_path)
-    fs.writeFileSync(key_path, key)
+    fs.writeFileSync(this.key_full_path, key)
     this.secret_key = key
   }
 
