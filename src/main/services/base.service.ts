@@ -7,8 +7,15 @@ export class BaseService<Entity extends BaseEntity> {
     return DbHlper.instance().GetAll(this.entity, null)
   }
 
-  public async AddOne(value: Entity): Promise<void> {
-    return DbHlper.instance().AddOne(value)
+  public async AddOne(obj: Record<string, any>): Promise<void> {
+    const co_fun = this.entity.constructor as new () => Entity
+    const entity = new co_fun()
+    const keys = Object.keys(obj)
+    keys.forEach((key) => {
+      const value = obj[key]
+      if (value) entity[key] = value
+    })
+    return DbHlper.instance().AddOne(entity)
   }
 
   public async UpdateOne(vault: Entity): Promise<void> {

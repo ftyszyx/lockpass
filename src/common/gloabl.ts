@@ -22,15 +22,3 @@ export enum Icon_type {
   icon_eye_fill = 'icon-eye-fill',
   icon_eyeclose_fill = 'icon-eyeclose-fill'
 }
-// export type Icon_Name_type =
-//   | 'icon-money'
-//   | 'icon-doc'
-//   | 'icon-money1'
-//   | 'icon-personal'
-//   | 'icon-lock'
-//   | 'icon-money2'
-//   | 'icon-lock2'
-//   | 'icon-card'
-//   | 'icon-chrome'
-//   | 'icon-eye-fill'
-//   | 'icon-eyeclose-fill'
