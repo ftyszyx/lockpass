@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4601905 */
-  src: url('iconfont.woff2?t=1719481564239') format('woff2'),
-       url('iconfont.woff?t=1719481564239') format('woff'),
-       url('iconfont.ttf?t=1719481564239') format('truetype');
+  src: url('iconfont.woff2?t=1720604224995') format('woff2'),
+       url('iconfont.woff?t=1720604224995') format('woff'),
+       url('iconfont.ttf?t=1720604224995') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,50 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-goto:before {
+  content: "\e70b";
+}
+
+.icon-set:before {
+  content: "\e60d";
+}
+
+.icon-money:before {
+  content: "\e663";
+}
+
+.icon-doc:before {
+  content: "\e648";
+}
+
+.icon-money1:before {
+  content: "\e62c";
+}
+
+.icon-personal:before {
+  content: "\e620";
+}
+
+.icon-lock:before {
+  content: "\e83e";
+}
+
+.icon-money2:before {
+  content: "\e607";
+}
+
+.icon-lock2:before {
+  content: "\e86c";
+}
+
+.icon-card:before {
+  content: "\e60b";
+}
+
+.icon-chrome:before {
+  content: "\ea09";
 }
 
 .icon-eye-fill:before {

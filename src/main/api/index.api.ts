@@ -16,6 +16,7 @@ export function initAllApi() {
     return await AppModel.getInstance().vaultItem?.GetAll()
   })
   ipcMain.handle(webToManMsg.AddValut, async (_, valut) => {
+    console.log('valut', valut)
     return await AppModel.getInstance().vault?.AddOne(valut)
   })
   ipcMain.handle(webToManMsg.AddValutItem, async (_, valutItem) => {

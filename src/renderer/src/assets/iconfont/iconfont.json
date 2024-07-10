@@ -6,6 +6,83 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1613945",
+      "name": "goto",
+      "font_class": "goto",
+      "unicode": "e70b",
+      "unicode_decimal": 59147
+    },
+    {
+      "icon_id": "3153828",
+      "name": "set",
+      "font_class": "set",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "153747",
+      "name": "money",
+      "font_class": "money",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "693579",
+      "name": "doc",
+      "font_class": "doc",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "704585",
+      "name": "money1",
+      "font_class": "money1",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "968469",
+      "name": "personal",
+      "font_class": "personal",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "4945532",
+      "name": "lock",
+      "font_class": "lock",
+      "unicode": "e83e",
+      "unicode_decimal": 59454
+    },
+    {
+      "icon_id": "7876858",
+      "name": "money",
+      "font_class": "money2",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "8289003",
+      "name": "lock2",
+      "font_class": "lock2",
+      "unicode": "e86c",
+      "unicode_decimal": 59500
+    },
+    {
+      "icon_id": "8450537",
+      "name": "card",
+      "font_class": "card",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "11983530",
+      "name": "chrome",
+      "font_class": "chrome",
+      "unicode": "ea09",
+      "unicode_decimal": 59913
+    },
+    {
       "icon_id": "6151097",
       "name": "eye-fill",
       "font_class": "eye-fill",

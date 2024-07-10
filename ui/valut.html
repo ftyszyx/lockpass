@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <title>1Password Vault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <div class="w-1/4 bg-white border-r">
+        <div class="p-4 border-b">
+          <div class="flex items-center">
+            <i class="fas fa-chevron-down mr-2"> </i>
+            <span class="font-semibold"> Personal </span>
+          </div>
+        </div>
+        <div class="p-4">
+          <input class="w-full p-2 border rounded" placeholder="Search" type="text" />
+        </div>
+        <div class="p-4">
+          <div class="flex items-center mb-4">
+            <img
+              alt="1Password Account Icon"
+              class="w-8 h-8 mr-2"
+              height="32"
+              src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-5ZgXRgzBtyrGPcnV2QXA95tD/user-fxD1OEDTnZkBQ7RUxPeeSIh0/img-30mWBJc0LJvcZhfvrmVFP0Ts.png?st=2024-07-10T08%3A50%3A59Z&amp;se=2024-07-10T10%3A50%3A59Z&amp;sp=r&amp;sv=2023-11-03&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-07-10T02%3A23%3A41Z&amp;ske=2024-07-11T02%3A23%3A41Z&amp;sks=b&amp;skv=2023-11-03&amp;sig=6JAsKUyyX7q2NZE54zOQtrCUVQ/3h%2BqxsEPtdmvGqJg%3D"
+              width="32"
+            />
+            <div>
+              <div class="font-semibold">1Password Account (张雨鑫)</div>
+              <div class="text-sm text-gray-500">flysyzx@gmail.com</div>
+            </div>
+          </div>
+          <div class="flex items-center mb-4">
+            <img
+              alt="Account Icon"
+              class="w-8 h-8 mr-2"
+              height="32"
+              src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-5ZgXRgzBtyrGPcnV2QXA95tD/user-fxD1OEDTnZkBQ7RUxPeeSIh0/img-K1JrayvsWqVGfnvflBq6ACYM.png?st=2024-07-10T08%3A50%3A59Z&amp;se=2024-07-10T10%3A50%3A59Z&amp;sp=r&amp;sv=2023-11-03&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-07-10T02%3A20%3A02Z&amp;ske=2024-07-11T02%3A20%3A02Z&amp;sks=b&amp;skv=2023-11-03&amp;sig=RD6fh4HukTRDR47OcH2XFQ5Q/aZ/e8N3%2B98upWWnl50%3D"
+              width="32"
+            />
+            <div>
+              <div class="font-semibold">张雨鑫</div>
+              <div class="text-sm text-gray-500">张雨鑫</div>
+            </div>
+          </div>
+          <button class="w-full p-2 bg-blue-500 text-white rounded">Import Passwords</button>
+        </div>
+      </div>
+      <!-- Main Content -->
+      <div class="flex-1 p-8">
+        <div class="flex items-center mb-8">
+          <img
+            alt="1Password Account Icon"
+            class="w-16 h-16 mr-4"
+            height="64"
+            src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-5ZgXRgzBtyrGPcnV2QXA95tD/user-fxD1OEDTnZkBQ7RUxPeeSIh0/img-30mWBJc0LJvcZhfvrmVFP0Ts.png?st=2024-07-10T08%3A50%3A59Z&amp;se=2024-07-10T10%3A50%3A59Z&amp;sp=r&amp;sv=2023-11-03&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-07-10T02%3A23%3A41Z&amp;ske=2024-07-11T02%3A23%3A41Z&amp;sks=b&amp;skv=2023-11-03&amp;sig=6JAsKUyyX7q2NZE54zOQtrCUVQ/3h%2BqxsEPtdmvGqJg%3D"
+            width="64"
+          />
+          <div>
+            <div class="text-2xl font-semibold">1Password Account (张雨鑫)</div>
+            <i class="fas fa-lock text-gray-500"> </i>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="font-semibold">username</div>
+          <div>flysyzx@gmail.com</div>
+        </div>
+        <div class="mb-4">
+          <div class="font-semibold">password</div>
+          <div>********</div>
+          <div class="w-1/4 h-2 bg-green-500 mt-1"></div>
+        </div>
+        <div class="mb-4">
+          <div class="font-semibold">website</div>
+          <a class="text-blue-500" href="https://my.1password.com"> https://my.1password.com </a>
+        </div>
+        <div class="mb-4">
+          <div class="font-semibold">notes</div>
+          <div>You can use this login to sign in to your account on 1password.com.</div>
+        </div>
+        <div class="mb-4">
+          <div class="font-semibold">tags</div>
+          <span class="bg-blue-100 text-blue-500 px-2 py-1 rounded"> Starter Kit </span>
+        </div>
+        <div class="mb-4">
+          <button class="p-2 bg-gray-200 rounded">Show Web Form Details</button>
+          <button class="p-2 bg-gray-200 rounded">View Sharing History</button>
+        </div>
+        <div class="text-sm text-gray-500">
+          <div>last modified May 29, 2024 4:35 PM</div>
+          <div>created May 29, 2024 4:35 PM</div>
+        </div>
+      </div>
+      <!-- Vault Dropdown -->
+      <div class="absolute top-4 right-4">
+        <div class="relative">
+          <button class="flex items-center">
+            <img
+              alt="All Vaults Icon"
+              class="w-8 h-8 mr-2"
+              height="32"
+              src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-5ZgXRgzBtyrGPcnV2QXA95tD/user-fxD1OEDTnZkBQ7RUxPeeSIh0/img-x8GhoCLrjcp3aMPr0rPoTCOQ.png?st=2024-07-10T08%3A50%3A59Z&amp;se=2024-07-10T10%3A50%3A59Z&amp;sp=r&amp;sv=2023-11-03&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-07-10T02%3A17%3A29Z&amp;ske=2024-07-11T02%3A17%3A29Z&amp;sks=b&amp;skv=2023-11-03&amp;sig=cPX9NHrLuPvjh0ij8sAUksnRH9WRiPqcBPMaDw35/pk%3D"
+              width="32"
+            />
+            <span class="font-semibold"> All Vaults </span>
+            <i class="fas fa-chevron-down ml-2"> </i>
+          </button>
+          <div class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+            <div class="p-2 flex items-center">
+              <i class="fas fa-check text-green-500 mr-2"> </i>
+              <span> All Vaults </span>
+            </div>
+            <div class="p-2 flex items-center">
+              <i class="fas fa-vault mr-2"> </i>
+              <span> Personal </span>
+            </div>
+            <div class="p-2 flex items-center">
+              <i class="fas fa-vault mr-2"> </i>
+              <span> test </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
