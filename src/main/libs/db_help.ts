@@ -66,13 +66,13 @@ class DbHlper {
     return sql_str
   }
 
-  private getupdateOneSql(obj: BaseEntity, keys: string[]): string {
+  private getupdateOneSql(entity: BaseEntity, obj: any, keys: string[]): string {
     let sql_str = ''
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       const element = obj[key]
       if (element == undefined || element == null) continue
-      const col_value = this.getColumnValue(obj, key, element)
+      const col_value = this.getColumnValue(entity, key, element)
       if (col_value) {
         sql_str += `${key}=${col_value}`
         if (i < keys.length - 1) {
@@ -149,11 +149,15 @@ class DbHlper {
     return this._runSql(sql_str, `del:${table_name}`)
   }
 
-  public UpdateOne(obj: BaseEntity): Promise<void> {
-    const table_name = obj[Table_Name_KEY]
+  public UpdateOne(entity: BaseEntity, obj: any): Promise<void> {
+    const table_name = entity[Table_Name_KEY]
+    if (!entity.id) {
+      Log.error('update entity id is null')
+      return Promise.reject(new Error('update entity id is null'))
+    }
     let sql_str = 'update ' + table_name + ' set '
-    const keys = Reflect.ownKeys(obj)
-    sql_str += this.getupdateOneSql(obj, keys as string[])
+    const keys = Reflect.ownKeys(entity)
+    sql_str += this.getupdateOneSql(entity, obj, keys as string[])
     sql_str += ` where id=${obj.id}`
     return this._runSql(sql_str, `update:${table_name}`)
   }

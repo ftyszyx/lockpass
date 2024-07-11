@@ -27,6 +27,7 @@ export default function Home() {
         <div className=" container mx-auto">
           <h1 className="text-2xl font-semibold mb-4">密码库</h1>
           <Button
+            className="mb-4"
             type="primary"
             onClick={() => {
               setEditPanelTitle('新增密码库')
@@ -67,6 +68,7 @@ export default function Home() {
             form.validateFields().then(async (values) => {
               console.log(values)
               await appstore.AddValut(values as Vault)
+              await getAllData()
               setShowEdit(false)
             })
           }}

@@ -19,7 +19,7 @@ export class BaseService<Entity extends BaseEntity> {
   }
 
   public async UpdateOne(vault: Entity): Promise<void> {
-    return DbHlper.instance().UpdateOne(vault)
+    return DbHlper.instance().UpdateOne(this.entity, vault)
   }
 
   public async DeleteOne(id: number): Promise<void> {
