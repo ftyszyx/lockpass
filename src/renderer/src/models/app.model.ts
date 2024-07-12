@@ -8,7 +8,7 @@ export interface AppStore extends AppEntity {
   // valuts
   FetchAllValuts: () => Promise<void>
   UpdateValut: (valut: Vault) => Promise<void>
-  DeleteValut: (valut: Vault) => Promise<void>
+  DeleteValut: (id: number) => Promise<void>
   AddValut: (valut: Vault) => Promise<void>
   //valut_item
   FetchValutItems: () => Promise<void>
@@ -41,8 +41,8 @@ export const use_appstore = create<AppStore>((set, get) => {
       await window.electron.ipcRenderer.invoke(webToManMsg.UpdateValut, valut)
     },
 
-    async DeleteValut(valut) {
-      await window.electron.ipcRenderer.invoke(webToManMsg.DeleteValut, valut)
+    async DeleteValut(id: number) {
+      await window.electron.ipcRenderer.invoke(webToManMsg.DeleteValut, id)
     },
 
     async AddValut(valut) {

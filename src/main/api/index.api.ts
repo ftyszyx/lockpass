@@ -22,11 +22,11 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.AddValutItem, async (_, valutItem) => {
     return await AppModel.getInstance().vaultItem?.AddOne(valutItem)
   })
-  ipcMain.handle(webToManMsg.DeleteValut, async (_, valut) => {
-    return await AppModel.getInstance().vault?.DeleteOne(valut.id)
+  ipcMain.handle(webToManMsg.DeleteValut, async (_, vault_id) => {
+    return await AppModel.getInstance().vault?.DeleteOne(vault_id)
   })
-  ipcMain.handle(webToManMsg.DeleteValutItem, async (_, valutItem) => {
-    return await AppModel.getInstance().vaultItem?.DeleteOne(valutItem.id)
+  ipcMain.handle(webToManMsg.DeleteValutItem, async (_, vault_item_id) => {
+    return await AppModel.getInstance().vaultItem?.DeleteOne(vault_item_id)
   })
   ipcMain.handle(webToManMsg.UpdateValut, async (_, valut) => {
     return await AppModel.getInstance().vault?.UpdateOne(valut)

@@ -11,8 +11,8 @@ export default function Home() {
   console.log('home render')
   const [form] = useForm()
   const [show_edit, setShowEdit] = useState(false)
+  const [show_del, setShowDel] = useState(false)
   const [edit_panel_title, setEditPanelTitle] = useState('')
-  const [init_value, setInitValue] = useState({} as Vault)
   const appstore = use_appstore() as AppStore
   useEffect(() => {
     getAllData()
@@ -31,7 +31,8 @@ export default function Home() {
             type="primary"
             onClick={() => {
               setEditPanelTitle('新增密码库')
-              setInitValue({} as Vault)
+              form.resetFields()
+              setShowDel(false)
               setShowEdit(true)
             }}
           >
@@ -50,8 +51,18 @@ export default function Home() {
                   </div>
                   <p className=" text-gray-600 mb-4">{valut.info}</p>
                   <div className="flex justify-between items-center ">
-                    <Icon type="icon-set" className=" text-gray-400"></Icon>
-                    <Icon type="icon-goto" className=" text-gray-400"></Icon>
+                    <Icon
+                      type="icon-set"
+                      className=" text-gray-400"
+                      onClick={() => {
+                        setEditPanelTitle('编辑密码库')
+                        form.resetFields()
+                        form.setFieldsValue(valut)
+                        setShowDel(true)
+                        setShowEdit(true)
+                      }}
+                    ></Icon>
+                    <Icon type="icon-goto" className=" text-gray-400" onClick={() => {}}></Icon>
                   </div>
                 </div>
               )
@@ -75,8 +86,24 @@ export default function Home() {
           onCancel={() => {
             setShowEdit(false)
           }}
+          footer={(_, { OkBtn, CancelBtn }) => (
+            <>
+              {show_del && (
+                <Button
+                  onClick={async () => {
+                    await appstore.DeleteValut(form.getFieldValue('id'))
+                    setShowEdit(false)
+                  }}
+                >
+                  删除
+                </Button>
+              )}
+              <CancelBtn />
+              <OkBtn />
+            </>
+          )}
         >
-          <Form {...formItemLayout} form={form} initialValues={init_value}>
+          <Form {...formItemLayout} form={form}>
             <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
               <Input></Input>
             </Form.Item>
