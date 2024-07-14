@@ -66,12 +66,14 @@ class DbHlper {
     return sql_str
   }
 
-  private getupdateOneSql(entity: BaseEntity, obj: any, keys: string[]): string {
+  private getupdateOneSql(entity: BaseEntity, obj_old: any, obj: any, keys: string[]): string {
     let sql_str = ''
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       const element = obj[key]
+      const old_value = obj_old[key]
       if (element == undefined || element == null) continue
+      if (old_value == element) continue
       const col_value = this.getColumnValue(entity, key, element)
       if (col_value) {
         sql_str += `${key}=${col_value}`
@@ -81,6 +83,20 @@ class DbHlper {
       }
     }
     return sql_str
+  }
+
+  private _exesql(sql_str: string, ext_msg: string = ''): Promise<void> {
+    let conn = this.getconnection()
+    return new Promise((resolve, reject) => {
+      conn.exec(sql_str, (err, row) => {
+        if (err) {
+          Log.error(`run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
+          reject(new Error(err.message))
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
   private _runSql(sql_str: string, ext_msg: string = ''): Promise<void> {
@@ -149,17 +165,18 @@ class DbHlper {
     return this._runSql(sql_str, `del:${table_name}`)
   }
 
-  public UpdateOne(entity: BaseEntity, obj: any): Promise<void> {
+  public UpdateOne(entity: BaseEntity, obj_old: any, obj: any): Promise<void> {
     const table_name = entity[Table_Name_KEY]
-    if (!entity.id) {
+    if (!obj.id) {
       Log.error('update entity id is null')
       return Promise.reject(new Error('update entity id is null'))
     }
     let sql_str = 'update ' + table_name + ' set '
     const keys = Reflect.ownKeys(entity)
-    sql_str += this.getupdateOneSql(entity, obj, keys as string[])
+    keys.splice(keys.indexOf('id'), 1)
+    sql_str += this.getupdateOneSql(entity, obj_old, obj, keys as string[])
     sql_str += ` where id=${obj.id}`
-    return this._runSql(sql_str, `update:${table_name}`)
+    return this._exesql(sql_str, `update:${table_name}`)
   }
 
   public AddList(objs: BaseEntity[]): Promise<void> {

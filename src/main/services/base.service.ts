@@ -15,14 +15,14 @@ export class BaseService<Entity extends BaseEntity> {
       const value = obj[key]
       if (value) entity[key] = value
     })
-    return DbHlper.instance().AddOne(entity)
+    await DbHlper.instance().AddOne(entity)
   }
 
-  public async UpdateOne(vault: Entity): Promise<void> {
-    return DbHlper.instance().UpdateOne(this.entity, vault)
+  public async UpdateOne(old: Entity, chang_values: Entity): Promise<void> {
+    await DbHlper.instance().UpdateOne(this.entity, old, chang_values)
   }
 
   public async DeleteOne(id: number): Promise<void> {
-    return DbHlper.instance().DelOne(this.entity, 'id', id)
+    await DbHlper.instance().DelOne(this.entity, 'id', id)
   }
 }

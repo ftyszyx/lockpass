@@ -7,12 +7,12 @@ import { create } from '@renderer/libs/state'
 export interface AppStore extends AppEntity {
   // valuts
   FetchAllValuts: () => Promise<void>
-  UpdateValut: (valut: Vault) => Promise<void>
+  UpdateValut: (old: Vault, valut: Vault) => Promise<void>
   DeleteValut: (id: number) => Promise<void>
   AddValut: (valut: Vault) => Promise<void>
   //valut_item
   FetchValutItems: () => Promise<void>
-  UpdateValutItem: (info: VaultItem) => Promise<void>
+  UpdateValutItem: (info_old: VaultItem, info: VaultItem) => Promise<void>
   DeleteValutItem: (info: VaultItem) => Promise<void>
   AddValutItem: (info: VaultItem) => Promise<void>
   //search
@@ -37,8 +37,9 @@ export const use_appstore = create<AppStore>((set, get) => {
       })
     },
 
-    async UpdateValut(valut) {
-      await window.electron.ipcRenderer.invoke(webToManMsg.UpdateValut, valut)
+    async UpdateValut(old, valut) {
+      console.log(valut)
+      await window.electron.ipcRenderer.invoke(webToManMsg.UpdateValut, old, valut)
     },
 
     async DeleteValut(id: number) {
@@ -49,8 +50,8 @@ export const use_appstore = create<AppStore>((set, get) => {
       await window.electron.ipcRenderer.invoke(webToManMsg.AddValut, valut)
     },
 
-    async UpdateValutItem(valutItem) {
-      await window.electron.ipcRenderer.invoke(webToManMsg.updateValutItem, valutItem)
+    async UpdateValutItem(old, valutItem) {
+      await window.electron.ipcRenderer.invoke(webToManMsg.updateValutItem, old, valutItem)
     },
 
     async DeleteValutItem(valutItem) {

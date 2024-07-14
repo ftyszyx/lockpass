@@ -16,7 +16,6 @@ export function initAllApi() {
     return await AppModel.getInstance().vaultItem?.GetAll()
   })
   ipcMain.handle(webToManMsg.AddValut, async (_, valut) => {
-    console.log('add valut', valut)
     return await AppModel.getInstance().vault?.AddOne(valut)
   })
   ipcMain.handle(webToManMsg.AddValutItem, async (_, valutItem) => {
@@ -28,10 +27,10 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.DeleteValutItem, async (_, vault_item_id) => {
     return await AppModel.getInstance().vaultItem?.DeleteOne(vault_item_id)
   })
-  ipcMain.handle(webToManMsg.UpdateValut, async (_, valut) => {
-    return await AppModel.getInstance().vault?.UpdateOne(valut)
+  ipcMain.handle(webToManMsg.UpdateValut, async (_, old_valut, new_valut) => {
+    return await AppModel.getInstance().vault?.UpdateOne(old_valut, new_valut)
   })
-  ipcMain.handle(webToManMsg.updateValutItem, async (_, valutItem) => {
-    return await AppModel.getInstance().vaultItem?.UpdateOne(valutItem)
+  ipcMain.handle(webToManMsg.updateValutItem, async (_, old_item, valutItem) => {
+    return await AppModel.getInstance().vaultItem?.UpdateOne(old_item, valutItem)
   })
 }

@@ -3,7 +3,7 @@ import { BaseEntity } from './db.entity'
 
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
-  @Column({ type: 'VARCHAR', unique: true, index_name: 'username_index' })
+  @Column({ type: 'VARCHAR', unique_index: true, index_name: 'username_index' })
   username: string
   @Column({ type: 'VARCHAR' })
   password: string

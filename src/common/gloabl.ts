@@ -22,3 +22,8 @@ export enum Icon_type {
   icon_eye_fill = 'icon-eye-fill',
   icon_eyeclose_fill = 'icon-eyeclose-fill'
 }
+
+export enum ModalType {
+  Add = 'add',
+  Edit = 'edit'
+}
