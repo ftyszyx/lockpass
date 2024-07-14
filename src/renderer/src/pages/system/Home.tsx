@@ -28,7 +28,7 @@ export default function Home() {
     <div>
       {contextHolder}
       <div className=" bg-gray-100 p-8">
-        <div className=" container mx-auto">
+        <div className=" mx-auto">
           <h1 className="text-2xl font-semibold mb-4">密码库</h1>
           <Button
             className="mb-4"
@@ -50,11 +50,11 @@ export default function Home() {
                   key={valut.id}
                   className="flex flex-col bg-white shadow-md rounded-lg p-4 w-64 border-t-4 h-[150px] border-purple-200 mr-4 mb-4"
                 >
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-1">
                     <h2 className="text-lg font-semibold">{valut.name}</h2>
                     <Icon type={valut.icon} className=" w-8 h-8" />
                   </div>
-                  <div className=" text-gray-600 mb-4 w-[100%] text-wrap break-words">
+                  <div className=" text-gray-600  w-[100%] text-wrap break-words flex-grow">
                     {valut.info}
                   </div>
                   <div className="flex justify-between items-center ">
