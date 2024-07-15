@@ -3,12 +3,13 @@ import RootRouter from './route'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
 import { useEffect } from 'react'
 function App(): JSX.Element {
+  const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.ShowErrorMsg, (_, msg, duration) => {
-      message.error(msg, duration)
+      messageApi.error(msg, duration)
     })
     window.electron.ipcRenderer.on(MainToWebMsg.ShowInfoMsg, (_, msg, duration) => {
-      message.info(msg, duration)
+      messageApi.info(msg, duration)
     })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowErrorMsg)
@@ -16,7 +17,12 @@ function App(): JSX.Element {
     }
   }, [])
 
-  return <RootRouter></RootRouter>
+  return (
+    <div>
+      {contextHolder}
+      <RootRouter></RootRouter>
+    </div>
+  )
 }
 
 export default App
