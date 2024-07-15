@@ -2,10 +2,10 @@ import { Vault } from '@common/entitys/valuts.entity'
 import { Icon_type, ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Form, Input, message, Modal, Select } from 'antd'
+import { Button, Form, Input, message, Modal, Pagination, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import TextArea from 'antd/es/input/TextArea'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 16 } }
 export default function Home() {
   console.log('home render')
@@ -15,6 +15,8 @@ export default function Home() {
   const [show_del, setShowDel] = useState(false)
   const [edit_panel_title, setEditPanelTitle] = useState('')
   const [show_type, setShowType] = useState(ModalType.Add)
+  const [page_size, setPageNum] = useState(10)
+  const [cur_page, setCurPage] = useState(1)
   const [cur_info, setCurInfo] = useState<Vault>({} as Vault)
   const appstore = use_appstore() as AppStore
   useEffect(() => {
@@ -23,6 +25,9 @@ export default function Home() {
   async function getAllData() {
     await appstore.FetchAllValuts()
   }
+  const showitems = useMemo(() => {
+    return appstore.vaults.slice((cur_page - 1) * page_size, cur_page * page_size)
+  }, [appstore.vaults, cur_page, page_size])
 
   return (
     <div>
@@ -44,7 +49,7 @@ export default function Home() {
             新增
           </Button>
           <div className="flex  flex-wrap items-center justify-start">
-            {appstore.vaults.map((valut) => {
+            {showitems.map((valut) => {
               return (
                 <div
                   key={valut.id}
@@ -77,6 +82,20 @@ export default function Home() {
               )
             })}
           </div>
+          <Pagination
+            style={{ textAlign: 'center' }}
+            defaultCurrent={cur_page}
+            defaultPageSize={page_size}
+            total={appstore.vaults.length}
+            // showTotal={(total) => `共${total}个`}
+            // showSizeChanger
+            onChange={(page) => {
+              setCurPage(page)
+            }}
+            onShowSizeChange={(current, size) => {
+              setPageNum(size)
+            }}
+          />
         </div>
       </div>
       {show_edit && (
