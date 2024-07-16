@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4601905 */
-  src: url('iconfont.woff2?t=1720604224995') format('woff2'),
-       url('iconfont.woff?t=1720604224995') format('woff'),
-       url('iconfont.ttf?t=1720604224995') format('truetype');
+  src: url('iconfont.woff2?t=1721139351551') format('woff2'),
+       url('iconfont.woff?t=1721139351551') format('woff'),
+       url('iconfont.ttf?t=1721139351551') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,42 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-card:before {
+  content: "\e677";
+}
+
+.icon-document:before {
+  content: "\e88f";
+}
+
+.icon-note:before {
+  content: "\e605";
+}
+
+.icon-password:before {
+  content: "\e680";
+}
+
+.icon-identity:before {
+  content: "\e85a";
+}
+
+.icon-1password:before {
+  content: "\eb31";
+}
+
+.icon-login:before {
+  content: "\ec05";
+}
+
+.icon-api_key:before {
+  content: "\e720";
+}
+
+.icon-api_key2:before {
+  content: "\ee91";
 }
 
 .icon-goto:before {
@@ -47,10 +83,6 @@
 
 .icon-lock2:before {
   content: "\e86c";
-}
-
-.icon-card:before {
-  content: "\e60b";
 }
 
 .icon-chrome:before {

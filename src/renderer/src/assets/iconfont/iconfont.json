@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1061313",
+      "name": "card",
+      "font_class": "card",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
+      "icon_id": "1190280",
+      "name": "document",
+      "font_class": "document",
+      "unicode": "e88f",
+      "unicode_decimal": 59535
+    },
+    {
+      "icon_id": "3746967",
+      "name": "note",
+      "font_class": "note",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "5929353",
+      "name": "password",
+      "font_class": "password",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "8796705",
+      "name": "identity",
+      "font_class": "identity",
+      "unicode": "e85a",
+      "unicode_decimal": 59482
+    },
+    {
+      "icon_id": "15378091",
+      "name": "1password",
+      "font_class": "1password",
+      "unicode": "eb31",
+      "unicode_decimal": 60209
+    },
+    {
+      "icon_id": "19729270",
+      "name": "login",
+      "font_class": "login",
+      "unicode": "ec05",
+      "unicode_decimal": 60421
+    },
+    {
+      "icon_id": "29345547",
+      "name": "api_key",
+      "font_class": "api_key",
+      "unicode": "e720",
+      "unicode_decimal": 59168
+    },
+    {
+      "icon_id": "40677223",
+      "name": "api_key2",
+      "font_class": "api_key2",
+      "unicode": "ee91",
+      "unicode_decimal": 61073
+    },
+    {
       "icon_id": "1613945",
       "name": "goto",
       "font_class": "goto",
@@ -56,7 +119,7 @@
     },
     {
       "icon_id": "7876858",
-      "name": "money",
+      "name": "money2",
       "font_class": "money2",
       "unicode": "e607",
       "unicode_decimal": 58887
@@ -67,13 +130,6 @@
       "font_class": "lock2",
       "unicode": "e86c",
       "unicode_decimal": 59500
-    },
-    {
-      "icon_id": "8450537",
-      "name": "card",
-      "font_class": "card",
-      "unicode": "e60b",
-      "unicode_decimal": 58891
     },
     {
       "icon_id": "11983530",

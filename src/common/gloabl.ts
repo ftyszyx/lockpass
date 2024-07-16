@@ -11,7 +11,14 @@ export function createInstance<T>(type: new (...args: any[]) => T, ...args: any[
 
 export enum Icon_type {
   icon_money = 'icon-money',
-  icon_doc = 'icon-doc',
+  icon_document = 'icon-document',
+  icon_note = 'icon-note',
+  icon_password = 'icon-password',
+  icon_id = 'icon-identity',
+  icon_1password = 'icon-1password',
+  icon_login = 'icon-login',
+  icon_api = 'icon-api_key',
+  icon_api2 = 'icon-api_key2',
   icon_money1 = 'icon-money1',
   icon_personal = 'icon-personal',
   icon_lock = 'icon-lock',
