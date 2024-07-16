@@ -4,6 +4,7 @@ import { Dropdown, Input, Select } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { VaultItem } from '@common/entitys/valut_item.entity'
 import Icon from '@renderer/components/icon'
+import ValutItemInfo from './ValutItemInfo'
 
 export default function Vault() {
   const appstore = use_appstore() as AppStore
@@ -57,16 +58,20 @@ export default function Vault() {
         <div className="flex w-40 flex-col">
           <Input placeholder="Search the item" />
           <div className=" flex flex-col">
-            {show_items.map((vault) => (
-              <div onClick={() => set_select_vault_item(vault)} className="flex flex-row">
-                {/* <Icon type={vault.} /> */}
-                {vault.name}
+            {show_items.map((vault_item) => (
+              <div onClick={() => set_select_vault_item(vault_item)} className="flex flex-row">
+                <Icon type={vault_item.icon} />
+                <div> {vault_item.name}</div>
               </div>
             ))}
           </div>
+          <div>新增</div>
+          <div>导入密码</div>
         </div>
         {/*  right side content*/}
-        <div className="flex flex-grow"></div>
+        <div className="flex flex-grow">
+          <ValutItemInfo info={select_vault_item} />
+        </div>
       </div>
     </div>
   )

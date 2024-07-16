@@ -23,6 +23,12 @@ export enum Icon_type {
   icon_eyeclose_fill = 'icon-eyeclose-fill'
 }
 
+export enum PasswordType {
+  Login = 0,
+  Card = 1,
+  NoteBook = 2
+}
+
 export enum ModalType {
   Add = 'add',
   Edit = 'edit'
