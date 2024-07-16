@@ -10,8 +10,10 @@ export enum PasswordType {
 export class VaultItem extends BaseEntity {
   @Column({ type: 'INTEGER' })
   valut_id: number
-  @Column({ type: 'INTEGER' })
+  @Column({ type: 'INTEGER', comment: '密码类型' })
   passwordType: number
+  @Column({ type: 'VARCHAR', comment: '图标' })
+  icon: string
   @Column({ type: 'VARCHAR' })
   name: string
 

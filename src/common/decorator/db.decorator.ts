@@ -26,6 +26,7 @@ export type ColumnType =
   | 'VARCHAR[]'
 
 export interface ColumnOptions {
+  comment?: string
   type?: ColumnType
   name?: string
   default?: any
