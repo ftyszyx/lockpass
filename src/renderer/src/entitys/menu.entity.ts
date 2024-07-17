@@ -12,7 +12,7 @@ export interface MyMenuType {
 export const allMenus: MyMenuType[] = [
   {
     id: 1,
-    title: '概况',
+    title: 'setting',
     sorts: 1,
     icon_style_type: 'icon-home',
     parent: '0',

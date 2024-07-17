@@ -5,6 +5,8 @@ import { AppEntity } from '@renderer/entitys/app.entity'
 import { create } from '@renderer/libs/state'
 
 export interface AppStore extends AppEntity {
+  fold_menu: boolean
+  SetFoldMenu: (fold: boolean) => void
   // valuts
   FetchAllValuts: () => Promise<void>
   UpdateValut: (old: Vault, valut: Vault) => Promise<void>
@@ -20,7 +22,12 @@ export interface AppStore extends AppEntity {
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
-    // fold_menu: false,
+    fold_menu: false,
+    SetFoldMenu(fold: boolean) {
+      set((state) => {
+        return { ...state, fold_menu: fold }
+      })
+    },
     vaults: [],
     vaut_items: [],
     async FetchAllValuts() {

@@ -11,9 +11,9 @@ const RootRouter = () => {
     <BrowerRouter debug={false}>
       <Route>
         <Route path={PagePath.initKey} element={InitSystem} match={{ end: true }} />
+        <Route path={PagePath.AdminHome} element={Home} />
         <Route path="/" element={BasicLayout} errorElement={NotFound}>
           <Route path="/" redirect={PagePath.AdminHome} match={{ end: true }} />
-          <Route path={PagePath.AdminHome} element={Home} />
           <Route path={PagePath.Valut_items + '/:id'} element={Vault} />
         </Route>
       </Route>

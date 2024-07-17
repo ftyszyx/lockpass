@@ -69,7 +69,7 @@ export default function MyMenu(): JSX.Element {
         <Link to="/" className={appstore.fold_menu ? ' hidden' : ' flex h-full items-center'}>
           <img src={ImgLogo} className=" w-10 ml-3" />
           <div className=" text-white w-full" style={{ width: '100 %', fontSize: '24px' }}>
-            {SystemName}
+            value manager
           </div>
         </Link>
       </div>
