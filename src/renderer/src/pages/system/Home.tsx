@@ -1,6 +1,8 @@
+import { PagePath } from '@common/entitys/page.entity'
 import { Vault } from '@common/entitys/valuts.entity'
 import { Icon_type, ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
+import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Modal, Pagination, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
@@ -10,6 +12,7 @@ const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 16 } }
 export default function Home() {
   console.log('home render')
   const [form] = useForm()
+  const history = useHistory()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_edit, setShowEdit] = useState(false)
   const [show_del, setShowDel] = useState(false)
@@ -76,7 +79,14 @@ export default function Home() {
                         setShowEdit(true)
                       }}
                     ></Icon>
-                    <Icon type="icon-goto" className=" text-gray-400" onClick={() => {}}></Icon>
+
+                    <Icon
+                      type="icon-goto"
+                      className=" text-gray-400"
+                      onClick={() => {
+                        history.push(`${PagePath.Valut_items}/${valut.id}`)
+                      }}
+                    ></Icon>
                   </div>
                 </div>
               )

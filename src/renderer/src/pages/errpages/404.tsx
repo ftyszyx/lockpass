@@ -2,6 +2,7 @@ import { Button } from 'antd'
 import errimg from '@renderer/assets/error.gif'
 
 export default function NotFound() {
+  console.log('not found')
   return (
     <div className=" relative h-full flex items-center bg-white">
       <div>

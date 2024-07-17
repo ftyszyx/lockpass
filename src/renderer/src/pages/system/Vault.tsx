@@ -7,6 +7,7 @@ import Icon from '@renderer/components/icon'
 import ValutItemInfo from './ValutItemInfo'
 
 export default function Vault() {
+  console.log('vault render')
   const appstore = use_appstore() as AppStore
   const SelectAll = 'ALL'
   const [select_vault, set_select_vault] = useState(SelectAll)
@@ -70,7 +71,12 @@ export default function Vault() {
         </div>
         {/*  right side content*/}
         <div className="flex flex-grow">
-          <ValutItemInfo info={select_vault_item} />
+          <ValutItemInfo
+            info={select_vault_item}
+            onDel={() => {
+              console.log('del')
+            }}
+          />
         </div>
       </div>
     </div>

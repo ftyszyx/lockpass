@@ -5,5 +5,5 @@ interface props {
   onDel: () => void
 }
 export default function ValutItemInfo(props: props) {
-  return <div></div>
+  return <div>valutiteminfo</div>
 }
