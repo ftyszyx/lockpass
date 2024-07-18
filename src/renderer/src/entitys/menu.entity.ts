@@ -16,7 +16,7 @@ export const allMenus: MyMenuType[] = [
     sorts: 1,
     icon_style_type: 'icon-home',
     parent: '0',
-    url: PagePath.AdminHome
+    url: PagePath.Home
   }
 ]
 

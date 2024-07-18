@@ -28,6 +28,7 @@ export type ColumnType =
 export interface ColumnOptions {
   comment?: string
   type?: ColumnType
+  select_hide?: boolean
   name?: string
   default?: any
   primary?: boolean

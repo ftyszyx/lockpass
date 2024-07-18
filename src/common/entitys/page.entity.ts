@@ -1,7 +1,8 @@
 export enum PagePath {
   initKey = '/initkey',
-  AdminHome = '/home',
-  Valut_items = '/valutitems',
+  Home = '/home',
+  Adminbase = '/admin',
+  Valut_items = '/admin/valutitems',
   Err404 = '/404',
   Err401 = '/401'
 }

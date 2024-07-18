@@ -3,8 +3,6 @@ import { BaseEntity } from './db.entity'
 
 @Entity({ name: 'vault' })
 export class Vault extends BaseEntity {
-  // @Column({ type: 'INTEGER', primary: true, unique: true })
-  // id: number
   @Column({ type: 'VARCHAR', unique_index: true, index_name: 'name_index' })
   name: string
   @Column({ type: 'VARCHAR' })

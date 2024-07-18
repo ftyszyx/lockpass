@@ -222,8 +222,9 @@ class DbHlper {
 
   public GetOne<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
     const table_name = obj[Table_Name_KEY]
-    let sql_str = `select * from ${table_name} where ` //${key}=${col_value} limit 1`
+    let sql_str = `select * from ${table_name} where `
     sql_str += this.getWhreSql(obj, where)
+    sql_str += ' limit 1'
     return this._runSqlWithResult(obj, sql_str, `get:${table_name}`)
   }
 

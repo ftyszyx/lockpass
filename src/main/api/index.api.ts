@@ -7,7 +7,7 @@ export function initAllApi() {
     return AppModel.getInstance().myencode?.needInitKey()
   })
   ipcMain.handle(webToManMsg.initKey, async (_, info: InitKeyInfo) => {
-    return await AppModel.getInstance().myencode?.InitSystem(info)
+    return await AppModel.getInstance().myencode?.InitSecretkey(info)
   })
   ipcMain.handle(webToManMsg.GetAllValuts, async () => {
     return await AppModel.getInstance().vault?.GetAll()
@@ -33,4 +33,12 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.updateValutItem, async (_, old_item, valutItem) => {
     return await AppModel.getInstance().vaultItem?.UpdateOne(old_item, valutItem)
   })
+
+  ipcMain.handle(webToManMsg.getAllUser, async () => {
+    return await AppModel.getInstance().user?.GetAll()
+  })
+
+  ipcMain.handle(webToManMsg.SelectAsUser, async (_, username) => {
+    return await AppModel.getInstance().user.SelectOne?(username)
+  }) 
 }

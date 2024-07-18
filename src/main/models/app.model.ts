@@ -4,12 +4,14 @@ import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
 import { BrowserWindow } from 'electron'
 import { ValutService } from '@main/services/vault.service'
+import { UserService } from '@main/services/user.service'
 
 class AppModel {
-  mainview: MainViewHelper | null = null
-  myencode: MyEncode | null = null
-  vault: ValutService | null = null
-  vaultItem: ValutService | null = null
+  public mainview: MainViewHelper | null = null
+  public myencode: MyEncode | null = null
+  public vault: ValutService | null = null
+  public vaultItem: ValutService | null = null
+  public user: UserService | null = null
   constructor() {
     Log.initialize()
     this.myencode = new MyEncode()
@@ -17,6 +19,7 @@ class AppModel {
     DbHlper.instance().InitTables()
     this.vault = new ValutService()
     this.vaultItem = new ValutService()
+    this.user = new UserService()
   }
 
   private static instance: AppModel

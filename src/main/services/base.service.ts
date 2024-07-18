@@ -7,6 +7,10 @@ export class BaseService<Entity extends BaseEntity> {
     return DbHlper.instance().GetAll(this.entity, null)
   }
 
+  public async GetOne(key: string, value: string): Promise<Entity[]> {
+    return DbHlper.instance().GetOne(this.entity, { key: value })
+  }
+
   public async AddOne(obj: Record<string, any>): Promise<void> {
     const co_fun = this.entity.constructor as new () => Entity
     const entity = new co_fun()

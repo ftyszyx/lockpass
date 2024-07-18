@@ -1,10 +1,13 @@
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/valut_item.entity'
 import { Vault } from '@common/entitys/valuts.entity'
 import { AppEntity } from '@renderer/entitys/app.entity'
 import { create } from '@renderer/libs/state'
 
 export interface AppStore extends AppEntity {
+  cur_user?: User
+  user_list?: User[]
   fold_menu: boolean
   SetFoldMenu: (fold: boolean) => void
   // valuts
@@ -19,6 +22,10 @@ export interface AppStore extends AppEntity {
   AddValutItem: (info: VaultItem) => Promise<void>
   //search
   SearchValutItems: (keyword: string, vault_id: Number) => VaultItem[]
+
+  //user
+  FetchAllUsers: () => Promise<void>
+  SelectUser: (user: User) => Promise<void>
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
@@ -41,6 +48,20 @@ export const use_appstore = create<AppStore>((set, get) => {
       const res = await window.electron.ipcRenderer.invoke(webToManMsg.GetAllValutItems)
       set((state) => {
         return { ...state, vaut_items: res }
+      })
+    },
+
+    async FetchAllUsers() {
+      const res = await window.electron.ipcRenderer.invoke(webToManMsg.getAllUser)
+      set((state) => {
+        return { ...state, user_list: res }
+      })
+    },
+
+    async SelectUser(info: User) {
+      await window.electron.ipcRenderer.invoke(webToManMsg.SelectAsUser, info.username)
+      set((state) => {
+        return { ...state, cur_user: info }
       })
     },
 

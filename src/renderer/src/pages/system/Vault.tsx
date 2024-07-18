@@ -50,7 +50,9 @@ export default function Vault() {
               }
             ]
           }}
-        />
+        >
+          <div>{appstore.cur_user.username}</div>
+        </Dropdown>
       </div>
 
       {/* content */}
@@ -60,7 +62,11 @@ export default function Vault() {
           <Input placeholder="Search the item" />
           <div className=" flex flex-col">
             {show_items.map((vault_item) => (
-              <div onClick={() => set_select_vault_item(vault_item)} className="flex flex-row">
+              <div
+                onClick={() => set_select_vault_item(vault_item)}
+                className="flex flex-row"
+                key={vault_item.id}
+              >
                 <Icon type={vault_item.icon} />
                 <div> {vault_item.name}</div>
               </div>

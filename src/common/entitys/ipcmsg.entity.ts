@@ -2,6 +2,9 @@ export enum webToManMsg {
   needInitKey = 'needInitKey',
   initKey = 'initKey',
 
+  getAllUser = 'getAllUser',
+  SelectAsUser = 'Login',
+
   GetAllValuts = 'GetAllValuts',
   UpdateValut = 'UpdateValut',
   DeleteValut = 'DeleteValut',
