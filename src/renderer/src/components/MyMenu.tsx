@@ -11,8 +11,11 @@ import { Link, useHistory } from '@renderer/libs/router'
 import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 type MenuNodeType = MyMenuType & MenuItemType
+interface MenuProps {
+  className?: string
+}
 
-export default function MyMenu(): JSX.Element {
+export default function MyMenu(props: MenuProps): JSX.Element {
   const location = useHistory()
   const appstore = use_appstore() as AppStore
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
@@ -58,14 +61,8 @@ export default function MyMenu(): JSX.Element {
   }, [location.PathName, menutree_info])
 
   return (
-    <Sider
-      width={256}
-      className=" min-h-full"
-      trigger={null}
-      collapsible
-      collapsed={appstore.fold_menu}
-    >
-      <div className={'h-16 bg-slate-800'}>
+    <div className={`${props.className} bg-slate-800`}>
+      <div className={'h-16 '}>
         <Link to="/" className={appstore.fold_menu ? ' hidden' : ' flex h-full items-center'}>
           <img src={ImgLogo} className=" w-10 ml-3" />
           <div className=" text-white w-full" style={{ width: '100 %', fontSize: '24px' }}>
@@ -102,6 +99,6 @@ export default function MyMenu(): JSX.Element {
           }
         }}
       />
-    </Sider>
+    </div>
   )
 }

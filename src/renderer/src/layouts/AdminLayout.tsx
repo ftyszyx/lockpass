@@ -4,7 +4,7 @@ import MyMenu from '@renderer/components/MyMenu'
 function AdminLayout(props: ChildProps): JSX.Element {
   console.log('admin layout render')
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div className="h-screen flex flex-row ">
       <MyMenu />
       {/* right side */}
       <div className=" flex-grow">
