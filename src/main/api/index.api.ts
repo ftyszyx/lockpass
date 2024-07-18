@@ -39,6 +39,6 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.SelectAsUser, async (_, username) => {
-    return await AppModel.getInstance().user.SelectOne?(username)
-  }) 
+    return await AppModel.getInstance().user?.SelectOne(username)
+  })
 }

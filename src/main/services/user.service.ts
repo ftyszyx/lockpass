@@ -16,6 +16,7 @@ export class UserService extends BaseService<User> {
   }
 
   public async SelectOne(username: string): Promise<void> {
+    console.log('select one', username)
     const users = await super.GetOne('username', username)
     if (users.length <= 0) {
       return Promise.reject(new Error('User not found'))

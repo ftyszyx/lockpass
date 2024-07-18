@@ -8,7 +8,7 @@ export class BaseService<Entity extends BaseEntity> {
   }
 
   public async GetOne(key: string, value: string): Promise<Entity[]> {
-    return DbHlper.instance().GetOne(this.entity, { key: value })
+    return DbHlper.instance().GetOne(this.entity, { [key]: value })
   }
 
   public async AddOne(obj: Record<string, any>): Promise<void> {
