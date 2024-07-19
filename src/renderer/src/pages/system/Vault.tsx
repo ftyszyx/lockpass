@@ -30,8 +30,7 @@ export default function Vault() {
   return (
     <div className="flex flex-col bg-gray-100 h-screen">
       {/* header */}
-      <div className="flex flex-row h-16 w-full">
-        <img src={logo} />
+      <div className="flex flex-row h-16 w-full items-center">
         {/* select vault */}
         <Select onChange={() => {}}>
           <Select.Option value={SelectAll}>ALL</Select.Option>

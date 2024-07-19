@@ -7,6 +7,7 @@ import InitSystem from './pages/init/InitSystem'
 import Vault from './pages/system/Vault'
 import AdminLayout from './layouts/AdminLayout'
 import AdminSet from './pages/system/AdminSet'
+import Lock from './pages/system/Lock'
 
 const RootRouter = () => {
   return (
@@ -16,6 +17,7 @@ const RootRouter = () => {
         <Route path="/" element={BasicLayout} errorElement={NotFound}>
           <Route path="/" redirect={PagePath.Home} match={{ end: true }} />
           <Route path={PagePath.Home} element={Home} />
+          <Route path={PagePath.Lock} element={Lock} />
           <Route path={PagePath.Adminbase} element={AdminLayout} errorElement={NotFound}>
             {/*  prettier-ignore */}
             <Route
