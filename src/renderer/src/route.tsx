@@ -1,11 +1,12 @@
 import { PagePath } from '@common/entitys/page.entity'
 import BasicLayout from './layouts/BaseLayout'
-import { BrowerRouter, HashRouter, Route } from './libs/router'
+import { BrowerRouter, Route } from './libs/router'
 import NotFound from '@renderer/pages/errpages/404'
 import Home from '@renderer/pages/system/Home'
 import InitSystem from './pages/init/InitSystem'
 import Vault from './pages/system/Vault'
 import AdminLayout from './layouts/AdminLayout'
+import AdminSet from './pages/system/AdminSet'
 
 const RootRouter = () => {
   return (
@@ -16,12 +17,14 @@ const RootRouter = () => {
           <Route path="/" redirect={PagePath.Home} match={{ end: true }} />
           <Route path={PagePath.Home} element={Home} />
           <Route path={PagePath.Adminbase} element={AdminLayout} errorElement={NotFound}>
+            {/*  prettier-ignore */}
             <Route
               path={PagePath.Adminbase}
-              redirect={PagePath.Valut_items}
+              redirect={PagePath.Admin_valutitem}
               match={{ end: true }}
             />
-            <Route path={PagePath.Valut_items + '/:id'} element={Vault} />
+            <Route path={PagePath.Admin_set} element={AdminSet} />
+            <Route path={PagePath.Admin_valutitem_full} element={Vault} />
           </Route>
         </Route>
       </Route>

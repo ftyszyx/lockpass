@@ -24,7 +24,7 @@ export interface AppStore extends AppEntity {
   SearchValutItems: (keyword: string, vault_id: Number) => VaultItem[]
 
   //user
-  FetchAllUsers: () => Promise<void>
+  FetchAllUsers: () => Promise<User[]>
   SelectUser: (user: User) => Promise<void>
 }
 export const use_appstore = create<AppStore>((set, get) => {
@@ -49,6 +49,7 @@ export const use_appstore = create<AppStore>((set, get) => {
       set((state) => {
         return { ...state, vaut_items: res }
       })
+      return res
     },
 
     async FetchAllUsers() {
@@ -56,6 +57,7 @@ export const use_appstore = create<AppStore>((set, get) => {
       set((state) => {
         return { ...state, user_list: res }
       })
+      return res
     },
 
     async SelectUser(info: User) {

@@ -5,7 +5,7 @@ import { BrowerRouterProps } from './index'
 export default function BrowerRouter(props: BrowerRouterProps) {
   const history = createBrowserHistory({ debug: props.debug })
   return (
-    <Router history={history} debug={props.debug || false}>
+    <Router history={history} debug={props.debug || false} relative_path={props.relative_path}>
       {props.children}
     </Router>
   )

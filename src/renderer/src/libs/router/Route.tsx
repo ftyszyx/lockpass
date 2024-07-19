@@ -3,9 +3,10 @@ import routerContext from './RouterContext'
 import { PathMatch } from './match'
 const Route = (props: RouteProps) => {
   const consume_func = (value: RouterStoreData) => {
+    const relevant_path = props.relative_path || value.relative_path
     const pathname = value.history.PathName
     let route_path = props.path || ''
-    if (value.match != null) {
+    if (value.match != null && relevant_path) {
       route_path = url_join(value.match.url, props.path || '')
     }
     let newcontext = value
@@ -14,7 +15,7 @@ const Route = (props: RouteProps) => {
       if (match == null) return null
       newcontext = { ...value, match } as RouterStoreData
     }
-    const childmatch = matchChild(route_path, props.children, value)
+    const childmatch = matchChild(route_path, props.children, value, relevant_path)
     const render_res = render(props, childmatch, newcontext)
     if (render_res != null)
       return <routerContext.Provider value={newcontext}>{render_res}</routerContext.Provider>

@@ -21,6 +21,7 @@ export type MatchRes = {
 export type RouterProps = {
   children?: React.ReactNode
   history?: History
+  relative_path?: boolean //route 节点是否使用相对路径
   debug: boolean
 }
 
@@ -31,6 +32,7 @@ export type RouteProps = {
   element?: React.ReactNode | ((props: RouteProps) => React.ReactElement)
   errorElement?: () => React.ReactElement
   path?: string
+  relative_path?: boolean //route 节点是否使用相对路径
   redirect?: string
   routeType?: string
 }
@@ -39,11 +41,13 @@ export type RedirectProps = RouteProps & {
 }
 export type BrowerRouterProps = {
   children?: React.ReactNode
+  relative_path?: boolean //route 节点是否使用相对路径
   debug?: boolean
 }
 
 export type HashRouteProps = {
   children?: React.ReactNode
+  relative_path?: boolean //route 节点是否使用相对路径
   debug?: boolean
 }
 
@@ -55,6 +59,7 @@ export type LinkProps = {
 export type RouterStoreData = {
   match?: MatchRes
   history: History
+  relative_path?: boolean //route 节点是否使用相对路径
   debug: boolean
 }
 export type RouterStoreDef = RouterStoreData & {
@@ -102,11 +107,8 @@ export function url_join(...args: string[]): string {
 }
 
 export type childMatchRes = { child: React.ReactElement | null }
-export function matchChild(
-  parent_path: string,
-  children: React.ReactNode,
-  value: RouterStoreData
-): childMatchRes {
+// prettier-ignore
+export function matchChild( parent_path: string, children: React.ReactNode, value: RouterStoreData,relative_path:boolean): childMatchRes {
   const url = value.history.PathName
   let final_children: React.ReactElement[] = []
   if (children instanceof Array) final_children = children
@@ -116,11 +118,10 @@ export function matchChild(
     const itemtype = item.type
     if (itemtype != Route) continue
     const item_props = item.props as RouteProps
-    const item_truepath = url_join(parent_path, item_props.path || '')
-    // if (value.debug) console.log('item truepath:', item_truepath, 'url', url)
+    let item_truepath = item_props.path || ''
+    if(relative_path) item_truepath = url_join(parent_path, item_truepath)
     const match = PathMatch(item_truepath, url, item_props?.match, value.debug)
     if (match != null) {
-      // if (value.debug) console.log(`child match: routepath:${item_truepath}  url:${url}`)
       return { child: item }
     }
   }

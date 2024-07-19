@@ -1,15 +1,15 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Layout, Menu as MenuAntd } from 'antd'
+import { Menu as MenuAntd } from 'antd'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
-const { Sider } = Layout
-import ImgLogo from '@renderer/assets/logo.png'
 import Icon from '@renderer/components/icon'
 import { cloneDeep } from 'lodash'
 import { pathToRegexp, compile, Key } from 'path-to-regexp'
-import { MyMenuType, MenuParamNull, getAllMenus } from '@renderer/entitys/menu.entity'
+import { MyMenuType, MenuParamNull, getAllMenus, MenuValutID } from '@renderer/entitys/menu.entity'
 import { Link, useHistory } from '@renderer/libs/router'
 import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { PagePath } from '@common/entitys/page.entity'
+import { SYS_TEM_NAME } from '@common/gloabl'
 type MenuNodeType = MyMenuType & MenuItemType
 interface MenuProps {
   className?: string
@@ -23,12 +23,22 @@ export default function MyMenu(props: MenuProps): JSX.Element {
 
   const menutree_info = useMemo(() => {
     console.log('get all menus')
-    const menulist = cloneDeep(getAllMenus())
+    let menulist = cloneDeep(getAllMenus())
+    appstore.vaults.forEach((item) => {
+      menulist.push({
+        id: item.id,
+        sorts: 1000 + item.id,
+        title: item.name,
+        icon_style_type: item.icon,
+        url: `${PagePath.Admin_valutitem}/${item.id}`,
+        parent: MenuValutID + ''
+      })
+    })
     menulist.sort((a, b) => {
       return a.sorts - b.sorts
     })
-    return GetCommonTree<MenuNodeType>(menulist)
-  }, [])
+    return GetCommonTree<MenuNodeType>(menulist as MenuNodeType[])
+  }, [appstore.vaults])
   /** 处理原始数据，将原始数据处理为层级关系 **/
   const treeDom: ItemType[] = useMemo(() => {
     menutree_info.datalist.forEach((item) => {
@@ -61,13 +71,13 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   }, [location.PathName, menutree_info])
 
   return (
-    <div className={`${props.className} bg-slate-800`}>
-      <div className={'h-16 '}>
-        <Link to="/" className={appstore.fold_menu ? ' hidden' : ' flex h-full items-center'}>
-          <img src={ImgLogo} className=" w-10 ml-3" />
-          <div className=" text-white w-full" style={{ width: '100 %', fontSize: '24px' }}>
-            value manager
-          </div>
+    <div className={`${props.className} bg-slate-800 ${appstore.fold_menu ? 'hidden' : 'w-60'}`}>
+      <div>
+        <Link
+          to={PagePath.Home}
+          className={appstore.fold_menu ? ' hidden' : ' flex h-full items-center'}
+        >
+          <div className=" text-white w-full m-4 text-lg">{SYS_TEM_NAME}</div>
         </Link>
       </div>
       <MenuAntd
@@ -82,19 +92,8 @@ export default function MyMenu(props: MenuProps): JSX.Element {
           if (menuinfo) {
             const params_keys: Key[] = []
             pathToRegexp(menuinfo.url, params_keys)
-            // console.log("slect parmskeys", params_keys);
-            if (params_keys.length == 0) {
-              location.push(menuinfo.url)
-            } else {
-              const topath = compile(menuinfo.url)
-              const newvalue: Record<string, any> = {}
-              params_keys.forEach((item) => {
-                newvalue[item.name] = MenuParamNull
-              })
-              const new_url = topath(newvalue)
-              console.log(`menu path ${menuinfo.url}->${new_url}`)
-              location.push(new_url)
-            }
+            console.log('slect parmskeys', params_keys)
+            location.push(menuinfo.url)
             setChosedKey([menuinfo.key])
           }
         }}

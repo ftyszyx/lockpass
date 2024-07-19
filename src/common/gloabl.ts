@@ -1,9 +1,13 @@
+//duckdb key
 export const Table_Desc_KEY = 'table_desc'
 export const Table_index_desc_KEY = 'index_desc'
 export const Column_desc_KEY = 'col_desc'
 export const Column_Name_KEY = 'col_name'
 export const Column_Type_KEY = 'col_type'
 export const Table_Name_KEY = 'table_name'
+
+//global string
+export const SYS_TEM_NAME = 'passlock'
 
 export function createInstance<T>(type: new (...args: any[]) => T, ...args: any[]): T {
   return new type(...args)
@@ -27,7 +31,8 @@ export enum Icon_type {
   icon_card = 'icon-card',
   icon_chrome = 'icon-chrome',
   icon_eye_fill = 'icon-eye-fill',
-  icon_eyeclose_fill = 'icon-eyeclose-fill'
+  icon_eyeclose_fill = 'icon-eyeclose-fill',
+  icon_set = 'icon-set'
 }
 
 export enum PasswordType {

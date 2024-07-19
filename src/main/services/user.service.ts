@@ -12,6 +12,7 @@ export class UserService extends BaseService<User> {
     all_users.forEach((user) => {
       user.password = ''
     })
+    console.log('get all users', all_users)
     return all_users
   }
 

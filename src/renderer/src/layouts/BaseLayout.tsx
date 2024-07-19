@@ -22,8 +22,9 @@ function BaseLayout(props: ChildProps): JSX.Element {
     })
   }, [])
   async function getallData() {
-    await appstore.FetchAllUsers()
-    var users = appstore.user_list
+    console.log('get all data')
+    const users = await appstore.FetchAllUsers()
+    console.log('users:', users)
     if (users?.length > 0) {
       await appstore.SelectUser(users[0])
     } else {

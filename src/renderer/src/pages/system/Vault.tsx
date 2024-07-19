@@ -51,7 +51,7 @@ export default function Vault() {
             ]
           }}
         >
-          <div>{appstore.cur_user.username}</div>
+          <div>{appstore.cur_user?.username}</div>
         </Dropdown>
       </div>
 
