@@ -1,10 +1,11 @@
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import logo from '@renderer/assets/logo.png'
-import { Dropdown, Input, Select } from 'antd'
+import { Button, Dropdown, Input, Select } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { VaultItem } from '@common/entitys/valut_item.entity'
 import Icon from '@renderer/components/icon'
 import ValutItemInfo from './ValutItemInfo'
+import { Icon_type, PasswordType } from '@common/gloabl'
 
 export default function Vault() {
   console.log('vault render')
@@ -30,37 +31,42 @@ export default function Vault() {
   return (
     <div className="flex flex-col bg-gray-100 h-screen">
       {/* header */}
-      <div className="flex flex-row h-16 w-full items-center">
-        {/* select vault */}
-        <Select onChange={() => {}}>
-          <Select.Option value={SelectAll}>ALL</Select.Option>
-          {appstore.vaults.map((vault) => (
-            <Select.Option value={vault} key={vault.id}>
-              {vault.name}
-            </Select.Option>
-          ))}
-        </Select>
-        {/* user settings */}
-        <Dropdown
-          menu={{
-            onClick: () => {},
-            items: [
-              {
-                key: 'settings',
-                label: 'Settings'
-              }
-            ]
-          }}
-        >
-          <div>{appstore.cur_user?.username}</div>
-        </Dropdown>
+      <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
+        <Input placeholder="Search the vault" className="flex-grow" />
+        <Icon type={Icon_type.icon_help} />
+        <Button type="primary">新增项目</Button>
       </div>
 
       {/* content */}
       <div className=" flex flex-row flex-grow">
         {/*  left side menu*/}
-        <div className="flex w-40 flex-col">
-          <Input placeholder="Search the item" />
+        <div className="flex w-[30%] flex-col">
+          {/* first line */}
+          <div className="flex flex-row justify-between items-center p-2">
+            <Select
+              value={select_vault}
+              onChange={(value) => {
+                set_select_vault(value)
+              }}
+              defaultValue={SelectAll}
+            >
+              <Select.Option value={SelectAll} key={SelectAll}>
+                <Icon type={Icon_type.icon_type} />
+                所有类别
+              </Select.Option>
+              {Object.keys(PasswordType).map((key) => {
+                const type_value = PasswordType[key]
+                return (
+                  <Select.Option key={key} value={type_value}>
+                    <Icon type={`icon-${type_value}`} />
+                    {type_value}
+                  </Select.Option>
+                )
+              })}
+            </Select>
+            <Icon type={Icon_type.icon_rank} />
+          </div>
+          {/* item list */}
           <div className=" flex flex-col">
             {show_items.map((vault_item) => (
               <div
@@ -68,7 +74,7 @@ export default function Vault() {
                 className="flex flex-row"
                 key={vault_item.id}
               >
-                <Icon type={vault_item.icon} />
+                <Icon type={`icon-${vault_item.passwordType}`} />
                 <div> {vault_item.name}</div>
               </div>
             ))}

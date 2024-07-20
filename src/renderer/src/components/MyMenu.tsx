@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Menu as MenuAntd } from 'antd'
+import { Dropdown, Menu as MenuAntd, Space } from 'antd'
+import { DownOutlined } from '@ant-design/icons'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/icon'
 import { cloneDeep } from 'lodash'
@@ -9,7 +10,7 @@ import { Link, useHistory } from '@renderer/libs/router'
 import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { PagePath } from '@common/entitys/page.entity'
-import { ModalType, SYS_TEM_NAME } from '@common/gloabl'
+import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
 import AdminAddValut from '@renderer/pages/system/AdminAddValut'
 type MenuNodeType = MyMenuType & MenuItemType
 interface MenuProps {
@@ -91,6 +92,26 @@ export default function MyMenu(props: MenuProps): JSX.Element {
             <div className=" text-white w-full m-4 text-lg">{SYS_TEM_NAME}</div>
           </Link>
         </div>
+        {/* user settings */}
+        <Dropdown
+          menu={{
+            onClick: () => {},
+            items: [
+              {
+                key: 'settings',
+                label: 'Settings'
+              }
+            ]
+          }}
+        >
+          <div className=" text-white text-lg flex flex-row justify-between m-2 items-center">
+            <div className="flex flex-row items-center">
+              <Icon type={Icon_type.icon_user} className="text-[40px] mr-2" />
+              {appstore.cur_user?.username}
+            </div>
+            <DownOutlined className=" text-sm" />
+          </div>
+        </Dropdown>
         <MenuAntd
           theme="dark"
           mode="inline"

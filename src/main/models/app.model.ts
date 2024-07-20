@@ -3,22 +3,23 @@ import { MainViewHelper } from '@main/libs/view_help'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
 import { BrowserWindow } from 'electron'
-import { ValutService } from '@main/services/vault.service'
+import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
+import { VaultItemService } from '@main/services/vault_item.service'
 
 class AppModel {
   public mainview: MainViewHelper | null = null
   public myencode: MyEncode | null = null
-  public vault: ValutService | null = null
-  public vaultItem: ValutService | null = null
+  public vault: VaultService | null = null
+  public vaultItem: VaultItemService | null = null
   public user: UserService | null = null
   constructor() {
     Log.initialize()
     this.myencode = new MyEncode()
     Log.info('AppModel init')
     DbHlper.instance().InitTables()
-    this.vault = new ValutService()
-    this.vaultItem = new ValutService()
+    this.vault = new VaultService()
+    this.vaultItem = new VaultItemService()
     this.user = new UserService()
   }
 

@@ -1,7 +1,7 @@
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/valut_item.entity'
-import { Vault } from '@common/entitys/valuts.entity'
+import { Vault } from '@common/entitys/vaults.entity'
 import { AppEntity } from '@renderer/entitys/app.entity'
 import { create } from '@renderer/libs/state'
 

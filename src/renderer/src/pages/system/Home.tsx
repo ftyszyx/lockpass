@@ -1,5 +1,5 @@
 import { PagePath } from '@common/entitys/page.entity'
-import { Vault } from '@common/entitys/valuts.entity'
+import { Vault } from '@common/entitys/vaults.entity'
 import { ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
 import { useHistory } from '@renderer/libs/router'

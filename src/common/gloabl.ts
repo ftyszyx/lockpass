@@ -35,13 +35,18 @@ export enum Icon_type {
   icon_set = 'icon-set',
   icon_add = 'icon-add',
   icon_log = 'icon-log',
-  icon_help = 'icon-help'
+  icon_help = 'icon-help',
+  icon_user = 'icon-user',
+  icon_man = 'icon-man',
+  icon_type = 'icon-type',
+  icon_type2 = 'icon-type2',
+  icon_rank = 'icon-rank'
 }
 
 export enum PasswordType {
-  Login = 0,
-  Card = 1,
-  NoteBook = 2
+  Login = 'login',
+  Card = 'card',
+  NoteBook = 'note'
 }
 
 export enum ModalType {

@@ -1,6 +1,6 @@
 import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/valut_item.entity'
-import { Vault } from '@common/entitys/valuts.entity'
+import { Vault } from '@common/entitys/vaults.entity'
 import { Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
 import duckdb from 'duckdb'
 import { Log } from './log'

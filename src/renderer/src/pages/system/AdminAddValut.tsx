@@ -1,4 +1,4 @@
-import { Vault } from '@common/entitys/valuts.entity'
+import { Vault } from '@common/entitys/vaults.entity'
 import { Icon_type, ModalType } from '@common/gloabl'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Modal, Select } from 'antd'
