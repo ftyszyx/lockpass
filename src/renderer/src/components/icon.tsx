@@ -4,10 +4,12 @@
 //   scriptUrl: "//at.alicdn.com/t/c/font_4582429_tpo90l32irp.js",
 // });
 
+import React from 'react'
+
 interface Props {
   type: string
   className?: string | undefined
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void
 }
 
 export default function Icon(props: Props): JSX.Element {

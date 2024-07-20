@@ -32,7 +32,10 @@ export enum Icon_type {
   icon_chrome = 'icon-chrome',
   icon_eye_fill = 'icon-eye-fill',
   icon_eyeclose_fill = 'icon-eyeclose-fill',
-  icon_set = 'icon-set'
+  icon_set = 'icon-set',
+  icon_add = 'icon-add',
+  icon_log = 'icon-log',
+  icon_help = 'icon-help'
 }
 
 export enum PasswordType {

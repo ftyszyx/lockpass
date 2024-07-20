@@ -1,7 +1,6 @@
 import { useLayoutEffect, useState } from 'react'
 import { RouterProps, RouterStoreData } from './index'
 import routerContext from './RouterContext'
-import { relative } from 'path'
 export default function Router(props: RouterProps) {
   // if (props.debug) console.log('router render', props.history?.PathName)
   const [locationState, setLocationState] = useState(props.history?.CurLocation)

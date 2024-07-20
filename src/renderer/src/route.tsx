@@ -8,10 +8,11 @@ import Vault from './pages/system/Vault'
 import AdminLayout from './layouts/AdminLayout'
 import AdminSet from './pages/system/AdminSet'
 import Lock from './pages/system/Lock'
+import AdminLog from './pages/system/AdminLog'
 
 const RootRouter = () => {
   return (
-    <BrowerRouter debug={false}>
+    <BrowerRouter debug={true}>
       <Route>
         <Route path={PagePath.initKey} element={InitSystem} match={{ end: true }} />
         <Route path="/" element={BasicLayout} errorElement={NotFound}>
@@ -27,6 +28,7 @@ const RootRouter = () => {
             />
             <Route path={PagePath.Admin_set} element={AdminSet} />
             <Route path={PagePath.Admin_valutitem_full} element={Vault} />
+            <Route path={PagePath.Admin_log} element={AdminLog} />
           </Route>
         </Route>
       </Route>

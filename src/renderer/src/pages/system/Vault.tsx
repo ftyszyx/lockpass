@@ -35,7 +35,9 @@ export default function Vault() {
         <Select onChange={() => {}}>
           <Select.Option value={SelectAll}>ALL</Select.Option>
           {appstore.vaults.map((vault) => (
-            <Select.Option value={vault}>{vault.name}</Select.Option>
+            <Select.Option value={vault} key={vault.id}>
+              {vault.name}
+            </Select.Option>
           ))}
         </Select>
         {/* user settings */}

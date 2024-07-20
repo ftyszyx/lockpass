@@ -24,11 +24,11 @@ function BaseLayout(props: ChildProps): JSX.Element {
   async function getallData() {
     console.log('get all data')
     const users = await appstore.FetchAllUsers()
-    console.log('users:', users)
     if (users?.length > 0) {
       await appstore.SelectUser(users[0])
     } else {
       messageapi.error('请先添加用户')
+      history.replace(PagePath.initKey)
     }
   }
   return (
