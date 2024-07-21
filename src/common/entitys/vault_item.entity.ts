@@ -1,10 +1,5 @@
 import { Column, Entity } from '@common/decorator/db.decorator'
 import { BaseEntity } from './db.entity'
-export enum PasswordType {
-  Login = 0,
-  Card = 1, //银行卡
-  NoteBook = 2
-}
 
 @Entity({ name: 'valut_item' })
 export class VaultItem extends BaseEntity {
