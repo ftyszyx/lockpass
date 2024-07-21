@@ -1,6 +1,6 @@
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import logo from '@renderer/assets/logo.png'
-import { Button, Dropdown, Input, Select } from 'antd'
+import { Button, Dropdown, Input, Select, Space } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import { VaultItem } from '@common/entitys/valut_item.entity'
 import Icon from '@renderer/components/icon'
@@ -51,15 +51,19 @@ export default function Vault() {
               defaultValue={SelectAll}
             >
               <Select.Option value={SelectAll} key={SelectAll}>
-                <Icon type={Icon_type.icon_type} />
-                所有类别
+                <Space>
+                  <Icon type={Icon_type.icon_type} />
+                  所有类别
+                </Space>
               </Select.Option>
               {Object.keys(PasswordType).map((key) => {
                 const type_value = PasswordType[key]
                 return (
                   <Select.Option key={key} value={type_value}>
-                    <Icon type={`icon-${type_value}`} />
-                    {type_value}
+                    <Space>
+                      <Icon type={`icon-${type_value}`} />
+                      {type_value}
+                    </Space>
                   </Select.Option>
                 )
               })}
@@ -79,8 +83,6 @@ export default function Vault() {
               </div>
             ))}
           </div>
-          <div>新增</div>
-          <div>导入密码</div>
         </div>
         {/*  right side content*/}
         <div className="flex flex-grow">

@@ -11,7 +11,7 @@ import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
-import AdminAddValut from '@renderer/pages/system/AdminAddValut'
+import AdminAddValut from '@renderer/pages/system/AdminAddVault'
 type MenuNodeType = MyMenuType & MenuItemType
 interface MenuProps {
   className?: string

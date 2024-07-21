@@ -7,7 +7,7 @@ import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, message, Pagination } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useMemo, useState } from 'react'
-import AdminAddValut from './AdminAddValut'
+import AdminAddValut from './AdminAddVault'
 export default function Home() {
   console.log('home render')
   const [form] = useForm()
