@@ -1,3 +1,4 @@
+import { LangHelper } from '@common/lang'
 import { ElectronAPI } from '@electron-toolkit/preload'
 
 declare global {

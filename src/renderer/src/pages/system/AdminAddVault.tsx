@@ -1,5 +1,5 @@
 import { Vault } from '@common/entitys/vaults.entity'
-import { Icon_type, ModalType } from '@common/gloabl'
+import { Icon_type, ModalType, PasswordIconType } from '@common/gloabl'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Modal, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
@@ -72,7 +72,7 @@ export default function AdminAddValut(pros: AmdinAddvalutProps): JSX.Element {
           </Form.Item>
           <Form.Item label="图标" name="icon" rules={[{ required: true, message: '请输入图标' }]}>
             <Select>
-              {Object.keys(Icon_type).map((key) => {
+              {Object.keys(PasswordIconType).map((key) => {
                 return (
                   <Select.Option key={key} value={Icon_type[key]}>
                     <Icon type={Icon_type[key]}></Icon>

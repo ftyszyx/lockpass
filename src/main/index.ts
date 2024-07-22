@@ -6,7 +6,6 @@ import { initAllApi } from './api/index.api'
 import AppModel from './models/app.model'
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -19,19 +18,15 @@ function createWindow(): void {
     }
   })
   mainWindow.webContents.clearHistory()
-
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
-
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
 
   if (is.dev) mainWindow.webContents.openDevTools({ mode: 'detach' })
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {

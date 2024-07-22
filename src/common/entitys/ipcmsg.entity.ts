@@ -1,4 +1,6 @@
 export enum webToManMsg {
+  SetLang = 'setLang',
+  GetLang = 'getLang',
   needInitKey = 'needInitKey',
   initKey = 'initKey',
 

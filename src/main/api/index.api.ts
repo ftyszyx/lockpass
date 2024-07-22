@@ -3,6 +3,12 @@ import AppModel from '../models/app.model'
 import { webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { InitKeyInfo } from '@common/entitys/app.entity'
 export function initAllApi() {
+  ipcMain.handle(webToManMsg.SetLang, (_, lang) => {
+    AppModel.getInstance().changeLang(lang)
+  })
+  ipcMain.handle(webToManMsg.GetLang, () => {
+    return AppModel.getInstance().set.lang
+  })
   ipcMain.handle(webToManMsg.needInitKey, (_) => {
     return AppModel.getInstance().myencode?.needInitKey()
   })
