@@ -6,3 +6,4 @@ out
 *.db
 *.key
 *.wal
+/set.json
