@@ -12,7 +12,7 @@ import AdminLog from './pages/system/AdminLog'
 
 const RootRouter = () => {
   return (
-    <BrowerRouter debug={true}>
+    <BrowerRouter debug={false}>
       <Route>
         <Route path={PagePath.initKey} element={InitSystem} match={{ end: true }} />
         <Route path="/" element={BasicLayout} errorElement={NotFound}>

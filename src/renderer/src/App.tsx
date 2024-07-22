@@ -4,6 +4,7 @@ import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useEffect } from 'react'
 import { LangHelper } from '@common/lang'
 import { LangContext } from './libs/lan/index.render'
+import { ConsoleLog } from './libs/Console'
 function App(): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
@@ -19,10 +20,10 @@ function App(): JSX.Element {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowInfoMsg)
     }
   }, [])
+  console.log('develop', import.meta.env.DEV)
 
   const initapp = async () => {
     const lang = (await window.electron.ipcRenderer.invoke(webToManMsg.GetLang)) as string
-    console.log('init render lang', lang)
     LangHelper.setLang(lang)
   }
   return (

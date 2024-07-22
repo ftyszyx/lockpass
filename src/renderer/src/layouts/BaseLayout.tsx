@@ -7,13 +7,11 @@ import { PagePath } from '@common/entitys/page.entity'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 
 function BaseLayout(props: ChildProps): JSX.Element {
-  console.log('basiclayout render')
   const history = useHistory()
   const appstore = use_appstore() as AppStore
   const [messageapi, contextHolder] = message.useMessage()
   useEffect(() => {
     window.electron.ipcRenderer.invoke(webToManMsg.needInitKey).then((res) => {
-      console.log('get res', res)
       if (res === true) {
         history.replace(PagePath.initKey)
       } else {
@@ -22,7 +20,6 @@ function BaseLayout(props: ChildProps): JSX.Element {
     })
   }, [])
   async function getallData() {
-    console.log('get all data')
     const users = await appstore.FetchAllUsers()
     if (users?.length > 0) {
       await appstore.SelectUser(users[0])

@@ -1,8 +1,7 @@
-type TreeSrcType = { id: number; title: string; parent?: string }
+type TreeSrcType = { id: number; parent?: string }
 export type TreeNodeType<T> = {
   id: number
   key: string
-  title: string
   children?: TreeNodeType<T>[]
   parent?: string
   show?: boolean

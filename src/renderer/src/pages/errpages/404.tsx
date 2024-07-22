@@ -2,7 +2,6 @@ import { Button } from 'antd'
 import errimg from '@renderer/assets/error.gif'
 
 export default function NotFound() {
-  console.log('render not found')
   return (
     <div className=" h-full flex items-center bg-white">
       <div className="flex flex-col">

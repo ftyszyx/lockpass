@@ -11,12 +11,15 @@ export const ValutAddEvent = 'ValutAddEvent'
 
 export interface MyMenuType {
   id: number // ID,添加时可以没有id
+  key: string
   title: string | ReactNode // 标题
   icon_style_type: string // 图标
   url: string // 链接路径
   parent: string // 父级ID
   sorts: number // 排序编号
   children?: number[] // 子菜单
+  label?: string | ReactNode
+  icon?: ReactNode
 }
 
 interface AllMenuProps {
@@ -26,6 +29,7 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
   return [
     {
       id: MenuValutID,
+      key: MenuValutID + '',
       title: (
         <div className="flex flex-row items-center">
           <span>密码库</span>
@@ -48,6 +52,7 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
     },
     {
       id: MenuSetID,
+      key: MenuSetID + '',
       title: '设置',
       sorts: 2,
       icon_style_type: Icon_type.icon_set,
@@ -56,6 +61,7 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
     },
     {
       id: MenuLog,
+      key: MenuLog + '',
       title: '日志',
       sorts: 3,
       icon_style_type: Icon_type.icon_note,

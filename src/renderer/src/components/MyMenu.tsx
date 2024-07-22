@@ -12,7 +12,6 @@ import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
 import AdminAddValut from '@renderer/pages/system/AdminAddVault'
-type MenuNodeType = MyMenuType & MenuItemType
 interface MenuProps {
   className?: string
 }
@@ -25,7 +24,6 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   const [show_addvalut, setShowAddValut] = useState(false)
 
   const menutree_info = useMemo(() => {
-    console.log('get all menus')
     let menulist = cloneDeep(
       getAllMenus({
         CallEvent: async (event: string) => {
@@ -38,6 +36,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
     appstore.vaults.forEach((item) => {
       menulist.push({
         id: item.id,
+        key: item.id + '',
         sorts: 1000 + item.id,
         title: item.name,
         icon_style_type: item.icon,
@@ -48,16 +47,17 @@ export default function MyMenu(props: MenuProps): JSX.Element {
     menulist.sort((a, b) => {
       return a.sorts - b.sorts
     })
-    return GetCommonTree<MenuNodeType>(menulist as MenuNodeType[])
+    return GetCommonTree<MyMenuType>(menulist)
   }, [appstore.vaults])
   /** 处理原始数据，将原始数据处理为层级关系 **/
-  const treeDom: ItemType[] = useMemo(() => {
+  const treeDom: ItemType<MenuItemType>[] = useMemo(() => {
     menutree_info.datalist.forEach((item) => {
       item.icon = <Icon type={item.icon_style_type}></Icon>
       item.label = item.title
     })
     return menutree_info.trees
   }, [menutree_info])
+  console.log('treeDom', treeDom)
 
   // 当页面路由跳转时，即location发生改变，则更新选中项
   useEffect(() => {

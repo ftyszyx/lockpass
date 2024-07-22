@@ -2,7 +2,6 @@ import { ChildProps } from '@renderer/entitys/other.entity'
 import MyMenu from '@renderer/components/MyMenu'
 
 function AdminLayout(props: ChildProps): JSX.Element {
-  console.log('admin layout render')
   return (
     <div className="h-screen flex flex-row ">
       <MyMenu />
