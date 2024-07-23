@@ -1,55 +1,47 @@
-import { Default_Lang } from '@common/gloabl'
 import en_us from './en-us.json'
 import zh_cn from './zh-cn.json'
 
-export interface LangItem {
+export class LangItem {
   name: string
   locale: string
   lang_dic: Record<string, string>
-}
 
-const Langs: LangItem[] = [
-  { name: '简体中文', locale: 'zh-cn', lang_dic: zh_cn },
-  { name: 'English', locale: 'en-us', lang_dic: en_us }
-]
-
-export class LangClass {
-  constructor(
-    private locale: string,
-    private lang: LangItem
-  ) {
+  constructor(name: string, locale: string, lang_dic: Record<string, string>) {
+    this.name = name
     this.locale = locale
-    this.lang = Langs.find((item) => item.locale == this.locale)
+    this.lang_dic = lang_dic
   }
 
   getLangText(msg: string) {
-    return this.lang.lang_dic[msg]
+    return this.lang_dic[msg]
   }
 
   getLangFormat(msg: string, ...args: any[]) {
-    return msg.replace(/{(\d+)}/g, function (match, number) {
+    const lang_msg = this.getLangText(msg)
+    if (lang_msg == null) {
+      return msg
+    }
+    return lang_msg.replace(/{(\d+)}/g, function (match, number) {
       return typeof args[number] != 'undefined' ? args[number] : match
     })
   }
 }
 
+const Langs: LangItem[] = [
+  new LangItem('简体中文', 'zh-cn', zh_cn),
+  new LangItem('English', 'en-us', en_us)
+]
+
 export class LangHelper {
   static lang: LangItem | null
-  static locale = Default_Lang
   static setLang(locale: string) {
     this.lang = Langs.find((item) => item.locale == locale)
     console.log('setLang', this.lang, locale)
-    this.locale = locale
   }
-
   static getLangText(msg: string) {
-    console.log('getLangText', msg, this.lang)
-    return this.lang.lang_dic[msg]
+    return this.lang?.getLangText(msg)
   }
-
   static getLangFormat(msg: string, ...args: any[]) {
-    return msg.replace(/{(\d+)}/g, function (match, number) {
-      return typeof args[number] != 'undefined' ? args[number] : match
-    })
+    return this.lang?.getLangFormat(msg, ...args)
   }
 }

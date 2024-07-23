@@ -2,8 +2,7 @@ import { message } from 'antd'
 import RootRouter from './route'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useEffect } from 'react'
-import { LangClass, LangHelper } from '@common/lang'
-import { LangContext } from './libs/lan/index.render'
+import { LangHelper } from '@common/lang'
 function App(): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
@@ -27,18 +26,10 @@ function App(): JSX.Element {
     LangHelper.setLang(lang)
   }
   return (
-    <LangContext.Provider
-      value={{
-        getLang: LangHelper.getLangText,
-        getLangFormat: LangHelper.getLangFormat,
-        lang: LangHelper
-      }}
-    >
-      <div>
-        {contextHolder}
-        <RootRouter></RootRouter>
-      </div>
-    </LangContext.Provider>
+    <div>
+      {contextHolder}
+      <RootRouter></RootRouter>
+    </div>
   )
 }
 

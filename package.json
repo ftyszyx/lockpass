@@ -21,6 +21,7 @@
     "tailwind": "tailwindcss -i ./src/renderer/src/assets/tailwind.css -o ./src/renderer/src/assets/tailwind_out.css --watch"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.4.0",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "antd": "^5.17.4",

@@ -1,14 +1,11 @@
+import { LangItem } from '@common/lang'
 import React, { createContext } from 'react'
 
-export interface LangContextDef {
-  getLang: (key: string) => string
-  getLangFormat(key: string, ...args: any[]): string
-}
-export const LangContext = createContext<LangContextDef>({} as LangContextDef)
+export const LangContext = createContext<LangItem>(null)
 
 export function useLang() {
-  const { getLang } = React.useContext(LangContext)
-  return getLang
+  const lang = React.useContext(LangContext)
+  return lang
 }
 
 export function useLangFormat() {

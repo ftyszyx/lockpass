@@ -9,7 +9,7 @@ interface InputArrProps {
 }
 
 export default function InputArr({ value, label, onChange }: InputArrProps) {
-  const [inputs, setInputs] = useState<string[]>(value)
+  const [inputs, setInputs] = useState<string[]>(value || [])
 
   const handleInputChange = (index: number, newValue: string) => {
     const newInputs = [...inputs]

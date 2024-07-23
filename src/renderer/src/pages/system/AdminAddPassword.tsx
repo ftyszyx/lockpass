@@ -1,14 +1,15 @@
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { PasswordIconType, PasswordType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
-import { FieldInfo } from '@renderer/entitys/form.entity'
 import { PasswordFileListDic } from '@renderer/entitys/password.entity'
 import { Form, Input, message, Modal } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useState } from 'react'
 import SelectPasswordTypeComp from './SelectPasswordTypeComp'
 import TextArea from 'antd/es/input/TextArea'
-import { useLang } from '@renderer/libs/lan/index.render'
+import { LangHelper } from '@common/lang'
+import { FieldInfo } from '@renderer/entitys/form.entity'
+import { LeftOutlined } from '@ant-design/icons'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -18,7 +19,6 @@ interface AdminAddPasswordProps {
   onClose?: () => void
 }
 export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Element {
-  const getLang = useLang()
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_password_type, set_show_password_type] = useState(true)
@@ -26,7 +26,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
   const fieldlist = PasswordFileListDic[select_type]
   const [show_info, set_show_info] = useState(false)
   return (
-    <div>
+    <div className=" relative">
       {show_password_type && (
         <SelectPasswordTypeComp
           onClose={() => {
@@ -58,6 +58,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             </>
           )}
         >
+          <LeftOutlined />
           <Form form={form}>
             <Form.Item name="icon">
               <select>
@@ -74,21 +75,19 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             <Form.Item name="name">
               <Input placeholder="名称" />
             </Form.Item>
-
-            {/* {PasswordFileListDic[select_type].map((item: FieldInfo) => {
+            {PasswordFileListDic[select_type].map((item: FieldInfo) => {
               return (
                 <Form.Item
                   name={item.field_name}
                   label={item.label}
-                  rules={item.edit_rules}}
+                  rules={item.edit_rules}
                   key={item.field_name}
                 >
                   <item.field_Element {...item.edit_props}></item.field_Element>
                 </Form.Item>
               )
             })}
-              */}
-            <Form.Item name="remarks" label={getLang('vaultadd.remarks')}>
+            <Form.Item name="remarks" label={LangHelper.getLangText('vaultadd.remarks')}>
               <TextArea autoSize={{ minRows: 3 }}></TextArea>
             </Form.Item>
           </Form>
