@@ -4,12 +4,11 @@ import { ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, message, Pagination } from 'antd'
+import { Button, Pagination } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useMemo, useState } from 'react'
 import AdminAddValut from './AdminAddVault'
 export default function Home() {
-  console.log('home render')
   const [form] = useForm()
   const history = useHistory()
   const [show_edit, setShowEdit] = useState(false)

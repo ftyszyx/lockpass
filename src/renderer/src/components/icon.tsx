@@ -7,14 +7,23 @@
 import React from 'react'
 
 interface Props {
+  svg?: boolean
   type: string
+  key?: string
   className?: string | undefined
   onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void
 }
 
 export default function Icon(props: Props): JSX.Element {
-  return (
-    <span className={`iconfont ${props.type} ${props.className}`} onClick={props.onClick}></span>
+  return props.svg ? (
+    <svg className={`icon ${props.className}`} aria-hidden="true">
+      <use xlinkHref={`#${props.type}`}></use>
+    </svg>
+  ) : (
+    <span
+      key={props.key}
+      className={`iconfont ${props.type} ${props.className}`}
+      onClick={props.onClick}
+    ></span>
   )
-  // return <IconFont type={props.type} className={props.className} />;
 }

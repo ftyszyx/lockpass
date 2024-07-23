@@ -1,6 +1,5 @@
 import { VaultItem } from '@common/entitys/vault_item.entity'
-
-import { PasswordIconType } from '@common/gloabl'
+import { PasswordIconType, PasswordType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { PasswordFileListDic } from '@renderer/entitys/password.entity'
@@ -19,16 +18,21 @@ interface AdminAddPasswordProps {
 export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Element {
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
-  const [show_password_type, set_show_password_type] = useState(false)
+  const [show_password_type, set_show_password_type] = useState(true)
+  const [select_type, set_select_type] = useState(PasswordType.Login)
+  const fieldlist = PasswordFileListDic[select_type]
   const [show_info, set_show_info] = useState(false)
   return (
     <div>
       {show_password_type && (
         <SelectPasswordTypeComp
+          onClose={() => {
+            set_show_password_type(false)
+          }}
           show={show_password_type}
           onOk={async (slecttype) => {
-            form.setFieldsValue({ passwordType: slecttype })
             set_show_password_type(false)
+            set_select_type(slecttype)
             set_show_info(true)
           }}
         ></SelectPasswordTypeComp>
@@ -55,7 +59,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
               <select>
                 {Object.keys(PasswordIconType).map((key) => {
                   return (
-                    <option value={key}>
+                    <option value={key} key={key}>
                       <Icon type={PasswordIconType[key]} />
                     </option>
                   )
@@ -64,17 +68,25 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             </Form.Item>
 
             <Form.Item name="name">
-              <Input placeholder="名称" value={props.init_info.name} />
+              <Input placeholder="名称" />
             </Form.Item>
 
+            {PasswordFileListDic[select_type].map((item: FieldInfo) => {
+              return (
+                <Form.Item
+                  name={item.field_name}
+                  label={item.label}
+                  rules={item.edit_rules}
+                  key={item.field_name}
+                >
+                  <item.field_Element {...item.edit_props}></item.field_Element>
+                </Form.Item>
+              )
+            })}
             <Form.List name="info">
-              {PasswordFileListDic[props.init_info.passwordType].map((item: FieldInfo) => {
-                return (
-                  <Form.Item name={item.field_name} label={item.label} rules={item.edit_rules}>
-                    <item.field_Element {...item.edit_props}></item.field_Element>
-                  </Form.Item>
-                )
-              })}
+              {(fields, { add, remove }) => {
+                return
+              }}
             </Form.List>
           </Form>
         </Modal>

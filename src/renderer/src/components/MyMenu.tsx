@@ -12,6 +12,7 @@ import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
 import AdminAddValut from '@renderer/pages/system/AdminAddVault'
+import { ConsoleLog } from '@renderer/libs/Console'
 interface MenuProps {
   className?: string
 }
@@ -50,14 +51,14 @@ export default function MyMenu(props: MenuProps): JSX.Element {
     return GetCommonTree<MyMenuType>(menulist)
   }, [appstore.vaults])
   /** 处理原始数据，将原始数据处理为层级关系 **/
-  const treeDom: ItemType<MenuItemType>[] = useMemo(() => {
+  const treeDom = useMemo(() => {
     menutree_info.datalist.forEach((item) => {
       item.icon = <Icon type={item.icon_style_type}></Icon>
       item.label = item.title
     })
-    return menutree_info.trees
+    ConsoleLog.LogInfo('treeDom', menutree_info.trees)
+    return menutree_info.trees as ItemType<MenuItemType>[]
   }, [menutree_info])
-  console.log('treeDom', treeDom)
 
   // 当页面路由跳转时，即location发生改变，则更新选中项
   useEffect(() => {
@@ -124,7 +125,6 @@ export default function MyMenu(props: MenuProps): JSX.Element {
             if (menuinfo) {
               const params_keys: Key[] = []
               pathToRegexp(menuinfo.url, params_keys)
-              console.log('slect parmskeys', params_keys)
               location.push(menuinfo.url)
               setChosedKey([menuinfo.key])
             }

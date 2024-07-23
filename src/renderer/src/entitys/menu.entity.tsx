@@ -32,12 +32,12 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
       key: MenuValutID + '',
       title: (
         <div className="flex flex-row items-center">
-          <span>密码库</span>
+          <div key={'title'}>密码库</div>
           <Icon
+            key="icon"
             className=" ml-5"
             type={Icon_type.icon_add}
             onClick={(event) => {
-              console.log('add valut 2')
               event.preventDefault()
               event.stopPropagation()
               props.CallEvent(ValutAddEvent)
