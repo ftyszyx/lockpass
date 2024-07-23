@@ -16,7 +16,7 @@ export class VaultItem extends BaseEntity {
   name: string
 
   @Column({ type: 'VARCHAR' })
-  comment: string
+  remarks: string
 
   @Column({ type: 'VARCHAR' })
   info: string

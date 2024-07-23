@@ -9,6 +9,8 @@ export const Table_Name_KEY = 'table_name'
 //global string
 export const SYS_TEM_NAME = 'passlock'
 
+export const Default_Lang = 'zh-cn'
+
 export function createInstance<T>(type: new (...args: any[]) => T, ...args: any[]): T {
   return new type(...args)
 }

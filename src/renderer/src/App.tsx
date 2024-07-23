@@ -2,9 +2,8 @@ import { message } from 'antd'
 import RootRouter from './route'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useEffect } from 'react'
-import { LangHelper } from '@common/lang'
+import { LangClass, LangHelper } from '@common/lang'
 import { LangContext } from './libs/lan/index.render'
-import { ConsoleLog } from './libs/Console'
 function App(): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
@@ -20,6 +19,7 @@ function App(): JSX.Element {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowInfoMsg)
     }
   }, [])
+
   console.log('develop', import.meta.env.DEV)
 
   const initapp = async () => {
@@ -28,7 +28,11 @@ function App(): JSX.Element {
   }
   return (
     <LangContext.Provider
-      value={{ getLang: LangHelper.getLangText, getLangFormat: LangHelper.getLangFormat }}
+      value={{
+        getLang: LangHelper.getLangText,
+        getLangFormat: LangHelper.getLangFormat,
+        lang: LangHelper
+      }}
     >
       <div>
         {contextHolder}

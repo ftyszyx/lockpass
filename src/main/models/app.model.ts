@@ -10,6 +10,7 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
+import { Default_Lang } from '@common/gloabl'
 export interface AppSet {
   lang: string
 }
@@ -21,7 +22,7 @@ class AppModel {
   public vaultItem: VaultItemService | null = null
   public user: UserService | null = null
   _set_path: string = ''
-  public set: AppSet = { lang: 'en_us' }
+  public set: AppSet = { lang: Default_Lang }
   constructor() {
     Log.initialize()
     this.myencode = new MyEncode()
