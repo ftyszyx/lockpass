@@ -20,7 +20,6 @@ interface AdminAddPasswordProps {
 }
 export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Element {
   const lang = useLang()
-  console.log('lang', lang)
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_password_type, set_show_password_type] = useState(true)

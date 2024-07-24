@@ -130,15 +130,17 @@ function getBaseHistory(
     const historyState = getHistoryState(location, index)
     const url = history.createHref(location)
     try {
-      console.log('push to ', url)
+      if (opitons.debug) console.log('push to ', url, listener)
       globalHistory.pushState(historyState, '', url)
     } catch (error) {
       if (error instanceof DOMException && error.name === 'DataCloneError') {
+        if (opitons.debug) console.log('DataCloneError', error)
         throw error
       }
       window.location.assign(url)
     }
     if (listener) {
+      if (opitons.debug) console.log('push listener')
       listener({ action, location: history.CurLocation, delta: 1 })
     }
   }
@@ -149,7 +151,7 @@ function getBaseHistory(
     index = getIndex()
     const historyState = getHistoryState(location, index)
     const url = history.createHref(location)
-    console.log('replace url ', url)
+    if (opitons.debug) console.log('replace url ', url)
     globalHistory.replaceState(historyState, '', url)
     if (listener) {
       listener({ action, location: history.CurLocation, delta: 0 })
@@ -179,6 +181,7 @@ function getBaseHistory(
       window.addEventListener(PopStateEventType, handlePop)
       listener = fn
       return () => {
+        if (opitons.debug) console.log('remove listener')
         window.removeEventListener(PopStateEventType, handlePop)
         listener = null
       }

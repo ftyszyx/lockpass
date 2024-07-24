@@ -5,11 +5,9 @@ import Icon from '@renderer/components/icon'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Pagination } from 'antd'
-import { useForm } from 'antd/es/form/Form'
 import { useEffect, useMemo, useState } from 'react'
 import AdminAddValut from './AdminAddVault'
 export default function Home() {
-  const [form] = useForm()
   const history = useHistory()
   const [show_edit, setShowEdit] = useState(false)
   const [show_del, setShowDel] = useState(false)
@@ -40,7 +38,6 @@ export default function Home() {
             onClick={() => {
               setEditPanelTitle('新增密码库')
               setShowType(ModalType.Add)
-              form.resetFields()
               setShowDel(false)
               setShowEdit(true)
             }}
@@ -67,10 +64,7 @@ export default function Home() {
                       className=" text-gray-400"
                       onClick={() => {
                         setEditPanelTitle('编辑密码库')
-                        form.resetFields()
                         setCurInfo(valut)
-                        setShowType(ModalType.Edit)
-                        form.setFieldsValue(valut)
                         setShowDel(true)
                         setShowEdit(true)
                       }}
