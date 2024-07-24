@@ -22,7 +22,7 @@ export default function Icon(props: Props): JSX.Element {
   ) : (
     <span
       key={props.key}
-      className={`iconfont ${props.type} ${props.className}`}
+      className={`iconfont ${props.type} ${props.className || ''}`}
       onClick={props.onClick}
     ></span>
   )

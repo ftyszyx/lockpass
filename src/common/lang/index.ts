@@ -33,15 +33,19 @@ const Langs: LangItem[] = [
 ]
 
 export class LangHelper {
-  static lang: LangItem | null
+  private static _lang: LangItem | null
   static setLang(locale: string) {
-    this.lang = Langs.find((item) => item.locale == locale)
-    console.log('setLang', this.lang, locale)
+    this._lang = Langs.find((item) => item.locale == locale)
+    console.log('setLang', this._lang, locale)
   }
-  static getLangText(msg: string) {
-    return this.lang?.getLangText(msg)
+  static getString(msg: string) {
+    return this._lang?.getLangText(msg)
   }
-  static getLangFormat(msg: string, ...args: any[]) {
-    return this.lang?.getLangFormat(msg, ...args)
+  static getStringFormat(msg: string, ...args: any[]) {
+    return this._lang?.getLangFormat(msg, ...args)
+  }
+
+  static get lang() {
+    return this._lang
   }
 }

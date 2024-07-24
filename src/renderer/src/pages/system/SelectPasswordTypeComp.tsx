@@ -21,7 +21,7 @@ export default function SelectPasswordTypeComp(props: SelectPasswordTypeProps): 
           {Object.keys(PasswordType).map((key) => {
             return (
               <div
-                className="bg-gray-200 hover:bg-blue-300 hover:cursor-pointer m-2 p-2 rounded-lg w-[220px] h-[40px] flex flex-row justify-between items-center"
+                className="bg-gray-200 hover:bg-blue-300 hover:cursor-pointer m-2 p-2 rounded-lg w-[210px] h-[40px] flex flex-row justify-between items-center"
                 key={key}
                 onClick={() => {
                   props.onOk?.(PasswordType[key])
