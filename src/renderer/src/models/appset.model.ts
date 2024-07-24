@@ -5,7 +5,7 @@ export interface AppsetStore {
   lang: LangItem
   setLang: (lang: LangItem) => void
 }
-export const use_appset = create<AppsetStore>((set, get) => {
+export const use_appset = create<AppsetStore>((set, _) => {
   return {
     lang: null,
     setLang(lang: LangItem) {

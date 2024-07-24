@@ -7,9 +7,6 @@ import { AppEntity } from '@renderer/entitys/app.entity'
 import { create } from '@renderer/libs/state'
 
 export interface AppStore extends AppEntity {
-  lang: LangItem
-  setlang: (lang: LangItem) => void
-
   cur_user?: User
   user_list?: User[]
   fold_menu: boolean
