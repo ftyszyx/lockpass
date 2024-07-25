@@ -30,6 +30,9 @@ export default function Vault() {
       return appstore.vaut_items
     } else {
       const vault = appstore.vaults.find((vault) => vault.name === select_vault)
+      if (!vault) {
+        return []
+      }
       return appstore.vaut_items.filter((item) => item.valut_id === vault.id)
     }
   }, [appstore.vaults, select_vault])
@@ -114,6 +117,7 @@ export default function Vault() {
           title="新增项目"
           onOk={async () => {
             set_show_add_vault(false)
+            await appstore.FetchValutItems()
           }}
           onClose={() => {
             set_show_add_vault(false)

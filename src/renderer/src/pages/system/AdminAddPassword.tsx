@@ -10,6 +10,8 @@ import TextArea from 'antd/es/input/TextArea'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { LeftOutlined } from '@ant-design/icons'
 import { useLang } from '@renderer/libs/AppContext'
+import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { AppsetStore } from '@renderer/models/appset.model'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -25,6 +27,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
   const [show_password_type, set_show_password_type] = useState(true)
   const [select_type, set_select_type] = useState(PasswordType.Login)
   const [show_info, set_show_info] = useState(false)
+  const appstore = use_appstore() as AppStore
   return (
     <div className=" relative">
       {show_password_type && (
@@ -64,7 +67,11 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
           }}
           onOk={async () => {
             const values = await form.validateFields()
+            values.info = JSON.stringify(values.info)
             console.log('values', values)
+            await appstore.AddValutItem(values)
+            set_show_info(false)
+            props.onOk?.()
           }}
           footer={(_, { OkBtn }) => (
             <>
@@ -80,8 +87,8 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             initialValues={
               props.init_info ||
               ({
-                icon: PasswordIconType.[`icon_${select_type}`],
-                name: lang.getLangText(`password_name_${select_type}`),
+                icon: PasswordIconType[`icon_${select_type}`],
+                name: lang.getLangText(`password_name_${select_type}`)
               } as VaultItem)
             }
           >
@@ -102,19 +109,25 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
                 <Input placeholder="名称" className="w-[300px] h-[40px]" />
               </Form.Item>
             </div>
-            {PasswordFileListDic[select_type].map((item: FieldInfo) => {
-              return (
-                <Form.Item
-                  className=" mb-0 w-[400px] "
-                  name={item.field_name}
-                  label={item.label}
-                  rules={item.edit_rules}
-                  key={item.field_name}
-                >
-                  <item.field_Element {...item.edit_props}></item.field_Element>
-                </Form.Item>
-              )
-            })}
+            <div>
+              {PasswordFileListDic[select_type].map((item: FieldInfo) => {
+                return (
+                  <Form.Item
+                    labelCol={{
+                      style: { marginBottom: '0px', marginTop: '0px', padding: '0px' }
+                    }}
+                    wrapperCol={{ style: { marginTop: '0px' } }}
+                    className=" mb-2 w-[400px] "
+                    name={['info', item.field_name]}
+                    label={item.label}
+                    rules={item.edit_rules}
+                    key={item.field_name}
+                  >
+                    <item.field_Element {...item.edit_props}></item.field_Element>
+                  </Form.Item>
+                )
+              })}
+            </div>
             <Form.Item
               className="mb-0 w-[400px]"
               name="remarks"

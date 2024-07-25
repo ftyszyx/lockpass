@@ -8,7 +8,7 @@ export interface prop_field {
 export class FieldInfo {
   field_name: string = ''
   field_Element: any = null
-  label: string = ''
+  label?: string = ''
   //edit 相关
   edit_rules?: Rule[] = []
   edit_props?: prop_field = {}

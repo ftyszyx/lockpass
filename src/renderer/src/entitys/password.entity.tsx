@@ -34,8 +34,7 @@ export const LoginPasswordFieldList: FieldInfo[] = [
   {
     field_name: 'urls',
     field_Element: InputArr,
-    edit_props: { placeholder: '请输入网址' },
-    label: '网址'
+    edit_props: { label: '网址', placeholder: '请输入网址' }
   }
 ]
 
