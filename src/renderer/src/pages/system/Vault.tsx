@@ -56,7 +56,7 @@ export default function Vault() {
         {/* content */}
         <div className=" flex flex-row flex-grow">
           {/*  left side menu*/}
-          <div className="flex w-[30%] flex-col">
+          <div className="flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200">
             {/* first line */}
             <div className="flex flex-row justify-between items-center p-2">
               <Select
@@ -90,11 +90,14 @@ export default function Vault() {
             <div className=" flex flex-col">
               {show_items.map((vault_item) => (
                 <div
-                  onClick={() => set_select_vault_item(vault_item)}
-                  className="flex flex-row"
+                  onClick={() => {
+                    console.log('select ', vault_item)
+                    set_select_vault_item(vault_item)
+                  }}
+                  className={`flex flex-row items-center space-x-2 p-2 m-2 hover:bg-gray-200 ${select_vault_item.id == vault_item.id ? 'bg-green-200' : ''}}`}
                   key={vault_item.id}
                 >
-                  <Icon type={`icon-${vault_item.passwordType}`} />
+                  <Icon type={`${vault_item.icon}`} svg className=" w-[40px] h-[40px]" />
                   <div> {vault_item.name}</div>
                 </div>
               ))}
