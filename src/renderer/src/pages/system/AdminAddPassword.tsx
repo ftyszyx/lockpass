@@ -44,10 +44,15 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
       {contextHolder}
       {show_info && (
         <Modal
-          width={400}
+          className="w-[500px] bg-gray-400"
           title={
             <div className="flex flex-row">
-              <LeftOutlined />
+              <LeftOutlined
+                onClick={() => {
+                  set_show_info(false)
+                  set_show_password_type(true)
+                }}
+              />
               <div className=" m-auto">{props.title}</div>
             </div>
           }
@@ -67,14 +72,26 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             </>
           )}
         >
-          <Form form={form} className="" initialValues={props.init_info || {}}>
-            <div className="flex flex-row items-center">
+          <Form<VaultItem>
+            form={form}
+            layout="vertical"
+            wrapperCol={{ span: 24 }}
+            className=" flex flex-col items-center "
+            initialValues={
+              props.init_info ||
+              ({
+                icon: PasswordIconType.[`icon_${select_type}`],
+                name: lang.getLangText(`password_name_${select_type}`),
+              } as VaultItem)
+            }
+          >
+            <div className="flex flex-row items-center space-x-2">
               <Form.Item name="icon">
-                <Select className=" w-[90px] h-[90px] ">
+                <Select className=" w-[70px] h-[40px]">
                   {Object.keys(PasswordIconType).map((key) => {
                     return (
-                      <Select.Option value={key} key={key}>
-                        <Icon type={PasswordIconType[key]} className=" w-[60px] h-[60px]" svg />
+                      <Select.Option value={PasswordIconType[key]} key={key}>
+                        <Icon type={PasswordIconType[key]} className=" w-[30px] h-[30px]" svg />
                       </Select.Option>
                     )
                   })}
@@ -82,12 +99,13 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
               </Form.Item>
 
               <Form.Item name="name">
-                <Input placeholder="名称" />
+                <Input placeholder="名称" className="w-[300px] h-[40px]" />
               </Form.Item>
             </div>
             {PasswordFileListDic[select_type].map((item: FieldInfo) => {
               return (
                 <Form.Item
+                  className=" mb-0 w-[400px] "
                   name={item.field_name}
                   label={item.label}
                   rules={item.edit_rules}
@@ -97,7 +115,11 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
                 </Form.Item>
               )
             })}
-            <Form.Item name="remarks" label={lang.getLangText('vaultadd.remarks')}>
+            <Form.Item
+              className="mb-0 w-[400px]"
+              name="remarks"
+              label={lang.getLangText('vaultadd.remarks')}
+            >
               <TextArea autoSize={{ minRows: 3 }}></TextArea>
             </Form.Item>
           </Form>

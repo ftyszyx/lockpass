@@ -3,5 +3,6 @@
   "password_name_card": "银行卡信息",
   "password_name_note": "笔记账信息",
 
-  "vaultadd.remarks": "备注"
+  "vaultadd.remarks": "备注",
+  "inputarr.addmore": "添加更多"
 }

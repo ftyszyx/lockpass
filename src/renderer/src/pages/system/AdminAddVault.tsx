@@ -66,7 +66,7 @@ export default function AdminAddValut(pros: AmdinAddvalutProps): JSX.Element {
           </>
         )}
       >
-        <Form {...formItemLayout} form={form}>
+        <Form {...formItemLayout} form={form} initialValues={pros.edit_info}>
           <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
             <Input></Input>
           </Form.Item>
