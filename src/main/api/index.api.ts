@@ -25,8 +25,8 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.getAllUser, async () => {
     return await AppModel.getInstance().user?.GetAll()
   })
-  ipcMain.handle(webToManMsg.getLastUser, async () => {
-    return await AppModel.getInstance().user?.GetLastUser()
+  ipcMain.handle(webToManMsg.GetLastUserInfo, async () => {
+    return await AppModel.getInstance().user?.GetLastUserInfo()
   })
   //valut
   ipcMain.handle(webToManMsg.GetAllValuts, async () => {

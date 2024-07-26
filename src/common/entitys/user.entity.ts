@@ -12,6 +12,11 @@ export interface LoginInfo {
   password: string
 }
 
+export interface LastUserInfo {
+  user: User
+  has_init_key: boolean
+}
+
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
   @Column({ type: 'VARCHAR', unique_index: true, index_name: 'username_index' })

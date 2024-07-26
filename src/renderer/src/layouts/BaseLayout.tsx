@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
+import { LastUserInfo } from '@common/entitys/user.entity'
 
 function BaseLayout(props: ChildProps): JSX.Element {
   const history = useHistory()
@@ -17,13 +18,17 @@ function BaseLayout(props: ChildProps): JSX.Element {
     ConsoleLog.LogInfo('initapp')
     const res = await window.electron.ipcRenderer.invoke(webToManMsg.HasLogin)
     if (res === true) {
-      const userinfo = await window.electron.ipcRenderer.invoke(webToManMsg.getLastUser)
-      if (userinfo) {
-        await appstore.Login(userinfo)
+      const userinfo = (await window.electron.ipcRenderer.invoke(
+        webToManMsg.GetLastUserInfo
+      )) as LastUserInfo
+      await appstore.Login(userinfo.user)
+      if (userinfo.has_init_key) {
+        return
+      } else {
+        history.replace(PagePath.register)
         return
       }
-    }
-    history.replace(PagePath.Login)
+    } else history.replace(PagePath.Login)
   }
 
   return <div>{props.children}</div>

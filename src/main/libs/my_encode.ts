@@ -29,6 +29,14 @@ export class MyEncode {
     this._pass_hash = null
   }
 
+  public hasKey(user: User) {
+    const key_path = this.getKeyPath(user)
+    if (fs.existsSync(key_path)) {
+      return true
+    }
+    return false
+  }
+
   public Login(user: User, password: string): ApiRespCode {
     this._pass_hash = null
     const key_path = this.getKeyPath(user)

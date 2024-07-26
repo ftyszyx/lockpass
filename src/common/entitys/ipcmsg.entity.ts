@@ -7,7 +7,7 @@ export enum webToManMsg {
   HasLogin = 'HasLogin',
   Logout = 'Logout',
   getAllUser = 'getAllUser',
-  getLastUser = 'getLastUser',
+  GetLastUserInfo = 'getLastUser',
 
   //valut
   GetAllValuts = 'GetAllValuts',

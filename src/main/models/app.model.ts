@@ -22,7 +22,7 @@ class AppModel {
   public vault: VaultService | null = null
   public vaultItem: VaultItemService | null = null
   public user: UserService | null = null
-  _set_path: string = ''
+  private _set_path: string = ''
   public set: AppSet = { lang: Default_Lang }
   constructor() {
     Log.initialize()

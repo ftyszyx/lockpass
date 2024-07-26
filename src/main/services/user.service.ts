@@ -1,4 +1,4 @@
-import { LoginInfo, RegisterInfo, User } from '@common/entitys/user.entity'
+import { LastUserInfo, LoginInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { BaseService } from './base.service'
 import AppModel from '@main/models/app.model'
 import { LangHelper } from '@common/lang'
@@ -26,15 +26,17 @@ export class UserService extends BaseService<User> {
     return { code: res }
   }
 
-  public async GetLastUser(): Promise<User | null> {
+  public async GetLastUserInfo(): Promise<LastUserInfo> {
     const last_userid = AppModel.getInstance().set.cur_user_uid
+    let res = { user: null, has_init_key: false }
     if (last_userid) {
       const user = await super.GetOne('id', last_userid)
       if (user.length > 0) {
-        return user[0]
+        res.user = user[0]
+        res.has_init_key = AppModel.getInstance().myencode.hasKey(res.user)
       }
     }
-    return null
+    return res
   }
 
   public async HasLogin(): Promise<boolean> {
