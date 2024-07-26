@@ -1,35 +1,62 @@
 import fs from 'fs'
 import path from 'path'
-import { InitKeyInfo } from '@common/entitys/app.entity'
 import { randomBytes, createHash, createCipheriv, createDecipheriv } from 'crypto'
-import DbHlper from './db_help'
-import { User } from '@common/entitys/user.entity'
-import AppModel from '@main/models/app.model'
 import { PathHelper } from './path'
-import { Log } from './log'
-export class MyEncode {
-  _secret_key: string | null = null
-  _pass_hash: string | null = null
-  _key_path = 'secret.key'
-  _encode_alg = 'aes-256-ccm'
-  _key_full_path = ''
+import { User } from '@common/entitys/user.entity'
+import { ApiRespCode } from '@common/entitys/app.entity'
+interface SecretyKeyInfo {
+  key: string
+  valid_data: string
+  ver: string
+}
 
-  constructor() {
-    this._key_full_path = path.join(PathHelper.getHomeDir(), this._key_path)
-    Log.info('key_path:', this._key_full_path)
-    if (fs.existsSync(this._key_full_path)) {
-      this._secret_key = fs.readFileSync(this._key_full_path).toString()
+export class MyEncode {
+  private _pass_hash: string | null = null
+  private _encode_alg = 'aes-256-ccm'
+  private secret_ver: string = '1.0'
+
+  constructor() {}
+
+  private getKeyPath(user: User) {
+    return path.join(PathHelper.getHomeDir(), `secret_${user.id}.key`)
+  }
+
+  public HasLogin() {
+    return this._pass_hash != null
+  }
+
+  public LoginOut() {
+    this._pass_hash = null
+  }
+
+  public Login(user: User, password: string): ApiRespCode {
+    this._pass_hash = null
+    const key_path = this.getKeyPath(user)
+    if (fs.existsSync(key_path)) {
+      const keyinfo_str = fs.readFileSync(key_path).toString()
+      const keyinfo: SecretyKeyInfo = JSON.parse(keyinfo_str)
+      if (keyinfo.ver != this.secret_ver) {
+        return ApiRespCode.ver_not_match
+      }
+      const hash = this.getPassHash(keyinfo.key, password)
+      const encode_data = this.Decode2(keyinfo.valid_data, hash)
+      if (encode_data !== this.getUserValidStr(user)) {
+        return ApiRespCode.Password_err
+      }
+      this._pass_hash = hash
+      return ApiRespCode.SUCCESS
+    }
+    return ApiRespCode.key_not_found
+  }
+
+  public cleanKey(user: User) {
+    let key_path = this.getKeyPath(user)
+    if (fs.existsSync(key_path)) {
+      fs.unlinkSync(key_path)
     }
   }
-  public needInitKey() {
-    return this._secret_key === null
-  }
 
-  public set PassHash(password: string) {
-    this._pass_hash = password
-  }
-
-  public async InitSecretkey(keyinfo: InitKeyInfo): Promise<boolean> {
+  public Register(user: User, password: string) {
     // prettier-ignore
     let key_data = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
     const rand_len = 25
@@ -41,50 +68,39 @@ export class MyEncode {
         key += '-'
       }
     }
-    let key_path = path.join(__dirname, 'secret.key')
-    fs.writeFileSync(key_path, key)
-    //生成hash
-    let pass_hash = this.getPassHash(key, keyinfo.password)
-    //存数据库
-    const info = new User()
-    info.username = keyinfo.username
-    info.password = pass_hash
-    info.set = ''
-    const _this = this
-    await DbHlper.instance()
-      .AddOne(info)
-      .then((res) => {
-        _this.writeKey(key)
-      })
-      .catch((err) => {
-        AppModel.getInstance().mainview?.showMsgErr(err.message)
-      })
-    return this._secret_key !== null
+    const key_path = this.getKeyPath(user)
+    const hash = this.getPassHash(key, password)
+    const valid_data = this.Encode2(this.getUserValidStr(user), hash)
+    const keyinfo: SecretyKeyInfo = { key, valid_data, ver: this.secret_ver }
+    fs.writeFileSync(key_path, JSON.stringify(keyinfo))
+  }
+
+  private getUserValidStr(user: User) {
+    return JSON.stringify({ username: user.username, id: user.id })
   }
 
   public getPassHash(key: string, password: string) {
     return createHash('sha256').update(`${key}-${password}`).digest('base64')
   }
 
-  writeKey(key: string) {
-    fs.writeFileSync(this._key_full_path, key)
-    this._secret_key = key
+  public Encode(data: string): string {
+    return this.Encode2(data, this._pass_hash)
   }
 
-  public encode_data(data: string): string {
-    const cliper = createCipheriv(this._encode_alg, Buffer.from(this._pass_hash), randomBytes(16))
+  public Encode2(data: string, password: string) {
+    const cliper = createCipheriv(this._encode_alg, password, randomBytes(16))
     let encrypted = cliper.update(data, 'utf8', 'base64')
     encrypted += cliper.final('base64')
     console.log('encode_data:', encrypted)
     return encrypted
   }
 
-  public decode_data(data: string): string {
-    const decipher = createDecipheriv(
-      this._encode_alg,
-      Buffer.from(this._pass_hash),
-      randomBytes(16)
-    )
+  public Decode(data: string): string {
+    return this.Decode2(data, this._pass_hash)
+  }
+
+  public Decode2(data: string, password: string): string {
+    const decipher = createDecipheriv(this._encode_alg, Buffer.from(password), randomBytes(16))
     let decrypted = decipher.update(data, 'base64', 'base64')
     decrypted += decipher.final('base64')
     console.log('decode_data:', decrypted)

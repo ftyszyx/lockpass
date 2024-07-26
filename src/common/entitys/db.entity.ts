@@ -6,7 +6,8 @@ export class BaseEntity {
 }
 
 export interface WhereDef {
-  [key: string]: any
+  cond: Record<string, any>
+  // [key: string]: any
   andor?: 'AND' | 'OR'
   page?: number
   page_size?: number

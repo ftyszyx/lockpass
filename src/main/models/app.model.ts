@@ -13,6 +13,7 @@ import { LangHelper } from '@common/lang'
 import { Default_Lang } from '@common/gloabl'
 export interface AppSet {
   lang: string
+  cur_user_uid?: number
 }
 
 class AppModel {

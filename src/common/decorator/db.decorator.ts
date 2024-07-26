@@ -28,7 +28,6 @@ export type ColumnType =
 export interface ColumnOptions {
   comment?: string
   type?: ColumnType
-  select_hide?: boolean
   name?: string
   default?: any
   primary?: boolean
@@ -36,6 +35,7 @@ export interface ColumnOptions {
   unique_index?: boolean
   index_name?: string
   hide?: boolean
+  encode?: boolean
 }
 
 export interface TableOptions {

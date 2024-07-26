@@ -5,6 +5,7 @@ export const Column_desc_KEY = 'col_desc'
 export const Column_Name_KEY = 'col_name'
 export const Column_Type_KEY = 'col_type'
 export const Table_Name_KEY = 'table_name'
+export const COlumn_Encode_key = 'encode'
 
 //global string
 export const SYS_TEM_NAME = 'passlock'

@@ -1,20 +1,34 @@
 import { ipcMain } from 'electron'
 import AppModel from '../models/app.model'
 import { webToManMsg } from '../../common/entitys/ipcmsg.entity'
-import { InitKeyInfo } from '@common/entitys/app.entity'
 export function initAllApi() {
+  //system
   ipcMain.handle(webToManMsg.SetLang, (_, lang) => {
     AppModel.getInstance().changeLang(lang)
   })
   ipcMain.handle(webToManMsg.GetLang, () => {
     return AppModel.getInstance().set.lang
   })
-  ipcMain.handle(webToManMsg.needInitKey, (_) => {
-    return AppModel.getInstance().myencode?.needInitKey()
+  //user
+  ipcMain.handle(webToManMsg.Login, async (_, info) => {
+    return await AppModel.getInstance().user?.Login(info)
   })
-  ipcMain.handle(webToManMsg.initKey, async (_, info: InitKeyInfo) => {
-    return await AppModel.getInstance().myencode?.InitSecretkey(info)
+  ipcMain.handle(webToManMsg.Register, async (_, info) => {
+    return await AppModel.getInstance().user?.Register(info)
   })
+  ipcMain.handle(webToManMsg.HasLogin, async (_) => {
+    return await AppModel.getInstance().user?.HasLogin()
+  })
+  ipcMain.handle(webToManMsg.Logout, async (_) => {
+    return await AppModel.getInstance().user?.Logout()
+  })
+  ipcMain.handle(webToManMsg.getAllUser, async () => {
+    return await AppModel.getInstance().user?.GetAll()
+  })
+  ipcMain.handle(webToManMsg.getLastUser, async () => {
+    return await AppModel.getInstance().user?.GetLastUser()
+  })
+  //valut
   ipcMain.handle(webToManMsg.GetAllValuts, async () => {
     return await AppModel.getInstance().vault?.GetAll()
   })
@@ -38,13 +52,5 @@ export function initAllApi() {
   })
   ipcMain.handle(webToManMsg.updateValutItem, async (_, old_item, valutItem) => {
     return await AppModel.getInstance().vaultItem?.UpdateOne(old_item, valutItem)
-  })
-
-  ipcMain.handle(webToManMsg.getAllUser, async () => {
-    return await AppModel.getInstance().user?.GetAll()
-  })
-
-  ipcMain.handle(webToManMsg.SelectAsUser, async (_, username) => {
-    return await AppModel.getInstance().user?.SelectOne(username)
   })
 }

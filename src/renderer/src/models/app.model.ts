@@ -5,9 +5,9 @@ import { Vault } from '@common/entitys/vaults.entity'
 import { LangItem } from '@common/lang'
 import { AppEntity } from '@renderer/entitys/app.entity'
 import { create } from '@renderer/libs/state'
+import { stat } from 'fs'
 
 export interface AppStore extends AppEntity {
-  cur_user?: User
   user_list?: User[]
   fold_menu: boolean
   SetFoldMenu: (fold: boolean) => void
@@ -25,8 +25,10 @@ export interface AppStore extends AppEntity {
   SearchValutItems: (keyword: string, vault_id: Number) => VaultItem[]
 
   //user
+  cur_user?: User
   FetchAllUsers: () => Promise<User[]>
-  SelectUser: (user: User) => Promise<void>
+  Login: (user: User) => Promise<void>
+  LoginOut: () => Promise<void>
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
@@ -55,6 +57,7 @@ export const use_appstore = create<AppStore>((set, get) => {
       set((state) => {
         return { ...state, vaut_items: res }
       })
+      console.log('get all valut items', res)
       return res
     },
 
@@ -66,8 +69,13 @@ export const use_appstore = create<AppStore>((set, get) => {
       return res
     },
 
-    async SelectUser(info: User) {
-      await window.electron.ipcRenderer.invoke(webToManMsg.SelectAsUser, info.username)
+    async Logout() {
+      set((state) => {
+        return { ...state, cur_user: null }
+      })
+    },
+
+    async Login(info: User) {
       set((state) => {
         return { ...state, cur_user: info }
       })

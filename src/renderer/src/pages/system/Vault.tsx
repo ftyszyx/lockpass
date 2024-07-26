@@ -11,11 +11,14 @@ import ValutItemInfo from './ValutItemInfo'
 import { Icon_type, PasswordType } from '@common/gloabl'
 import AdminAddPassword from './AdminAddPassword'
 import { VaultItem } from '@common/entitys/vault_item.entity'
+import { useLang } from '@renderer/libs/AppContext'
 
 export default function Vault() {
+  const lang = useLang()
   const appstore = use_appstore() as AppStore
   const SelectAll = 'ALL'
-  const [select_vault, set_select_vault] = useState(SelectAll)
+  const [search_Password_type, set_Search_password_type] = useState(SelectAll)
+  const [gloal_search_keyword, set_gloal_search_keyword] = useState('')
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>({} as VaultItem)
   const [show_add_vault, set_show_add_vault] = useState(false)
   useEffect(() => {
@@ -25,23 +28,33 @@ export default function Vault() {
     await appstore.FetchAllValuts()
     await appstore.FetchValutItems()
   }
+
   const show_items = useMemo(() => {
-    if (select_vault === SelectAll) {
+    console.log('change select vault', search_Password_type, appstore.vaults, appstore.vaut_items)
+    if (search_Password_type === SelectAll) {
       return appstore.vaut_items
     } else {
-      const vault = appstore.vaults.find((vault) => vault.name === select_vault)
+      const vault = appstore.vaults.find((vault) => vault.name === search_Password_type)
       if (!vault) {
         return []
       }
       return appstore.vaut_items.filter((item) => item.valut_id === vault.id)
     }
-  }, [appstore.vaults, select_vault])
+  }, [appstore.vaults, search_Password_type, appstore.vaut_items])
   return (
     <>
       <div className="flex flex-col bg-gray-100 h-screen">
         {/* header */}
         <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
-          <Input placeholder="Search the vault" className="flex-grow" />
+          <Input
+            placeholder={lang.getLangText('valut,search,placeholder')}
+            className="flex-grow"
+            onChange={(newvalue) => {
+              if (newvalue.target.value) {
+                set_gloal_search_keyword(newvalue.target.value)
+              }
+            }}
+          />
           <Icon type={Icon_type.icon_help} />
           <Button
             type="primary"
@@ -60,9 +73,9 @@ export default function Vault() {
             {/* first line */}
             <div className="flex flex-row justify-between items-center p-2">
               <Select
-                value={select_vault}
+                value={search_Password_type}
                 onChange={(value) => {
-                  set_select_vault(value)
+                  set_Search_password_type(value)
                 }}
                 defaultValue={SelectAll}
               >
@@ -94,7 +107,7 @@ export default function Vault() {
                     console.log('select ', vault_item)
                     set_select_vault_item(vault_item)
                   }}
-                  className={`flex flex-row items-center space-x-2 p-2 m-2 hover:bg-gray-200 ${select_vault_item.id == vault_item.id ? 'bg-green-200' : ''}}`}
+                  className={`flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
                   key={vault_item.id}
                 >
                   <Icon type={`${vault_item.icon}`} svg className=" w-[40px] h-[40px]" />

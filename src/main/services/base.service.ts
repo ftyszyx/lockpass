@@ -4,11 +4,11 @@ import DbHlper from '@main/libs/db_help'
 export class BaseService<Entity extends BaseEntity> {
   constructor(public entity: Entity) {}
   public async GetAll(): Promise<Entity[]> {
-    return DbHlper.instance().GetAll(this.entity, null)
+    return await DbHlper.instance().GetAll(this.entity, null)
   }
 
-  public async GetOne(key: string, value: string): Promise<Entity[]> {
-    return DbHlper.instance().GetOne(this.entity, { [key]: value })
+  public async GetOne(key: string, value: any): Promise<Entity[]> {
+    return DbHlper.instance().GetOne(this.entity, { cond: { [key]: value } })
   }
 
   public async AddOne(obj: Record<string, any>): Promise<void> {

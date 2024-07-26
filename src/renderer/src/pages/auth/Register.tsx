@@ -1,14 +1,15 @@
-import { InitKeyInfo } from '@common/entitys/app.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { PagePath } from '@common/entitys/page.entity'
+import { RegisterInfo } from '@common/entitys/user.entity'
 import { Button, Form, Input, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-interface InitFormInfo extends InitKeyInfo {
+interface RegisterInfo2 extends RegisterInfo {
   password_repeat: string
 }
 
-export default function InitSystem(): JSX.Element {
+export default function Register(): JSX.Element {
   console.log('init system')
-  const [form] = useForm<InitFormInfo>()
+  const [form] = useForm<RegisterInfo2>()
   return (
     <div className=" bg-slate-100">
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
@@ -34,10 +35,10 @@ export default function InitSystem(): JSX.Element {
                 message.error('两次密码不一致')
                 return
               }
-              window.electron.ipcRenderer.invoke(webToManMsg.initKey, values).then((res) => {
+              window.electron.ipcRenderer.invoke(webToManMsg.Register, values).then((res) => {
                 if (res) {
                   message.success('初始化成功')
-                  window.location.href = '/'
+                  window.location.href = PagePath.Login
                 }
               })
             })

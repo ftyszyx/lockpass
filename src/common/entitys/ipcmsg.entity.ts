@@ -1,17 +1,21 @@
 export enum webToManMsg {
   SetLang = 'setLang',
   GetLang = 'getLang',
-  needInitKey = 'needInitKey',
-  initKey = 'initKey',
-
+  //user
+  Login = 'Login',
+  Register = 'Register',
+  HasLogin = 'HasLogin',
+  Logout = 'Logout',
   getAllUser = 'getAllUser',
-  SelectAsUser = 'Login',
+  getLastUser = 'getLastUser',
 
+  //valut
   GetAllValuts = 'GetAllValuts',
   UpdateValut = 'UpdateValut',
   DeleteValut = 'DeleteValut',
   AddValut = 'AddValut',
 
+  //vaultItem
   GetAllValutItems = 'GetAllValutItems',
   updateValutItem = 'updateValutItem',
   DeleteValutItem = 'DeleteValutItem',

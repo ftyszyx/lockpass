@@ -1,5 +1,6 @@
 export enum PagePath {
-  initKey = '/initkey',
+  register = '/register',
+  Login = '/login',
   Home = '/home',
   Lock = '/lock',
   Adminbase = '/admin',

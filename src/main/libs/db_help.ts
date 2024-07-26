@@ -1,12 +1,13 @@
 import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Vault } from '@common/entitys/vaults.entity'
-import { Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
+import { COlumn_Encode_key, Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
 import duckdb from 'duckdb'
 import { Log } from './log'
 import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 import { ColumnType } from '@common/decorator/db.decorator'
 import { PathHelper } from './path'
+import AppModel from '@main/models/app.model'
 class DbHlper {
   private static _instance: DbHlper
   public user: User
@@ -35,13 +36,37 @@ class DbHlper {
     return this.db?.connect()
   }
 
+  public encode_table_str(obj: BaseEntity, key: string, value: any): string {
+    if (value == undefined || value == null) return value
+    const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
+    const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
+    if (encode_type) {
+      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+        return AppModel.getInstance().myencode.Encode(value.toString())
+      }
+    }
+    return value
+  }
+
+  public decode_table_str(obj: BaseEntity, key: string, value: any): string {
+    const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
+    const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
+    if (encode_type) {
+      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+        return AppModel.getInstance().myencode.Decode(value.toString())
+      }
+    }
+    return value
+  }
+
   private getColumnValue(obj: BaseEntity, key: string, value: any): string {
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     if (col_type) {
       if (value == undefined || value == null) {
         return 'default'
       } else if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
-        return `'${value.toString()}'`
+        let res = value.toString()
+        return `'${res}'`
       } else {
         return `${value.toString()}`
       }
@@ -53,7 +78,8 @@ class DbHlper {
     let sql_str = '('
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      const element = obj[key]
+      let element = obj[key]
+      element = this.encode_table_str(obj, key, element)
       const col_value = this.getColumnValue(obj, key, element)
       if (col_value) {
         sql_str += col_value
@@ -70,9 +96,10 @@ class DbHlper {
     let sql_str = ''
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      const element = obj[key]
+      let element = obj[key]
       const old_value = obj_old[key]
       if (element == undefined || element == null) continue
+      element = this.encode_table_str(entity, key, element)
       if (old_value == element) continue
       const col_value = this.getColumnValue(entity, key, element)
       if (col_value) {
@@ -147,7 +174,7 @@ class DbHlper {
               const key = keys[j]
               const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
               if (col_name) {
-                item[key] = rows[i][col_name]
+                item[key] = this.decode_table_str(obj, key, rows[i][col_name])
               }
             }
             res.push(item)
@@ -160,7 +187,8 @@ class DbHlper {
 
   public DelOne(obj: BaseEntity, key: string, value: string | number): Promise<void> {
     const table_name = obj[Table_Name_KEY]
-    const col_value = this.getColumnValue(obj, key, value)
+    const encode_value = this.encode_table_str(obj, key, value)
+    const col_value = this.getColumnValue(obj, key, encode_value)
     let sql_str = `delete from ${table_name} where ${key}=${col_value}`
     return this._runSql(sql_str, `del:${table_name}`)
   }
@@ -207,10 +235,12 @@ class DbHlper {
 
   private getWhreSql(obj: BaseEntity, where: WhereDef): string {
     let sql_str = ''
-    Object.keys(where).every((val, indx, _) => {
-      const col_value = this.getColumnValue(obj, val, where[val])
+    Object.keys(where.cond).every((key, indx, _) => {
+      let search_val = where.cond[key]
+      search_val = this.encode_table_str(obj, key, search_val)
+      const col_value = this.getColumnValue(obj, key, search_val)
       if (col_value) {
-        sql_str += ` ${val}=${col_value}`
+        sql_str += ` ${key}=${col_value}`
         if (indx < Object.keys(where).length - 1) {
           sql_str += where.andor
         }

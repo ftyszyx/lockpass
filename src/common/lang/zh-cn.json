@@ -4,5 +4,14 @@
   "password_name_note": "笔记账信息",
 
   "vaultadd.remarks": "备注",
-  "inputarr.addmore": "添加更多"
+  "inputarr.addmore": "添加更多",
+  "valut.search.placeholder": "搜索全部密码库",
+
+  "myencode.passworderror": "账号或密码错误",
+  "auth.register.userexist": "用户名重复",
+  "auth.login.notfound": "用户不存在",
+  "auth.login.passworderr": "密码错误",
+  "auth.login.success": "登陆成功",
+  "auth.login.needinit": "需要初始化系统",
+  "auth.login.fail": "登陆失败: {0}"
 }
