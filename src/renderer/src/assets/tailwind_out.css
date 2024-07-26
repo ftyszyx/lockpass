@@ -631,6 +631,10 @@ video {
   margin-right: 1rem !important;
 }
 
+.mb-3 {
+  margin-bottom: 0.75rem !important;
+}
+
 .inline {
   display: inline !important;
 }
@@ -691,16 +695,8 @@ video {
   width: 2rem !important;
 }
 
-.w-\[1\/4\] {
-  width: 1/4 !important;
-}
-
 .w-\[100\%\] {
   width: 100% !important;
-}
-
-.w-\[150px\] {
-  width: 150px !important;
 }
 
 .w-\[20px\] {
@@ -709,6 +705,10 @@ video {
 
 .w-\[210px\] {
   width: 210px !important;
+}
+
+.w-\[250px\] {
+  width: 250px !important;
 }
 
 .w-\[300px\] {
@@ -737,10 +737,6 @@ video {
 
 .w-full {
   width: 100% !important;
-}
-
-.w-\[250px\] {
-  width: 250px !important;
 }
 
 .flex-grow {
@@ -825,9 +821,9 @@ video {
   border-style: solid !important;
 }
 
-.border-gray-100 {
+.border-gray-200 {
   --tw-border-opacity: 1 !important;
-  border-color: rgb(243 244 246 / var(--tw-border-opacity)) !important;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity)) !important;
 }
 
 .border-gray-300 {
@@ -838,11 +834,6 @@ video {
 .border-purple-200 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(233 213 255 / var(--tw-border-opacity)) !important;
-}
-
-.border-gray-200 {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity)) !important;
 }
 
 .bg-gray-100 {
@@ -884,11 +875,6 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
 }
 
-.bg-green-200 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(187 247 208 / var(--tw-bg-opacity)) !important;
-}
-
 .p-1 {
   padding: 0.25rem !important;
 }
@@ -918,6 +904,10 @@ video {
 .py-1 {
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
+}
+
+.font-sans {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
 
 .text-2xl {
@@ -955,6 +945,11 @@ video {
 
 .font-semibold {
   font-weight: 600 !important;
+}
+
+.text-black {
+  --tw-text-opacity: 1 !important;
+  color: rgb(0 0 0 / var(--tw-text-opacity)) !important;
 }
 
 .text-gray-400 {

@@ -13,7 +13,6 @@ export default function Login(): JSX.Element {
   const history = useHistory()
   const appstore = use_appstore() as AppStore
   const isLogin = history.PathName == PagePath.Login && !appstore.cur_user
-  console.log('curuser', appstore.cur_user)
   const lang = useLang()
   return (
     <div className=" bg-slate-100">

@@ -13,5 +13,7 @@
   "auth.login.passworderr": "密码错误",
   "auth.login.success": "登陆成功",
   "auth.login.needinit": "需要初始化系统",
-  "auth.login.fail": "登陆失败: {0}"
+  "auth.login.fail": "登陆失败: {0}",
+
+  "register.title": "初始化你的账号"
 }

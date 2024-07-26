@@ -16,19 +16,22 @@ function BaseLayout(props: ChildProps): JSX.Element {
 
   async function initApp() {
     ConsoleLog.LogInfo('initapp')
-    const res = await window.electron.ipcRenderer.invoke(webToManMsg.HasLogin)
-    if (res === true) {
-      const userinfo = (await window.electron.ipcRenderer.invoke(
-        webToManMsg.GetLastUserInfo
-      )) as LastUserInfo
-      await appstore.Login(userinfo.user)
-      if (userinfo.has_init_key) {
-        return
-      } else {
-        history.replace(PagePath.register)
-        return
+    const userinfo = (await window.electron.ipcRenderer.invoke(
+      webToManMsg.GetLastUserInfo
+    )) as LastUserInfo
+    ConsoleLog.LogInfo('get userinfo', userinfo)
+    if (userinfo.has_init_key) {
+      if (userinfo.user) {
+        await appstore.Login(userinfo.user)
       }
-    } else history.replace(PagePath.Login)
+      const has_login = await window.electron.ipcRenderer.invoke(webToManMsg.HasLogin)
+      if (has_login == false) {
+        history.replace(PagePath.Login)
+      }
+    } else {
+      history.replace(PagePath.register)
+      return
+    }
   }
 
   return <div>{props.children}</div>
