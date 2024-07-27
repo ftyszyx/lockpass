@@ -36,7 +36,6 @@ export class LangHelper {
   private static _lang: LangItem | null
   static setLang(locale: string) {
     this._lang = Langs.find((item) => item.locale == locale)
-    console.log('setLang', this._lang, locale)
   }
   static getString(msg: string) {
     return this._lang?.getLangText(msg)

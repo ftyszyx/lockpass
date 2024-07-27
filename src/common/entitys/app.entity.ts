@@ -11,6 +11,8 @@ export enum ApiRespCode {
   ver_not_match = 2,
   Password_err = 3,
   user_notfind = 4,
+  user_exit = 5,
   //common
-  Other_err = 205
+  Other_err = 205,
+  db_err = 206
 }

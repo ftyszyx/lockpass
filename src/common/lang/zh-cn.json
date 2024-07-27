@@ -15,5 +15,10 @@
   "auth.login.needinit": "需要初始化系统",
   "auth.login.fail": "登陆失败: {0}",
 
-  "register.title": "初始化你的账号"
+  "register.title": "初始化你的账号",
+  "register.success": "注册成功",
+  "register.fail": "注册失败: {0}",
+  "register.userexist": "用户名已存在",
+  "err.unknown": "未知错误",
+  "err.dberr": "数据库异常"
 }

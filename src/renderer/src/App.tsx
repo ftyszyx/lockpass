@@ -21,7 +21,6 @@ function App(): JSX.Element {
     <div>
       {contextHolder}
       <RootRouter></RootRouter>
-      {/* </AppContext.Provider> */}
     </div>
   )
 }

@@ -224,6 +224,22 @@ class DbHlper {
     return this._runSql(sql_str)
   }
 
+  public beginTransaction() {
+    this._runSql('BEGIN TRANSACTION;')
+  }
+
+  public commitTransaction() {
+    this._runSql('COMMIT;')
+  }
+
+  public rollbackTransaction() {
+    this._runSql('ROLLBACK;')
+  }
+
+  public abortTransaction() {
+    this._runSql('ABORT;')
+  }
+
   public AddOne(obj: BaseEntity): Promise<void> {
     const table_name = obj[Table_Name_KEY]
     let sql_str = 'Insert into ' + table_name + ' Values '

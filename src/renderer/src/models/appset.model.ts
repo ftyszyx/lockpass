@@ -9,6 +9,7 @@ export const use_appset = create<AppsetStore>((set, _) => {
   return {
     lang: null,
     setLang(lang: LangItem) {
+      console.log('set store lang', lang)
       set((state) => {
         return { ...state, lang: lang }
       })

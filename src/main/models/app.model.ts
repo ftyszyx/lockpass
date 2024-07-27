@@ -33,6 +33,7 @@ class AppModel {
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
     this._initSet()
+    this.initLang()
   }
 
   private _initSet() {
@@ -69,7 +70,6 @@ class AppModel {
 
   public initLang() {
     LangHelper.setLang(this.set.lang)
-    Log.info('init lang:', LangHelper.lang)
   }
 }
 

@@ -2,6 +2,7 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { RegisterInfo } from '@common/entitys/user.entity'
 import { useLang } from '@renderer/libs/AppContext'
+import { IPC_CALL } from '@renderer/libs/tools/ipc'
 import { Button, Form, Input, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 interface RegisterInfo2 extends RegisterInfo {
@@ -10,10 +11,12 @@ interface RegisterInfo2 extends RegisterInfo {
 
 export default function Register(): JSX.Element {
   console.log('init system')
+  const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm<RegisterInfo2>()
   const lang = useLang()
   return (
     <div className=" bg-slate-100">
+      {contextHolder}
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex flex-col items-center">
           <div className=" text-4xl text-black mb-3 font-bold font-sans">
@@ -35,18 +38,14 @@ export default function Register(): JSX.Element {
             htmlType="submit"
             className="w-full"
             onClick={() => {
-              form.validateFields().then((values) => {
+              form.validateFields().then(async (values) => {
                 console.log(values)
                 if (values.password_repeat !== values.password) {
                   message.error('两次密码不一致')
                   return
                 }
-                window.electron.ipcRenderer.invoke(webToManMsg.Register, values).then((res) => {
-                  if (res) {
-                    message.success('初始化成功')
-                    window.location.href = PagePath.Login
-                  }
-                })
+                const res = await IPC_CALL<null>(messageApi, webToManMsg.Register, values)
+                window.location.href = PagePath.Login
               })
             }}
           >

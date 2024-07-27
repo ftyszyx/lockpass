@@ -3,6 +3,8 @@ import { BaseService } from './base.service'
 import AppModel from '@main/models/app.model'
 import { LangHelper } from '@common/lang'
 import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
+import { Log } from '@main/libs/log'
+import DbHlper from '@main/libs/db_help'
 
 export class UserService extends BaseService<User> {
   constructor() {
@@ -47,14 +49,23 @@ export class UserService extends BaseService<User> {
     return AppModel.getInstance().myencode.LoginOut()
   }
 
-  public async Register(info: RegisterInfo): Promise<void> {
+  public async Register(info: RegisterInfo): Promise<ApiResp<null>> {
     const users = await super.GetOne('username', info.username)
     if (users.length > 0) {
-      return Promise.reject(new Error(LangHelper.getString('userservice.register.userexist')))
+      return { code: ApiRespCode.user_exit }
     }
-    await super.AddOne({ username: info.username, set: '' } as User)
-    const userinfo = await super.GetOne('username', info.username)
-    AppModel.getInstance().myencode.Register(userinfo[0], info.password)
+    try {
+      await DbHlper.instance().beginTransaction()
+      await super.AddOne({ username: info.username, set: '' } as User)
+      const userinfo = await super.GetOne('username', info.username)
+      AppModel.getInstance().myencode.Register(userinfo[0], info.password)
+      DbHlper.instance().commitTransaction()
+    } catch (e) {
+      await DbHlper.instance().rollbackTransaction()
+      Log.error('register error:', e)
+      return { code: ApiRespCode.db_err }
+    }
+    return { code: ApiRespCode.SUCCESS }
   }
 
   public async GetAll(): Promise<User[]> {

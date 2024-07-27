@@ -1,8 +1,8 @@
 import { PagePath } from '@common/entitys/page.entity'
 import BasicLayout from './layouts/BaseLayout'
-import { BrowerRouter, Route } from './libs/router'
+import { BrowerRouter, Route, useHistory } from './libs/router'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { LangHelper } from '@common/lang'
 import { AppContext } from '@renderer/libs/AppContext'
@@ -17,14 +17,20 @@ import Login from './pages/auth/Login'
 
 const RootRouter = () => {
   const appset = use_appset() as AppsetStore
+  console.log('render root router')
   useEffect(() => {
     initapp()
   }, [])
+  useLayoutEffect(() => {
+    console.log('uselayout')
+  }, [])
   const initapp = async () => {
+    console.log('init app')
     const lang = (await window.electron.ipcRenderer.invoke(webToManMsg.GetLang)) as string
     LangHelper.setLang(lang)
     appset.setLang(LangHelper.lang)
   }
+  console.log('get lang', appset.lang)
   return (
     <BrowerRouter debug={false}>
       <AppContext.Provider value={{ Lang: appset.lang }}>
@@ -35,7 +41,6 @@ const RootRouter = () => {
           <Route path="/" element={BasicLayout} errorElement={NotFound}>
             <Route path="/" redirect={PagePath.Home} match={{ end: true }} />
             <Route path={PagePath.Home} element={Home} />
-            <Route path={PagePath.Lock} element={Lock} />
             <Route path={PagePath.Adminbase} element={AdminLayout} errorElement={NotFound}>
               {/*  prettier-ignore */}
               <Route

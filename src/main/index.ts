@@ -1,9 +1,10 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initAllApi } from './api/index.api'
 import AppModel from './models/app.model'
+import { Log } from './libs/log'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -17,6 +18,14 @@ function createWindow(): void {
       sandbox: false
     }
   })
+  // globalShortcut.register('f5', () => {
+  //   console.log('f5')
+  //   mainWindow.reload()
+  // })
+  // globalShortcut.register('CommandOrControl+R', () => {
+  //   console.log('CommandOrControl+R')
+  //   mainWindow.reload()
+  // })
   mainWindow.webContents.clearHistory()
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
