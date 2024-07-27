@@ -4,7 +4,6 @@ import { LangHelper } from '@common/lang'
 import { ConsoleLog } from '../Console'
 
 export async function IPC_CALL<T>(messageApi, api: string, ...args: any[]): Promise<T> {
-  console.log('call ipc')
   try {
     const res = (await window.electron.ipcRenderer.invoke(api, ...args)) as ApiResp<T>
     if (res.code == ApiRespCode.SUCCESS) {
@@ -21,6 +20,8 @@ export async function IPC_CALL<T>(messageApi, api: string, ...args: any[]): Prom
         messageApi.error(LangHelper.getString('err.dberr'))
       } else if (res.code == ApiRespCode.Password_err) {
         messageApi.error(LangHelper.getString('auth.login.passworderr'))
+      } else if (res.code == ApiRespCode.Other_err) {
+        messageApi.error(LangHelper.getString('err.unkwn'))
       }
       return Promise.reject(res)
     }

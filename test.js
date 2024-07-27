@@ -1,26 +1,26 @@
 const crypto = require('crypto')
-
-// 加密函数
-function encrypt(text, key) {
-  const cipher = crypto.createCipher('aes-256-cbc', key)
-  let encrypted = cipher.update(text, 'utf8', 'hex')
-  encrypted += cipher.final('hex')
-  return encrypted
+const arg = 'aes-256-cbc'
+function Encode2(data, key) {
+  const iv = crypto.randomBytes(16)
+  const cliper = crypto.createCipheriv(arg, key, iv)
+  let encrypted = cliper.update(data, 'utf8', 'base64url')
+  encrypted += cliper.final('base64url')
+  let text = encrypted + '|' + iv.toString('base64url')
+  return text
 }
 
-// 解密函数
-function decrypt(encryptedText, key) {
-  const decipher = crypto.createDecipher('aes-256-cbc', key)
-  let decrypted = decipher.update(encryptedText, 'hex', 'utf8')
+function Decode2(data, key) {
+  const [data_str, iv_str] = data.split('|')
+  const iv = Buffer.from(iv_str, 'base64url')
+  const decipher = crypto.createDecipheriv(arg, key, iv)
+  let decrypted = decipher.update(data_str, 'base64url', 'utf8')
   decrypted += decipher.final('utf8')
   return decrypted
 }
 
-// 示例用法
-const key = crypto.randomBytes(32)
-const plainText = '这是要加密的文本'
-const encrypted = encrypt(plainText, key)
-console.log('加密后的文本:', encrypted)
-
-const decrypted = decrypt(encrypted, key)
-console.log('解密后的文本:', decrypted)
+const key = crypto.createHash('sha256').update('1234567890123456').digest() //.digest('base64').substring(0, 32)
+const src_test = '耗损在需要'
+const res = Encode2(src_test, key)
+console.log('加密后的文本:', res)
+const res2 = Decode2(res, key)
+console.log('解密后的文本:', res2)

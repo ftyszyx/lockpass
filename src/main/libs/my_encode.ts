@@ -11,8 +11,8 @@ interface SecretyKeyInfo {
 }
 
 export class MyEncode {
-  private _pass_hash: string | null = null
-  private _encode_alg = 'aes-256-ccm'
+  private _pass_hash: Buffer | null = null
+  private _encode_alg = 'aes-256-cbc'
   private secret_ver: string = '1.0'
 
   constructor() {}
@@ -88,6 +88,10 @@ export class MyEncode {
   }
 
   public getPassHash(key: string, password: string) {
+    return createHash('sha256').update(`${key}-${password}`).digest()
+  }
+
+  public getPassHashStr(key: string, password: string) {
     return createHash('sha256').update(`${key}-${password}`).digest('base64')
   }
 
@@ -95,11 +99,12 @@ export class MyEncode {
     return this.Encode2(data, this._pass_hash)
   }
 
-  public Encode2(data: string, password: string) {
-    const cliper = createCipheriv(this._encode_alg, password, randomBytes(16))
-    let encrypted = cliper.update(data, 'utf8', 'base64')
-    encrypted += cliper.final('base64')
-    console.log('encode_data:', encrypted)
+  Encode2(data: string, key: Buffer): string {
+    const iv = randomBytes(16)
+    const cliper = createCipheriv(this._encode_alg, key, iv)
+    let encrypted = cliper.update(data, 'utf8', 'base64url')
+    encrypted += cliper.final('base64url')
+    encrypted += '|' + iv.toString('base64url')
     return encrypted
   }
 
@@ -107,11 +112,12 @@ export class MyEncode {
     return this.Decode2(data, this._pass_hash)
   }
 
-  public Decode2(data: string, password: string): string {
-    const decipher = createDecipheriv(this._encode_alg, Buffer.from(password), randomBytes(16))
-    let decrypted = decipher.update(data, 'base64', 'base64')
-    decrypted += decipher.final('base64')
-    console.log('decode_data:', decrypted)
+  Decode2(data: string, key: Buffer): string {
+    const [data_str, iv_str] = data.split('|')
+    const iv = Buffer.from(iv_str, 'base64url')
+    const decipher = createDecipheriv(this._encode_alg, key, iv)
+    let decrypted = decipher.update(data_str, 'base64url', 'utf8')
+    decrypted += decipher.final('utf8')
     return decrypted
   }
 }

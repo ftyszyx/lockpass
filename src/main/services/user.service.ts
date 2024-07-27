@@ -1,7 +1,6 @@
 import { LastUserInfo, LoginInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { BaseService } from './base.service'
 import AppModel from '@main/models/app.model'
-import { LangHelper } from '@common/lang'
 import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
@@ -16,16 +15,20 @@ export class UserService extends BaseService<User> {
     if (users.length <= 0) {
       return { code: ApiRespCode.user_notfind }
     }
-    const res = AppModel.getInstance().myencode.Login(users[0], info.password)
-    if (res == ApiRespCode.SUCCESS) {
-      AppModel.getInstance().set.cur_user_uid = users[0].id
-      AppModel.getInstance().saveSet()
-      return {
-        code: ApiRespCode.SUCCESS,
-        data: users[0]
+    const res: ApiResp<User> = { code: ApiRespCode.Other_err }
+    try {
+      const res_code = AppModel.getInstance().myencode.Login(users[0], info.password)
+      res.code = res_code
+      if (res_code == ApiRespCode.SUCCESS) {
+        AppModel.getInstance().set.cur_user_uid = users[0].id
+        AppModel.getInstance().saveSet()
+        res.data = users[0]
       }
+    } catch (e: any) {
+      Log.Exception(e)
+    } finally {
+      return res
     }
-    return { code: res }
   }
 
   public async GetLastUserInfo(): Promise<LastUserInfo> {
@@ -54,18 +57,20 @@ export class UserService extends BaseService<User> {
     if (users.length > 0) {
       return { code: ApiRespCode.user_exit }
     }
+    let res = { code: ApiRespCode.Other_err }
     try {
       await DbHlper.instance().beginTransaction()
       await super.AddOne({ username: info.username, set: '' } as User)
       const userinfo = await super.GetOne('username', info.username)
       AppModel.getInstance().myencode.Register(userinfo[0], info.password)
       DbHlper.instance().commitTransaction()
-    } catch (e) {
+      res.code = ApiRespCode.SUCCESS
+    } catch (e: any) {
+      Log.Exception(e)
       await DbHlper.instance().rollbackTransaction()
-      Log.error('register error:', e)
-      return { code: ApiRespCode.db_err }
+    } finally {
+      return res
     }
-    return { code: ApiRespCode.SUCCESS }
   }
 
   public async GetAll(): Promise<User[]> {

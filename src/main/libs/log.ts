@@ -94,4 +94,11 @@ export class Log {
     Log.logWriter.writeLine(logstr)
     console.error(logstr)
   }
+
+  static Exception(e: Error) {
+    const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${e.message}  
+    \n stack:\n ${e.stack}`
+    Log.logWriter.writeLine(logstr)
+    console.error(logstr)
+  }
 }

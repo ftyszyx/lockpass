@@ -13,6 +13,9 @@ class DbHlper {
   public user: User
   public vault: Vault
   public vaultItem: VaultItem
+  public show_log: boolean = false
+  private _use_main_connection: boolean = true
+
   constructor() {
     this.user = new User()
     this.vault = new Vault()
@@ -32,7 +35,16 @@ class DbHlper {
     return DbHlper._instance
   }
 
+  public useMainConnect() {
+    this._use_main_connection = true
+  }
+
+  public useMultiConnect() {
+    this._use_main_connection = false
+  }
+
   private getconnection() {
+    if (this._use_main_connection) return this.db
     return this.db?.connect()
   }
 
@@ -115,6 +127,7 @@ class DbHlper {
   private _exesql(sql_str: string, ext_msg: string = ''): Promise<void> {
     let conn = this.getconnection()
     return new Promise((resolve, reject) => {
+      if (this.show_log) Log.info('exesql:', sql_str)
       conn.exec(sql_str, (err, row) => {
         if (err) {
           Log.error(`run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
@@ -129,7 +142,8 @@ class DbHlper {
   private _runSql(sql_str: string, ext_msg: string = ''): Promise<void> {
     let conn = this.getconnection()
     return new Promise((resolve, reject) => {
-      conn.all(sql_str, (err, row) => {
+      if (this.show_log) Log.info('runsql:', sql_str)
+      conn.exec(sql_str, (err, row) => {
         if (err) {
           Log.error(`run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
           reject(new Error(err.message))
@@ -159,9 +173,10 @@ class DbHlper {
     sql_str: string,
     ext_msg: string = ''
   ): Promise<T[]> {
-    let conn = this.getconnection()
     const keys = Reflect.ownKeys(obj) as string[]
+    const conn = this.getconnection()
     return new Promise((resolve, reject) => {
+      if (this.show_log) Log.info('runsql:', sql_str)
       conn.all(sql_str, (err, rows) => {
         if (err) {
           Log.error(`run sql:${sql_str} ext:${ext_msg} err: ${err.message}`)
@@ -185,15 +200,15 @@ class DbHlper {
     })
   }
 
-  public DelOne(obj: BaseEntity, key: string, value: string | number): Promise<void> {
+  public async DelOne(obj: BaseEntity, key: string, value: string | number): Promise<void> {
     const table_name = obj[Table_Name_KEY]
     const encode_value = this.encode_table_str(obj, key, value)
     const col_value = this.getColumnValue(obj, key, encode_value)
     let sql_str = `delete from ${table_name} where ${key}=${col_value}`
-    return this._runSql(sql_str, `del:${table_name}`)
+    return await this._runSql(sql_str, `del:${table_name}`)
   }
 
-  public UpdateOne(entity: BaseEntity, obj_old: any, obj: any): Promise<void> {
+  public async UpdateOne(entity: BaseEntity, obj_old: any, obj: any): Promise<void> {
     const table_name = entity[Table_Name_KEY]
     if (!obj.id) {
       Log.error('update entity id is null')
@@ -204,10 +219,10 @@ class DbHlper {
     keys.splice(keys.indexOf('id'), 1)
     sql_str += this.getupdateOneSql(entity, obj_old, obj, keys as string[])
     sql_str += ` where id=${obj.id}`
-    return this._exesql(sql_str, `update:${table_name}`)
+    return await this._exesql(sql_str, `update:${table_name}`)
   }
 
-  public AddList(objs: BaseEntity[]): Promise<void> {
+  public async AddList(objs: BaseEntity[]): Promise<void> {
     const table_name = obj[Table_Name_KEY]
     let sql_str = 'BEGIN TRANSACTION;\n'
     sql_str += 'Insert into ' + table_name + ' Values '
@@ -221,28 +236,29 @@ class DbHlper {
     }
     sql_str += ';\n'
     sql_str += 'COMMIT;'
-    return this._runSql(sql_str)
+    return await this._runSql(sql_str)
   }
 
-  public beginTransaction() {
-    this._runSql('BEGIN TRANSACTION;')
+  public async beginTransaction() {
+    await this._runSql('BEGIN TRANSACTION;')
   }
 
-  public commitTransaction() {
-    this._runSql('COMMIT;')
+  public async commitTransaction() {
+    await this._runSql('COMMIT;')
   }
 
-  public rollbackTransaction() {
-    this._runSql('ROLLBACK;')
+  public async rollbackTransaction() {
+    await this._runSql('ROLLBACK;')
   }
 
-  public abortTransaction() {
-    this._runSql('ABORT;')
+  public async abortTransaction() {
+    await this._runSql('ABORT;')
   }
 
   public AddOne(obj: BaseEntity): Promise<void> {
     const table_name = obj[Table_Name_KEY]
-    let sql_str = 'Insert into ' + table_name + ' Values '
+    let sql_str = ''
+    sql_str += 'Insert into ' + table_name + ' Values '
     const keys = Reflect.ownKeys(obj)
     sql_str += this.getAddOneSql(obj, keys as string[])
     sql_str += ';'
@@ -288,6 +304,7 @@ class DbHlper {
     sql_str += this.getWhreSql(obj, where)
     return new Promise((resolve, reject) => {
       let conn = this.getconnection()
+      if (this.show_log) Log.info('runsql:', sql_str)
       conn.all(sql_str, (err, rows) => {
         if (err) {
           reject(new Error(err.message))
@@ -349,7 +366,7 @@ class DbHlper {
       }
       table_desc += ');'
       const sql_str = sequence_desc + '\n' + table_desc + '\n' + index_desc
-      // Log.info('sql:\n', sql_str)
+      if (this.show_log) Log.info('runsql:', sql_str)
       conn.each(sql_str, (err, row) => {
         if (err) {
           Log.error('create table err', obj[Table_Name_KEY], err.message)
