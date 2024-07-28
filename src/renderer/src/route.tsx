@@ -26,7 +26,7 @@ const RootRouter = () => {
     appset.setLang(LangHelper.lang)
   }
   return (
-    <BrowerRouter debug={true}>
+    <BrowerRouter debug={false}>
       <AppContext.Provider value={{ Lang: appset.lang }}>
         <Route>
           <Route path={PagePath.register} element={Register} match={{ end: true }} />
