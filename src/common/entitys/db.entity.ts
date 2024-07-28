@@ -5,8 +5,11 @@ export class BaseEntity {
   id: number
 }
 
-export interface WhereDef {
-  cond: Record<string, any>
+export type SearchField<T> = {
+  [P in keyof T]?: any
+}
+export interface WhereDef<T> {
+  cond: SearchField<T>
   // [key: string]: any
   andor?: 'AND' | 'OR'
   page?: number

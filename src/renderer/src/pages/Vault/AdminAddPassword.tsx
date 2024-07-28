@@ -9,9 +9,8 @@ import SelectPasswordTypeComp from './SelectPasswordTypeComp'
 import TextArea from 'antd/es/input/TextArea'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { LeftOutlined } from '@ant-design/icons'
-import { useLang } from '@renderer/libs/AppContext'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { AppsetStore } from '@renderer/models/appset.model'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -21,7 +20,7 @@ interface AdminAddPasswordProps {
   onClose?: () => void
 }
 export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Element {
-  const lang = useLang()
+  const lang = (use_appset() as AppsetStore).lang
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_password_type, set_show_password_type] = useState(true)

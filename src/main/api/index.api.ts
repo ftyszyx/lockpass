@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron'
 import AppModel from '../models/app.model'
 import { webToManMsg } from '../../common/entitys/ipcmsg.entity'
+import { WhereDef } from '@common/entitys/db.entity'
 
 export function initAllApi() {
   //system
@@ -30,11 +31,11 @@ export function initAllApi() {
     return await AppModel.getInstance().user?.GetLastUserInfo()
   })
   //valut
-  ipcMain.handle(webToManMsg.GetAllValuts, async () => {
-    return await AppModel.getInstance().vault?.GetAll()
+  ipcMain.handle(webToManMsg.GetAllValuts, async (_, cond: WhereDef) => {
+    return await AppModel.getInstance().vault?.FindAll(cond)
   })
-  ipcMain.handle(webToManMsg.GetAllValutItems, async () => {
-    return await AppModel.getInstance().vaultItem?.GetAll()
+  ipcMain.handle(webToManMsg.GetAllValutItems, async (_, cond: WhereDef) => {
+    return await AppModel.getInstance().vaultItem?.FindAll(cond)
   })
   ipcMain.handle(webToManMsg.AddValut, async (_, valut) => {
     return await AppModel.getInstance().vault?.AddOne(valut)

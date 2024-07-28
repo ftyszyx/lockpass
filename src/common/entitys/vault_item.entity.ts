@@ -4,6 +4,9 @@ import { BaseEntity } from './db.entity'
 @Entity({ name: 'valut_item' })
 export class VaultItem extends BaseEntity {
   @Column({ type: 'INTEGER' })
+  user_id: number
+
+  @Column({ type: 'INTEGER' })
   valut_id: number
 
   @Column({ type: 'VARCHAR', comment: '密码类型' })

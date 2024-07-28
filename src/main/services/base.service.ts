@@ -1,5 +1,5 @@
 import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
-import { BaseEntity } from '@common/entitys/db.entity'
+import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 import DbHlper from '@main/libs/db_help'
 import { Log } from '@main/libs/log'
 
@@ -9,6 +9,17 @@ export class BaseService<Entity extends BaseEntity> {
     const res: ApiResp<Entity[]> = { code: ApiRespCode.SUCCESS, data: [] }
     try {
       res.data = await DbHlper.instance().GetAll(this.entity, null)
+    } catch (e: any) {
+      Log.Exception(e)
+      res.code = ApiRespCode.db_err
+    }
+    return res
+  }
+
+  public async FindAll(where: WhereDef<Entity>): Promise<ApiResp<Entity[]>> {
+    const res: ApiResp<Entity[]> = { code: ApiRespCode.SUCCESS, data: [] }
+    try {
+      res.data = await DbHlper.instance().GetAll(this.entity, where)
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err

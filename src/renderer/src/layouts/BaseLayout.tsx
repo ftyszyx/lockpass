@@ -7,40 +7,56 @@ import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { LastUserInfo } from '@common/entitys/user.entity'
 import { message } from 'antd'
-import { ipc_call } from '@renderer/libs/tools/other'
-import { useLang } from '@renderer/libs/AppContext'
+import { getAllVault, getAllVaultItem, ipc_call } from '@renderer/libs/tools/other'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 function BaseLayout(props: ChildProps): JSX.Element {
-  const [messageApi] = message.useMessage()
+  const [messageApi, messageContex] = message.useMessage()
   const history = useHistory()
-  const lang = useLang()
+  const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
   ConsoleLog.LogInfo('baselayout render')
   useEffect(() => {
-    initApp()
-  }, [])
+    if (appset.initOK) initApp()
+  }, [appset.initOK])
 
   async function initApp() {
-    const userinfo = await ipc_call<LastUserInfo>(webToManMsg.GetLastUserInfo).catch((error) => {
-      messageApi.error(lang.getLangText(`err.${error.code}`))
-    })
-    if (userinfo) {
-      appstore.SetUser(userinfo.user)
-      if (userinfo.has_init_key) {
-        const havelogin = await ipc_call<boolean>(webToManMsg.HasLogin).catch((error) => {
-          messageApi.error(lang.getLangText(`err.${error.code}`))
-        })
-        if (havelogin == false) {
-          history.replace(PagePath.Login)
+    await ipc_call<LastUserInfo>(webToManMsg.GetLastUserInfo)
+      .then(async (userinfo) => {
+        appstore.SetUser(userinfo.user)
+        if (userinfo.has_init_key) {
+          const havelogin = await ipc_call<boolean>(webToManMsg.HasLogin).catch((error) => {
+            messageApi.error(appset.lang.getLangText(`err.${error.code}`))
+          })
+          if (havelogin == false) {
+            history.replace(PagePath.Login)
+          }
+        } else {
+          history.replace(PagePath.register)
+          return
         }
-      } else {
+      })
+      .catch((error) => {
+        messageApi.error(appset.lang.getLangText(`err.${error.code}`))
         history.replace(PagePath.register)
-        return
-      }
-    }
+      })
   }
 
-  return <div>{props.children}</div>
+  useEffect(() => {
+    initAllData()
+  }, [appstore.cur_user])
+
+  async function initAllData() {
+    await getAllVault(appstore, appset.lang, messageApi)
+    await getAllVaultItem(appstore, appset.lang, messageApi)
+  }
+
+  return (
+    <div>
+      {messageContex}
+      {props.children}
+    </div>
+  )
 }
 
 export default BaseLayout

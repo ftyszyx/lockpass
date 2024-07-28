@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import Icon from './icon'
 import { Icon_type } from '@common/gloabl'
-import { useLang } from '@renderer/libs/AppContext'
-import { ControlOutlined } from '@ant-design/icons'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 interface InputArrProps {
   value: string[]
@@ -12,7 +11,7 @@ interface InputArrProps {
 }
 
 export default function InputArr(props: InputArrProps) {
-  const lang = useLang()
+  const lang = (use_appset() as AppsetStore).lang
   const [inputs, setInputs] = useState<string[]>(props.value || [''])
 
   const handleInputChange = (index: number, newValue: string) => {

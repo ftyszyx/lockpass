@@ -1,6 +1,6 @@
 import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
-import { Vault } from '@common/entitys/vaults.entity'
+import { Vault } from '@common/entitys/vault.entity'
 import { COlumn_Encode_key, Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
 import duckdb from 'duckdb'
 import { Log } from './log'
@@ -265,7 +265,7 @@ class DbHlper {
     return this._runSql(sql_str)
   }
 
-  private getWhreSql(obj: BaseEntity, where: WhereDef): string {
+  private getWhreSql(obj: BaseEntity, where: WhereDef<BaseEntity>): string {
     let sql_str = ''
     Object.keys(where.cond).every((key, indx, _) => {
       let search_val = where.cond[key]
@@ -284,7 +284,7 @@ class DbHlper {
     return sql_str
   }
 
-  public GetOne<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
+  public GetOne<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {
     const table_name = obj[Table_Name_KEY]
     let sql_str = `select * from ${table_name} where `
     sql_str += this.getWhreSql(obj, where)
@@ -292,14 +292,16 @@ class DbHlper {
     return this._runSqlWithResult(obj, sql_str, `get:${table_name}`)
   }
 
-  public GetAll<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
+  public GetAll<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {
     const table_name = obj[Table_Name_KEY]
-    let sql_str = `select * from ${table_name} `
-    if (where) sql_str += this.getWhreSql(obj, where)
+    let sql_str = `select * from ${table_name}  `
+    if (where) {
+      sql_str = `${sql_str} where ${this.getWhreSql(obj, where)}`
+    }
     return this._runSqlWithResult(obj, sql_str, `get:${table_name}`)
   }
 
-  public GetTotalCount(obj: BaseEntity, where: WhereDef): Promise<number> {
+  public GetTotalCount(obj: BaseEntity, where: WhereDef<BaseEntity>): Promise<number> {
     const table_name = obj[Table_Name_KEY]
     let keystr = 'count(*)'
     let sql_str = `select ${keystr} from ${table_name} where `
@@ -317,7 +319,7 @@ class DbHlper {
     })
   }
 
-  public async SearchAll<T extends BaseEntity>(obj: T, where: WhereDef): Promise<T[]> {
+  public async SearchAll<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {
     const total_num = await this.GetTotalCount(obj, where)
     if (total_num == 0) return []
     const table_name = obj[Table_Name_KEY]

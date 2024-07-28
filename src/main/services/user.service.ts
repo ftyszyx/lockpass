@@ -11,7 +11,6 @@ export class UserService extends BaseService<User> {
   }
 
   public async Login(info: LoginInfo): Promise<ApiResp<User>> {
-    console.log('login')
     const res: ApiResp<User> = { code: ApiRespCode.other_err }
     if (!info.username || !info.password) {
       res.code = ApiRespCode.form_err
@@ -44,17 +43,14 @@ export class UserService extends BaseService<User> {
       data: { user: null, has_init_key: false }
     }
     const last_userid = AppModel.getInstance().set.cur_user_uid
-    console.log('last user id', last_userid)
     if (last_userid) {
       const user = await super.GetOne('id', last_userid)
-      console.log('user', user)
       if (user.length > 0) {
         ret.data.user = user[0]
         ret.data.has_init_key = AppModel.getInstance().myencode.hasKey(user[0])
         ret.code = ApiRespCode.SUCCESS
       }
     }
-    console.log('retrurn', ret)
     return ret
   }
 

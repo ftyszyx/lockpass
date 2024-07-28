@@ -11,23 +11,16 @@ import ValutItemInfo from './ValutItemInfo'
 import { Icon_type, PasswordType } from '@common/gloabl'
 import AdminAddPassword from './AdminAddPassword'
 import { VaultItem } from '@common/entitys/vault_item.entity'
-import { useLang } from '@renderer/libs/AppContext'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 export default function Vault() {
-  const lang = useLang()
+  const lang = (use_appset() as AppsetStore).lang
   const appstore = use_appstore() as AppStore
   const SelectAll = 'ALL'
   const [search_Password_type, set_Search_password_type] = useState(SelectAll)
   const [gloal_search_keyword, set_gloal_search_keyword] = useState('')
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>({} as VaultItem)
   const [show_add_vault, set_show_add_vault] = useState(false)
-  useEffect(() => {
-    getAllData()
-  }, [])
-  const getAllData = async () => {
-    await appstore.FetchAllValuts()
-    await appstore.FetchValutItems()
-  }
 
   const show_items = useMemo(() => {
     console.log('change select vault', search_Password_type, appstore.vaults, appstore.vaut_items)

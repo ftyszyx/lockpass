@@ -1,9 +1,10 @@
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { RegisterInfo } from '@common/entitys/user.entity'
-import { useLang } from '@renderer/libs/AppContext'
+import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory } from '@renderer/libs/router'
 import { ipc_call } from '@renderer/libs/tools/other'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, Form, Input, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 interface RegisterInfo2 extends RegisterInfo {
@@ -11,11 +12,11 @@ interface RegisterInfo2 extends RegisterInfo {
 }
 
 export default function Register(): JSX.Element {
-  console.log('register render')
+  ConsoleLog.LogInfo('register render')
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm<RegisterInfo2>()
   const history = useHistory()
-  const lang = useLang()
+  const lang = (use_appset() as AppsetStore).lang
   async function onFinish() {
     form.validateFields().then(async (values) => {
       console.log(values)

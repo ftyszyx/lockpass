@@ -1,4 +1,4 @@
-import { Vault } from '@common/entitys/vaults.entity'
+import { Vault } from '@common/entitys/vault.entity'
 import { BaseService } from './base.service'
 
 export class ValutService extends BaseService<Vault> {

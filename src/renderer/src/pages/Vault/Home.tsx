@@ -4,13 +4,17 @@ import { ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/icon'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Pagination } from 'antd'
+import { Button, message, Pagination } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import AdminAddValut from './AdminAddVault'
 import { ConsoleLog } from '@renderer/libs/Console'
+import { getAllVault } from '@renderer/libs/tools/other'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 export default function Home() {
   ConsoleLog.LogInfo('home render')
   const history = useHistory()
+  const appset = use_appset() as AppsetStore
+  const [messageApi, contextHolder] = message.useMessage()
   const [show_edit, setShowEdit] = useState(false)
   const [show_del, setShowDel] = useState(false)
   const [edit_panel_title, setEditPanelTitle] = useState('')
@@ -19,12 +23,6 @@ export default function Home() {
   const [cur_page, setCurPage] = useState(1)
   const [cur_info, setCurInfo] = useState<Vault>({} as Vault)
   const appstore = use_appstore() as AppStore
-  useEffect(() => {
-    getAllData()
-  }, [])
-  async function getAllData() {
-    // await appstore.FetchAllValuts()
-  }
   const showitems = useMemo(() => {
     return appstore.vaults.slice((cur_page - 1) * page_size, cur_page * page_size)
   }, [appstore.vaults, cur_page, page_size])
@@ -106,18 +104,19 @@ export default function Home() {
           edit_info={cur_info}
           show_del={show_del}
           onAddOk={async () => {
-            await getAllData()
+            await getAllVault(appstore, appset.lang, messageApi)
             setShowEdit(false)
           }}
           onClose={() => {
             setShowEdit(false)
           }}
           onDelOk={async () => {
-            await getAllData()
+            await getAllVault(appstore, appset.lang, messageApi)
             setShowEdit(false)
           }}
         />
       )}
+      {contextHolder}
     </div>
   )
 }

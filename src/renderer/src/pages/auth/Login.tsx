@@ -1,12 +1,11 @@
-import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { LoginInfo, User } from '@common/entitys/user.entity'
-import { useLang } from '@renderer/libs/AppContext'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory } from '@renderer/libs/router'
 import { ipc_call } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, Form, Input, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 
@@ -17,7 +16,7 @@ export default function Login(): JSX.Element {
   const appstore = use_appstore() as AppStore
   ConsoleLog.LogInfo('login render')
   const isLogin = history.PathName == PagePath.Login && !appstore.cur_user
-  const lang = useLang()
+  const lang = (use_appset() as AppsetStore).lang
   async function onFinish() {
     form.validateFields().then(async (values) => {
       if (!isLogin) {
