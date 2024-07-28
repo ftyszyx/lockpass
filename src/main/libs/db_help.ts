@@ -358,6 +358,9 @@ class DbHlper {
         if (Reflect.getMetadata('unique', obj, key)) {
           table_desc += ' UNIQUE'
         }
+        if (Reflect.getMetadata('notNull', obj, key)) {
+          table_desc += ' NOT NULL'
+        }
         if (i < keys.length - 1) {
           table_desc += ','
         }

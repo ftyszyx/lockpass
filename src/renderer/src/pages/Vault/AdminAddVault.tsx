@@ -1,10 +1,13 @@
-import { Vault } from '@common/entitys/vaults.entity'
+import { Vault } from '@common/entitys/vault.entity'
 import { Icon_type, ModalType, PasswordIconType } from '@common/gloabl'
-import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Modal, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import TextArea from 'antd/es/input/TextArea'
 import Icon from '@renderer/components/icon'
+import { ipc_call } from '@renderer/libs/tools/other'
+import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { AppStore, use_appstore } from '@renderer/models/app.model'
 const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 16 } }
 
 interface AmdinAddvalutProps {
@@ -18,9 +21,10 @@ interface AmdinAddvalutProps {
   onDelOk?: () => Promise<void>
 }
 export default function AdminAddValut(pros: AmdinAddvalutProps): JSX.Element {
-  const appstore = use_appstore() as AppStore
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm()
+  const appstore = use_appstore() as AppStore
+  const appset = use_appset() as AppsetStore
   return (
     <div>
       {contextHolder}
@@ -32,15 +36,23 @@ export default function AdminAddValut(pros: AmdinAddvalutProps): JSX.Element {
           form.validateFields().then(async (values) => {
             if (pros.show_type === ModalType.Edit) {
               values.id = pros.edit_info.id
-              await appstore.UpdateValut(pros.edit_info, values as Vault).catch((err) => {
-                messageApi.error(err.message, 5)
-              })
+              await ipc_call(webToManMsg.UpdateValut, values)
+                .then(() => {
+                  pros.onAddOk?.()
+                })
+                .catch((err) => {
+                  messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+                })
             } else if (pros.show_type === ModalType.Add) {
-              await appstore.AddValut(values as Vault).catch((err) => {
-                messageApi.error(err.message, 5)
-              })
+              values.user_id = appstore.cur_user?.id
+              await ipc_call(webToManMsg.AddValut, values)
+                .then(async () => {
+                  pros.onAddOk?.()
+                })
+                .catch((err) => {
+                  messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+                })
             }
-            pros.onAddOk?.()
           })
         }}
         onCancel={() => {
@@ -52,10 +64,13 @@ export default function AdminAddValut(pros: AmdinAddvalutProps): JSX.Element {
             {pros.show_del && (
               <Button
                 onClick={async () => {
-                  await appstore.DeleteValut(pros.edit_info.id).catch((err) => {
-                    messageApi.error(err.message, 5)
-                  })
-                  pros.onDelOk?.()
+                  await ipc_call(webToManMsg.DeleteValut, pros.edit_info.id)
+                    .then(() => {
+                      pros.onDelOk?.()
+                    })
+                    .catch((err) => {
+                      messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+                    })
                 }}
               >
                 删除

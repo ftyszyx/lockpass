@@ -1,6 +1,5 @@
 import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
 import { ConsoleLog } from '../Console'
-import { User } from '@common/entitys/user.entity'
 import { AppStore } from '@renderer/models/app.model'
 import { MessageInstance } from 'antd/es/message/interface'
 import { WhereDef } from '@common/entitys/db.entity'
@@ -29,6 +28,7 @@ export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
 
 export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
   if (appstore.cur_user) {
+    // ConsoleLog.LogTrace('getAllVault')
     const where: WhereDef<Vault> = { cond: { user_id: appstore.cur_user.id } }
     await ipc_call<Vault[]>(webToManMsg.GetAllValuts, where)
       .then((res) => {

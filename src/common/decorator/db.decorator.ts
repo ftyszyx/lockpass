@@ -36,6 +36,7 @@ export interface ColumnOptions {
   index_name?: string
   hide?: boolean
   encode?: boolean
+  notNull?: boolean
 }
 
 export interface TableOptions {

@@ -1,6 +1,6 @@
 import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
-import { Vault } from '@common/entitys/vaults.entity'
+import { Vault } from '@common/entitys/vault.entity'
 import { LangItem } from '@common/lang'
 import { create } from '@renderer/libs/state'
 export interface AppStore {

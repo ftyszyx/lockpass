@@ -11,6 +11,9 @@ import { FieldInfo } from '@renderer/entitys/form.entity'
 import { LeftOutlined } from '@ant-design/icons'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { ipc_call } from '@renderer/libs/tools/other'
+import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { useHistory, useRouterStore } from '@renderer/libs/router'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -20,13 +23,16 @@ interface AdminAddPasswordProps {
   onClose?: () => void
 }
 export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Element {
-  const lang = (use_appset() as AppsetStore).lang
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_password_type, set_show_password_type] = useState(true)
   const [select_type, set_select_type] = useState(PasswordType.Login)
   const [show_info, set_show_info] = useState(false)
+  const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
+  const route_data = useRouterStore()
+  const cur_vault_id = parseInt(route_data.match?.params['id'])
+  // console.log('path', history.PathName, vault_id)
   return (
     <div className=" relative">
       {show_password_type && (
@@ -67,10 +73,16 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
           onOk={async () => {
             const values = await form.validateFields()
             values.info = JSON.stringify(values.info)
-            console.log('values', values)
-            await appstore.AddValutItem(values)
-            set_show_info(false)
-            props.onOk?.()
+            values.user_id = appstore.cur_user?.id
+            values.valut_id = cur_vault_id
+            await ipc_call(webToManMsg.AddValutItem, values)
+              .then(() => {
+                set_show_info(false)
+                props.onOk?.()
+              })
+              .catch((err) => {
+                messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+              })
           }}
           footer={(_, { OkBtn }) => (
             <>
@@ -87,7 +99,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
               props.init_info ||
               ({
                 icon: PasswordIconType[`icon_${select_type}`],
-                name: lang.getLangText(`password_name_${select_type}`)
+                name: appset.lang.getLangText(`password_name_${select_type}`)
               } as VaultItem)
             }
           >
@@ -130,7 +142,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             <Form.Item
               className="mb-0 w-[400px]"
               name="remarks"
-              label={lang.getLangText('vaultadd.remarks')}
+              label={appset.lang.getLangText('vaultadd.remarks')}
             >
               <TextArea autoSize={{ minRows: 3 }}></TextArea>
             </Form.Item>

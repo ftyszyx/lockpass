@@ -4,7 +4,7 @@ desc: 密码管理页面
 date:2024/07/23 11:45:04
 */
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Input, Select, Space } from 'antd'
+import { Button, Input, message, Select, Space } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import Icon from '@renderer/components/icon'
 import ValutItemInfo from './ValutItemInfo'
@@ -12,10 +12,12 @@ import { Icon_type, PasswordType } from '@common/gloabl'
 import AdminAddPassword from './AdminAddPassword'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { getAllVaultItem } from '@renderer/libs/tools/other'
 
 export default function Vault() {
-  const lang = (use_appset() as AppsetStore).lang
+  const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
+  const [messageApi, contextHolder] = message.useMessage()
   const SelectAll = 'ALL'
   const [search_Password_type, set_Search_password_type] = useState(SelectAll)
   const [gloal_search_keyword, set_gloal_search_keyword] = useState('')
@@ -37,10 +39,11 @@ export default function Vault() {
   return (
     <>
       <div className="flex flex-col bg-gray-100 h-screen">
+        {contextHolder}
         {/* header */}
         <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
           <Input
-            placeholder={lang.getLangText('valut,search,placeholder')}
+            placeholder={appset.lang.getLangText('valut.search.placeholder')}
             className="flex-grow"
             onChange={(newvalue) => {
               if (newvalue.target.value) {
@@ -126,7 +129,7 @@ export default function Vault() {
           title="新增项目"
           onOk={async () => {
             set_show_add_vault(false)
-            await appstore.FetchValutItems()
+            await getAllVaultItem(appstore, appset.lang, messageApi)
           }}
           onClose={() => {
             set_show_add_vault(false)
