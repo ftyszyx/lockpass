@@ -11,12 +11,18 @@ export class UserService extends BaseService<User> {
   }
 
   public async Login(info: LoginInfo): Promise<ApiResp<User>> {
-    const users = await super.GetOne('username', info.username)
-    if (users.length <= 0) {
-      return { code: ApiRespCode.user_notfind }
+    console.log('login')
+    const res: ApiResp<User> = { code: ApiRespCode.other_err }
+    if (!info.username || !info.password) {
+      res.code = ApiRespCode.form_err
+      return res
     }
-    const res: ApiResp<User> = { code: ApiRespCode.Other_err }
     try {
+      const users = await super.GetOne('username', info.username)
+      if (users.length <= 0) {
+        res.code = ApiRespCode.user_notfind
+        return res
+      }
       const res_code = AppModel.getInstance().myencode.Login(users[0], info.password)
       res.code = res_code
       if (res_code == ApiRespCode.SUCCESS) {
@@ -31,33 +37,45 @@ export class UserService extends BaseService<User> {
     }
   }
 
-  public async GetLastUserInfo(): Promise<LastUserInfo> {
+  public async GetLastUserInfo(): Promise<ApiResp<LastUserInfo>> {
+    console.log('get last user info')
+    const ret: ApiResp<LastUserInfo> = {
+      code: ApiRespCode.other_err,
+      data: { user: null, has_init_key: false }
+    }
     const last_userid = AppModel.getInstance().set.cur_user_uid
-    let res = { user: null, has_init_key: false }
+    console.log('last user id', last_userid)
     if (last_userid) {
       const user = await super.GetOne('id', last_userid)
+      console.log('user', user)
       if (user.length > 0) {
-        res.user = user[0]
-        res.has_init_key = AppModel.getInstance().myencode.hasKey(res.user)
+        ret.data.user = user[0]
+        ret.data.has_init_key = AppModel.getInstance().myencode.hasKey(user[0])
+        ret.code = ApiRespCode.SUCCESS
       }
     }
+    console.log('retrurn', ret)
+    return ret
+  }
+
+  public async HasLogin(): Promise<ApiResp<boolean>> {
+    const res: ApiResp<boolean> = { code: ApiRespCode.SUCCESS }
+    res.data = AppModel.getInstance().myencode.HasLogin()
     return res
   }
 
-  public async HasLogin(): Promise<boolean> {
-    return AppModel.getInstance().myencode.HasLogin()
-  }
-
-  public async Logout(): Promise<void> {
-    return AppModel.getInstance().myencode.LoginOut()
+  public async Logout(): Promise<ApiResp<void>> {
+    const res: ApiResp<void> = { code: ApiRespCode.SUCCESS }
+    AppModel.getInstance().myencode.LoginOut()
+    return res
   }
 
   public async Register(info: RegisterInfo): Promise<ApiResp<null>> {
+    const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     const users = await super.GetOne('username', info.username)
-    if (users.length > 0) {
-      return { code: ApiRespCode.user_exit }
+    if (!users || users.length <= 0) {
+      res.code = ApiRespCode.user_notfind
     }
-    let res = { code: ApiRespCode.Other_err }
     try {
       await DbHlper.instance().beginTransaction()
       await super.AddOne({ username: info.username, set: '' } as User)
@@ -68,13 +86,11 @@ export class UserService extends BaseService<User> {
     } catch (e: any) {
       Log.Exception(e)
       await DbHlper.instance().rollbackTransaction()
-    } finally {
-      return res
     }
+    return res
   }
 
-  public async GetAll(): Promise<User[]> {
-    const all_users = await super.GetAll()
-    return all_users
+  public async GetAll(): Promise<ApiResp<User[]>> {
+    return await super.GetAll()
   }
 }

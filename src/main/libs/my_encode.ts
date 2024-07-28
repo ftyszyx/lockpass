@@ -4,6 +4,7 @@ import { randomBytes, createHash, createCipheriv, createDecipheriv } from 'crypt
 import { PathHelper } from './path'
 import { User } from '@common/entitys/user.entity'
 import { ApiRespCode } from '@common/entitys/app.entity'
+import { Log } from './log'
 interface SecretyKeyInfo {
   key: string
   valid_data: string
@@ -47,9 +48,14 @@ export class MyEncode {
         return ApiRespCode.ver_not_match
       }
       const hash = this.getPassHash(keyinfo.key, password)
-      const encode_data = this.Decode2(keyinfo.valid_data, hash)
-      if (encode_data !== this.getUserValidStr(user)) {
-        return ApiRespCode.Password_err
+      try {
+        const encode_data = this.Decode2(keyinfo.valid_data, hash)
+        if (encode_data !== this.getUserValidStr(user)) {
+          return ApiRespCode.password_err
+        }
+      } catch (e: any) {
+        Log.Exception(e)
+        return ApiRespCode.password_err
       }
       this._pass_hash = hash
       return ApiRespCode.SUCCESS

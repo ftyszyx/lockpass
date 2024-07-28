@@ -2,7 +2,8 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { RegisterInfo } from '@common/entitys/user.entity'
 import { useLang } from '@renderer/libs/AppContext'
-import { IPC_CALL } from '@renderer/libs/tools/ipc'
+import { useHistory } from '@renderer/libs/router'
+import { ipc_call } from '@renderer/libs/tools/other'
 import { Button, Form, Input, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 interface RegisterInfo2 extends RegisterInfo {
@@ -10,10 +11,24 @@ interface RegisterInfo2 extends RegisterInfo {
 }
 
 export default function Register(): JSX.Element {
-  console.log('init system')
+  console.log('register render')
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm<RegisterInfo2>()
+  const history = useHistory()
   const lang = useLang()
+  async function onFinish() {
+    form.validateFields().then(async (values) => {
+      console.log(values)
+      if (values.password_repeat !== values.password) {
+        message.error('两次密码不一致')
+        return
+      }
+      await ipc_call<null>(webToManMsg.Register, values).catch((err) => {
+        messageApi.error(lang.getLangText(`err.${err.code}`))
+      })
+      history.replace(PagePath.Login)
+    })
+  }
   return (
     <div className=" bg-slate-100">
       {contextHolder}
@@ -37,19 +52,22 @@ export default function Register(): JSX.Element {
             type="primary"
             htmlType="submit"
             className="w-full"
-            onClick={() => {
-              form.validateFields().then(async (values) => {
-                console.log(values)
-                if (values.password_repeat !== values.password) {
-                  message.error('两次密码不一致')
-                  return
-                }
-                const res = await IPC_CALL<null>(messageApi, webToManMsg.Register, values)
-                window.location.href = PagePath.Login
-              })
+            onSubmit={async () => {
+              await onFinish()
+            }}
+            onClick={async () => {
+              await onFinish()
             }}
           >
-            确定
+            {lang.getLangText('ok')}
+          </Button>
+          <Button
+            className="w-full mt-2"
+            onClick={() => {
+              history.push(PagePath.Login)
+            }}
+          >
+            {lang.getLangText('register.skiptoLogin')}
           </Button>
         </div>
       </div>

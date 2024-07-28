@@ -154,6 +154,7 @@ function getBaseHistory(
     if (opitons.debug) console.log('replace url ', url)
     globalHistory.replaceState(historyState, '', url)
     if (listener) {
+      if (opitons.debug) console.log('push listener')
       listener({ action, location: history.CurLocation, delta: 0 })
     }
   }

@@ -60,7 +60,8 @@ export class Log {
     if (!fs.existsSync(log_dir)) {
       fs.mkdirSync(log_dir)
     }
-    let log_path = `${log_dir}/lockpass-${date.getFullYear()}-${date.getMonth()}-${date.getDay()}.log`
+    let log_path = `${log_dir}/lockpass-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`
+    // console.log(`log path: ${log_path}`)
     Log.logWriter = new FileLogWriter(log_path, true)
   }
 
@@ -88,15 +89,17 @@ export class Log {
     }
     const obj = Object.create(null)
     Error.captureStackTrace(obj)
-    Error.stackTraceLimit = 5
+    Error.stackTraceLimit = 10
     const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')} 
     \n stack:\n ${obj.stack}`
     Log.logWriter.writeLine(logstr)
     console.error(logstr)
   }
 
-  static Exception(e: Error) {
-    const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${e.message}  
+  static Exception(e: Error, ...args) {
+    Error.captureStackTrace(e)
+    Error.stackTraceLimit = 10
+    const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${e.message} ${args.join(' ')}
     \n stack:\n ${e.stack}`
     Log.logWriter.writeLine(logstr)
     console.error(logstr)

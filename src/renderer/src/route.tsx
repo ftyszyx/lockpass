@@ -17,22 +17,16 @@ import Login from './pages/auth/Login'
 
 const RootRouter = () => {
   const appset = use_appset() as AppsetStore
-  console.log('render root router')
   useEffect(() => {
     initapp()
   }, [])
-  useLayoutEffect(() => {
-    console.log('uselayout')
-  }, [])
   const initapp = async () => {
-    console.log('init app')
     const lang = (await window.electron.ipcRenderer.invoke(webToManMsg.GetLang)) as string
     LangHelper.setLang(lang)
     appset.setLang(LangHelper.lang)
   }
-  console.log('get lang', appset.lang)
   return (
-    <BrowerRouter debug={false}>
+    <BrowerRouter debug={true}>
       <AppContext.Provider value={{ Lang: appset.lang }}>
         <Route>
           <Route path={PagePath.register} element={Register} match={{ end: true }} />

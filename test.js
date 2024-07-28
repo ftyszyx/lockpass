@@ -24,3 +24,6 @@ const res = Encode2(src_test, key)
 console.log('加密后的文本:', res)
 const res2 = Decode2(res, key)
 console.log('解密后的文本:', res2)
+
+const time = Date.now()
+// console.log('time:', time,'month:', new Date(time).getMonth() + 1)

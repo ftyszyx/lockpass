@@ -7,7 +7,9 @@ import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Pagination } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import AdminAddValut from './AdminAddVault'
+import { ConsoleLog } from '@renderer/libs/Console'
 export default function Home() {
+  ConsoleLog.LogInfo('home render')
   const history = useHistory()
   const [show_edit, setShowEdit] = useState(false)
   const [show_del, setShowDel] = useState(false)
@@ -21,7 +23,7 @@ export default function Home() {
     getAllData()
   }, [])
   async function getAllData() {
-    await appstore.FetchAllValuts()
+    // await appstore.FetchAllValuts()
   }
   const showitems = useMemo(() => {
     return appstore.vaults.slice((cur_page - 1) * page_size, cur_page * page_size)

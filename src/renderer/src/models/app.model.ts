@@ -1,14 +1,11 @@
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { User } from '@common/entitys/user.entity'
+import { LastUserInfo, LoginInfo, User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Vault } from '@common/entitys/vaults.entity'
 import { LangItem } from '@common/lang'
 import { AppEntity } from '@renderer/entitys/app.entity'
 import { create } from '@renderer/libs/state'
-import { stat } from 'fs'
-
 export interface AppStore extends AppEntity {
-  user_list?: User[]
   fold_menu: boolean
   SetFoldMenu: (fold: boolean) => void
   // valuts
@@ -26,12 +23,16 @@ export interface AppStore extends AppEntity {
 
   //user
   cur_user?: User
-  FetchAllUsers: () => Promise<User[]>
-  Login: (user: User) => Promise<void>
-  LoginOut: () => Promise<void>
+  hasLogin: boolean
+  Login: (user: User) => void
+  SetUser: (user: User) => void
+  LoginOut: () => void
+  HaveLogin: () => boolean
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
+    cur_user: null,
+    hasLogin: false,
     fold_menu: false,
     setLang(lang: LangItem) {
       set((state) => {
@@ -57,28 +58,32 @@ export const use_appstore = create<AppStore>((set, get) => {
       set((state) => {
         return { ...state, vaut_items: res }
       })
-      console.log('get all valut items', res)
       return res
     },
 
-    async FetchAllUsers() {
-      const res = await window.electron.ipcRenderer.invoke(webToManMsg.getAllUser)
+    //user
+    LoginOut() {
       set((state) => {
-        return { ...state, user_list: res }
-      })
-      return res
-    },
-
-    async Logout() {
-      set((state) => {
-        return { ...state, cur_user: null }
+        return { ...state, cur_user: null, hasLogin: false }
       })
     },
 
-    async Login(info: User) {
+    Login(info: User) {
       set((state) => {
-        return { ...state, cur_user: info }
+        return { ...state, cur_user: info, hasLogin: true }
       })
+    },
+    SetUser(user: User) {
+      set((state) => {
+        const res = { ...state, cur_user: user }
+        return res
+      })
+    },
+    HaveLogin() {
+      if (get().hasLogin && get().cur_user) {
+        return true
+      }
+      return false
     },
 
     async UpdateValut(old, valut) {

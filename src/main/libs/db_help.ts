@@ -13,7 +13,7 @@ class DbHlper {
   public user: User
   public vault: Vault
   public vaultItem: VaultItem
-  public show_log: boolean = false
+  public show_log: boolean = true
   private _use_main_connection: boolean = true
 
   constructor() {
@@ -130,7 +130,7 @@ class DbHlper {
       if (this.show_log) Log.info('exesql:', sql_str)
       conn.exec(sql_str, (err, row) => {
         if (err) {
-          Log.error(`run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
+          Log.Exception(err, `run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
           reject(new Error(err.message))
         } else {
           resolve()
@@ -145,7 +145,7 @@ class DbHlper {
       if (this.show_log) Log.info('runsql:', sql_str)
       conn.exec(sql_str, (err, row) => {
         if (err) {
-          Log.error(`run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
+          Log.Exception(err, `run sql:${sql_str} ext:${ext_msg}  `)
           reject(new Error(err.message))
         } else {
           resolve()
@@ -179,7 +179,7 @@ class DbHlper {
       if (this.show_log) Log.info('runsql:', sql_str)
       conn.all(sql_str, (err, rows) => {
         if (err) {
-          Log.error(`run sql:${sql_str} ext:${ext_msg} err: ${err.message}`)
+          Log.Exception(err, `run sql:${sql_str} ext:${ext_msg} err: ${err.message}`)
           reject(new Error(err.message))
         } else {
           let res: T[] = []
@@ -269,6 +269,8 @@ class DbHlper {
     let sql_str = ''
     Object.keys(where.cond).every((key, indx, _) => {
       let search_val = where.cond[key]
+      if (search_val == undefined || search_val == null)
+        throw new Error(`search value is null key:${key}`)
       search_val = this.encode_table_str(obj, key, search_val)
       const col_value = this.getColumnValue(obj, key, search_val)
       if (col_value) {
@@ -369,7 +371,7 @@ class DbHlper {
       if (this.show_log) Log.info('runsql:', sql_str)
       conn.each(sql_str, (err, row) => {
         if (err) {
-          Log.error('create table err', obj[Table_Name_KEY], err.message)
+          Log.Exception(err, 'create table err', obj[Table_Name_KEY], err.message)
         }
       })
     }

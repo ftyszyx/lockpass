@@ -44,7 +44,7 @@ function render(parnet_props: RouteProps, child_match: childMatchRes, ctxvalue: 
   }
   if (parnet_props.redirect != null) {
     setTimeout(() => {
-      console.log('redirect to:', parnet_props.redirect)
+      // console.log('redirect to:', parnet_props.redirect)
       ctxvalue.history?.push(parnet_props.redirect as string)
     }, 0)
     return null
