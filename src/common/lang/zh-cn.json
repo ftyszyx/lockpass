@@ -33,6 +33,14 @@
   "err.1": "密钥不存在",
   "err.7": "数据不存在",
 
+  "time.second": "{0}秒",
+  "time.minute": "{0}分钟",
+  "time.hour": "{0}小时",
+  "time.day": "{0}天",
+  "time.week": "{0}周",
+  "time.never": "从不",
+
   "ok": "确定",
+  "save": "保存",
   "cancel": "取消"
 }

@@ -8,6 +8,7 @@ export enum webToManMsg {
   Logout = 'Logout',
   getAllUser = 'getAllUser',
   GetLastUserInfo = 'getLastUser',
+  UpdateUser = 'UpdateUser',
 
   //valut
   GetAllValuts = 'GetAllValuts',
@@ -24,5 +25,7 @@ export enum webToManMsg {
 
 export enum MainToWebMsg {
   ShowErrorMsg = 'ShowError',
-  ShowInfoMsg = 'ShowInfoMsg'
+  ShowInfoMsg = 'ShowInfoMsg',
+  LockApp = 'lockApp',
+  UnlockApp = 'UnLockApp'
 }

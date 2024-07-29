@@ -3,13 +3,12 @@ import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { LangItem } from '@common/lang'
 import { create } from '@renderer/libs/state'
+import { UserSetInfo } from '@renderer/entitys/set.entity'
 export interface AppStore {
   vaults: Vault[]
   setValuts: (valuts: Vault[]) => void
   vaut_items: VaultItem[]
   setValutItems: (valutItems: VaultItem[]) => void
-  fold_menu: boolean
-  SetFoldMenu: (fold: boolean) => void
   //user
   cur_user?: User
   hasLogin: boolean
@@ -22,15 +21,9 @@ export const use_appstore = create<AppStore>((set, get) => {
   return {
     cur_user: null,
     hasLogin: false,
-    fold_menu: false,
     setLang(lang: LangItem) {
       set((state) => {
         return { ...state, lang: lang }
-      })
-    },
-    SetFoldMenu(fold: boolean) {
-      set((state) => {
-        return { ...state, fold_menu: fold }
       })
     },
     vaults: [],
@@ -49,6 +42,9 @@ export const use_appstore = create<AppStore>((set, get) => {
     },
     SetUser(user: User) {
       set((state) => {
+        let setinfo = JSON.parse((user.set as string) || '{}') as UserSetInfo
+        setinfo.aulock_time = 10
+        user.set = setinfo
         const res = { ...state, cur_user: user }
         return res
       })

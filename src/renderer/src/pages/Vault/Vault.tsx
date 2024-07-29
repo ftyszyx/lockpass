@@ -67,6 +67,13 @@ export default function Vault() {
         {contextHolder}
         {/* header */}
         <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
+          <Icon
+            type={Icon_type.icon_fold}
+            className={`cursor-pointer ${appset.fold_menu ? ' rotate-180' : 'rotate-0'} font-[40px]`}
+            onClick={() => {
+              appset.ToggleFoldMenu()
+            }}
+          ></Icon>
           <Input
             placeholder={appset.lang.getLangText('valut.search.placeholder')}
             className="flex-grow"

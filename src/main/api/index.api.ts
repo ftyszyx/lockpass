@@ -32,6 +32,10 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.GetLastUserInfo, async () => {
     return await AppModel.getInstance().user?.GetLastUserInfo()
   })
+  ipcMain.handle(webToManMsg.UpdateUser, async (_, user) => {
+    return await AppModel.getInstance().user?.UpdateOne(user)
+  })
+
   //valut
   ipcMain.handle(webToManMsg.GetAllValuts, async (_, cond: WhereDef<Vault>) => {
     return await AppModel.getInstance().vault?.FindAll(cond)

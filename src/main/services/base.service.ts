@@ -50,7 +50,10 @@ export class BaseService<Entity extends BaseEntity> {
     return res
   }
 
-  public async UpdateOne(chang_values: Entity): Promise<ApiResp<null>> {
+  public async UpdateOne2(
+    chang_values: Entity,
+    return_new: boolean
+  ): Promise<ApiResp<null | Entity>> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     try {
       const old = await DbHlper.instance().GetOne(this.entity, { cond: { id: chang_values.id } })
@@ -59,11 +62,20 @@ export class BaseService<Entity extends BaseEntity> {
         return res
       }
       await DbHlper.instance().UpdateOne(this.entity, old[0], chang_values)
+      if (return_new) {
+        res.data = await DbHlper.instance().GetOne(this.entity, {
+          cond: { id: chang_values.id }
+        })[0]
+      }
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err
     }
     return res
+  }
+
+  public async UpdateOne(chang_values: Entity): Promise<ApiResp<null | Entity>> {
+    return this.UpdateOne2(chang_values, false)
   }
 
   public async DeleteOne(id: number): Promise<ApiResp<null>> {

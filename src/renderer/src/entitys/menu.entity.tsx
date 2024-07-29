@@ -58,16 +58,16 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
       icon_style_type: Icon_type.icon_set,
       parent: '0',
       url: PagePath.Admin_set
-    },
-    {
-      id: MenuLog,
-      key: MenuLog + '',
-      title: '日志',
-      sorts: 3,
-      icon_style_type: Icon_type.icon_note,
-      parent: '0',
-      url: PagePath.Admin_log
     }
+    // {
+    //   id: MenuLog,
+    //   key: MenuLog + '',
+    //   title: '日志',
+    //   sorts: 3,
+    //   icon_style_type: Icon_type.icon_note,
+    //   parent: '0',
+    //   url: PagePath.Admin_log
+    // }
   ]
 }
 export const MenuParamNull = 'null'

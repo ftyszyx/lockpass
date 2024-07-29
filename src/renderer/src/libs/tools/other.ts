@@ -50,12 +50,7 @@ export async function getAllVaultItem(
     await ipc_call<VaultItem[]>(webToManMsg.GetAllValutItems, where2)
       .then((res) => {
         res.forEach((item) => {
-          const iteminfo = item.info as string
-          if (iteminfo && iteminfo.length > 0) {
-            item.info = JSON.parse(iteminfo)
-          } else {
-            item.info = {}
-          }
+          item.info = JSON.parse((item.info as string) || '{}')
         })
         appstore.setValutItems(res)
       })

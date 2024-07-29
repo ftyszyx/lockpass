@@ -1,5 +1,5 @@
-import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
-import { join } from 'path'
+import { app, shell, BrowserWindow, ipcMain, globalShortcut, Tray, Menu } from 'electron'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initAllApi } from './api/index.api'
@@ -17,18 +17,42 @@ function createWindow(): void {
       sandbox: false
     }
   })
-  // globalShortcut.register('f5', () => {
-  //   console.log('f5')
-  //   mainWindow.reload()
-  // })
-  // globalShortcut.register('CommandOrControl+R', () => {
-  //   console.log('CommandOrControl+R')
-  //   mainWindow.reload()
-  // })
   mainWindow.webContents.clearHistory()
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
+  mainWindow.on('closed', () => {
+    console.log('win closed')
+  })
+  mainWindow.on('close', (event) => {
+    event.preventDefault()
+    mainWindow.hide()
+    mainWindow.setSkipTaskbar(true)
+  })
+
+  const tray = new Tray(path.join(__dirname, '../../resources/icon.png'))
+  tray.setToolTip('passlock')
+  const contextmenu = Menu.buildFromTemplate([
+    {
+      label: '显示',
+      click: () => {
+        mainWindow.show()
+      }
+    },
+    {
+      label: '退出',
+      click: () => {
+        mainWindow.destroy()
+        app.quit()
+      }
+    }
+  ])
+  tray.setContextMenu(contextmenu)
+  tray.on('double-click', () => {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true)
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -77,13 +101,4 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
-
-app.on('before-quit', (event) => {
-  console.log('before-quit', event)
-  globalShortcut.unregisterAll()
-})
-
-app.on('quit', (evnnt, exitCode) => {
-  console.log('quit')
 })

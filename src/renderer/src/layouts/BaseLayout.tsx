@@ -1,7 +1,7 @@
 import { ChildProps } from '@renderer/entitys/other.entity'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
@@ -19,6 +19,18 @@ function BaseLayout(props: ChildProps): JSX.Element {
   useEffect(() => {
     if (appset.initOK) initApp()
   }, [appset.initOK])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((pre) => {
+        console.log('count', pre)
+        return pre + 1
+      })
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
 
   async function initApp() {
     await ipc_call<LastUserInfo>(webToManMsg.GetLastUserInfo)

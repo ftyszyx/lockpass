@@ -63,7 +63,8 @@ export enum Icon_type {
   icon_type = 'icon-type',
   icon_type2 = 'icon-type2',
   icon_rank = 'icon-rank',
-  icon_del = 'icon-delete'
+  icon_del = 'icon-delete',
+  icon_fold = 'icon-fold'
 }
 
 export enum PasswordType {

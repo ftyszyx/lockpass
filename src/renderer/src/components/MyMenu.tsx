@@ -13,6 +13,7 @@ import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
 import AddValutPanel from '@renderer/pages/Vault/AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 interface MenuProps {
   className?: string
 }
@@ -20,6 +21,7 @@ interface MenuProps {
 export default function MyMenu(props: MenuProps): JSX.Element {
   const location = useHistory()
   const appstore = use_appstore() as AppStore
+  const appset = use_appset() as AppsetStore
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 当前需要被展开的项
   const [show_addvalut, setShowAddValut] = useState(false)
@@ -84,11 +86,11 @@ export default function MyMenu(props: MenuProps): JSX.Element {
 
   return (
     <>
-      <div className={`${props.className} bg-slate-800 ${appstore.fold_menu ? 'hidden' : 'w-60'}`}>
+      <div className={`${props.className} bg-slate-800 ${appset.fold_menu ? 'hidden' : 'w-60'}`}>
         <div>
           <Link
             to={PagePath.Home}
-            className={appstore.fold_menu ? ' hidden' : ' flex h-full items-center'}
+            className={appset.fold_menu ? ' hidden' : ' flex h-full items-center'}
           >
             <div className=" text-white w-full m-4 text-lg">{SYS_TEM_NAME}</div>
           </Link>
@@ -118,7 +120,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
           mode="inline"
           items={treeDom}
           selectedKeys={chosedKey}
-          {...(appstore.fold_menu ? {} : { openKeys })}
+          {...(appset.fold_menu ? {} : { openKeys })}
           onOpenChange={(keys: string[]) => setOpenKeys(keys)}
           onSelect={(e) => {
             const menuinfo = menutree_info.datamap.get(e.key)

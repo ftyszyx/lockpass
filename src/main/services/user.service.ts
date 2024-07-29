@@ -88,4 +88,8 @@ export class UserService extends BaseService<User> {
   public async GetAll(): Promise<ApiResp<User[]>> {
     return await super.GetAll()
   }
+
+  public async UpdateUser(user: User): Promise<ApiResp<User>> {
+    return await super.UpdateOne2(user, true)
+  }
 }
