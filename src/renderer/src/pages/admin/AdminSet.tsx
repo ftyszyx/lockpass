@@ -38,12 +38,12 @@ export default function AdminSet() {
                     appstore.SetUser(res)
                   })
                   .catch((e) => {
-                    messageApi.error(appset.lang.getLangText(`err.${e.code}`))
+                    messageApi.error(appset.lang.getText(`err.${e.code}`))
                   })
               })
             }}
           >
-            {appset.lang.getLangText('save')}
+            {appset.lang.getText('save')}
           </Button>
         </Form.Item>
       </Form>

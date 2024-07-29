@@ -23,4 +23,7 @@ export class VaultItem extends BaseEntity {
 
   @Column({ type: 'VARCHAR', encode: true, default: '' })
   remarks: string
+
+  @Column({ type: 'INTEGER', default: 0 })
+  last_use_time: number
 }

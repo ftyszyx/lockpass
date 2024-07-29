@@ -5,7 +5,7 @@ date:2024/07/23 11:45:04
 */
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Select, Space } from 'antd'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Icon from '@renderer/components/icon'
 import { Icon_type, ModalType, PasswordType } from '@common/gloabl'
 import AddPasswordPanel from './AddPasswordPanel'
@@ -30,9 +30,7 @@ export default function Vault() {
   const [show_add_vault, set_show_add_vault] = useState(false)
   const route_data = useRouterStore()
   const cur_vault_id = parseInt(route_data.match?.params['id'])
-  console.log('select vault item', select_vault_item)
   const show_items = useMemo(() => {
-    console.log('change select vault', gloal_search_keyword, appstore.vaut_items, cur_vault_id)
     if (gloal_search_keyword && gloal_search_keyword.length > 0) {
       return appstore.vaut_items.filter((item) => {
         if (item.name.includes(gloal_search_keyword)) return true
@@ -61,6 +59,15 @@ export default function Vault() {
     cur_vault_id,
     gloal_search_keyword
   ])
+
+  useEffect(() => {
+    if (show_items.length > 0) {
+      set_select_vault_item(show_items[0])
+    } else {
+      set_select_vault_item(null)
+    }
+  }, [show_items])
+
   return (
     <>
       <div className="flex flex-col bg-gray-100 h-screen">
@@ -75,7 +82,7 @@ export default function Vault() {
             }}
           ></Icon>
           <Input
-            placeholder={appset.lang.getLangText('valut.search.placeholder')}
+            placeholder={appset.lang.getText('vault.global_search', appstore.cur_user.username)}
             className="flex-grow"
             onChange={(newvalue) => {
               if (newvalue.target.value) {
@@ -83,7 +90,6 @@ export default function Vault() {
               }
             }}
           />
-          <Icon type={Icon_type.icon_help} />
           <Button
             type="primary"
             onClick={() => {
@@ -102,25 +108,27 @@ export default function Vault() {
             <div className="flex flex-row justify-between items-center p-2">
               <Select
                 value={search_Password_type}
+                size="middle"
+                // className="h-[40px] flex flex-row items-center"
                 onChange={(value) => {
                   set_Search_password_type(value)
                 }}
                 defaultValue={SelectAll}
               >
                 <Select.Option value={SelectAll} key={SelectAll}>
-                  <Space>
-                    <Icon type={Icon_type.icon_type} svg />
-                    所有类别
-                  </Space>
+                  <div className="flex flex-row items-center space-x-1 w-[80px]">
+                    <Icon type={Icon_type.icon_type} svg className="" />
+                    <div>所有类别</div>
+                  </div>
                 </Select.Option>
                 {Object.keys(PasswordType).map((key) => {
                   const type_value = PasswordType[key]
                   return (
                     <Select.Option key={key} value={type_value}>
-                      <Space>
-                        <Icon type={`icon-${type_value}`} svg />
-                        {type_value}
-                      </Space>
+                      <div className="flex flex-row items-center space-x-1 w-[80px]">
+                        <Icon type={`icon-${type_value}`} svg className="" />
+                        <div>{type_value}</div>
+                      </div>
                     </Select.Option>
                   )
                 })}
@@ -146,12 +154,23 @@ export default function Vault() {
           {/*  right side content*/}
           <div className="flex flex-grow">
             {select_vault_item && (
-              <Form form={form} initialValues={select_vault_item}>
-                <PaswordDetail
-                  passwordType={select_vault_item.passwordType as PasswordType}
-                  modal_type={ModalType.View}
-                ></PaswordDetail>
-              </Form>
+              <div className=" flex flex-col w-full p-4">
+                <div className="flex flex-row-reverse">
+                  <Button type="primary">{appset.lang.getText('edit')}</Button>
+                </div>
+                <Form
+                  form={form}
+                  className="flex-grow"
+                  initialValues={select_vault_item}
+                  layout="vertical"
+                  wrapperCol={{}}
+                >
+                  <PaswordDetail
+                    passwordType={select_vault_item.passwordType as PasswordType}
+                    modal_type={ModalType.View}
+                  ></PaswordDetail>
+                </Form>
+              </div>
             )}
             {!select_vault_item && (
               <div className="flex flex-col items-center justify-center flex-grow">
@@ -162,7 +181,7 @@ export default function Vault() {
                     set_show_add_vault(true)
                   }}
                 >
-                  {appset.lang.getLangText('vault.empty_add')}
+                  {appset.lang.getText('vault.empty_add')}
                 </Button>
               </div>
             )}

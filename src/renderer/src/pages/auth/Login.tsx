@@ -24,10 +24,10 @@ export default function Login(): JSX.Element {
         values.username = appstore.cur_user?.username
       }
       const user = await ipc_call<User>(webToManMsg.Login, values).catch((error) => {
-        messageApi.error(lang.getLangText(`err.${error.code}`))
+        messageApi.error(lang.getText(`err.${error.code}`))
       })
       if (user) {
-        message.success(lang.getLangText('auth.login.success'))
+        message.success(lang.getText('auth.login.success'))
         appstore.Login(user)
         history.replace(PagePath.Home)
       }
@@ -38,9 +38,7 @@ export default function Login(): JSX.Element {
       {messageContext}
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex flex-col items-center space-y-1">
-          <div className=" text-2xl font-sans font-bold">
-            {lang.getLangText('auth.login.title')}
-          </div>
+          <div className=" text-2xl font-sans font-bold">{lang.getText('auth.login.title')}</div>
           <Form<LoginInfo>
             form={form}
             initialValues={{ username: appstore.cur_user?.username }}

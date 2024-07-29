@@ -25,7 +25,7 @@ export default function Register(): JSX.Element {
         return
       }
       await ipc_call<null>(webToManMsg.Register, values).catch((err) => {
-        messageApi.error(lang.getLangText(`err.${err.code}`))
+        messageApi.error(lang.getText(`err.${err.code}`))
       })
       history.replace(PagePath.Login)
     })
@@ -36,7 +36,7 @@ export default function Register(): JSX.Element {
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex flex-col items-center">
           <div className=" text-4xl text-black mb-3 font-bold font-sans">
-            {lang.getLangText('register.title')}
+            {lang.getText('register.title')}
           </div>
           <Form form={form} layout="vertical" onFinish={() => {}}>
             <Form.Item label="你的账号名" required name="username">
@@ -60,7 +60,7 @@ export default function Register(): JSX.Element {
                   await onFinish()
                 }}
               >
-                {lang.getLangText('ok')}
+                {lang.getText('ok')}
               </Button>
             </Form.Item>
             <Button
@@ -69,7 +69,7 @@ export default function Register(): JSX.Element {
                 history.push(PagePath.Login)
               }}
             >
-              {lang.getLangText('register.skiptoLogin')}
+              {lang.getText('register.skiptoLogin')}
             </Button>
           </Form>
         </div>

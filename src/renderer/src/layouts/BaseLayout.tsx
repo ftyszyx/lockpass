@@ -41,7 +41,7 @@ function BaseLayout(props: ChildProps): JSX.Element {
         appstore.SetUser(userinfo.user)
         if (userinfo.has_init_key) {
           const havelogin = await ipc_call<boolean>(webToManMsg.HasLogin).catch((error) => {
-            messageApi.error(appset.lang.getLangText(`err.${error.code}`))
+            messageApi.error(appset.lang.getText(`err.${error.code}`))
           })
           if (havelogin == false) {
             history.replace(PagePath.Login)
@@ -52,7 +52,7 @@ function BaseLayout(props: ChildProps): JSX.Element {
         }
       })
       .catch((error) => {
-        messageApi.error(appset.lang.getLangText(`err.${error.code}`))
+        messageApi.error(appset.lang.getText(`err.${error.code}`))
         history.replace(PagePath.register)
       })
   }

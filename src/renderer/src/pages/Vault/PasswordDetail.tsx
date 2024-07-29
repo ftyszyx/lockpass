@@ -10,6 +10,8 @@ import TextArea from 'antd/es/input/TextArea'
 interface props {
   passwordType: PasswordType
   modal_type: ModalType
+  className?: string
+  InputClassName?: string
 }
 
 export default function PaswordDetail(props: props) {
@@ -17,7 +19,7 @@ export default function PaswordDetail(props: props) {
   const appset = use_appset() as AppsetStore
   return (
     <>
-      <div className="flex flex-row items-center space-x-2">
+      <div className="flex flex-row items-center space-x-2 ">
         <Form.Item name="icon">
           <Select className=" w-[70px] h-[40px]">
             {Object.keys(PasswordIconType).map((key) => {
@@ -29,9 +31,8 @@ export default function PaswordDetail(props: props) {
             })}
           </Select>
         </Form.Item>
-
         <Form.Item name="name">
-          <Input placeholder="名称" className="w-[300px] h-[40px]" />
+          <Input placeholder="名称" />
         </Form.Item>
       </div>
       <div>
@@ -42,7 +43,7 @@ export default function PaswordDetail(props: props) {
                 style: { marginBottom: '0px', marginTop: '0px', padding: '0px' }
               }}
               wrapperCol={{ style: { marginTop: '0px' } }}
-              className=" mb-2 w-[400px] "
+              className=" mb-2 "
               name={['info', item.field_name]}
               label={item.label}
               rules={item.edit_rules}
@@ -53,12 +54,8 @@ export default function PaswordDetail(props: props) {
           )
         })}
       </div>
-      <Form.Item
-        className="mb-0 w-[400px]"
-        name="remarks"
-        label={appset.lang.getLangText('vaultadd.remarks')}
-      >
-        <TextArea autoSize={{ minRows: 3 }}></TextArea>
+      <Form.Item className="mb-0" name="remarks" label={appset.lang.getText('vaultadd.remarks')}>
+        <TextArea autoSize={{ minRows: 4 }}></TextArea>
       </Form.Item>
     </>
   )

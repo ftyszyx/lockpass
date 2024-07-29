@@ -1,4 +1,8 @@
 {
+  "app.name": "PassLock",
+
+  "menu.help": "帮助",
+
   "password_name_login": "登陆信息",
   "password_name_card": "银行卡信息",
   "password_name_note": "笔记账信息",
@@ -7,6 +11,7 @@
   "inputarr.addmore": "添加更多",
   "valut.search.placeholder": "搜索全部密码库",
   "vault.empty_add": "添加一个新的密码库",
+  "vault.global_search": "在\"{0}\"中全局搜索",
 
   "myencode.passworderror": "账号或密码错误",
   "auth.register.userexist": "用户名重复",
@@ -41,6 +46,7 @@
   "time.never": "从不",
 
   "ok": "确定",
+  "edit": "编辑",
   "save": "保存",
   "cancel": "取消"
 }

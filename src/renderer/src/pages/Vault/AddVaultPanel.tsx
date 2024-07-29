@@ -41,7 +41,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
-                  messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
                 })
             } else if (pros.show_type === ModalType.Add) {
               values.user_id = appstore.cur_user?.id
@@ -50,7 +50,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
-                  messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
                 })
             }
           })
@@ -69,7 +69,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                       pros.onDelOk?.()
                     })
                     .catch((err) => {
-                      messageApi.error(appset.lang.getLangText(`err.${err.code}`), 5)
+                      messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
                     })
                 }}
               >

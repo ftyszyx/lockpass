@@ -751,6 +751,10 @@ video {
   width: 100% !important;
 }
 
+.w-\[80px\] {
+  width: 80px !important;
+}
+
 .flex-grow {
   flex-grow: 1 !important;
 }
@@ -781,6 +785,10 @@ video {
 
 .flex-row {
   flex-direction: row !important;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse !important;
 }
 
 .flex-col {
@@ -940,6 +948,11 @@ video {
 .py-1 {
   padding-top: 0.25rem !important;
   padding-bottom: 0.25rem !important;
+}
+
+.py-2 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
 }
 
 .font-sans {

@@ -12,23 +12,17 @@ export class LangItem {
     this.lang_dic = lang_dic
   }
 
-  getLangText(msg: string) {
+  getText(msg: string, ...args: any[]) {
     const res = this.lang_dic[msg]
     if (res == null) {
       console.error(`can't find lang text:${msg}`)
     }
-    return res
-  }
-
-  getLangFormat(msg: string, ...args: any[]) {
-    const lang_msg = this.getLangText(msg)
-    if (lang_msg == null) {
-      console.error(`can't find lang text:${msg}`)
-      return msg
+    if (args.length > 0) {
+      return res.replace(/{(\d+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined' ? args[number] : match
+      })
     }
-    return lang_msg.replace(/{(\d+)}/g, function (match, number) {
-      return typeof args[number] != 'undefined' ? args[number] : match
-    })
+    return res
   }
 }
 
@@ -41,13 +35,9 @@ export class LangHelper {
   private static _lang: LangItem | null
   static setLang(locale: string) {
     this._lang = Langs.find((item) => item.locale == locale)
-    // console.log('set lang:', this._lang)
   }
-  static getString(msg: string) {
-    return this._lang?.getLangText(msg)
-  }
-  static getStringFormat(msg: string, ...args: any[]) {
-    return this._lang?.getLangFormat(msg, ...args)
+  static getString(msg: string, ...args: any[]) {
+    return this._lang?.getText(msg, ...args)
   }
 
   static get lang() {
