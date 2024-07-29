@@ -1,6 +1,7 @@
 import os from 'os'
 import fs from 'fs'
 import { PathHelper } from './path'
+import { ConsoleColor } from '@common/gloabl'
 
 export class FileLogWriter {
   asyncWriteQueue = []
@@ -81,6 +82,7 @@ export class Log {
     const logstr = `[INFO] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')}`
     Log.logWriter.writeLine(logstr)
     console.log(logstr)
+    // console.log(`${ConsoleColor.FgGreen}${logstr}${ConsoleColor.FgGreen}`)
   }
 
   static error(...args) {
@@ -93,15 +95,16 @@ export class Log {
     const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')} 
     \n stack:\n ${obj.stack}`
     Log.logWriter.writeLine(logstr)
-    console.error(logstr)
+    // console.error(logstr)
+    console.trace(`${ConsoleColor.FgRed}${logstr}${ConsoleColor.FgRed}`)
+    // console.log(logstr)
   }
 
   static Exception(e: Error, ...args) {
-    Error.captureStackTrace(e)
-    Error.stackTraceLimit = 10
     const logstr = `[Error] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${e.message} ${args.join(' ')}
     \n stack:\n ${e.stack}`
     Log.logWriter.writeLine(logstr)
-    console.error(logstr)
+    console.trace(`${ConsoleColor.FgRed}${logstr}${ConsoleColor.FgRed}`)
+    // console.trace(logstr)
   }
 }

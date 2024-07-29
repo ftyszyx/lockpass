@@ -9,18 +9,18 @@ export class VaultItem extends BaseEntity {
   @Column({ type: 'INTEGER', notNull: true })
   valut_id: number
 
-  @Column({ type: 'VARCHAR', comment: '密码类型' })
+  @Column({ type: 'VARCHAR', notNull: true, comment: '密码类型' })
   passwordType: string
 
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', notNull: true })
   icon: string
 
-  @Column({ type: 'VARCHAR' })
+  @Column({ type: 'VARCHAR', notNull: true })
   name: string
 
-  @Column({ type: 'VARCHAR', encode: true })
-  remarks: string
+  @Column({ type: 'VARCHAR', encode: true, default: '' })
+  info: string | object
 
-  @Column({ type: 'VARCHAR', encode: true })
-  info: string
+  @Column({ type: 'VARCHAR', encode: true, default: '' })
+  remarks: string
 }

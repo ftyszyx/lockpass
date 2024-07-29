@@ -13,6 +13,7 @@ export enum ApiRespCode {
   user_notfind = 4,
   user_exit = 5,
   form_err = 6,
+  data_not_find = 7,
   //common
   other_err = 205,
   db_err = 206,

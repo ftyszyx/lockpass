@@ -2,6 +2,8 @@ import { ipcMain } from 'electron'
 import AppModel from '../models/app.model'
 import { webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { WhereDef } from '@common/entitys/db.entity'
+import { Vault } from '@common/entitys/vault.entity'
+import { VaultItem } from '@common/entitys/vault_item.entity'
 
 export function initAllApi() {
   //system
@@ -31,10 +33,10 @@ export function initAllApi() {
     return await AppModel.getInstance().user?.GetLastUserInfo()
   })
   //valut
-  ipcMain.handle(webToManMsg.GetAllValuts, async (_, cond: WhereDef) => {
+  ipcMain.handle(webToManMsg.GetAllValuts, async (_, cond: WhereDef<Vault>) => {
     return await AppModel.getInstance().vault?.FindAll(cond)
   })
-  ipcMain.handle(webToManMsg.GetAllValutItems, async (_, cond: WhereDef) => {
+  ipcMain.handle(webToManMsg.GetAllValutItems, async (_, cond: WhereDef<VaultItem>) => {
     return await AppModel.getInstance().vaultItem?.FindAll(cond)
   })
   ipcMain.handle(webToManMsg.AddValut, async (_, valut) => {
@@ -49,10 +51,10 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.DeleteValutItem, async (_, vault_item_id) => {
     return await AppModel.getInstance().vaultItem?.DeleteOne(vault_item_id)
   })
-  ipcMain.handle(webToManMsg.UpdateValut, async (_, old_valut, new_valut) => {
-    return await AppModel.getInstance().vault?.UpdateOne(old_valut, new_valut)
+  ipcMain.handle(webToManMsg.UpdateValut, async (_, new_valut) => {
+    return await AppModel.getInstance().vault?.UpdateOne(new_valut)
   })
-  ipcMain.handle(webToManMsg.updateValutItem, async (_, old_item, valutItem) => {
-    return await AppModel.getInstance().vaultItem?.UpdateOne(old_item, valutItem)
+  ipcMain.handle(webToManMsg.updateValutItem, async (_, valutItem) => {
+    return await AppModel.getInstance().vaultItem?.UpdateOne(valutItem)
   })
 }

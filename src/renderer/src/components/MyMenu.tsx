@@ -11,7 +11,7 @@ import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
-import AdminAddValut from '@renderer/pages/Vault/AdminAddVault'
+import AddValutPanel from '@renderer/pages/Vault/AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 interface MenuProps {
   className?: string
@@ -132,7 +132,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
         />
       </div>
       {show_addvalut && (
-        <AdminAddValut
+        <AddValutPanel
           show={show_addvalut}
           title={'新增密码库'}
           show_type={ModalType.Add}

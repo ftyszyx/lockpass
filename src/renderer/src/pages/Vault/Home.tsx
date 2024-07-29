@@ -6,7 +6,7 @@ import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, message, Pagination } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
-import AdminAddValut from './AdminAddVault'
+import AddValutPanel from './AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { getAllVault } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -53,7 +53,7 @@ export default function Home() {
                 >
                   <div className="flex items-center justify-between mb-1">
                     <h2 className="text-lg font-semibold">{valut.name}</h2>
-                    <Icon type={valut.icon} className=" w-8 h-8" />
+                    <Icon svg type={valut.icon} className=" w-8 h-8" />
                   </div>
                   <div className=" text-gray-600  w-[100%] text-wrap break-words flex-grow">
                     {valut.info}
@@ -65,6 +65,7 @@ export default function Home() {
                       onClick={() => {
                         setEditPanelTitle('编辑密码库')
                         setCurInfo(valut)
+                        setShowType(ModalType.Edit)
                         setShowDel(true)
                         setShowEdit(true)
                       }}
@@ -97,7 +98,7 @@ export default function Home() {
         </div>
       </div>
       {show_edit && (
-        <AdminAddValut
+        <AddValutPanel
           show={show_edit}
           title={edit_panel_title}
           show_type={show_type}

@@ -37,7 +37,6 @@ export class UserService extends BaseService<User> {
   }
 
   public async GetLastUserInfo(): Promise<ApiResp<LastUserInfo>> {
-    console.log('get last user info')
     const ret: ApiResp<LastUserInfo> = {
       code: ApiRespCode.other_err,
       data: { user: null, has_init_key: false }

@@ -48,28 +48,30 @@ export default function Register(): JSX.Element {
             <Form.Item label="再次输入初始密码" name="password_repeat" required>
               <Input.Password placeholder="请输入初始密码" size="large" />
             </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+                onSubmit={async () => {
+                  await onFinish()
+                }}
+                onClick={async () => {
+                  await onFinish()
+                }}
+              >
+                {lang.getLangText('ok')}
+              </Button>
+            </Form.Item>
+            <Button
+              className="w-full mt-2"
+              onClick={() => {
+                history.push(PagePath.Login)
+              }}
+            >
+              {lang.getLangText('register.skiptoLogin')}
+            </Button>
           </Form>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="w-full"
-            onSubmit={async () => {
-              await onFinish()
-            }}
-            onClick={async () => {
-              await onFinish()
-            }}
-          >
-            {lang.getLangText('ok')}
-          </Button>
-          <Button
-            className="w-full mt-2"
-            onClick={() => {
-              history.push(PagePath.Login)
-            }}
-          >
-            {lang.getLangText('register.skiptoLogin')}
-          </Button>
         </div>
       </div>
     </div>

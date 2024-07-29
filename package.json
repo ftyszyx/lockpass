@@ -12,7 +12,7 @@
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "chcp 65001 && electron-vite preview",
-    "dev": "chcp 65001 && electron-vite dev",
+    "dev": "chcp 65001 && electron-vite dev --inspect",
     "build": "npm run typecheck && electron-vite build",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",

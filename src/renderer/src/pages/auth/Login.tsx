@@ -16,7 +16,8 @@ export default function Login(): JSX.Element {
   const appstore = use_appstore() as AppStore
   ConsoleLog.LogInfo('login render')
   const isLogin = history.PathName == PagePath.Login && !appstore.cur_user
-  const lang = (use_appset() as AppsetStore).lang
+  const appset = use_appset() as AppsetStore
+  const lang = appset.lang
   async function onFinish() {
     form.validateFields().then(async (values) => {
       if (!isLogin) {
@@ -36,35 +37,40 @@ export default function Login(): JSX.Element {
     <div className=" bg-slate-100">
       {messageContext}
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
-        <Form<LoginInfo>
-          form={form}
-          initialValues={{ username: appstore.cur_user?.username }}
-          layout="vertical"
-          onFinish={async () => {
-            await onFinish()
-          }}
-        >
-          {isLogin && (
-            <Form.Item label="你的账号名" required name="username">
-              <Input placeholder="请输入你的名字" />
-            </Form.Item>
-          )}
-          <Form.Item label="初始密码" name="password" required>
-            <Input.Password placeholder="请输入初始密码" size="large" />
-          </Form.Item>
-        </Form>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="w-full"
-            onClick={async () => {
-              await onFinish()
-            }}
+        <div className="flex flex-col items-center space-y-1">
+          <div className=" text-2xl font-sans font-bold">
+            {lang.getLangText('auth.login.title')}
+          </div>
+          <Form<LoginInfo>
+            form={form}
+            initialValues={{ username: appstore.cur_user?.username }}
+            layout="vertical"
+            // onFinish={async () => {
+            //   await onFinish()
+            // }}
           >
-            确定
-          </Button>
-        </Form.Item>
+            {isLogin && (
+              <Form.Item label="你的账号名" required name="username">
+                <Input placeholder="请输入你的名字" />
+              </Form.Item>
+            )}
+            <Form.Item label="初始密码" name="password" required>
+              <Input.Password placeholder="请输入初始密码" size="large" />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+                onClick={async () => {
+                  await onFinish()
+                }}
+              >
+                确定
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
     </div>
   )

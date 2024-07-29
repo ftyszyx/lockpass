@@ -106,12 +106,17 @@ export class MyEncode {
   }
 
   Encode2(data: string, key: Buffer): string {
-    const iv = randomBytes(16)
-    const cliper = createCipheriv(this._encode_alg, key, iv)
-    let encrypted = cliper.update(data, 'utf8', 'base64url')
-    encrypted += cliper.final('base64url')
-    encrypted += '|' + iv.toString('base64url')
-    return encrypted
+    try {
+      const iv = randomBytes(16)
+      const cliper = createCipheriv(this._encode_alg, key, iv)
+      let encrypted = cliper.update(data, 'utf8', 'base64url')
+      encrypted += cliper.final('base64url')
+      encrypted += '|' + iv.toString('base64url')
+      return encrypted
+    } catch (e: any) {
+      Log.Exception(e)
+    }
+    return data
   }
 
   public Decode(data: string): string {
@@ -119,11 +124,16 @@ export class MyEncode {
   }
 
   Decode2(data: string, key: Buffer): string {
-    const [data_str, iv_str] = data.split('|')
-    const iv = Buffer.from(iv_str, 'base64url')
-    const decipher = createDecipheriv(this._encode_alg, key, iv)
-    let decrypted = decipher.update(data_str, 'base64url', 'utf8')
-    decrypted += decipher.final('utf8')
-    return decrypted
+    try {
+      const [data_str, iv_str] = data.split('|')
+      const iv = Buffer.from(iv_str, 'base64url')
+      const decipher = createDecipheriv(this._encode_alg, key, iv)
+      let decrypted = decipher.update(data_str, 'base64url', 'utf8')
+      decrypted += decipher.final('utf8')
+      return decrypted
+    } catch (e: any) {
+      Log.Exception(e, data)
+    }
+    return data
   }
 }

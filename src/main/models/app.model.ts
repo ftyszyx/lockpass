@@ -2,7 +2,7 @@ import { MyEncode } from '@main/libs/my_encode'
 import { MainViewHelper } from '@main/libs/view_help'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
-import { BrowserWindow } from 'electron'
+import { app, BrowserWindow, crashReporter } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
 import { VaultItemService } from '@main/services/vault_item.service'
@@ -34,6 +34,12 @@ class AppModel {
     this.user = new UserService()
     this._initSet()
     this.initLang()
+    app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
+    crashReporter.start({
+      productName: 'MyElectron',
+      companyName: 'MyCompany',
+      uploadToServer: false
+    })
   }
 
   private _initSet() {

@@ -20,7 +20,7 @@ interface AmdinAddvalutProps {
   onClose?: () => void
   onDelOk?: () => Promise<void>
 }
-export default function AdminAddValut(pros: AmdinAddvalutProps): JSX.Element {
+export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm()
   const appstore = use_appstore() as AppStore

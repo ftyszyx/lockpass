@@ -7,7 +7,7 @@ interface SelectPasswordTypeProps {
   onOk?: (password_type: PasswordType) => Promise<void>
   onClose: () => void
 }
-export default function SelectPasswordTypeComp(props: SelectPasswordTypeProps): JSX.Element {
+export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps): JSX.Element {
   return (
     <div>
       <Modal

@@ -6,6 +6,7 @@
   "vaultadd.remarks": "备注",
   "inputarr.addmore": "添加更多",
   "valut.search.placeholder": "搜索全部密码库",
+  "vault.empty_add": "添加一个新的密码库",
 
   "myencode.passworderror": "账号或密码错误",
   "auth.register.userexist": "用户名重复",
@@ -14,6 +15,7 @@
   "auth.login.success": "登陆成功",
   "auth.login.needinit": "需要初始化系统",
   "auth.login.fail": "登陆失败: {0}",
+  "auth.login.title": "登陆",
 
   "register.title": "初始化你的账号",
   "register.success": "注册成功",
@@ -29,6 +31,7 @@
   "err.3": "密码错误",
   "err.2": "版本不匹配",
   "err.1": "密钥不存在",
+  "err.7": "数据不存在",
 
   "ok": "确定",
   "cancel": "取消"

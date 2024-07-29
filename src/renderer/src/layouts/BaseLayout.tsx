@@ -44,11 +44,13 @@ function BaseLayout(props: ChildProps): JSX.Element {
 
   useEffect(() => {
     initAllData()
-  }, [appstore.cur_user])
+  }, [appstore.cur_user, appstore.hasLogin])
 
   async function initAllData() {
-    await getAllVault(appstore, appset.lang, messageApi)
-    await getAllVaultItem(appstore, appset.lang, messageApi)
+    if (appstore.hasLogin) {
+      await getAllVault(appstore, appset.lang, messageApi)
+      await getAllVaultItem(appstore, appset.lang, messageApi)
+    }
   }
 
   return (

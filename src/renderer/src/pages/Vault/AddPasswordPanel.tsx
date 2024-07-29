@@ -1,19 +1,16 @@
 import { VaultItem } from '@common/entitys/vault_item.entity'
-import { PasswordIconType, PasswordType } from '@common/gloabl'
-import Icon from '@renderer/components/icon'
-import { PasswordFileListDic } from '@renderer/entitys/password.entity'
+import { ModalType, PasswordIconType, PasswordType } from '@common/gloabl'
 import { Form, Input, message, Modal, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useState } from 'react'
-import SelectPasswordTypeComp from './SelectPasswordTypeComp'
-import TextArea from 'antd/es/input/TextArea'
-import { FieldInfo } from '@renderer/entitys/form.entity'
+import SelectPasswordTypePanel from './SelectPasswordTypePanel'
 import { LeftOutlined } from '@ant-design/icons'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { ipc_call } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { useHistory, useRouterStore } from '@renderer/libs/router'
+import { useRouterStore } from '@renderer/libs/router'
+import PaswordDetail from './PasswordDetail'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -22,7 +19,7 @@ interface AdminAddPasswordProps {
   onOk?: () => Promise<void>
   onClose?: () => void
 }
-export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Element {
+export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Element {
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_password_type, set_show_password_type] = useState(true)
@@ -32,11 +29,10 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
   const appstore = use_appstore() as AppStore
   const route_data = useRouterStore()
   const cur_vault_id = parseInt(route_data.match?.params['id'])
-  // console.log('path', history.PathName, vault_id)
   return (
     <div className=" relative">
       {show_password_type && (
-        <SelectPasswordTypeComp
+        <SelectPasswordTypePanel
           onClose={() => {
             set_show_password_type(false)
             props.onClose?.()
@@ -47,7 +43,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             set_select_type(slecttype)
             set_show_info(true)
           }}
-        ></SelectPasswordTypeComp>
+        ></SelectPasswordTypePanel>
       )}
       {contextHolder}
       {show_info && (
@@ -75,6 +71,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
             values.info = JSON.stringify(values.info)
             values.user_id = appstore.cur_user?.id
             values.valut_id = cur_vault_id
+            values.passwordType = select_type
             await ipc_call(webToManMsg.AddValutItem, values)
               .then(() => {
                 set_show_info(false)
@@ -103,49 +100,7 @@ export default function AdminAddPassword(props: AdminAddPasswordProps): JSX.Elem
               } as VaultItem)
             }
           >
-            <div className="flex flex-row items-center space-x-2">
-              <Form.Item name="icon">
-                <Select className=" w-[70px] h-[40px]">
-                  {Object.keys(PasswordIconType).map((key) => {
-                    return (
-                      <Select.Option value={PasswordIconType[key]} key={key}>
-                        <Icon type={PasswordIconType[key]} className=" w-[30px] h-[30px]" svg />
-                      </Select.Option>
-                    )
-                  })}
-                </Select>
-              </Form.Item>
-
-              <Form.Item name="name">
-                <Input placeholder="名称" className="w-[300px] h-[40px]" />
-              </Form.Item>
-            </div>
-            <div>
-              {PasswordFileListDic[select_type].map((item: FieldInfo) => {
-                return (
-                  <Form.Item
-                    labelCol={{
-                      style: { marginBottom: '0px', marginTop: '0px', padding: '0px' }
-                    }}
-                    wrapperCol={{ style: { marginTop: '0px' } }}
-                    className=" mb-2 w-[400px] "
-                    name={['info', item.field_name]}
-                    label={item.label}
-                    rules={item.edit_rules}
-                    key={item.field_name}
-                  >
-                    <item.field_Element {...item.edit_props}></item.field_Element>
-                  </Form.Item>
-                )
-              })}
-            </div>
-            <Form.Item
-              className="mb-0 w-[400px]"
-              name="remarks"
-              label={appset.lang.getLangText('vaultadd.remarks')}
-            >
-              <TextArea autoSize={{ minRows: 3 }}></TextArea>
-            </Form.Item>
+            <PaswordDetail passwordType={select_type} modal_type={ModalType.Add}></PaswordDetail>
           </Form>
         </Modal>
       )}

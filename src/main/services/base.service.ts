@@ -50,10 +50,15 @@ export class BaseService<Entity extends BaseEntity> {
     return res
   }
 
-  public async UpdateOne(old: Entity, chang_values: Entity): Promise<ApiResp<null>> {
+  public async UpdateOne(chang_values: Entity): Promise<ApiResp<null>> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     try {
-      await DbHlper.instance().UpdateOne(this.entity, old, chang_values)
+      const old = await DbHlper.instance().GetOne(this.entity, { cond: { id: chang_values.id } })
+      if (old.length <= 0) {
+        res.code = ApiRespCode.data_not_find
+        return res
+      }
+      await DbHlper.instance().UpdateOne(this.entity, old[0], chang_values)
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err

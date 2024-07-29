@@ -2,6 +2,7 @@ import { message } from 'antd'
 import RootRouter from './route'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
 import { useEffect } from 'react'
+import { ConsoleLog } from './libs/Console'
 function App(): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
@@ -16,7 +17,7 @@ function App(): JSX.Element {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowInfoMsg)
     }
   }, [])
-  console.log('develop', import.meta.env.DEV)
+  ConsoleLog.LogInfo('develop', import.meta.env.DEV)
   return (
     <div>
       {contextHolder}

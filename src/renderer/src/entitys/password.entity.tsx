@@ -23,12 +23,14 @@ export const LoginPasswordFieldList: FieldInfo[] = [
   {
     field_name: 'username',
     field_Element: Input,
+    edit_rules: [{ required: true, message: '请输入用户名' }],
     edit_props: { placeholder: '请输入用户名' },
     label: '用户名'
   },
   {
     field_name: 'password',
     field_Element: Input.Password,
+    edit_rules: [{ required: true, message: '请输入密码' }],
     label: '密码'
   },
   {
@@ -42,16 +44,19 @@ export const CardPasswordFieldList: FieldInfo[] = [
   {
     field_name: 'card_company',
     field_Element: Input,
+    edit_rules: [{ required: true, message: '请输入银行' }],
     label: '银行'
   },
   {
     field_name: 'card_number',
     field_Element: Input,
+    edit_rules: [{ required: true, message: '请输入卡号' }],
     label: '卡号'
   },
   {
     field_name: 'card_password',
     field_Element: Input.Password,
+    edit_rules: [{ required: true, message: '请输入密码' }],
     label: '密码'
   }
 ]

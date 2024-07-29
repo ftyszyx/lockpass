@@ -49,7 +49,7 @@ class DbHlper {
   }
 
   public encode_table_str(obj: BaseEntity, key: string, value: any): string {
-    if (value == undefined || value == null) return value
+    if (value == undefined || value == null || value == '') return value
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
@@ -61,6 +61,7 @@ class DbHlper {
   }
 
   public decode_table_str(obj: BaseEntity, key: string, value: any): string {
+    if (value == undefined || value == null || value == '') return value
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
@@ -189,7 +190,9 @@ class DbHlper {
               const key = keys[j]
               const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
               if (col_name) {
-                item[key] = this.decode_table_str(obj, key, rows[i][col_name])
+                let col_value = rows[i][col_name]
+                if (col_value == undefined || col_value == null) continue
+                item[key] = this.decode_table_str(obj, key, col_value)
               }
             }
             res.push(item)
@@ -352,8 +355,8 @@ class DbHlper {
           table_desc += " PRIMARY KEY default nextval('" + col_name + "_seq')"
         }
         const default_value = Reflect.getMetadata('default', obj, key)
-        if (default_value) {
-          table_desc += ` DEFAULT ${default_value}`
+        if (default_value != undefined || default_value != null) {
+          table_desc += ` DEFAULT '${default_value}' `
         }
         if (Reflect.getMetadata('unique', obj, key)) {
           table_desc += ' UNIQUE'

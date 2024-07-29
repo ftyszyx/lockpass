@@ -4,7 +4,6 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { initAllApi } from './api/index.api'
 import AppModel from './models/app.model'
-import { Log } from './libs/log'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -80,5 +79,11 @@ app.on('window-all-closed', () => {
   }
 })
 
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
+app.on('before-quit', (event) => {
+  console.log('before-quit', event)
+  globalShortcut.unregisterAll()
+})
+
+app.on('quit', (evnnt, exitCode) => {
+  console.log('quit')
+})
