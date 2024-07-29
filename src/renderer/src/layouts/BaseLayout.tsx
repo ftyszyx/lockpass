@@ -15,17 +15,20 @@ function BaseLayout(props: ChildProps): JSX.Element {
   const history = useHistory()
   const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
+  const appstoreRef = useRef(appstore)
   ConsoleLog.LogInfo('baselayout render')
   useEffect(() => {
     if (appset.initOK) initApp()
   }, [appset.initOK])
 
   useEffect(() => {
+    // console.log('baselayout effect')
     const timer = setInterval(() => {
-      setCount((pre) => {
-        console.log('count', pre)
-        return pre + 1
-      })
+      // console.log('check lock', appstoreRef.current.IsLock(), appstoreRef.current.LockRemainTime())
+      if (appstoreRef.current.IsLock()) {
+        // console.log('begin lock')
+        history.replace(PagePath.Lock)
+      }
     }, 1000)
     return () => {
       clearInterval(timer)

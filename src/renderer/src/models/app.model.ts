@@ -16,11 +16,16 @@ export interface AppStore {
   SetUser: (user: User) => void
   LoginOut: () => void
   HaveLogin: () => boolean
+
+  lock_timeout: number
+  IsLock: () => boolean
+  LockRemainTime: () => number
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
     cur_user: null,
     hasLogin: false,
+    lock_timeout: 0,
     setLang(lang: LangItem) {
       set((state) => {
         return { ...state, lang: lang }
@@ -29,15 +34,25 @@ export const use_appstore = create<AppStore>((set, get) => {
     vaults: [],
     vaut_items: [],
     //user
+    IsLock() {
+      const cuttime = new Date().getTime() / 1000
+      return get().lock_timeout < cuttime
+    },
+    LockRemainTime() {
+      const cuttime = new Date().getTime() / 1000
+      return get().lock_timeout - cuttime
+    },
     LoginOut() {
       set((state) => {
-        return { ...state, cur_user: null, hasLogin: false }
+        return { ...state, cur_user: null, hasLogin: false, lock_timeout: 0 }
       })
     },
-
     Login(info: User) {
       set((state) => {
-        return { ...state, cur_user: info, hasLogin: true }
+        if (!state.cur_user) return state
+        const setinfo = (state.cur_user.set as UserSetInfo) || { aulock_time: 10 }
+        const lock_timeout = new Date().getTime() / 1000 + setinfo.aulock_time * 60
+        return { ...state, cur_user: info, hasLogin: true, lock_timeout }
       })
     },
     SetUser(user: User) {

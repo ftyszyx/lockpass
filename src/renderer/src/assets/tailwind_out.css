@@ -975,20 +975,16 @@ video {
   line-height: 1.25rem !important;
 }
 
+.font-\[40px\] {
+  font-weight: 40px !important;
+}
+
 .font-bold {
   font-weight: 700 !important;
 }
 
 .font-semibold {
   font-weight: 600 !important;
-}
-
-.font-\[30px\] {
-  font-weight: 30px !important;
-}
-
-.font-\[40px\] {
-  font-weight: 40px !important;
 }
 
 .text-black {

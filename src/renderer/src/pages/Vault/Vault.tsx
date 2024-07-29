@@ -109,7 +109,7 @@ export default function Vault() {
               >
                 <Select.Option value={SelectAll} key={SelectAll}>
                   <Space>
-                    <Icon type={Icon_type.icon_type} />
+                    <Icon type={Icon_type.icon_type} svg />
                     所有类别
                   </Space>
                 </Select.Option>
@@ -118,7 +118,7 @@ export default function Vault() {
                   return (
                     <Select.Option key={key} value={type_value}>
                       <Space>
-                        <Icon type={`icon-${type_value}`} />
+                        <Icon type={`icon-${type_value}`} svg />
                         {type_value}
                       </Space>
                     </Select.Option>
