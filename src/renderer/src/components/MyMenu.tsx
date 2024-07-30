@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Dropdown, Menu as MenuAntd, Space } from 'antd'
+import { Dropdown, Menu as MenuAntd } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/Icon'
