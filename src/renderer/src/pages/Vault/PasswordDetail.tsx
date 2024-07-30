@@ -1,5 +1,6 @@
 import { ModalType, PasswordIconType, PasswordType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
+import IconSelect from '@renderer/components/IconSelect'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { PasswordFileListDic } from '@renderer/entitys/password.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
@@ -21,18 +22,18 @@ export default function PaswordDetail(props: props) {
     <>
       <div className="flex flex-row items-center space-x-2 ">
         <Form.Item name="icon">
-          <Select className=" w-[70px] h-[40px]">
-            {Object.keys(PasswordIconType).map((key) => {
-              return (
-                <Select.Option value={PasswordIconType[key]} key={key}>
-                  <Icon type={PasswordIconType[key]} className=" w-[30px] h-[30px]" svg />
-                </Select.Option>
-              )
+          <IconSelect
+            show_type={props.modal_type}
+            items={Object.keys(PasswordIconType).map((key) => {
+              return {
+                value: PasswordIconType[key],
+                label: <Icon type={PasswordIconType[key]} className=" w-[50px] h-[50px]" svg />
+              }
             })}
-          </Select>
+          ></IconSelect>
         </Form.Item>
         <Form.Item name="name" className="flex-grow">
-          <Input placeholder="名称" />
+          <Input placeholder="名称" readOnly={props.modal_type == ModalType.View} />
         </Form.Item>
       </div>
       <div>
