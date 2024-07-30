@@ -6,7 +6,7 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { LastUserInfo } from '@common/entitys/user.entity'
-import { message } from 'antd'
+import { Button, message } from 'antd'
 import { getAllVault, getAllVaultItem, ipc_call } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
@@ -22,12 +22,9 @@ function BaseLayout(props: ChildProps): JSX.Element {
   }, [appset.initOK])
 
   useEffect(() => {
-    // console.log('baselayout effect')
     const timer = setInterval(() => {
-      // console.log('check lock', appstoreRef.current.IsLock(), appstoreRef.current.LockRemainTime())
       if (appstoreRef.current.IsLock()) {
-        // console.log('begin lock')
-        history.replace(PagePath.Lock)
+        // history.push(PagePath.Lock)
       }
     }, 1000)
     return () => {
@@ -70,6 +67,13 @@ function BaseLayout(props: ChildProps): JSX.Element {
 
   return (
     <div>
+      {/* <Button
+        onClick={() => {
+          history.push(PagePath.Lock)
+        }}
+      >
+        go to lock
+      </Button> */}
       {messageContex}
       {props.children}
     </div>

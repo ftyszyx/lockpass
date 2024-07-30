@@ -114,6 +114,7 @@ function getBaseHistory(
   }
 
   function handlePop() {
+    if (opitons.debug) console.log('handlePop')
     action = Action.Pop
     const nextIndex = getIndex()
     const delta = nextIndex == null ? null : nextIndex - index

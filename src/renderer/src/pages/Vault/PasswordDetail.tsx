@@ -1,5 +1,5 @@
 import { ModalType, PasswordIconType, PasswordType } from '@common/gloabl'
-import Icon from '@renderer/components/icon'
+import Icon from '@renderer/components/Icon'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { PasswordFileListDic } from '@renderer/entitys/password.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
@@ -31,7 +31,7 @@ export default function PaswordDetail(props: props) {
             })}
           </Select>
         </Form.Item>
-        <Form.Item name="name">
+        <Form.Item name="name" className="flex-grow">
           <Input placeholder="名称" />
         </Form.Item>
       </div>

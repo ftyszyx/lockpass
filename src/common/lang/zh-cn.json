@@ -9,8 +9,8 @@
 
   "vaultadd.remarks": "备注",
   "inputarr.addmore": "添加更多",
-  "valut.search.placeholder": "搜索全部密码库",
-  "vault.empty_add": "添加一个新的密码库",
+  "valut.search.placeholder": "搜索全部密码",
+  "vault.empty_add": "添加一个新的密码",
   "vault.global_search": "在\"{0}\"中全局搜索",
 
   "myencode.passworderror": "账号或密码错误",
@@ -21,12 +21,16 @@
   "auth.login.needinit": "需要初始化系统",
   "auth.login.fail": "登陆失败: {0}",
   "auth.login.title": "登陆",
+  "auth.lock.title": "解锁",
 
   "register.title": "初始化你的账号",
   "register.success": "注册成功",
   "register.fail": "注册失败: {0}",
   "register.userexist": "用户名已存在",
   "register.skiptoLogin": "已有账号，去登陆",
+
+  "addvault.input.icon": "选择图标",
+  "addvault.input.name": "保险库名字必须",
 
   "err.207": "未知错误",
   "err.206": "数据库异常",
@@ -44,6 +48,10 @@
   "time.day": "{0}天",
   "time.week": "{0}周",
   "time.never": "从不",
+
+  "icon": "图标",
+  "name": "名字",
+  "remarks": "备注",
 
   "ok": "确定",
   "edit": "编辑",

@@ -3,7 +3,7 @@ import { Icon_type, ModalType, PasswordIconType } from '@common/gloabl'
 import { Button, Form, Input, message, Modal, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import TextArea from 'antd/es/input/TextArea'
-import Icon from '@renderer/components/icon'
+import Icon from '@renderer/components/Icon'
 import { ipc_call } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -82,15 +82,23 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
         )}
       >
         <Form {...formItemLayout} form={form} initialValues={pros.edit_info}>
-          <Form.Item label="名称" name="name" rules={[{ required: true, message: '请输入名称' }]}>
+          <Form.Item
+            label={appset.lang.getText('name')}
+            name="name"
+            rules={[{ required: true, message: appset.lang.getText('addvault.input.name') }]}
+          >
             <Input></Input>
           </Form.Item>
-          <Form.Item label="图标" name="icon" rules={[{ required: true, message: '请输入图标' }]}>
+          <Form.Item
+            label={appset.lang.getText('icon')}
+            name="icon"
+            rules={[{ required: true, message: appset.lang.getText('addvault.input.icon') }]}
+          >
             <Select>
               {Object.keys(PasswordIconType).map((key) => {
                 return (
                   <Select.Option key={key} value={Icon_type[key]}>
-                    <Icon type={Icon_type[key]}></Icon>
+                    <Icon type={Icon_type[key]} svg></Icon>
                   </Select.Option>
                 )
               })}

@@ -7,7 +7,6 @@ import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { LangHelper } from '@common/lang'
 import NotFound from '@renderer/pages/errpages/404'
 import Home from '@renderer/pages/Vault/Home'
-import Register from '@renderer/pages/auth/Register'
 import Vault from './pages/Vault/Vault'
 import AdminLayout from './layouts/AdminLayout'
 import AdminSet from './pages/admin/AdminSet'
@@ -31,7 +30,7 @@ const RootRouter = () => {
     <BrowerRouter debug={false}>
       {/* <AppContext.Provider value={{ Lang: appset.lang }}> */}
       <Route>
-        <Route path={PagePath.register} element={Register} match={{ end: true }} />
+        <Route path={PagePath.register} element={Login} match={{ end: true }} />
         <Route path={PagePath.Login} element={Login} match={{ end: true }} />
         <Route path={PagePath.Lock} element={Login} match={{ end: true }} />
         <Route path="/" element={BasicLayout} errorElement={NotFound}>

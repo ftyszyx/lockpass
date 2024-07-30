@@ -6,7 +6,7 @@ date:2024/07/23 11:45:04
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Select, Space } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
-import Icon from '@renderer/components/icon'
+import Icon from '@renderer/components/Icon'
 import { Icon_type, ModalType, PasswordType } from '@common/gloabl'
 import AddPasswordPanel from './AddPasswordPanel'
 import { VaultItem } from '@common/entitys/vault_item.entity'

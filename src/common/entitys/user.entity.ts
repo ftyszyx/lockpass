@@ -26,6 +26,8 @@ export interface CurUserInfo {
 export class User extends BaseEntity {
   @Column({ type: 'VARCHAR', unique_index: true, index_name: 'username_index' })
   username: string
+  @Column({ type: 'VARCHAR', unique_index: false, index_name: 'nickname_index' })
+  nickname: string
   @Column({ type: 'VARCHAR' })
-  set: string|object
+  set: string | object
 }

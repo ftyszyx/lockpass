@@ -25,8 +25,7 @@ export class UserService extends BaseService<User> {
       const res_code = AppModel.getInstance().myencode.Login(users[0], info.password)
       res.code = res_code
       if (res_code == ApiRespCode.SUCCESS) {
-        AppModel.getInstance().set.cur_user_uid = users[0].id
-        AppModel.getInstance().saveSet()
+        AppModel.getInstance().SetLastUser(users[0].id)
         res.data = users[0]
       }
     } catch (e: any) {
@@ -41,7 +40,7 @@ export class UserService extends BaseService<User> {
       code: ApiRespCode.other_err,
       data: { user: null, has_init_key: false }
     }
-    const last_userid = AppModel.getInstance().set.cur_user_uid
+    const last_userid = AppModel.getInstance().GetLastUser()
     if (last_userid) {
       const user = await super.GetOne('id', last_userid)
       if (user.length > 0) {
@@ -68,8 +67,8 @@ export class UserService extends BaseService<User> {
   public async Register(info: RegisterInfo): Promise<ApiResp<null>> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     const users = await super.GetOne('username', info.username)
-    if (!users || users.length <= 0) {
-      res.code = ApiRespCode.user_notfind
+    if (users && users.length > 0) {
+      res.code = ApiRespCode.user_exit
     }
     try {
       await DbHlper.instance().beginTransaction()
@@ -79,6 +78,7 @@ export class UserService extends BaseService<User> {
       DbHlper.instance().commitTransaction()
       res.code = ApiRespCode.SUCCESS
     } catch (e: any) {
+      res.code = ApiRespCode.db_err
       Log.Exception(e)
       await DbHlper.instance().rollbackTransaction()
     }

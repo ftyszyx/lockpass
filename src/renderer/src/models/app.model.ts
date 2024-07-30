@@ -16,6 +16,8 @@ export interface AppStore {
   SetUser: (user: User) => void
   LoginOut: () => void
   HaveLogin: () => boolean
+  user_list: User[]
+  setUserList: (users: User[]) => void
 
   lock_timeout: number
   IsLock: () => boolean
@@ -23,6 +25,7 @@ export interface AppStore {
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
+    user_list: [],
     cur_user: null,
     hasLogin: false,
     lock_timeout: 0,
@@ -69,6 +72,11 @@ export const use_appstore = create<AppStore>((set, get) => {
         return true
       }
       return false
+    },
+    setUserList(users: User[]) {
+      set((state) => {
+        return { ...state, user_list: users }
+      })
     },
     //vault
     setValuts(valuts: Vault[]) {

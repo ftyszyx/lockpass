@@ -11,7 +11,7 @@ export function initAllApi() {
     AppModel.getInstance().changeLang(lang)
   })
   ipcMain.handle(webToManMsg.GetLang, () => {
-    return AppModel.getInstance().set.lang
+    return AppModel.getInstance().CurLang()
   })
   //user
   ipcMain.handle(webToManMsg.Login, async (_, info) => {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Icon from './icon'
+import Icon from './Icon'
 import { Icon_type } from '@common/gloabl'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 

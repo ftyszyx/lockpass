@@ -90,8 +90,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
           <Form<VaultItem>
             form={form}
             layout="vertical"
-            wrapperCol={{ span: 24 }}
-            className=" flex flex-col items-center "
+            wrapperCol={{}}
             initialValues={
               props.init_info ||
               ({

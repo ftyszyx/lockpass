@@ -1,7 +1,7 @@
 import { PagePath } from '@common/entitys/page.entity'
 import { Vault } from '@common/entitys/vaults.entity'
 import { ModalType } from '@common/gloabl'
-import Icon from '@renderer/components/icon'
+import Icon from '@renderer/components/Icon'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, message, Pagination } from 'antd'

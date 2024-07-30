@@ -7,23 +7,34 @@ import { Vault } from '@common/entitys/vault.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { LangItem } from '@common/lang'
 import { VaultItem } from '@common/entitys/vault_item.entity'
+import { User } from '@common/entitys/user.entity'
 
 export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
   try {
     ConsoleLog.LogInfo('ipc_call req', api, args)
     const res = (await window.electron.ipcRenderer.invoke(api, ...args)) as ApiResp<T>
     if (res.code == ApiRespCode.SUCCESS) {
-      ConsoleLog.LogInfo('ipc_call res', res.data)
+      ConsoleLog.LogInfo('ipc_call res', api, res.data)
       return res.data as T
     } else {
-      ConsoleLog.LogInfo('ipc_call res err', res.code)
+      ConsoleLog.LogInfo('ipc_call res err', api, res.code)
       return Promise.reject(res)
     }
   } catch (e: any) {
     ConsoleLog.LogError(e)
-    ConsoleLog.LogError('ipc_call res err', e.message)
+    ConsoleLog.LogError('ipc_call res err', api, e.message)
     return Promise.reject({ code: ApiRespCode.unkonw })
   }
+}
+
+export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
+  await ipc_call<User[]>(webToManMsg.getAllUser)
+    .then((res) => {
+      appstore.setUserList(res)
+    })
+    .catch((e) => {
+      messageApi.error(lang.getText(`err.${e.code}`))
+    })
 }
 
 export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {

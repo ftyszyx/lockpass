@@ -1,6 +1,6 @@
 import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type } from '@common/gloabl'
-import Icon from '@renderer/components/icon'
+import Icon from '@renderer/components/Icon'
 import { ReactNode } from 'react'
 //id list
 export const MenuValutID = 1

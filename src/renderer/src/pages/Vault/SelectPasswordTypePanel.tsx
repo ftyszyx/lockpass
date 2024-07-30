@@ -1,5 +1,5 @@
 import { Icon_type, PasswordType } from '@common/gloabl'
-import Icon from '@renderer/components/icon'
+import Icon from '@renderer/components/Icon'
 import { Modal, Space } from 'antd'
 
 interface SelectPasswordTypeProps {
