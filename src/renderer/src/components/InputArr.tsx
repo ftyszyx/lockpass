@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { InputHTMLAttributes, useState } from 'react'
 import Icon from './Icon'
 import { Icon_type, ModalType } from '@common/gloabl'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -15,9 +15,8 @@ interface InputArrProps {
 }
 
 export default function InputArr(props: InputArrProps) {
-  const lang = (use_appset() as AppsetStore).lang
+  const appset = use_appset() as AppsetStore
   const [inputs, setInputs] = useState<string[]>(props.value || [''])
-
   const handleInputChange = (index: number, newValue: string) => {
     const newInputs = [...inputs]
     newInputs[index] = newValue
@@ -40,17 +39,18 @@ export default function InputArr(props: InputArrProps) {
   return (
     <div className="flex flex-col">
       <div className=" flex flex-col">
-        {inputs.map((input, index) => (
+        {inputs.map((input_value, index) => (
           <div
             key={index}
             className=" p-1 rounded-lg flex flex-row items-center  border-solid mb-1 bg-gray-200"
           >
             <div className="flex flex-col flex-grow">
               <div>{props.label}</div>
-              <MyInputWrapper
+              <MyInputWrapper<InputHTMLAttributes<HTMLInputElement>>
                 inputProps={{ placeholder: props.placeholder || '' }}
                 inputElement={Input}
-                {...props}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                value={input_value}
               />
             </div>
             {!props.readonly && (
@@ -67,7 +67,7 @@ export default function InputArr(props: InputArrProps) {
           className=" cursor-pointer flex flex-row space-x-1 items-center bg-gray-300 rounded-lg border-[1px] px-3 py-1"
         >
           <Icon type={Icon_type.icon_add} />
-          <div>{lang.getText('inputarr.addmore')}</div>
+          <div>{appset.lang.getText('inputarr.addmore')}</div>
         </div>
       )}
     </div>

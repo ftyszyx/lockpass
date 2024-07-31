@@ -47,23 +47,24 @@ export default function VaultSide(props: VaultSideProps) {
       )
     }
   }, [
-    [
-      appstore.vaults,
-      search_Password_type,
-      appstore.vaut_items,
-      cur_vault_id,
-      props.global_search_keyword
-    ]
+    appstore.vaults,
+    search_Password_type,
+    appstore.vaut_items,
+    cur_vault_id,
+    props.global_search_keyword
   ])
   useEffect(() => {
     if (show_items.length > 0) {
-      set_select_vault_item(show_items[0])
-      props.onSelect(show_items[0])
+      DoSelectItem(show_items[0])
     } else {
-      set_select_vault_item(null)
-      props.onSelect(null)
+      DoSelectItem(null)
     }
   }, [show_items])
+
+  const DoSelectItem = (vault_item: VaultItem) => {
+    set_select_vault_item(vault_item)
+    props.onSelect(vault_item)
+  }
   return (
     <div className="flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200">
       {/* first line */}
@@ -102,7 +103,7 @@ export default function VaultSide(props: VaultSideProps) {
         {show_items.map((vault_item) => (
           <div
             onClick={() => {
-              set_select_vault_item(vault_item)
+              DoSelectItem(vault_item)
             }}
             className={`flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
             key={vault_item.id}

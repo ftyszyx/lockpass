@@ -4,8 +4,8 @@ desc: 密码管理页面
 date:2024/07/23 11:45:04
 */
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Form, Input, message, Popconfirm, Select, Space } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
+import { Button, Form, Input, message, Popconfirm } from 'antd'
+import { useEffect, useState } from 'react'
 import Icon from '@renderer/components/Icon'
 import { Icon_type, ModalType, PasswordType } from '@common/gloabl'
 import AddPasswordPanel from './AddPasswordPanel'
@@ -28,6 +28,9 @@ export default function Vault() {
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
   const [show_add_vault, set_show_add_vault] = useState(false)
   const [show_edit, set_show_edit] = useState(false)
+  useEffect(() => {
+    form.resetFields()
+  }, [select_vault_item])
 
   return (
     <>
@@ -88,7 +91,6 @@ export default function Vault() {
                   className="flex-grow"
                   initialValues={select_vault_item}
                   layout="vertical"
-                  wrapperCol={{}}
                 >
                   <PaswordDetail
                     passwordType={select_vault_item.passwordType as PasswordType}
@@ -97,12 +99,18 @@ export default function Vault() {
                   <div className=" flex flex-row-reverse mt-2">
                     {show_edit && (
                       <Form.Item>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          onClick={async () => {
+                        <Popconfirm
+                          title={appset.lang.getText('vault.edit_title')}
+                          description={appset.lang.getText(
+                            'vault.sure_edit',
+                            select_vault_item.name
+                          )}
+                          okText={appset.lang.getText('ok')}
+                          cancelText={appset.lang.getText('cancel')}
+                          onConfirm={async () => {
                             const values = await form.validateFields()
                             values.info = JSON.stringify(values.info)
+                            values.id = select_vault_item.id
                             await ipc_call(webToManMsg.updateValutItem, values)
                               .then(async () => {
                                 set_show_edit(false)
@@ -113,15 +121,20 @@ export default function Vault() {
                               })
                           }}
                         >
-                          {appset.lang.getText('save')}
-                        </Button>
+                          <Button type="primary" htmlType="submit">
+                            {appset.lang.getText('save')}
+                          </Button>
+                        </Popconfirm>
                       </Form.Item>
                     )}
                     {show_edit && (
                       <Form.Item className=" mr-3">
                         <Popconfirm
-                          title={appset.lang.getText('vault.delte_title')}
-                          description={appset.lang.getText('vault.sure_delte')}
+                          title={appset.lang.getText('vault.delete_title')}
+                          description={appset.lang.getText(
+                            'vault.sure_delete',
+                            select_vault_item.name
+                          )}
                           onConfirm={async () => {
                             await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
                               .then(async () => {

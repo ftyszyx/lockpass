@@ -66,6 +66,7 @@ export const LoginPasswordFieldList: FieldInfo[] = [
           label={LangHelper.getString('input.label.url')}
           placeholder={LangHelper.getString('input.placeholder.url')}
           show_type={props.show_type}
+          {...props}
         ></InputArr>
       )
     }
@@ -81,7 +82,7 @@ export const CardPasswordFieldList: FieldInfo[] = [
           inputProps={{
             placeholder: LangHelper.getString('input.placeholder.bank')
           }}
-          inputElement={Input.Password}
+          inputElement={Input}
           show_type={props.show_type}
           {...props}
         />
