@@ -22,7 +22,7 @@ export default function AdminSet() {
         {UserSetFieldList.map((item) => {
           return (
             <Form.Item key={item.field_name} label={item.label} name={item.field_name}>
-              <item.field_Element></item.field_Element>
+              <item.render></item.render>
             </Form.Item>
           )
         })}

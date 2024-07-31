@@ -12,6 +12,8 @@
   "valut.search.placeholder": "搜索全部密码",
   "vault.empty_add": "添加一个新的密码",
   "vault.global_search": "在\"{0}\"中全局搜索",
+  "vault.sure_delete": "确定删除\"{0}\"吗?",
+  "vault.delete_title": "删除密码",
 
   "myencode.passworderror": "账号或密码错误",
   "auth.register.userexist": "用户名重复",
@@ -49,12 +51,35 @@
   "time.week": "{0}周",
   "time.never": "从不",
 
+  "input.placeholder.password": "请输入密码",
+  "input.placeholder.username": "请输入用户名",
+  "input.placeholder.remarks": "请输入备注",
+  "input.placeholder.url": "请输入网址",
+  "input.placeholder.bank": "请输入银行名",
+  "input.placeholder.cardnum": "请输入卡号",
+
+  "input.rule.username": "用户名不能为空",
+  "input.rule.password": "密码不能为空",
+  "input.rule.remarks": "备注不能为空",
+  "input.rule.cardnum": "卡号不能为空",
+
+  "input.label.username": "用户名",
+  "input.label.password": "密码",
+  "input.label.remarks": "备注",
+  "input.label.url": "网址",
+  "input.label.bank": "银行",
+  "input.label.cardnum": "卡号",
+  "input.label.note": "笔记",
+
   "icon": "图标",
   "name": "名字",
   "remarks": "备注",
 
   "ok": "确定",
   "edit": "编辑",
+  "delete": "删除",
+  "copy": "复制",
   "save": "保存",
-  "cancel": "取消"
+  "cancel": "取消",
+  "copy_success": "复制成功"
 }

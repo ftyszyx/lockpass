@@ -4,18 +4,19 @@ desc: 密码管理页面
 date:2024/07/23 11:45:04
 */
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Form, Input, message, Select, Space } from 'antd'
+import { Button, Form, Input, message, Popconfirm, Select, Space } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 import Icon from '@renderer/components/Icon'
 import { Icon_type, ModalType, PasswordType } from '@common/gloabl'
 import AddPasswordPanel from './AddPasswordPanel'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { getAllVaultItem } from '@renderer/libs/tools/other'
-import { useRouterStore } from '@renderer/libs/router'
+import { getAllVaultItem, ipc_call } from '@renderer/libs/tools/other'
 import PaswordDetail from './PasswordDetail'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useForm } from 'antd/es/form/Form'
+import VaultSide from './VaultSide'
+import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 
 export default function Vault() {
   ConsoleLog.LogInfo('Vault render')
@@ -23,50 +24,10 @@ export default function Vault() {
   const appstore = use_appstore() as AppStore
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
-  const SelectAll = 'ALL'
-  const [search_Password_type, set_Search_password_type] = useState(SelectAll)
-  const [gloal_search_keyword, set_gloal_search_keyword] = useState('')
+  const [global_search_keyword, set_gloal_search_keyword] = useState('')
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
   const [show_add_vault, set_show_add_vault] = useState(false)
-  const route_data = useRouterStore()
-  const cur_vault_id = parseInt(route_data.match?.params['id'])
-  const show_items = useMemo(() => {
-    if (gloal_search_keyword && gloal_search_keyword.length > 0) {
-      return appstore.vaut_items.filter((item) => {
-        if (item.name.includes(gloal_search_keyword)) return true
-        if (item.info) {
-          const keys = Object.keys(item.info)
-          const ok = keys.some((key) => {
-            if (item.info[key].includes(gloal_search_keyword)) return true
-            return false
-          })
-          if (ok) return true
-        }
-        return false
-      })
-    }
-    if (search_Password_type === SelectAll) {
-      return appstore.vaut_items.filter((item) => item.valut_id == cur_vault_id)
-    } else {
-      return appstore.vaut_items.filter(
-        (item) => item.passwordType === search_Password_type && item.valut_id == cur_vault_id
-      )
-    }
-  }, [
-    appstore.vaults,
-    search_Password_type,
-    appstore.vaut_items,
-    cur_vault_id,
-    gloal_search_keyword
-  ])
-
-  useEffect(() => {
-    if (show_items.length > 0) {
-      set_select_vault_item(show_items[0])
-    } else {
-      set_select_vault_item(null)
-    }
-  }, [show_items])
+  const [show_edit, set_show_edit] = useState(false)
 
   return (
     <>
@@ -102,61 +63,25 @@ export default function Vault() {
 
         {/* content */}
         <div className=" flex flex-row flex-grow">
-          {/*  left side menu*/}
-          <div className="flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200">
-            {/* first line */}
-            <div className="flex flex-row justify-between items-center p-2">
-              <Select
-                value={search_Password_type}
-                size="middle"
-                // className="h-[40px] flex flex-row items-center"
-                onChange={(value) => {
-                  set_Search_password_type(value)
-                }}
-                defaultValue={SelectAll}
-              >
-                <Select.Option value={SelectAll} key={SelectAll}>
-                  <div className="flex flex-row items-center space-x-1 w-[80px]">
-                    <Icon type={Icon_type.icon_type} svg className="" />
-                    <div>所有类别</div>
-                  </div>
-                </Select.Option>
-                {Object.keys(PasswordType).map((key) => {
-                  const type_value = PasswordType[key]
-                  return (
-                    <Select.Option key={key} value={type_value}>
-                      <div className="flex flex-row items-center space-x-1 w-[80px]">
-                        <Icon type={`icon-${type_value}`} svg className="" />
-                        <div>{type_value}</div>
-                      </div>
-                    </Select.Option>
-                  )
-                })}
-              </Select>
-              <Icon type={Icon_type.icon_rank} />
-            </div>
-            {/* item list */}
-            <div className=" flex flex-col">
-              {show_items.map((vault_item) => (
-                <div
-                  onClick={() => {
-                    set_select_vault_item(vault_item)
-                  }}
-                  className={`flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
-                  key={vault_item.id}
-                >
-                  <Icon type={`${vault_item.icon}`} svg className=" w-[40px] h-[40px]" />
-                  <div> {vault_item.name}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <VaultSide
+            global_search_keyword={global_search_keyword}
+            onSelect={(item) => {
+              set_select_vault_item(item)
+            }}
+          ></VaultSide>
           {/*  right side content*/}
           <div className="flex flex-grow">
             {select_vault_item && (
               <div className=" flex flex-col w-full p-4">
                 <div className="flex flex-row-reverse">
-                  <Button type="primary">{appset.lang.getText('edit')}</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      set_show_edit(!show_edit)
+                    }}
+                  >
+                    {show_edit ? appset.lang.getText('cancel') : appset.lang.getText('edit')}
+                  </Button>
                 </div>
                 <Form
                   form={form}
@@ -167,8 +92,54 @@ export default function Vault() {
                 >
                   <PaswordDetail
                     passwordType={select_vault_item.passwordType as PasswordType}
-                    modal_type={ModalType.View}
+                    modal_type={show_edit ? ModalType.Edit : ModalType.View}
                   ></PaswordDetail>
+                  <div className=" flex flex-row-reverse mt-2">
+                    {show_edit && (
+                      <Form.Item>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          onClick={async () => {
+                            const values = await form.validateFields()
+                            values.info = JSON.stringify(values.info)
+                            await ipc_call(webToManMsg.updateValutItem, values)
+                              .then(async () => {
+                                set_show_edit(false)
+                                await getAllVaultItem(appstore, appset.lang, messageApi)
+                              })
+                              .catch((err) => {
+                                messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                              })
+                          }}
+                        >
+                          {appset.lang.getText('save')}
+                        </Button>
+                      </Form.Item>
+                    )}
+                    {show_edit && (
+                      <Form.Item className=" mr-3">
+                        <Popconfirm
+                          title={appset.lang.getText('vault.delte_title')}
+                          description={appset.lang.getText('vault.sure_delte')}
+                          onConfirm={async () => {
+                            await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
+                              .then(async () => {
+                                set_show_edit(false)
+                                await getAllVaultItem(appstore, appset.lang, messageApi)
+                              })
+                              .catch((err) => {
+                                messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                              })
+                          }}
+                          okText={appset.lang.getText('ok')}
+                          cancelText={appset.lang.getText('cancel')}
+                        >
+                          <Button type="dashed">{appset.lang.getText('delete')}</Button>
+                        </Popconfirm>
+                      </Form.Item>
+                    )}
+                  </div>
                 </Form>
               </div>
             )}

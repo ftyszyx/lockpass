@@ -10,14 +10,14 @@ export interface UserSetInfo {
 export const UserSetFieldList: FieldInfo[] = [
   {
     field_name: 'aulock_time',
-    field_Element: TimeSelect,
+    render: TimeSelect,
     edit_rules: [{ required: true, message: '请输入自动锁定时间' }],
     edit_props: { placeholder: '请输入自动锁定时间' },
     label: '自动锁定时间'
   },
   {
     field_name: 'lock_with_pc',
-    field_Element: Switch,
+    render: Switch,
     edit_props: { placeholder: '电脑锁定，软件也锁定' },
     label: '电脑锁定，软件也锁定'
   }

@@ -16,9 +16,11 @@ interface Props {
 
 export default function Icon(props: Props): JSX.Element {
   return props.svg ? (
-    <svg className={`icon ${props.className}`} aria-hidden="true">
-      <use xlinkHref={`#${props.type}`}></use>
-    </svg>
+    <div onClick={props.onClick}>
+      <svg className={`icon ${props.className}`} aria-hidden="true">
+        <use xlinkHref={`#${props.type}`}></use>
+      </svg>
+    </div>
   ) : (
     <span
       key={props.key}

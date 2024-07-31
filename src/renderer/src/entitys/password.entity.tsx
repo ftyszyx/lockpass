@@ -1,7 +1,9 @@
 import { Input } from 'antd'
-import { FieldInfo } from './form.entity'
+import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
-import { PasswordType } from '@common/gloabl'
+import { ModalType, PasswordType } from '@common/gloabl'
+import { LangHelper } from '@common/lang'
+import MyInputWrapper from '@renderer/components/MyInputWrapper'
 
 export interface LoginPasswordInfo {
   username: string
@@ -22,50 +24,111 @@ export interface NoteTextPasswordInfo {
 export const LoginPasswordFieldList: FieldInfo[] = [
   {
     field_name: 'username',
-    field_Element: Input,
-    edit_rules: [{ required: true, message: '请输入用户名' }],
-    edit_props: { placeholder: '请输入用户名' },
-    label: '用户名'
+    render: (props) => {
+      return (
+        <MyInputWrapper
+          inputProps={{
+            placeholder: LangHelper.getString('input.placeholder.username')
+          }}
+          inputElement={Input}
+          show_type={props.show_type}
+          {...props}
+        />
+      )
+    },
+    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.username') }],
+    label: LangHelper.getString('input.label.username')
   },
   {
     field_name: 'password',
-    field_Element: Input.Password,
-    edit_rules: [{ required: true, message: '请输入密码' }],
-    label: '密码'
+    render: (props) => {
+      return (
+        <MyInputWrapper
+          inputProps={{
+            placeholder: LangHelper.getString('input.placeholder.password')
+          }}
+          inputElement={Input.Password}
+          show_type={props.show_type}
+          is_password
+          {...props}
+        />
+      )
+    },
+    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.password') }],
+    label: LangHelper.getString('input.label.password')
   },
   {
     field_name: 'urls',
-    field_Element: InputArr,
-    edit_props: { label: '网址', placeholder: '请输入网址' }
+    render: (props) => {
+      return (
+        <InputArr
+          readonly={props.show_type == ModalType.View}
+          label={LangHelper.getString('input.label.url')}
+          placeholder={LangHelper.getString('input.placeholder.url')}
+          show_type={props.show_type}
+        ></InputArr>
+      )
+    }
   }
 ]
 
 export const CardPasswordFieldList: FieldInfo[] = [
   {
     field_name: 'card_company',
-    field_Element: Input,
-    edit_rules: [{ required: true, message: '请输入银行' }],
-    label: '银行'
+    render: (props: FiledProps) => {
+      return (
+        <MyInputWrapper
+          inputProps={{
+            placeholder: LangHelper.getString('input.placeholder.bank')
+          }}
+          inputElement={Input.Password}
+          show_type={props.show_type}
+          {...props}
+        />
+      )
+    },
+    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.bank') }],
+    label: LangHelper.getString('input.label.bank')
   },
   {
     field_name: 'card_number',
-    field_Element: Input,
-    edit_rules: [{ required: true, message: '请输入卡号' }],
-    label: '卡号'
+    render: (props: FiledProps) => {
+      return (
+        <MyInputWrapper
+          inputProps={{ placeholder: LangHelper.getString('input.placeholder.card_number') }}
+          inputElement={Input}
+          show_type={props.show_type}
+          {...props}
+        />
+      )
+    },
+    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.card_number') }],
+    label: LangHelper.getString('input.label.card_number')
   },
   {
     field_name: 'card_password',
-    field_Element: Input.Password,
-    edit_rules: [{ required: true, message: '请输入密码' }],
-    label: '密码'
+    render: (props: FiledProps) => {
+      return (
+        <MyInputWrapper
+          inputProps={{ placeholder: LangHelper.getString('input.placeholder.password') }}
+          inputElement={Input.Password}
+          show_type={props.show_type}
+          {...props}
+        />
+      )
+    },
+    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.password') }],
+    label: LangHelper.getString('input.label.password')
   }
 ]
 
 export const NotePasswordFieldList: FieldInfo[] = [
   {
     field_name: 'note_text',
-    field_Element: Input.TextArea,
-    label: '笔记'
+    render: (props: FiledProps) => {
+      return <MyInputWrapper inputElement={Input.TextArea} show_type={props.show_type} {...props} />
+    },
+    label: LangHelper.getString('input.label.note')
   }
 ]
 

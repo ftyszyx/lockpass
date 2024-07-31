@@ -1,12 +1,13 @@
 import { ModalType, PasswordIconType, PasswordType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import IconSelect from '@renderer/components/IconSelect'
+import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { PasswordFileListDic } from '@renderer/entitys/password.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, Form, Input, Select } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
+import TextArea, { TextAreaProps } from 'antd/es/input/TextArea'
 
 interface props {
   passwordType: PasswordType
@@ -33,12 +34,11 @@ export default function PaswordDetail(props: props) {
           ></IconSelect>
         </Form.Item>
         <Form.Item name="name" className="flex-grow">
-          <Input placeholder="名称" readOnly={props.modal_type == ModalType.View} />
-          {props.modal_type == ModalType.View && (
-            <Button type="text" className=" absolute right-0">
-              复制
-            </Button>
-          )}
+          <MyInputWrapper
+            inputElement={Input}
+            inputProps={{ placeholder: appset.lang.getText('name') }}
+            show_type={props.modal_type}
+          />
         </Form.Item>
       </div>
       <div>
@@ -48,25 +48,24 @@ export default function PaswordDetail(props: props) {
               labelCol={{
                 style: { marginBottom: '0px', marginTop: '0px', padding: '0px' }
               }}
-              wrapperCol={{ style: { marginTop: '0px' } }}
-              className=" mb-2 "
+              wrapperCol={{ style: { marginTop: '0px', padding: '3px' } }}
+              className=" mb-2  group"
               name={['info', item.field_name]}
               label={item.label}
               rules={item.edit_rules}
               key={item.field_name}
             >
-              <item.field_Element {...item.edit_props}></item.field_Element>
-              {props.modal_type == ModalType.View && (
-                <Button type="text" className=" absolute right-0">
-                  复制
-                </Button>
-              )}
+              <item.render show_type={props.modal_type}></item.render>
             </Form.Item>
           )
         })}
       </div>
       <Form.Item className="mb-0" name="remarks" label={appset.lang.getText('vaultadd.remarks')}>
-        <TextArea autoSize={{ minRows: 4 }}></TextArea>
+        <MyInputWrapper<TextAreaProps>
+          inputProps={{ autoSize: { minRows: 4 } }}
+          inputElement={TextArea}
+          show_type={props.modal_type}
+        ></MyInputWrapper>
       </Form.Item>
     </>
   )

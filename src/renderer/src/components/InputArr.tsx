@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import Icon from './Icon'
-import { Icon_type } from '@common/gloabl'
+import { Icon_type, ModalType } from '@common/gloabl'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import MyInputWrapper from './MyInputWrapper'
+import { Input } from 'antd'
 
 interface InputArrProps {
-  value: string[]
+  value?: string[]
   placeholder?: string
   label: string
+  show_type?: ModalType
+  readonly?: boolean
   onChange?: (newValue: string[]) => void // 添加一个onChange回调函数来传递数据
 }
 
@@ -43,27 +47,29 @@ export default function InputArr(props: InputArrProps) {
           >
             <div className="flex flex-col flex-grow">
               <div>{props.label}</div>
-              <input
-                type="text"
-                className="bg-inherit"
-                placeholder={props.placeholder || ''}
-                value={input}
-                onChange={(e) => handleInputChange(index, e.target.value)}
+              <MyInputWrapper
+                inputProps={{ placeholder: props.placeholder || '' }}
+                inputElement={Input}
+                {...props}
               />
             </div>
-            <div onClick={() => handleRemoveInput(index)}>
-              <Icon className="w-[20px] h-[20px]" type={Icon_type.icon_del} svg />
-            </div>
+            {!props.readonly && (
+              <div onClick={() => handleRemoveInput(index)} className=" cursor-pointer">
+                <Icon className="w-[20px] h-[20px]" type={Icon_type.icon_del} svg />
+              </div>
+            )}
           </div>
         ))}
       </div>
-      <div
-        onClick={handleAddInput}
-        className="flex flex-row space-x-1 items-center bg-gray-300 rounded-lg border-[1px] px-3 py-1"
-      >
-        <Icon type={Icon_type.icon_add} />
-        <div>{lang.getText('inputarr.addmore')}</div>
-      </div>
+      {!props.readonly && (
+        <div
+          onClick={handleAddInput}
+          className=" cursor-pointer flex flex-row space-x-1 items-center bg-gray-300 rounded-lg border-[1px] px-3 py-1"
+        >
+          <Icon type={Icon_type.icon_add} />
+          <div>{lang.getText('inputarr.addmore')}</div>
+        </div>
+      )}
     </div>
   )
 }
