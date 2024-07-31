@@ -5,7 +5,7 @@ import { FieldInfo } from '@renderer/entitys/form.entity'
 import { PasswordFileListDic } from '@renderer/entitys/password.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { Form, Input, Select } from 'antd'
+import { Button, Form, Input, Select } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 
 interface props {
@@ -34,6 +34,11 @@ export default function PaswordDetail(props: props) {
         </Form.Item>
         <Form.Item name="name" className="flex-grow">
           <Input placeholder="名称" readOnly={props.modal_type == ModalType.View} />
+          {props.modal_type == ModalType.View && (
+            <Button type="text" className=" absolute right-0">
+              复制
+            </Button>
+          )}
         </Form.Item>
       </div>
       <div>
@@ -51,6 +56,11 @@ export default function PaswordDetail(props: props) {
               key={item.field_name}
             >
               <item.field_Element {...item.edit_props}></item.field_Element>
+              {props.modal_type == ModalType.View && (
+                <Button type="text" className=" absolute right-0">
+                  复制
+                </Button>
+              )}
             </Form.Item>
           )
         })}
