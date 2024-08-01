@@ -20,28 +20,20 @@ export enum ApiRespCode {
   unkonw = 207
 }
 
-export interface ShortCutSet {
-  name: string
-  value: string
+export interface UserSetInfo {
+  normal_autolock_time: number //自动锁定时间,单位分钟
+  normal_lock_with_pc: boolean //电脑锁定，软件也锁定
+  shortcurt_global_quick_find: string //全局快捷键，快速查找
+  shortcurt_global_quick_lock: string //全局快捷键，快速锁定
+  shortcurt_local_view_shortcut: string //本地快捷键，查看快捷键
+  shortcurt_local_find: string //本地快捷键，查找
 }
 
-export const DefaultLocalShortCut: ShortCutSet[] = [
-  {
-    name: 'veiw_shortCut',
-    value: 'ctrl+/'
-  },
-  {
-    name: 'find',
-    value: 'ctrl+f'
-  }
-]
-export const DefaultGlobalShortCut: ShortCutSet[] = [
-  {
-    name: 'quick_find',
-    value: 'ctrl+shift+space'
-  },
-  {
-    name: 'quick_lock',
-    value: 'ctrl+shift+l'
-  }
-]
+export const defaultUserSetInfo: UserSetInfo = {
+  normal_autolock_time: 5,
+  normal_lock_with_pc: true,
+  shortcurt_global_quick_find: 'ctrl+shift+space',
+  shortcurt_global_quick_lock: 'ctrl+shift+l',
+  shortcurt_local_find: 'ctrl+f',
+  shortcurt_local_view_shortcut: 'ctrl+/'
+}
