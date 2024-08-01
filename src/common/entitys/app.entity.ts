@@ -19,3 +19,29 @@ export enum ApiRespCode {
   db_err = 206,
   unkonw = 207
 }
+
+export interface ShortCutSet {
+  name: string
+  value: string
+}
+
+export const DefaultLocalShortCut: ShortCutSet[] = [
+  {
+    name: 'veiw_shortCut',
+    value: 'ctrl+/'
+  },
+  {
+    name: 'find',
+    value: 'ctrl+f'
+  }
+]
+export const DefaultGlobalShortCut: ShortCutSet[] = [
+  {
+    name: 'quick_find',
+    value: 'ctrl+shift+space'
+  },
+  {
+    name: 'quick_lock',
+    value: 'ctrl+shift+l'
+  }
+]

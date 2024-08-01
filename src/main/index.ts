@@ -21,6 +21,27 @@ function createWindow(): void {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
+  })
+  initTray(mainWindow)
+
+  if (is.dev) mainWindow.webContents.openDevTools({ mode: 'detach' })
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  } else {
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+  }
+  AppModel.getInstance().initMainView(mainWindow)
+  initAllApi()
+}
+
+//初始化全局快捷键
+function initGlobalShortcut(): void {}
+//初始化托盘
+function initTray(mainWindow: BrowserWindow): void {
   mainWindow.on('closed', () => {
     console.log('win closed')
   })
@@ -52,20 +73,6 @@ function createWindow(): void {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
     mainWindow.isVisible() ? mainWindow.setSkipTaskbar(false) : mainWindow.setSkipTaskbar(true)
   })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
-  if (is.dev) mainWindow.webContents.openDevTools({ mode: 'detach' })
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
-  AppModel.getInstance().initMainView(mainWindow)
-  initAllApi()
 }
 
 // This method will be called when Electron has finished

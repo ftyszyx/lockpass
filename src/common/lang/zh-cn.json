@@ -17,6 +17,10 @@
   "vault.sure_edit": "确定修改\"{0}\"吗?",
   "vault.edit_title": "修改密码",
 
+  "set.menu.normal": "常规",
+  "set.menu.global_shortcut": "全局快捷键",
+  "set.menu.local_shortcut": "软件快捷键",
+
   "myencode.passworderror": "账号或密码错误",
   "auth.register.userexist": "用户名重复",
   "auth.login.notfound": "用户不存在",
