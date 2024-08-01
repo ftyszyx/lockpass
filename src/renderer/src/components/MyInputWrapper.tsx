@@ -53,7 +53,7 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
               console.log('get text', props.value)
               messageApi.success(appset.lang.getText('copy_success'))
             }}
-            className={` flex-grow  font-bold  ${hoverState ? ' visible' : 'hidden'}`}
+            className={` flex-grow  font-bold h-full ${hoverState ? ' visible' : 'hidden'}`}
           >
             {appset.lang.getText('copy')}
           </Button>

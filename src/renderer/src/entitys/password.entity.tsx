@@ -4,6 +4,7 @@ import InputArr from '@renderer/components/InputArr'
 import { ModalType, PasswordType } from '@common/gloabl'
 import { LangHelper } from '@common/lang'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
+import { TextAreaProps } from 'antd/es/input'
 
 export interface LoginPasswordInfo {
   username: string
@@ -127,7 +128,14 @@ export const NotePasswordFieldList: FieldInfo[] = [
   {
     field_name: 'note_text',
     render: (props: FiledProps) => {
-      return <MyInputWrapper inputElement={Input.TextArea} show_type={props.show_type} {...props} />
+      return (
+        <MyInputWrapper<TextAreaProps>
+          inputProps={{ autoSize: { minRows: 9 } }}
+          inputElement={Input.TextArea}
+          show_type={props.show_type}
+          {...props}
+        />
+      )
     },
     label: LangHelper.getString('input.label.note')
   }

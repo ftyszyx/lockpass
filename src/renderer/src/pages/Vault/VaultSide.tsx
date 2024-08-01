@@ -55,7 +55,12 @@ export default function VaultSide(props: VaultSideProps) {
   ])
   useEffect(() => {
     if (show_items.length > 0) {
-      DoSelectItem(show_items[0])
+      if (
+        select_vault_item == null ||
+        !show_items.some((item) => item.id == select_vault_item.id)
+      ) {
+        DoSelectItem(show_items[0])
+      }
     } else {
       DoSelectItem(null)
     }

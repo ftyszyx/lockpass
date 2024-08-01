@@ -49,6 +49,7 @@ export default function InputArr(props: InputArrProps) {
               <MyInputWrapper<InputHTMLAttributes<HTMLInputElement>>
                 inputProps={{ placeholder: props.placeholder || '' }}
                 inputElement={Input}
+                show_type={props.show_type}
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 value={input_value}
               />
