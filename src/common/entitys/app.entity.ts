@@ -23,17 +23,17 @@ export enum ApiRespCode {
 export interface UserSetInfo {
   normal_autolock_time: number //自动锁定时间,单位分钟
   normal_lock_with_pc: boolean //电脑锁定，软件也锁定
-  shortcurt_global_quick_find: string //全局快捷键，快速查找
-  shortcurt_global_quick_lock: string //全局快捷键，快速锁定
-  shortcurt_local_view_shortcut: string //本地快捷键，查看快捷键
-  shortcurt_local_find: string //本地快捷键，查找
+  shortcut_global_quick_find: string //全局快捷键，快速查找
+  shortcut_global_quick_lock: string //全局快捷键，快速锁定
+  shortcut_local_view_shortcut: string //本地快捷键，查看快捷键
+  shortcut_local_find: string //本地快捷键，查找
 }
 
 export const defaultUserSetInfo: UserSetInfo = {
   normal_autolock_time: 5,
   normal_lock_with_pc: true,
-  shortcurt_global_quick_find: 'ctrl+shift+space',
-  shortcurt_global_quick_lock: 'ctrl+shift+l',
-  shortcurt_local_find: 'ctrl+f',
-  shortcurt_local_view_shortcut: 'ctrl+/'
+  shortcut_global_quick_find: 'ctrl+shift+space',
+  shortcut_global_quick_lock: 'ctrl+shift+l',
+  shortcut_local_find: 'ctrl+f',
+  shortcut_local_view_shortcut: 'ctrl+/'
 }

@@ -4,7 +4,7 @@ import TimeSelect from '@renderer/components/TimeSelect'
 
 export const NormalSetFiledList: FieldInfo[] = [
   {
-    field_name: 'aulock_time',
+    field_name: 'normal_aulock_time',
     render: (props: FiledProps) => {
       return <TimeSelect {...props} />
     },
@@ -13,7 +13,7 @@ export const NormalSetFiledList: FieldInfo[] = [
     label: '自动锁定时间'
   },
   {
-    field_name: 'lock_with_pc',
+    field_name: 'normal_lock_with_pc',
     render: (props: FiledProps) => {
       return <Switch {...props} />
     },
