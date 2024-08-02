@@ -14,6 +14,7 @@ export enum ApiRespCode {
   user_exit = 5,
   form_err = 6,
   data_not_find = 7,
+  update_err = 8,
   //common
   other_err = 205,
   db_err = 206,

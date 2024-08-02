@@ -183,6 +183,7 @@ class DbHlper {
           Log.Exception(err, `run sql:${sql_str} ext:${ext_msg} err: ${err.message}`)
           reject(new Error(err.message))
         } else {
+          // if (this.show_log) Log.info('rows:', rows)
           let res: T[] = []
           for (let i = 0; i < rows.length; i++) {
             const item = new obj_type()

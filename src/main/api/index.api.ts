@@ -33,7 +33,7 @@ export function initAllApi() {
     return await AppModel.getInstance().user?.GetLastUserInfo()
   })
   ipcMain.handle(webToManMsg.UpdateUser, async (_, user) => {
-    return await AppModel.getInstance().user?.UpdateOne(user)
+    return await AppModel.getInstance().user?.UpdateOne2(user, true)
   })
 
   //valut

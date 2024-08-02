@@ -1,83 +1,98 @@
-import { defaultUserSetInfo } from '@common/entitys/app.entity'
+import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { User } from '@common/entitys/user.entity'
-import { NormalSetFiledList, UserSetInfo } from '@renderer/entitys/set.entity'
+import { Icon_type } from '@common/gloabl'
+import Icon from '@renderer/components/Icon'
+import ShortKeyInput from '@renderer/components/ShortKeyInput'
+import { NormalSetFiledList, SetMenuItem } from '@renderer/entitys/set.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { ipc_call } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { Form, Button, message } from 'antd'
+import { Form, Button, message, Input } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function AdminSet() {
   const [form] = useForm<UserSetInfo>(null)
   const appstore = use_appstore() as AppStore
   const appset = use_appset() as AppsetStore
   const [messageApi, messageContext] = message.useMessage()
-  const [select_item, set_select_item] = useState<string>('nomral')
+  const [select_item, set_select_item] = useState<string>(SetMenuItem.normal)
+  const onSave = () => {
+    form.validateFields().then(async (values) => {
+      const setinfo = appstore.cur_user.user_set as UserSetInfo
+      appstore.cur_user.user_set = { ...setinfo, ...values }
+      await ipc_call<User>(webToManMsg.UpdateUser, appstore.cur_user)
+        .then((res) => {
+          appstore.SetUser(res)
+          messageApi.success(appset.lang.getText('save_success'))
+        })
+        .catch((e) => {
+          messageApi.error(appset.lang.getText(`err.${e.code}`))
+        })
+    })
+  }
   ConsoleLog.LogInfo('AdminSet render', appstore.cur_user)
 
   return (
-    <div className=" felx flex-row">
+    <div className=" flex flex-row h-full">
       {messageContext}
       {/* left menu */}
-      <div className=" w-[100px]">
-        {['normal', 'shortcurt'].map((item) => {
+      <div className=" w-[150px] flex flex-col border-solid border-r-2 border-gray-300">
+        {Object.keys(SetMenuItem).map((item) => {
           return (
             <div
               key={item}
               onClick={() => {
                 set_select_item(item)
               }}
+              className={` rounded-sm text-sm font-bold font-sans flex flex-row items-center cursor-pointer p-2 ${item == select_item ? 'bg-gray-200' : ''} h-[50px]`}
             >
-              {appset.lang.getText(`set.menu.${item}`)}
+              <Icon className="w-[30px] h-[30px] mr-2" type={Icon_type[`${item}_set`]} svg></Icon>
+              <span> {appset.lang.getText(`set.menu.${item}`)}</span>
             </div>
           )
         })}
       </div>
       {/* right content */}
-      <div className="flex-grow">
-        <Form form={form} initialValues={appstore.cur_user.set as UserSetInfo}>
-          {select_item == 'normal' &&
+      <div className="flex-grow flex flex-col p-4">
+        <Form
+          form={form}
+          initialValues={appstore.cur_user.user_set as UserSetInfo}
+          onFieldsChange={async (changefield) => {
+            console.log('changefield', changefield)
+            // await onSave()
+          }}
+        >
+          {select_item == SetMenuItem.normal &&
             NormalSetFiledList.map((item) => {
               return (
-                <Form.Item key={item.field_name} label={item.label} name={item.field_name}>
+                <Form.Item
+                  key={item.field_name}
+                  label={appset.lang.getText(`set.menu.${item.field_name}`)}
+                  name={item.field_name}
+                >
                   <item.render></item.render>
                 </Form.Item>
               )
             })}
-          {select_item == 'shortcurt' &&
+          {(select_item == SetMenuItem.shortcut_global ||
+            select_item == SetMenuItem.shortcut_local) &&
             Object.keys(defaultUserSetInfo).map((key) => {
-              if (key.startsWith('shortcurt')) {
+              if (key.startsWith(select_item)) {
                 return (
-                  <Form.Item key={key} label={appset.lang.getText(`set.${key}`)} name={key}>
-                    <input type="text" />
+                  <Form.Item key={key} label={appset.lang.getText(`set.menu.${key}`)} name={key}>
+                    <ShortKeyInput
+                      onRemove={() => {
+                        form.setFieldsValue({ [key]: '' })
+                      }}
+                    ></ShortKeyInput>
                   </Form.Item>
                 )
               }
               return null
             })}
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={() => {
-                form.validateFields().then(async (values) => {
-                  appstore.cur_user.set = values
-                  await ipc_call<User>(webToManMsg.UpdateUser, appstore.cur_user)
-                    .then((res) => {
-                      appstore.SetUser(res)
-                    })
-                    .catch((e) => {
-                      messageApi.error(appset.lang.getText(`err.${e.code}`))
-                    })
-                })
-              }}
-            >
-              {appset.lang.getText('save')}
-            </Button>
-          </Form.Item>
         </Form>
       </div>
     </div>

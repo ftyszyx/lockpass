@@ -27,15 +27,13 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   const [show_addvalut, setShowAddValut] = useState(false)
 
   const menutree_info = useMemo(() => {
-    let menulist = cloneDeep(
-      getAllMenus({
-        CallEvent: async (event: string) => {
-          if (event === ValutAddEvent) {
-            setShowAddValut(true)
-          }
+    const menulist = getAllMenus({
+      CallEvent: async (event: string) => {
+        if (event === ValutAddEvent) {
+          setShowAddValut(true)
         }
-      })
-    )
+      }
+    })
     appstore.vaults.forEach((item) => {
       menulist.push({
         id: item.id,

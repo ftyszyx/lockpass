@@ -29,7 +29,9 @@ export default function Vault() {
   const [show_add_vault, set_show_add_vault] = useState(false)
   const [show_edit, set_show_edit] = useState(false)
   useEffect(() => {
-    form.resetFields()
+    if (select_vault_item) {
+      form.resetFields()
+    }
   }, [select_vault_item])
 
   return (

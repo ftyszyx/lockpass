@@ -1,7 +1,7 @@
 import { LastUserInfo, LoginInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { BaseService } from './base.service'
 import AppModel from '@main/models/app.model'
-import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
+import { ApiResp, ApiRespCode, defaultUserSetInfo } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
 
@@ -72,7 +72,7 @@ export class UserService extends BaseService<User> {
     }
     try {
       await DbHlper.instance().beginTransaction()
-      await super.AddOne({ username: info.username, set: '' } as User)
+      await super.AddOne({ username: info.username, user_set: '' } as User)
       const userinfo = await super.GetOne('username', info.username)
       AppModel.getInstance().myencode.Register(userinfo[0], info.password)
       DbHlper.instance().commitTransaction()
@@ -91,5 +91,13 @@ export class UserService extends BaseService<User> {
 
   public async UpdateUser(user: User): Promise<ApiResp<User>> {
     return await super.UpdateOne2(user, true)
+  }
+
+  override fixEntityPost(item: User) {
+    item.user_set = JSON.parse((item.user_set as string) || '{}') as Object
+    item.user_set = { ...defaultUserSetInfo, ...item.user_set }
+  }
+  override fiexEntityPre(entity: User): void {
+    entity.user_set = JSON.stringify(entity.user_set)
   }
 }

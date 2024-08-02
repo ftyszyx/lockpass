@@ -53,16 +53,13 @@ export const use_appstore = create<AppStore>((set, get) => {
     Login(info: User) {
       set((state) => {
         if (!state.cur_user) return state
-        const setinfo = state.cur_user.set as UserSetInfo
+        const setinfo = state.cur_user.user_set as UserSetInfo
         const lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
         return { ...state, cur_user: info, hasLogin: true, lock_timeout }
       })
     },
     SetUser(user: User) {
       set((state) => {
-        let setinfo = JSON.parse((user.set as string) || '{}') as UserSetInfo
-        setinfo = { ...defaultUserSetInfo, ...setinfo }
-        user.set = setinfo
         const res = { ...state, cur_user: user }
         return res
       })

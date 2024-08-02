@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5394473",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "9769182",
+      "name": "remove",
+      "font_class": "remove",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "13519489",
+      "name": "remove1",
+      "font_class": "remove1",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    },
+    {
+      "icon_id": "14863553",
+      "name": "set2",
+      "font_class": "set2",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "19451059",
+      "name": "shortcut",
+      "font_class": "shortcut",
+      "unicode": "eacd",
+      "unicode_decimal": 60109
+    },
+    {
+      "icon_id": "6360853",
+      "name": "edit",
+      "font_class": "edit",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
       "icon_id": "40379272",
       "name": "fold",
       "font_class": "fold",
@@ -53,13 +95,6 @@
       "font_class": "man",
       "unicode": "e61a",
       "unicode_decimal": 58906
-    },
-    {
-      "icon_id": "5428254",
-      "name": "add",
-      "font_class": "add",
-      "unicode": "e687",
-      "unicode_decimal": 59015
     },
     {
       "icon_id": "12243740",
