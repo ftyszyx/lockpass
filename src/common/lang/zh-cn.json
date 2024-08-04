@@ -88,9 +88,31 @@
   "input.label.card_number": "卡号",
   "input.label.note": "笔记",
 
+  "passwordType.random": "随机密码",
+  "passwordType.pin": "pin码",
+  "passwordType.memory": "易记忆密码",
+
   "icon": "图标",
   "name": "名字",
   "remarks": "备注",
+
+  "passwordSeparator.underline": "下划线",
+  "passwordSeparator.hyphen": "连字符",
+  "passwordSeparator.dot": "点",
+  "passwordSeparator.comma": "逗号",
+
+  "passwordGenPanel.random_characters_len": "随机密码长度",
+  "passwordGenPanel.random_number": "需要包含数字",
+  "passwordGenPanel.random_symbol": "需要包含符号",
+  "passwordGenPanel.random_capitalize": "需要包含大写字母",
+  "passwordGenPanel.memory_words_num": "单词个数",
+  "passwordGenPanel.memory_separator": "单词连接符",
+  "passwordGenPanel.memory_capitalize": "需要包含大写字母",
+  "passwordGenPanel.memory_word_full": "完整单词",
+  "passwordGenPanel.pin_code_num": "pin码长度",
+  "passwordGenPanel.password_type": "密码类型",
+
+  "menu.password_gen": "密码生成器",
 
   "ok": "确定",
   "edit": "编辑",
@@ -98,6 +120,10 @@
   "copy": "复制",
   "save": "保存",
   "cancel": "取消",
+  "use": "使用",
+  "refresh": "刷新",
+  "recover": "恢复",
+  "recover_default": "恢复默认",
   "save_success": "修改成功",
   "copy_success": "复制成功"
 }

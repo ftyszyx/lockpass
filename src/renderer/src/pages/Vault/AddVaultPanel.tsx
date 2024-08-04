@@ -1,5 +1,5 @@
 import { Vault } from '@common/entitys/vault.entity'
-import { Icon_type, ModalType, PasswordIconType } from '@common/gloabl'
+import { Icon_type, ModalType, VaultItemTypeIcon } from '@common/gloabl'
 import { Button, Form, Input, message, Modal, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import TextArea from 'antd/es/input/TextArea'
@@ -95,7 +95,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
             rules={[{ required: true, message: appset.lang.getText('addvault.input.icon') }]}
           >
             <Select>
-              {Object.keys(PasswordIconType).map((key) => {
+              {Object.keys(VaultItemTypeIcon).map((key) => {
                 return (
                   <Select.Option key={key} value={Icon_type[key]}>
                     <Icon type={Icon_type[key]} svg></Icon>

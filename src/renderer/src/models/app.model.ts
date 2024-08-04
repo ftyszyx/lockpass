@@ -18,6 +18,7 @@ export interface AppStore {
   HaveLogin: () => boolean
   user_list: User[]
   setUserList: (users: User[]) => void
+  GetUserSet: () => UserSetInfo
 
   lock_timeout: number
   IsLock: () => boolean
@@ -36,8 +37,15 @@ export const use_appstore = create<AppStore>((set, get) => {
     },
     vaults: [],
     vaut_items: [],
+    GetUserSet() {
+      if (!get().cur_user) return defaultUserSetInfo
+      return get().cur_user.user_set as UserSetInfo
+    },
     //user
     IsLock() {
+      if (!get().cur_user) return false
+      const setinfo = get().cur_user.user_set as UserSetInfo
+      if (setinfo.normal_autolock_time == 0) return false
       const cuttime = new Date().getTime() / 1000
       return get().lock_timeout < cuttime
     },
@@ -55,12 +63,15 @@ export const use_appstore = create<AppStore>((set, get) => {
         if (!state.cur_user) return state
         const setinfo = state.cur_user.user_set as UserSetInfo
         const lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
-        return { ...state, cur_user: info, hasLogin: true, lock_timeout }
+        const res = { ...state, cur_user: info, hasLogin: true, lock_timeout }
+        console.log('login', res)
+        return res
       })
     },
     SetUser(user: User) {
       set((state) => {
         const res = { ...state, cur_user: user }
+        console.log('set user', res)
         return res
       })
     },

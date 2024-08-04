@@ -33,7 +33,10 @@ export default function AdminSet() {
         })
     })
   }
-  ConsoleLog.LogInfo('AdminSet render', appstore.cur_user)
+  // useEffect(() => {
+  //   form.resetFields()
+  // }, [select_item])
+  ConsoleLog.LogInfo('AdminSet render', appstore.cur_user.user_set)
 
   return (
     <div className=" flex flex-row h-full">
@@ -60,9 +63,10 @@ export default function AdminSet() {
         <Form
           form={form}
           initialValues={appstore.cur_user.user_set as UserSetInfo}
-          onFieldsChange={async (changefield) => {
-            console.log('changefield', changefield)
-            // await onSave()
+          onFieldsChange={async () => {
+            if (select_item == SetMenuItem.normal) {
+              await onSave()
+            }
           }}
         >
           {select_item == SetMenuItem.normal &&
@@ -81,18 +85,40 @@ export default function AdminSet() {
             select_item == SetMenuItem.shortcut_local) &&
             Object.keys(defaultUserSetInfo).map((key) => {
               if (key.startsWith(select_item)) {
+                console.log('key', key)
                 return (
                   <Form.Item key={key} label={appset.lang.getText(`set.menu.${key}`)} name={key}>
-                    <ShortKeyInput
-                      onRemove={() => {
-                        form.setFieldsValue({ [key]: '' })
-                      }}
-                    ></ShortKeyInput>
+                    <ShortKeyInput></ShortKeyInput>
                   </Form.Item>
                 )
               }
               return null
             })}
+          {/* save button */}
+          {(select_item == SetMenuItem.shortcut_global ||
+            select_item == SetMenuItem.shortcut_local) && (
+            <Form.Item>
+              <div className=" flex flex-row-reverse">
+                <Button onClick={onSave} type="primary" htmlType="submit" className="">
+                  {appset.lang.getText('save')}
+                </Button>
+                <Button
+                  className="mr-3"
+                  onClick={() => {
+                    Object.keys(defaultUserSetInfo).map((key) => {
+                      if (key.startsWith(select_item)) {
+                        const setvalue = { [key]: defaultUserSetInfo[key] }
+                        console.log('set ', setvalue)
+                        form.setFieldsValue(setvalue)
+                      }
+                    })
+                  }}
+                >
+                  {appset.lang.getText('recover_default')}
+                </Button>
+              </div>
+            </Form.Item>
+          )}
         </Form>
       </div>
     </div>

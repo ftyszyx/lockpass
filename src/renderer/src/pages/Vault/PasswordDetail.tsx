@@ -1,16 +1,16 @@
-import { ModalType, PasswordIconType, PasswordType } from '@common/gloabl'
+import { ModalType, VaultItemTypeIcon, VaultItemType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import IconSelect from '@renderer/components/IconSelect'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { FieldInfo } from '@renderer/entitys/form.entity'
-import { PasswordFileListDic } from '@renderer/entitys/password.entity'
+import { PasswordFileListDic } from '@renderer/entitys/VaultItem.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { Button, Form, Input, Select } from 'antd'
+import { Form, Input } from 'antd'
 import TextArea, { TextAreaProps } from 'antd/es/input/TextArea'
 
 interface props {
-  passwordType: PasswordType
+  passwordType: VaultItemType
   modal_type: ModalType
   className?: string
   InputClassName?: string
@@ -25,10 +25,10 @@ export default function PaswordDetail(props: props) {
         <Form.Item name="icon">
           <IconSelect
             show_type={props.modal_type}
-            items={Object.keys(PasswordIconType).map((key) => {
+            items={Object.keys(VaultItemTypeIcon).map((key) => {
               return {
-                value: PasswordIconType[key],
-                label: <Icon type={PasswordIconType[key]} className=" w-[50px] h-[50px]" svg />
+                value: VaultItemTypeIcon[key],
+                label: <Icon type={VaultItemTypeIcon[key]} className=" w-[50px] h-[50px]" svg />
               }
             })}
           ></IconSelect>

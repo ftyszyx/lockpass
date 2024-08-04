@@ -1,5 +1,5 @@
 import { VaultItem } from '@common/entitys/vault_item.entity'
-import { ModalType, PasswordIconType, PasswordType } from '@common/gloabl'
+import { ModalType, VaultItemTypeIcon, VaultItemType } from '@common/gloabl'
 import { Form, Input, message, Modal, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useState } from 'react'
@@ -23,7 +23,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [show_password_type, set_show_password_type] = useState(true)
-  const [select_type, set_select_type] = useState(PasswordType.Login)
+  const [select_type, set_select_type] = useState(VaultItemType.Login)
   const [show_info, set_show_info] = useState(false)
   const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
@@ -94,7 +94,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
             initialValues={
               props.init_info ||
               ({
-                icon: PasswordIconType[`icon_${select_type}`],
+                icon: VaultItemTypeIcon[`icon_${select_type}`],
                 name: appset.lang.getText(`password_name_${select_type}`)
               } as VaultItem)
             }

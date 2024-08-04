@@ -24,7 +24,7 @@ function BaseLayout(props: ChildProps): JSX.Element {
   useEffect(() => {
     const timer = setInterval(() => {
       if (appstoreRef.current.IsLock()) {
-        // history.push(PagePath.Lock)
+        history.push(PagePath.Lock)
       }
     }, 1000)
     return () => {

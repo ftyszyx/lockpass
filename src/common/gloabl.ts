@@ -18,7 +18,7 @@ export function createInstance<T>(type: new (...args: any[]) => T, ...args: any[
   return new type(...args)
 }
 
-export enum PasswordIconType {
+export enum VaultItemTypeIcon {
   icon_money = 'icon-money',
   icon_document = 'icon-document',
   icon_note = 'icon-note',
@@ -71,10 +71,11 @@ export enum Icon_type {
   icon_type2 = 'icon-type2',
   icon_rank = 'icon-rank',
   icon_del = 'icon-delete',
-  icon_fold = 'icon-fold'
+  icon_fold = 'icon-fold',
+  icon_refresh = 'icon-refresh'
 }
 
-export enum PasswordType {
+export enum VaultItemType {
   Login = 'login',
   Card = 'card',
   NoteBook = 'note'
@@ -114,4 +115,12 @@ export enum ConsoleColor {
   BgCyan = '\x1b[46m',
   BgWhite = '\x1b[47m',
   BgGray = '\x1b[100m'
+}
+
+export enum ControlKey {
+  Control = 'ctrl',
+  Shift = 'shift',
+  Alt = 'alt',
+  Meta = 'meta',
+  Space = 'space'
 }

@@ -1,19 +1,20 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Dropdown, Menu as MenuAntd } from 'antd'
+import { Button, Dropdown, Menu as MenuAntd, Modal } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/Icon'
-import { cloneDeep } from 'lodash'
 import { pathToRegexp, Key } from 'path-to-regexp'
 import { MyMenuType, getAllMenus, MenuValutID, ValutAddEvent } from '@renderer/entitys/menu.entity'
 import { Link, useHistory } from '@renderer/libs/router'
 import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { PagePath } from '@common/entitys/page.entity'
-import { Icon_type, ModalType, SYS_TEM_NAME } from '@common/gloabl'
+import { Icon_type, ModalType } from '@common/gloabl'
 import AddValutPanel from '@renderer/pages/Vault/AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
+import { set } from 'lodash'
 interface MenuProps {
   className?: string
 }
@@ -22,6 +23,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   const location = useHistory()
   const appstore = use_appstore() as AppStore
   const appset = use_appset() as AppsetStore
+  const [showPasswordGen, setShowPasswordGen] = useState(false)
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 当前需要被展开的项
   const [show_addvalut, setShowAddValut] = useState(false)
@@ -85,34 +87,33 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   return (
     <>
       <div className={`${props.className} bg-slate-800 ${appset.fold_menu ? 'hidden' : 'w-60'}`}>
-        <div>
-          <Link
-            to={PagePath.Home}
-            className={appset.fold_menu ? ' hidden' : ' flex h-full items-center'}
-          >
-            <div className=" text-white w-full m-4 text-lg">{SYS_TEM_NAME}</div>
-          </Link>
-        </div>
-        {/* user settings */}
-        <Dropdown
-          menu={{
-            onClick: () => {},
-            items: [
-              {
-                key: 'settings',
-                label: 'Settings'
-              }
-            ]
-          }}
-        >
-          <div className=" text-white text-lg flex flex-row justify-between m-2 items-center">
-            <div className="flex flex-row items-center">
-              <Icon type={Icon_type.icon_user} className="text-[40px] mr-2" />
-              {appstore.cur_user?.username}
-            </div>
-            <DownOutlined className=" text-sm" />
+        <div className="flex flex-row justify-between p-1">
+          <div className="flex flex-row items-center text-white">
+            <Link to={PagePath.Home}>
+              <Icon type={Icon_type.icon_user} className="text-[30px] mr-2 " />
+            </Link>
+            {appstore.cur_user?.username}
           </div>
-        </Dropdown>
+          <Dropdown
+            menu={{
+              onClick: (item) => {
+                if (item.key === 'password_gen') {
+                  setShowPasswordGen(true)
+                }
+              },
+              items: [
+                {
+                  key: 'password_gen',
+                  label: appset.lang.getText('menu.password_gen')
+                }
+              ]
+            }}
+          >
+            <div className=" text-white text-lg flex flex-row justify-between m-2 items-center">
+              <DownOutlined className=" text-sm" />
+            </div>
+          </Dropdown>
+        </div>
         <MenuAntd
           theme="dark"
           mode="inline"
@@ -138,13 +139,23 @@ export default function MyMenu(props: MenuProps): JSX.Element {
           show_type={ModalType.Add}
           show_del={false}
           onAddOk={async () => {
-            await appstore.FetchAllValuts()
             setShowAddValut(false)
           }}
           onClose={() => {
             setShowAddValut(false)
           }}
         />
+      )}
+      {showPasswordGen && (
+        <PasswordGenPanel
+          show={showPasswordGen}
+          onClose={() => {
+            setShowPasswordGen(false)
+          }}
+          onOk={() => {
+            setShowPasswordGen(false)
+          }}
+        ></PasswordGenPanel>
       )}
     </>
   )

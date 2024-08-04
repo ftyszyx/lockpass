@@ -7,7 +7,7 @@ import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, message, Popconfirm } from 'antd'
 import { useEffect, useState } from 'react'
 import Icon from '@renderer/components/Icon'
-import { Icon_type, ModalType, PasswordType } from '@common/gloabl'
+import { Icon_type, ModalType, VaultItemType } from '@common/gloabl'
 import AddPasswordPanel from './AddPasswordPanel'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -48,7 +48,7 @@ export default function Vault() {
             }}
           ></Icon>
           <Input
-            placeholder={appset.lang.getText('vault.global_search', appstore.cur_user.username)}
+            placeholder={appset.lang.getText('vault.global_search', appstore.cur_user?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
               if (newvalue.target.value) {
@@ -95,7 +95,7 @@ export default function Vault() {
                   layout="vertical"
                 >
                   <PaswordDetail
-                    passwordType={select_vault_item.passwordType as PasswordType}
+                    passwordType={select_vault_item.passwordType as VaultItemType}
                     modal_type={show_edit ? ModalType.Edit : ModalType.View}
                   ></PaswordDetail>
                   <div className=" flex flex-row-reverse mt-2">

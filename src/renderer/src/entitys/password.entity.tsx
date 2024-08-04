@@ -1,148 +1,86 @@
-import { Input } from 'antd'
-import { FieldInfo, FiledProps } from './form.entity'
-import InputArr from '@renderer/components/InputArr'
-import { ModalType, PasswordType } from '@common/gloabl'
+import { InputNumber, Select, Slider, Switch } from 'antd'
+import { FieldInfo } from './form.entity'
 import { LangHelper } from '@common/lang'
-import MyInputWrapper from '@renderer/components/MyInputWrapper'
-import { TextAreaProps } from 'antd/es/input'
+import { PasswordSeparatorType } from '@common/entitys/password.entity'
 
-export interface LoginPasswordInfo {
-  username: string
-  password: string
-  urls: string[]
-}
-
-export interface CardPasswordInfo {
-  card_company: string
-  card_number: string
-  card_password: string
-}
-
-export interface NoteTextPasswordInfo {
-  note_text: string
-}
-
-export const LoginPasswordFieldList: FieldInfo[] = [
+export const PasswordTypeFileList: FieldInfo[] = [
   {
-    field_name: 'username',
-    render: (props) => {
+    field_name: 'random_characters_len',
+    render(props: any) {
       return (
-        <MyInputWrapper
-          inputProps={{
-            placeholder: LangHelper.getString('input.placeholder.username')
-          }}
-          inputElement={Input}
-          show_type={props.show_type}
-          {...props}
-        />
+        <div className="flex flex-row">
+          <Slider min={8} max={50} {...props} className="flex-grow"></Slider>
+          <InputNumber min={8} max={50} {...props} size="small" className="w-[60px]"></InputNumber>
+        </div>
       )
-    },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.username') }],
-    label: LangHelper.getString('input.label.username')
+    }
   },
   {
-    field_name: 'password',
-    render: (props) => {
-      return (
-        <MyInputWrapper
-          inputProps={{
-            placeholder: LangHelper.getString('input.placeholder.password')
-          }}
-          inputElement={Input.Password}
-          show_type={props.show_type}
-          is_password
-          {...props}
-        />
-      )
-    },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.password') }],
-    label: LangHelper.getString('input.label.password')
+    field_name: 'random_number',
+    render() {
+      return <Switch></Switch>
+    }
   },
   {
-    field_name: 'urls',
-    render: (props) => {
+    field_name: 'random_symbol',
+    render() {
+      return <Switch></Switch>
+    }
+  },
+  {
+    field_name: 'random_capitalize',
+    render() {
+      return <Switch></Switch>
+    }
+  },
+  {
+    field_name: 'memory_words_num',
+    render(props: any) {
       return (
-        <InputArr
-          readonly={props.show_type == ModalType.View}
-          label={LangHelper.getString('input.label.url')}
-          placeholder={LangHelper.getString('input.placeholder.url')}
-          show_type={props.show_type}
-          {...props}
-        ></InputArr>
+        <div className="flex flex-row">
+          <Slider min={3} max={15} {...props} className="flex-grow"></Slider>
+          <InputNumber min={3} max={15} {...props} size="small" className="w-[60px]"></InputNumber>
+        </div>
+      )
+    }
+  },
+  {
+    field_name: 'memory_capitalize',
+    render() {
+      return <Switch></Switch>
+    }
+  },
+  {
+    field_name: 'memory_word_full',
+    render() {
+      return <Switch></Switch>
+    }
+  },
+  {
+    field_name: 'memory_separator',
+    render() {
+      return (
+        <Select>
+          {Object.keys(PasswordSeparatorType).map((key) => {
+            return (
+              <Select.Option value={PasswordSeparatorType[key]} key={key}>
+                {LangHelper.getString(`passwordSeparator.${key}`)}
+              </Select.Option>
+            )
+          })}
+        </Select>
+      )
+    }
+  },
+  {
+    field_name: 'pin_code_num',
+    render(props: any) {
+      return (
+        <div className="flex flex-row">
+          <Slider min={3} max={12} {...props} className="flex-grow"></Slider>
+          <InputNumber min={3} max={12} {...props} size="small" className="w-[60px]"></InputNumber>
+        </div>
       )
     }
   }
 ]
-
-export const CardPasswordFieldList: FieldInfo[] = [
-  {
-    field_name: 'card_company',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper
-          inputProps={{
-            placeholder: LangHelper.getString('input.placeholder.bank')
-          }}
-          inputElement={Input}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
-    },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.bank') }],
-    label: LangHelper.getString('input.label.bank')
-  },
-  {
-    field_name: 'card_number',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper
-          inputProps={{ placeholder: LangHelper.getString('input.placeholder.card_number') }}
-          inputElement={Input}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
-    },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.card_number') }],
-    label: LangHelper.getString('input.label.card_number')
-  },
-  {
-    field_name: 'card_password',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper
-          inputProps={{ placeholder: LangHelper.getString('input.placeholder.password') }}
-          inputElement={Input.Password}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
-    },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.password') }],
-    label: LangHelper.getString('input.label.password')
-  }
-]
-
-export const NotePasswordFieldList: FieldInfo[] = [
-  {
-    field_name: 'note_text',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper<TextAreaProps>
-          inputProps={{ autoSize: { minRows: 9 } }}
-          inputElement={Input.TextArea}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
-    },
-    label: LangHelper.getString('input.label.note')
-  }
-]
-
-export const PasswordFileListDic: Record<PasswordType, FieldInfo[]> = {
-  [PasswordType.Login]: LoginPasswordFieldList,
-  [PasswordType.Card]: CardPasswordFieldList,
-  [PasswordType.NoteBook]: NotePasswordFieldList
-}

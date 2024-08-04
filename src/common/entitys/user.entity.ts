@@ -1,5 +1,6 @@
 import { Column, Entity } from '@common/decorator/db.decorator'
 import { BaseEntity } from './db.entity'
+import { UserSetInfo } from './app.entity'
 
 export interface RegisterInfo {
   username: string
@@ -29,5 +30,5 @@ export class User extends BaseEntity {
   @Column({ type: 'VARCHAR', unique_index: false, index_name: 'nickname_index' })
   nickname: string
   @Column({ type: 'VARCHAR' })
-  user_set: string | object
+  user_set: string | UserSetInfo
 }

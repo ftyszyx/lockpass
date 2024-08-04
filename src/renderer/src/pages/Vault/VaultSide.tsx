@@ -5,7 +5,7 @@ date:2024/07/31 17:08:51
 */
 
 import { VaultItem } from '@common/entitys/vault_item.entity'
-import { Icon_type, PasswordType } from '@common/gloabl'
+import { Icon_type, VaultItemType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import { useRouterStore } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
@@ -89,8 +89,8 @@ export default function VaultSide(props: VaultSideProps) {
               <div>所有类别</div>
             </div>
           </Select.Option>
-          {Object.keys(PasswordType).map((key) => {
-            const type_value = PasswordType[key]
+          {Object.keys(VaultItemType).map((key) => {
+            const type_value = VaultItemType[key]
             return (
               <Select.Option key={key} value={type_value}>
                 <div className="flex flex-row items-center space-x-1 w-[80px]">

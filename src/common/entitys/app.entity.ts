@@ -1,3 +1,5 @@
+import { DefaultPasswordTypeConf, GenPasswordType, PasswordTypeInfo } from './password.entity'
+
 export interface ApiResp<T> {
   code: ApiRespCode // 状态，200成功
   data?: T // 返回的数据
@@ -28,6 +30,8 @@ export interface UserSetInfo {
   shortcut_global_quick_lock: string //全局快捷键，快速锁定
   shortcut_local_view_shortcut: string //本地快捷键，查看快捷键
   shortcut_local_find: string //本地快捷键，查找
+  password_type: GenPasswordType //密码生成类型
+  password_type_conf: PasswordTypeInfo //密码生成配置
 }
 
 export const defaultUserSetInfo: UserSetInfo = {
@@ -36,5 +40,7 @@ export const defaultUserSetInfo: UserSetInfo = {
   shortcut_global_quick_find: 'ctrl+shift+space',
   shortcut_global_quick_lock: 'ctrl+shift+l',
   shortcut_local_find: 'ctrl+f',
-  shortcut_local_view_shortcut: 'ctrl+/'
+  shortcut_local_view_shortcut: 'ctrl+/',
+  password_type: GenPasswordType.random,
+  password_type_conf: DefaultPasswordTypeConf
 }
