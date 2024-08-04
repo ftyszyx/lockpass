@@ -1,6 +1,6 @@
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { ModalType, VaultItemTypeIcon, VaultItemType } from '@common/gloabl'
-import { Form, Input, message, Modal, Select } from 'antd'
+import { Form, message, Modal } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useState } from 'react'
 import SelectPasswordTypePanel from './SelectPasswordTypePanel'

@@ -1,17 +1,15 @@
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
-import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { User } from '@common/entitys/user.entity'
 import { Icon_type } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import ShortKeyInput from '@renderer/components/ShortKeyInput'
 import { NormalSetFiledList, SetMenuItem } from '@renderer/entitys/set.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { ipc_call } from '@renderer/libs/tools/other'
+import { ChangeAppset } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { Form, Button, message, Input } from 'antd'
+import { Form, Button, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function AdminSet() {
   const [form] = useForm<UserSetInfo>(null)
@@ -22,15 +20,8 @@ export default function AdminSet() {
   const onSave = () => {
     form.validateFields().then(async (values) => {
       const setinfo = appstore.cur_user.user_set as UserSetInfo
-      appstore.cur_user.user_set = { ...setinfo, ...values }
-      await ipc_call<User>(webToManMsg.UpdateUser, appstore.cur_user)
-        .then((res) => {
-          appstore.SetUser(res)
-          messageApi.success(appset.lang.getText('save_success'))
-        })
-        .catch((e) => {
-          messageApi.error(appset.lang.getText(`err.${e.code}`))
-        })
+      const newset = { ...setinfo, ...values }
+      await ChangeAppset(appstore, appset, newset, messageApi)
     })
   }
   // useEffect(() => {

@@ -3,7 +3,7 @@ desc: short key input component
 © 2024 zyx
 date:2024/08/02 17:42:05
 */
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Icon from './Icon'
 import { ControlKey as CONTROL_KEY_MAP, Icon_type } from '@common/gloabl'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'

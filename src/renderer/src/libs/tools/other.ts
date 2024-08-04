@@ -1,4 +1,4 @@
-import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
+import { ApiResp, ApiRespCode, UserSetInfo } from '@common/entitys/app.entity'
 import { ConsoleLog } from '../Console'
 import { AppStore } from '@renderer/models/app.model'
 import { MessageInstance } from 'antd/es/message/interface'
@@ -8,6 +8,7 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { LangItem } from '@common/lang'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { User } from '@common/entitys/user.entity'
+import { AppsetStore } from '@renderer/models/appset.model'
 
 export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
   try {
@@ -69,4 +70,21 @@ export async function getAllVaultItem(
         messageApi.error(lang.getText(`err.${e.code}`))
       })
   }
+}
+
+export async function ChangeAppset(
+  appstore: AppStore,
+  appset: AppsetStore,
+  setinfo: UserSetInfo,
+  messageApi: MessageInstance
+) {
+  const newuserinfo = { ...appstore.cur_user, user_set: setinfo }
+  await ipc_call<User>(webToManMsg.UpdateUser, newuserinfo)
+    .then((res) => {
+      appstore.SetUser(res)
+      messageApi.success(appset.lang.getText('save_success'))
+    })
+    .catch((e) => {
+      messageApi.error(appset.lang.getText(`err.${e.code}`))
+    })
 }
