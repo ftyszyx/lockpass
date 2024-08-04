@@ -122,7 +122,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
   return (
     <>
       {contextHolder}
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-1">
         <div>
           <Input value={value}></Input>
         </div>
@@ -130,7 +130,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
           <div> {appset.lang.getText('passwordGenPanel.password_type')}</div>
           <div className="">
             <Select
-              className="w-[200px]"
+              className="w-[100px]"
               value={password_type}
               onChange={(value) => set_password_type(value)}
             >
@@ -159,6 +159,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
                   <Form.Item
                     layout="horizontal"
                     name={item.field_name}
+                    className="mb-1"
                     key={item.field_name}
                     label={appset.lang.getText(`passwordGenPanel.${item.field_name}`)}
                   >

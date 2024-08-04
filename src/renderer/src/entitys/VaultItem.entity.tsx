@@ -2,7 +2,7 @@ import { Input } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
 import { ModalType, VaultItemType } from '@common/gloabl'
-import { LangHelper } from '@common/lang'
+import { LangHelper, LangItem } from '@common/lang'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { TextAreaProps } from 'antd/es/input'
 
@@ -22,127 +22,101 @@ export interface NoteTextPasswordInfo {
   note_text: string
 }
 
-export const LoginPasswordFieldList: FieldInfo[] = [
-  {
-    field_name: 'username',
-    render: (props) => {
-      return (
-        <MyInputWrapper
-          inputProps={{
-            placeholder: LangHelper.getString('input.placeholder.username')
-          }}
-          inputElement={Input}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
+export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
+  return [
+    {
+      field_name: 'username',
+      render: (props) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      },
+      edit_rules: [{ required: true, message: lang.getText('input.rule.username') }]
     },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.username') }],
-    label: LangHelper.getString('input.label.username')
-  },
-  {
-    field_name: 'password',
-    render: (props) => {
-      return (
-        <MyInputWrapper
-          inputProps={{
-            placeholder: LangHelper.getString('input.placeholder.password')
-          }}
-          inputElement={Input.Password}
-          show_type={props.show_type}
-          is_password
-          {...props}
-        />
-      )
+    {
+      field_name: 'password',
+      render: (props) => {
+        return (
+          <MyInputWrapper
+            inputElement={Input.Password}
+            show_type={props.show_type}
+            is_password
+            {...props}
+          />
+        )
+      },
+      edit_rules: [{ required: true, message: lang.getText('input.rule.password') }]
     },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.password') }],
-    label: LangHelper.getString('input.label.password')
-  },
-  {
-    field_name: 'urls',
-    render: (props) => {
-      return (
-        <InputArr
-          readonly={props.show_type == ModalType.View}
-          label={LangHelper.getString('input.label.url')}
-          placeholder={LangHelper.getString('input.placeholder.url')}
-          show_type={props.show_type}
-          {...props}
-        ></InputArr>
-      )
+    {
+      field_name: 'urls',
+      hide_label: true,
+      render: (props) => {
+        return (
+          <InputArr
+            readonly={props.show_type == ModalType.View}
+            label={lang.getText('vaultitem.label.url')}
+            show_type={props.show_type}
+            {...props}
+          ></InputArr>
+        )
+      }
     }
-  }
-]
+  ]
+}
 
-export const CardPasswordFieldList: FieldInfo[] = [
-  {
-    field_name: 'card_company',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper
-          inputProps={{
-            placeholder: LangHelper.getString('input.placeholder.bank')
-          }}
-          inputElement={Input}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
+export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
+  return [
+    {
+      field_name: 'card_company',
+      render: (props: FiledProps) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      },
+      edit_rules: [{ required: true, message: lang.getText('input.rule.bank') }]
     },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.bank') }],
-    label: LangHelper.getString('input.label.bank')
-  },
-  {
-    field_name: 'card_number',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper
-          inputProps={{ placeholder: LangHelper.getString('input.placeholder.card_number') }}
-          inputElement={Input}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
+    {
+      field_name: 'card_number',
+      render: (props: FiledProps) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      },
+      edit_rules: [{ required: true, message: lang.getText('input.rule.card_number') }]
     },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.card_number') }],
-    label: LangHelper.getString('input.label.card_number')
-  },
-  {
-    field_name: 'card_password',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper
-          inputProps={{ placeholder: LangHelper.getString('input.placeholder.password') }}
-          inputElement={Input.Password}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
-    },
-    edit_rules: [{ required: true, message: LangHelper.getString('input.rule.password') }],
-    label: LangHelper.getString('input.label.password')
-  }
-]
+    {
+      field_name: 'card_password',
+      render: (props: FiledProps) => {
+        return (
+          <MyInputWrapper inputElement={Input.Password} show_type={props.show_type} {...props} />
+        )
+      },
+      edit_rules: [{ required: true, message: lang.getText('input.rule.password') }]
+    }
+  ]
+}
 
-export const NotePasswordFieldList: FieldInfo[] = [
-  {
-    field_name: 'note_text',
-    render: (props: FiledProps) => {
-      return (
-        <MyInputWrapper<TextAreaProps>
-          inputProps={{ autoSize: { minRows: 9 } }}
-          inputElement={Input.TextArea}
-          show_type={props.show_type}
-          {...props}
-        />
-      )
-    },
-    label: LangHelper.getString('input.label.note')
-  }
-]
+export function NotePasswordFieldList(lang: LangItem): FieldInfo[] {
+  return [
+    {
+      field_name: 'note_text',
+      render: (props: FiledProps) => {
+        return (
+          <MyInputWrapper<TextAreaProps>
+            inputProps={{ autoSize: { minRows: 9 } }}
+            inputElement={Input.TextArea}
+            show_type={props.show_type}
+            {...props}
+          />
+        )
+      }
+    }
+  ]
+}
 
-export const PasswordFileListDic: Record<VaultItemType, FieldInfo[]> = {
-  [VaultItemType.Login]: LoginPasswordFieldList,
-  [VaultItemType.Card]: CardPasswordFieldList,
-  [VaultItemType.NoteBook]: NotePasswordFieldList
+export const GetPasswordFilelist = (type: VaultItemType, lang: LangItem): FieldInfo[] => {
+  switch (type) {
+    case VaultItemType.Login:
+      return LoginPasswordFieldList(lang)
+    case VaultItemType.Card:
+      return CardPasswordFieldList(lang)
+    case VaultItemType.NoteBook:
+      return NotePasswordFieldList(lang)
+    default:
+      return []
+  }
 }

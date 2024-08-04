@@ -13,6 +13,7 @@ interface PasswordGenPanelProps {
   show: boolean
   calssName?: string
   showUse?: boolean
+  style: React.CSSProperties
   onOk: (value: string) => void
   onClose: () => void
 }
@@ -24,7 +25,11 @@ export default function PasswordGenPanel(props: PasswordGenPanelProps): JSX.Elem
     <Modal
       className={props.calssName ? props.calssName : ''}
       open={props.show}
+      style={props.style}
       closable={false}
+      onCancel={() => {
+        props.onClose()
+      }}
       footer={null}
       title={
         <div className="flex flex-row justify-between">
@@ -40,7 +45,7 @@ export default function PasswordGenPanel(props: PasswordGenPanelProps): JSX.Elem
               passwordContenRef.current.ReFresh()
             }}
             type={Icon_type.icon_refresh}
-            className="text-[20px]"
+            className="text-[20px] cursor-pointer"
             svg
           ></Icon>
           {props.showUse && (

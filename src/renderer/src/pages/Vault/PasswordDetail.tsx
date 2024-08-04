@@ -3,7 +3,7 @@ import Icon from '@renderer/components/Icon'
 import IconSelect from '@renderer/components/IconSelect'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { FieldInfo } from '@renderer/entitys/form.entity'
-import { PasswordFileListDic } from '@renderer/entitys/VaultItem.entity'
+import { GetPasswordFilelist, PasswordFileListDic } from '@renderer/entitys/VaultItem.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Form, Input } from 'antd'
@@ -42,20 +42,22 @@ export default function PaswordDetail(props: props) {
         </Form.Item>
       </div>
       <div>
-        {PasswordFileListDic[props.passwordType].map((item: FieldInfo) => {
+        {GetPasswordFilelist(props.passwordType, appset.lang).map((item: FieldInfo) => {
+          console.log('item', item)
           return (
             <Form.Item
-              labelCol={{
-                style: { marginBottom: '0px', marginTop: '0px', padding: '0px' }
-              }}
-              wrapperCol={{ style: { marginTop: '0px', padding: '3px' } }}
-              className=" mb-2  group"
+              className=" mb-2  "
               name={['info', item.field_name]}
-              label={item.label}
+              label={
+                item.hide_label ? '' : appset.lang.getText(`vaultitem.label.${item.field_name}`)
+              }
               rules={item.edit_rules}
               key={item.field_name}
             >
-              <item.render show_type={props.modal_type}></item.render>
+              <item.render
+                show_type={props.modal_type}
+                placeholder={appset.lang.getText(`vaultitem.placeholder.${item.field_name}`)}
+              ></item.render>
             </Form.Item>
           )
         })}

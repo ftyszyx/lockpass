@@ -4,13 +4,16 @@ import { Button, InputRef, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import Icon from './Icon'
 import { PasswordGenContent, PasswordGenContentRef } from '@renderer/pages/Vault/PasswordGenContent'
+import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
 
 interface MyInputProps<InputPropsT> {
   value?: any
   onChange?: (value: any) => void
   show_type?: ModalType
+  hide_label?: boolean
   className?: string
   inputProps?: InputPropsT
+  placeholder?: string
   inputElement: React.ElementType
   is_password?: boolean
 }
@@ -23,6 +26,7 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
   const inputRef = useRef<InputRef>(null)
   const [passwordValue, setPasswordValue] = useState<string>('')
   const passwordContenRef = useRef<PasswordGenContentRef>(null)
+  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   console.log('show type', props.show_type, props.is_password)
   const isedit = props.show_type == ModalType.Edit || props.show_type == ModalType.Add
   const getPasswordVisible = () => {
@@ -31,6 +35,17 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
       visibilityToggle: { visible: showPassword, onVisibleChange: setShowPassword }
     }
   }
+  useEffect(() => {
+    if (showPasswordGen && inputRef.current) {
+      const inputElement = inputRef.current.input
+      if (inputElement) {
+        const rect = inputElement.getBoundingClientRect()
+        console.log('rect', rect)
+        setModalPosition({ top: rect.y + rect.height + 10, left: rect.x })
+        console.log('setModalPosition', modalPosition)
+      }
+    }
+  }, [showPasswordGen])
   useEffect(() => {
     function handleFocus() {
       if (isedit && props.is_password) {
@@ -77,41 +92,19 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
         readOnly={props.show_type == ModalType.View}
       ></props.inputElement>
       {showPasswordGen && (
-        <div className=" absolute top-[40px] z-10 bg-white p-4 space-y-1 w-[300px] ">
-          <div className="flex flex-row justify-between">
-            <Button
-              onClick={() => {
-                setShowPasswordGen(false)
-              }}
-            >
-              {appset.lang.getText('cancel')}
-            </Button>
-            <Icon
-              onClick={() => {
-                passwordContenRef.current.ReFresh()
-              }}
-              type={Icon_type.icon_refresh}
-              className="text-[20px]"
-              svg
-            ></Icon>
-            <Button
-              type="primary"
-              onClick={async () => {
-                await passwordContenRef.current.UpdateSet()
-                props.onChange(passwordValue)
-                setShowPasswordGen(false)
-              }}
-            >
-              {appset.lang.getText('use')}
-            </Button>
-          </div>
-          <PasswordGenContent
-            onChange={(newvalue) => {
-              setPasswordValue(newvalue)
-            }}
-            ref={passwordContenRef}
-          ></PasswordGenContent>
-        </div>
+        <PasswordGenPanel
+          show={showPasswordGen}
+          showUse={true}
+          calssName="fixed  w-[300px]"
+          style={{ top: modalPosition.top, left: modalPosition.left }}
+          onOk={(value) => {
+            props.onChange(value)
+            setShowPasswordGen(false)
+          }}
+          onClose={() => {
+            setShowPasswordGen(false)
+          }}
+        />
       )}
       {props.show_type == ModalType.View && (
         <div className=" z-10 absolute w-full h-full left-0 right-0 top-0 bottom-0 flex flex-row items-center">
