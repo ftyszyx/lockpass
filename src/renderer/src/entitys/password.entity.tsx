@@ -8,7 +8,7 @@ export const PasswordTypeFileList: FieldInfo[] = [
     field_name: 'random_characters_len',
     render(props: any) {
       return (
-        <div className="flex flex-row">
+        <div className="flex flex-row space-x-2">
           <Slider min={8} max={50} {...props} className="flex-grow"></Slider>
           <InputNumber min={8} max={50} {...props} size="small" className="w-[60px]"></InputNumber>
         </div>
@@ -17,27 +17,27 @@ export const PasswordTypeFileList: FieldInfo[] = [
   },
   {
     field_name: 'random_number',
-    render() {
-      return <Switch></Switch>
+    render(props: any) {
+      return <Switch {...props}></Switch>
     }
   },
   {
     field_name: 'random_symbol',
-    render() {
-      return <Switch></Switch>
+    render(props: any) {
+      return <Switch {...props}></Switch>
     }
   },
   {
     field_name: 'random_capitalize',
-    render() {
-      return <Switch></Switch>
+    render(props: any) {
+      return <Switch {...props}></Switch>
     }
   },
   {
     field_name: 'memory_words_num',
     render(props: any) {
       return (
-        <div className="flex flex-row">
+        <div className="flex flex-row space-x-2">
           <Slider min={3} max={15} {...props} className="flex-grow"></Slider>
           <InputNumber min={3} max={15} {...props} size="small" className="w-[60px]"></InputNumber>
         </div>
@@ -46,21 +46,21 @@ export const PasswordTypeFileList: FieldInfo[] = [
   },
   {
     field_name: 'memory_capitalize',
-    render() {
-      return <Switch></Switch>
+    render(props: any) {
+      return <Switch {...props}></Switch>
     }
   },
   {
     field_name: 'memory_word_full',
-    render() {
-      return <Switch></Switch>
+    render(props: any) {
+      return <Switch {...props}></Switch>
     }
   },
   {
     field_name: 'memory_separator',
-    render() {
+    render(props: any) {
       return (
-        <Select>
+        <Select {...props}>
           {Object.keys(PasswordSeparatorType).map((key) => {
             return (
               <Select.Option value={PasswordSeparatorType[key]} key={key}>
@@ -76,7 +76,7 @@ export const PasswordTypeFileList: FieldInfo[] = [
     field_name: 'pin_code_num',
     render(props: any) {
       return (
-        <div className="flex flex-row">
+        <div className="flex flex-row space-x-2">
           <Slider min={3} max={12} {...props} className="flex-grow"></Slider>
           <InputNumber min={3} max={12} {...props} size="small" className="w-[60px]"></InputNumber>
         </div>

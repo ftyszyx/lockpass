@@ -67,6 +67,9 @@ class AppModel {
     this.initWin()
     initAllApi()
     this.initGlobalShortcut(defaultUserSetInfo)
+    app.on('browser-window-blur', () => {
+      this.quickwin.CheckBlurClick()
+    })
   }
 
   initWin() {

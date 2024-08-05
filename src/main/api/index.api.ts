@@ -4,6 +4,7 @@ import { webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { WhereDef } from '@common/entitys/db.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
+import { renderViewType } from '@common/entitys/app.entity'
 
 export function initAllApi() {
   //system
@@ -73,7 +74,9 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.updateValutItem, async (_, valutItem) => {
     return await AppModel.getInstance().vaultItem?.UpdateOne(valutItem)
   })
-  ipcMain.on(webToManMsg.ResizeWindow, (_, width, height) => {
-    AppModel.getInstance().mainwin?.win.setSize(width, height)
+  ipcMain.handle(webToManMsg.ResizeWindow, (_, viewtype: renderViewType, width, height) => {
+    if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.setSize(width, height)
+    else if (viewtype == renderViewType.Quickview)
+      AppModel.getInstance().quickwin?.setSize(width, height)
   })
 }

@@ -1,10 +1,11 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, screen } from 'electron'
 import icon from '../../../resources/icon.png?asset'
 import path, { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 export class WindowBase {
   protected witdth: number = 900
   protected height: number = 670
+  protected click_outsize_close = false
   protected url: string = 'index.html'
   protected resizeable: boolean = true
   protected closeable: boolean = true
@@ -63,5 +64,22 @@ export class WindowBase {
   hide() {
     this.window.hide()
     this.window.setSkipTaskbar(true)
+  }
+
+  setSize(width: number, height: number) {
+    const oldsize = this.win.getSize()
+    if (width <= 0) width = oldsize[0]
+    if (height <= 0) height = oldsize[1]
+    // console.log('change size', width, height)
+    this.window.setSize(width, height)
+  }
+
+  CheckBlurClick() {
+    if (!this.click_outsize_close) return
+    const { x, y } = screen.getCursorScreenPoint()
+    const rect = this.win.getBounds()
+    if (x < rect.x || x > rect.x + rect.width || y < rect.y || y > rect.y + rect.height) {
+      this.hide()
+    }
   }
 }

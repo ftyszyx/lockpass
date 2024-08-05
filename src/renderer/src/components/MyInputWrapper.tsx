@@ -24,8 +24,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
   const [messageApi, contextHolder] = message.useMessage()
   const [showPassword, setShowPassword] = useState(false)
   const inputRef = useRef<InputRef>(null)
-  const [passwordValue, setPasswordValue] = useState<string>('')
-  const passwordContenRef = useRef<PasswordGenContentRef>(null)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   console.log('show type', props.show_type, props.is_password)
   const isedit = props.show_type == ModalType.Edit || props.show_type == ModalType.Add
