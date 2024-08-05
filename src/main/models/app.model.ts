@@ -1,5 +1,4 @@
 import { MyEncode } from '@main/libs/my_encode'
-import { MainViewHelper } from '@main/libs/view_help'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
 import { app, BrowserWindow, crashReporter } from 'electron'
@@ -11,6 +10,11 @@ import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
 import { APP_VER_CODE, Default_Lang, SQL_VER_CODE } from '@common/gloabl'
+import { MainWindow } from '@main/windows/window.main'
+import { QuickSearchWindow } from '@main/windows/window.quicksearch'
+import { MyTray } from '@main/windows/mytray'
+import { initAllApi } from '@main/api/index.api'
+import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -19,7 +23,9 @@ export interface AppSet {
 }
 
 class AppModel {
-  public mainview: MainViewHelper | null = null
+  public mainwin: MainWindow | null = null
+  public quickSearchWin: QuickSearchWindow | null = null
+  public my_tray: MyTray | null = null
   public myencode: MyEncode | null = null
   public vault: VaultService | null = null
   public vaultItem: VaultItemService | null = null
@@ -47,6 +53,20 @@ class AppModel {
       companyName: 'MyCompany',
       uploadToServer: false
     })
+  }
+
+  init() {
+    this.initWin()
+    initAllApi()
+  }
+
+  initWin() {
+    this.mainwin = new MainWindow()
+    this.mainwin.win.on('ready-to-show', () => {
+      this.mainwin.show()
+    })
+    this.quickSearchWin = new QuickSearchWindow()
+    this.my_tray = new MyTray()
   }
 
   private _initSet() {
@@ -98,12 +118,18 @@ class AppModel {
     return AppModel.instance
   }
 
-  public initMainView(mainview: BrowserWindow) {
-    this.mainview = new MainViewHelper(mainview)
-  }
-
   public initLang() {
     LangHelper.setLang(this.set.lang)
+  }
+
+  public showMsgErr(msg: string, duration: number = 3000) {
+    this.mainwin?.content.send(MainToWebMsg.ShowErrorMsg, msg, duration)
+  }
+  public showMsgInfo(msg: string, duration: number = 3000) {
+    this.mainwin?.content.send(MainToWebMsg.ShowInfoMsg, msg, duration)
+  }
+  public sendmsg(event: string, ...args: any[]) {
+    this.mainwin?.content.send(event, ...args)
   }
 }
 
