@@ -118,9 +118,10 @@ export enum ConsoleColor {
 }
 
 export enum ControlKey {
-  Control = 'ctrl',
-  Shift = 'shift',
-  Alt = 'alt',
-  Meta = 'meta',
-  Space = 'space'
+  Control = 'CommandOrControl',
+  ctrl = 'Ctrl',
+  Shift = 'Shift',
+  Alt = 'Alt',
+  Meta = 'Meta',
+  Space = 'Space'
 }

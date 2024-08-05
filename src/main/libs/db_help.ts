@@ -13,7 +13,7 @@ class DbHlper {
   public user: User
   public vault: Vault
   public vaultItem: VaultItem
-  public show_log: boolean = true
+  public show_log: boolean = false
   private _use_main_connection: boolean = true
 
   constructor() {

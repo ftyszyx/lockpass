@@ -6,8 +6,11 @@ export class WindowBase {
   protected witdth: number = 900
   protected height: number = 670
   protected url: string = 'index.html'
-  protected hideInTray: boolean = true
-
+  protected resizeable: boolean = true
+  protected closeable: boolean = true
+  protected haveFrame: boolean = true //是否无边框
+  protected ontop: boolean = false
+  protected wintype: string = 'normal'
   private window: BrowserWindow | null = null
 
   get content() {
@@ -28,7 +31,12 @@ export class WindowBase {
     this.window = new BrowserWindow({
       width: this.witdth,
       height: this.height,
+      alwaysOnTop: this.ontop,
+      type: this.wintype,
       show: false,
+      resizable: this.resizeable,
+      closable: this.closeable,
+      frame: this.haveFrame,
       autoHideMenuBar: true,
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
@@ -43,7 +51,7 @@ export class WindowBase {
       this.window.loadFile(join(__dirname, `../renderer/${this.url}`))
     }
     this.window.on('close', (event) => {
-      if (this.hideInTray) event.preventDefault()
+      event.preventDefault()
       this.hide()
     })
   }

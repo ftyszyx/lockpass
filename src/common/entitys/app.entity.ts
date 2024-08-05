@@ -1,3 +1,4 @@
+import { ControlKey } from '@common/gloabl'
 import { DefaultPasswordTypeConf, GenPasswordType, PasswordTypeInfo } from './password.entity'
 
 export interface ApiResp<T> {
@@ -28,6 +29,7 @@ export interface UserSetInfo {
   normal_lock_with_pc: boolean //电脑锁定，软件也锁定
   shortcut_global_quick_find: string //全局快捷键，快速查找
   shortcut_global_quick_lock: string //全局快捷键，快速锁定
+  shortcut_global_open_main: string //全局快捷键，快速锁定
   shortcut_local_view_shortcut: string //本地快捷键，查看快捷键
   shortcut_local_find: string //本地快捷键，查找
   password_type: GenPasswordType //密码生成类型
@@ -37,10 +39,26 @@ export interface UserSetInfo {
 export const defaultUserSetInfo: UserSetInfo = {
   normal_autolock_time: 5,
   normal_lock_with_pc: true,
-  shortcut_global_quick_find: 'ctrl+shift+space',
-  shortcut_global_quick_lock: 'ctrl+shift+l',
-  shortcut_local_find: 'ctrl+f',
-  shortcut_local_view_shortcut: 'ctrl+/',
+  shortcut_global_quick_find: `${ControlKey.Control}+ ${ControlKey.Shift}+a`,
+  shortcut_global_quick_lock: `${ControlKey.Control}+ ${ControlKey.Shift}+l`,
+  shortcut_global_open_main: `${ControlKey.Control}+ ${ControlKey.Shift}+up`,
+  shortcut_local_find: `${ControlKey.ctrl}+f`,
+  shortcut_local_view_shortcut: `${ControlKey.Control}+/`,
   password_type: GenPasswordType.random,
   password_type_conf: DefaultPasswordTypeConf
+}
+
+export enum renderViewType {
+  Mainview = 'mainview',
+  Quickview = 'quickview'
+}
+
+let gloabl_curViewType: renderViewType = renderViewType.Mainview
+
+export function InitCurViewType(viewtype: renderViewType) {
+  gloabl_curViewType = viewtype
+}
+
+export function GetCurViewType() {
+  return gloabl_curViewType
 }

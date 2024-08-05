@@ -14,6 +14,18 @@ export function initAllApi() {
     return AppModel.getInstance().CurLang()
   })
   //user
+  ipcMain.handle(webToManMsg.isLock, () => {
+    return AppModel.getInstance().IsLock()
+  })
+  ipcMain.handle(webToManMsg.LockApp, () => {
+    AppModel.getInstance().LockApp()
+  })
+  ipcMain.handle(webToManMsg.UnLockApp, () => {
+    AppModel.getInstance().UnLockApp()
+  })
+  ipcMain.handle(webToManMsg.isLogin, () => {
+    return AppModel.getInstance().IsLogin()
+  })
   ipcMain.handle(webToManMsg.Login, async (_, info) => {
     return await AppModel.getInstance().user?.Login(info)
   })
@@ -60,5 +72,8 @@ export function initAllApi() {
   })
   ipcMain.handle(webToManMsg.updateValutItem, async (_, valutItem) => {
     return await AppModel.getInstance().vaultItem?.UpdateOne(valutItem)
+  })
+  ipcMain.on(webToManMsg.ResizeWindow, (_, width, height) => {
+    AppModel.getInstance().mainwin?.win.setSize(width, height)
   })
 }

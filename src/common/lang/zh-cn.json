@@ -114,6 +114,11 @@
 
   "menu.password_gen": "密码生成器",
 
+  "tray.menu.openlockpass": "打开lockpass",
+  "tray.menu.openquick": "打开快速访问",
+  "tray.menu.lock": "锁定",
+  "tray.menu.quit": "退出",
+
   "ok": "确定",
   "edit": "编辑",
   "delete": "删除",

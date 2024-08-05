@@ -2,6 +2,7 @@ export enum PagePath {
   register = '/register',
   Login = '/login',
   Home = '/home',
+
   Lock = '/lock',
   Adminbase = '/admin',
   Admin_valutitem = '/admin/valutitems',

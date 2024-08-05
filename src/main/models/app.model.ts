@@ -1,7 +1,7 @@
 import { MyEncode } from '@main/libs/my_encode'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
-import { app, BrowserWindow, crashReporter } from 'electron'
+import { app, BrowserWindow, crashReporter, globalShortcut } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
 import { VaultItemService } from '@main/services/vault_item.service'
@@ -15,6 +15,7 @@ import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
 import { initAllApi } from '@main/api/index.api'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
+import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -24,11 +25,13 @@ export interface AppSet {
 
 class AppModel {
   public mainwin: MainWindow | null = null
-  public quickSearchWin: QuickSearchWindow | null = null
+  public quickwin: QuickSearchWindow | null = null
   public my_tray: MyTray | null = null
   public myencode: MyEncode | null = null
   public vault: VaultService | null = null
   public vaultItem: VaultItemService | null = null
+  private _lock: boolean = false
+  private _logined: boolean = false
   public user: UserService | null = null
   private _set_path: string = ''
   private set: AppSet = {
@@ -37,6 +40,7 @@ class AppModel {
     sql_ver: SQL_VER_CODE,
     cur_user_uid: 0
   }
+
   constructor() {
     Log.initialize()
     this.myencode = new MyEncode()
@@ -55,9 +59,14 @@ class AppModel {
     })
   }
 
+  Quit() {
+    globalShortcut.unregisterAll()
+  }
+
   init() {
     this.initWin()
     initAllApi()
+    this.initGlobalShortcut(defaultUserSetInfo)
   }
 
   initWin() {
@@ -65,7 +74,7 @@ class AppModel {
     this.mainwin.win.on('ready-to-show', () => {
       this.mainwin.show()
     })
-    this.quickSearchWin = new QuickSearchWindow()
+    this.quickwin = new QuickSearchWindow()
     this.my_tray = new MyTray()
   }
 
@@ -93,11 +102,6 @@ class AppModel {
   public changeLang(lang: string) {
     this.set.lang = lang
     this.initLang()
-    this.saveSet()
-  }
-
-  public SetLastUser(uid: number) {
-    this.set.cur_user_uid = uid
     this.saveSet()
   }
 
@@ -130,6 +134,50 @@ class AppModel {
   }
   public sendmsg(event: string, ...args: any[]) {
     this.mainwin?.content.send(event, ...args)
+  }
+
+  public LockApp() {
+    this._lock = true
+  }
+
+  public UnLockApp() {
+    this._lock = false
+  }
+
+  public IsLock() {
+    return this._lock
+  }
+
+  public Login(uid: number) {
+    this.set.cur_user_uid = uid
+    this._logined = true
+    this.UnLockApp()
+    this.saveSet()
+  }
+
+  public IsLogin() {
+    return this._logined
+  }
+
+  public LoginOut() {
+    this.myencode?.LoginOut()
+    this._logined = false
+  }
+
+  public initGlobalShortcut(setinfo: UserSetInfo) {
+    globalShortcut.unregisterAll()
+    globalShortcut.register(setinfo.shortcut_global_open_main, () => {
+      Log.info('shortcut_global_open_main')
+      this.mainwin?.show()
+    })
+    globalShortcut.register(setinfo.shortcut_global_quick_find, () => {
+      Log.info('shortcut_global_quick_find')
+      this.quickwin?.show()
+    })
+    globalShortcut.register(setinfo.shortcut_global_quick_lock, () => {
+      Log.info('shortcut_global_quick_lock')
+      this.LockApp()
+    })
   }
 }
 

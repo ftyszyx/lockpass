@@ -3,6 +3,7 @@ export enum webToManMsg {
   GetLang = 'getLang',
   //user
   Login = 'Login',
+  isLogin = 'isLogin',
   Register = 'Register',
   HasLogin = 'HasLogin',
   Logout = 'Logout',
@@ -20,7 +21,13 @@ export enum webToManMsg {
   GetAllValutItems = 'GetAllValutItems',
   updateValutItem = 'updateValutItem',
   DeleteValutItem = 'DeleteValutItem',
-  AddValutItem = 'AddValutItem'
+  AddValutItem = 'AddValutItem',
+
+  //other
+  ResizeWindow = 'ResizeWindow',
+  isLock = 'isLock',
+  LockApp = 'LockApp',
+  UnLockApp = 'UnLockApp'
 }
 
 export enum MainToWebMsg {

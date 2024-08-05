@@ -578,10 +578,6 @@ video {
   left: 0px !important;
 }
 
-.left-\[20px\] {
-  left: 20px !important;
-}
-
 .left-\[50\%\] {
   left: 50% !important;
 }
@@ -596,14 +592,6 @@ video {
 
 .top-0 {
   top: 0px !important;
-}
-
-.top-\[20px\] {
-  top: 20px !important;
-}
-
-.top-\[40px\] {
-  top: 40px !important;
 }
 
 .top-\[50\%\] {
@@ -767,10 +755,6 @@ video {
   width: 150px !important;
 }
 
-.w-\[200px\] {
-  width: 200px !important;
-}
-
 .w-\[20px\] {
   width: 20px !important;
 }
@@ -813,10 +797,6 @@ video {
 
 .w-full {
   width: 100% !important;
-}
-
-.w-\[400px\] {
-  width: 400px !important;
 }
 
 .flex-grow {
@@ -895,12 +875,6 @@ video {
   --tw-space-y-reverse: 0 !important;
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse))) !important;
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse)) !important;
-}
-
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0 !important;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse))) !important;
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse)) !important;
 }
 
 .overflow-y-auto {

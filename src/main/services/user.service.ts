@@ -1,7 +1,7 @@
 import { LastUserInfo, LoginInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { BaseService } from './base.service'
 import AppModel from '@main/models/app.model'
-import { ApiResp, ApiRespCode, defaultUserSetInfo } from '@common/entitys/app.entity'
+import { ApiResp, ApiRespCode, defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
 
@@ -25,7 +25,7 @@ export class UserService extends BaseService<User> {
       const res_code = AppModel.getInstance().myencode.Login(users[0], info.password)
       res.code = res_code
       if (res_code == ApiRespCode.SUCCESS) {
-        AppModel.getInstance().SetLastUser(users[0].id)
+        AppModel.getInstance().Login(users[0].id)
         res.data = users[0]
       }
     } catch (e: any) {
@@ -60,7 +60,7 @@ export class UserService extends BaseService<User> {
 
   public async Logout(): Promise<ApiResp<void>> {
     const res: ApiResp<void> = { code: ApiRespCode.SUCCESS }
-    AppModel.getInstance().myencode.LoginOut()
+    AppModel.getInstance().LoginOut()
     return res
   }
 
@@ -94,7 +94,7 @@ export class UserService extends BaseService<User> {
   }
 
   override fixEntityPost(item: User) {
-    item.user_set = JSON.parse((item.user_set as string) || '{}') as Object
+    item.user_set = JSON.parse((item.user_set as string) || '{}') as UserSetInfo
     item.user_set = { ...defaultUserSetInfo, ...item.user_set }
   }
   override fiexEntityPre(entity: User): void {

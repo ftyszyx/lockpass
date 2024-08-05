@@ -19,6 +19,7 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
+  AppModel.getInstance().Quit()
   if (process.platform !== 'darwin') {
     app.quit()
   }

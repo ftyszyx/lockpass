@@ -6,7 +6,7 @@ date:2024/08/02 16:14:17
 import { Form, Input, message, Select } from 'antd'
 import { forwardRef, Ref, useEffect, useImperativeHandle, useState } from 'react'
 import { useForm } from 'antd/es/form/Form'
-import { PasswordTypeFileList } from '@renderer/entitys/Password.entity'
+import { PasswordTypeFileList } from '@renderer/entitys/password.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { GenPasswordType, PasswordTypeInfo } from '@common/entitys/password.entity'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
