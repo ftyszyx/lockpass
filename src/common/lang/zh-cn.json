@@ -33,6 +33,8 @@
   "vaultitem.label.card_number": "卡号",
   "vaultitem.label.note": "笔记",
 
+  "quicksearch.input.placeholder": "搜索",
+
   "set.menu.normal": "常规",
   "set.menu.shortcut_local": "软件内快捷键",
   "set.menu.shortcut_global": "全局快捷键",
