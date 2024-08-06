@@ -55,6 +55,7 @@
   "auth.login.needinit": "需要初始化系统",
   "auth.login.fail": "登陆失败: {0}",
   "auth.login.title": "登陆",
+  "auth.login.gotoRegister": "没有账号，去注册",
   "auth.lock.title": "解锁",
 
   "register.title": "初始化你的账号",

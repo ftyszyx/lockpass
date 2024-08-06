@@ -2,6 +2,7 @@ import { EntityType, renderViewType } from '@common/entitys/app.entity'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { User } from '@common/entitys/user.entity'
 import { ChildProps } from '@renderer/entitys/other.entity'
+import { ConsoleLog } from '@renderer/libs/Console'
 import { getAllVault, getAllVaultItem, ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -24,12 +25,18 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   useEffect(() => {
     initData()
     window.electron.ipcRenderer.on(MainToWebMsg.DataChange, (_, changetype: EntityType) => {
+      ConsoleLog.LogInfo('data change', changetype)
       if (changetype == EntityType.vault) getAllVault(appstore, appset.lang, messageApi)
       else if (changetype == EntityType.vault_item)
         getAllVaultItem(appstore, appset.lang, messageApi)
     })
+    window.electron.ipcRenderer.on(MainToWebMsg.LoginOK, () => {
+      ConsoleLog.LogInfo('login ok')
+      initData()
+    })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.DataChange)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LoginOK)
     }
   }, [])
 

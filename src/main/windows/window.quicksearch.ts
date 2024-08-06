@@ -9,7 +9,7 @@ export class QuickSearchWindow extends WindowBase {
     this.wintype = 'toolbar'
     this.resizeable = false
     this.ontop = true
-    this.witdth = 400
+    this.witdth = 600
     this.height = 50
     this.initWin()
   }

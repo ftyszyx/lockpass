@@ -114,6 +114,16 @@ export default function Register(): JSX.Element {
                 {lang.getText('ok')}
               </Button>
             </Form.Item>
+            {isLogin && (
+              <Button
+                className="w-full"
+                onClick={() => {
+                  history.replace(PagePath.register)
+                }}
+              >
+                {lang.getText('auth.login.gotoRegister')}
+              </Button>
+            )}
             {isReigster && (
               <Button
                 className="w-full mt-2"
