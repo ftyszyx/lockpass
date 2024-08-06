@@ -3,9 +3,9 @@ export enum webToManMsg {
   GetLang = 'getLang',
   //user
   Login = 'Login',
+  getCurUserInfo = 'getCurUserInfo',
   isLogin = 'isLogin',
   Register = 'Register',
-  HasLogin = 'HasLogin',
   Logout = 'Logout',
   getAllUser = 'getAllUser',
   GetLastUserInfo = 'getLastUser',
@@ -27,12 +27,17 @@ export enum webToManMsg {
   ResizeWindow = 'ResizeWindow',
   isLock = 'isLock',
   LockApp = 'LockApp',
-  UnLockApp = 'UnLockApp'
+  UnLockApp = 'UnLockApp',
+  IsSystemInit = 'IsSystemInit',
+  AutoFill = 'AutoFill'
 }
 
 export enum MainToWebMsg {
-  ShowErrorMsg = 'ShowError',
-  ShowInfoMsg = 'ShowInfoMsg',
+  ShowMsg = 'ShowMsg',
   LockApp = 'lockApp',
-  UnlockApp = 'UnLockApp'
+  LoginOK = 'LoginOk',
+  UserChange = 'userchange',
+  VaultChange = 'vaultchange',
+  vaultItemChange = 'vaultItemChange',
+  DataChange = 'DataChange'
 }

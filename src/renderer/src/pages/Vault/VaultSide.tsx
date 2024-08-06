@@ -7,6 +7,7 @@ date:2024/07/31 17:08:51
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Icon_type, VaultItemType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
+import { IsVaultItemMatchSearch } from '@renderer/entitys/VaultItem.entity'
 import { useRouterStore } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Select } from 'antd'
@@ -27,15 +28,7 @@ export default function VaultSide(props: VaultSideProps) {
   const show_items = useMemo(() => {
     if (props.global_search_keyword && props.global_search_keyword.length > 0) {
       return appstore.vaut_items.filter((item) => {
-        if (item.name.includes(props.global_search_keyword)) return true
-        if (item.info) {
-          const keys = Object.keys(item.info)
-          const ok = keys.some((key) => {
-            if (item.info[key].includes(props.global_search_keyword)) return true
-            return false
-          })
-          if (ok) return true
-        }
+        if (IsVaultItemMatchSearch(item, props.global_search_keyword)) return true
         return false
       })
     }
@@ -43,7 +36,7 @@ export default function VaultSide(props: VaultSideProps) {
       return appstore.vaut_items.filter((item) => item.valut_id == cur_vault_id)
     } else {
       return appstore.vaut_items.filter(
-        (item) => item.passwordType === search_Password_type && item.valut_id == cur_vault_id
+        (item) => item.vault_item_type === search_Password_type && item.valut_id == cur_vault_id
       )
     }
   }, [

@@ -11,7 +11,6 @@ export interface AppStore {
   setValutItems: (valutItems: VaultItem[]) => void
   //user
   cur_user?: User
-  hasLogin: boolean
   Login: (user: User) => void
   SetUser: (user: User) => void
   LoginOut: () => void
@@ -19,16 +18,11 @@ export interface AppStore {
   user_list: User[]
   setUserList: (users: User[]) => void
   GetUserSet: () => UserSetInfo
-
-  lock_timeout: number
-  IsLock: () => boolean
-  LockRemainTime: () => number
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
     user_list: [],
     cur_user: null,
-    hasLogin: false,
     lock_timeout: 0,
     setLang(lang: LangItem) {
       set((state) => {
@@ -41,29 +35,14 @@ export const use_appstore = create<AppStore>((set, get) => {
       if (!get().cur_user) return defaultUserSetInfo
       return get().cur_user.user_set as UserSetInfo
     },
-    //user
-    IsLock() {
-      if (!get().cur_user) return false
-      const setinfo = get().cur_user.user_set as UserSetInfo
-      if (setinfo.normal_autolock_time == 0) return false
-      const cuttime = new Date().getTime() / 1000
-      return get().lock_timeout < cuttime
-    },
-    LockRemainTime() {
-      const cuttime = new Date().getTime() / 1000
-      return get().lock_timeout - cuttime
-    },
     LoginOut() {
       set((state) => {
-        return { ...state, cur_user: null, hasLogin: false, lock_timeout: 0 }
+        return { ...state, cur_user: null }
       })
     },
     Login(info: User) {
       set((state) => {
-        if (!state.cur_user) return state
-        const setinfo = state.cur_user.user_set as UserSetInfo
-        const lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
-        const res = { ...state, cur_user: info, hasLogin: true, lock_timeout }
+        const res = { ...state, cur_user: info }
         console.log('login', res)
         return res
       })
@@ -76,7 +55,7 @@ export const use_appstore = create<AppStore>((set, get) => {
       })
     },
     HaveLogin() {
-      if (get().hasLogin && get().cur_user) {
+      if (get().cur_user) {
         return true
       }
       return false

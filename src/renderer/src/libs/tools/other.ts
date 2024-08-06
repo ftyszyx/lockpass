@@ -28,6 +28,19 @@ export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
   }
 }
 
+export async function ipc_call_normal<T>(api: string, ...args: any[]): Promise<T> {
+  try {
+    ConsoleLog.LogInfo('ipc_call_noraml req', api, args)
+    const res = (await window.electron.ipcRenderer.invoke(api, ...args)) as T
+    ConsoleLog.LogInfo('ipc_call_normal res', api, res)
+    return res
+  } catch (e: any) {
+    ConsoleLog.LogError(e)
+    ConsoleLog.LogError('ipc_call_noraml res err', api, e.message)
+    return Promise.reject(e)
+  }
+}
+
 export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
   await ipc_call<User[]>(webToManMsg.getAllUser)
     .then((res) => {

@@ -16,6 +16,7 @@ import { ConsoleLog } from './libs/Console'
 import { GetCurViewType, renderViewType } from '@common/entitys/app.entity'
 import QucickLayout from './pages/quick/QuickLayout'
 import QuickSearch from './pages/quick/QuickSearch'
+import BaseLayout from './layouts/BaseLayout'
 
 const RootRouter = () => {
   const appset = use_appset() as AppsetStore
@@ -38,7 +39,7 @@ const RootRouter = () => {
           <Route path={PagePath.register} element={Login} match={{ end: true }} />
           <Route path={PagePath.Login} element={Login} match={{ end: true }} />
           <Route path={PagePath.Lock} element={Login} match={{ end: true }} />
-          <Route path="/" element={BasicLayout} errorElement={NotFound}>
+          <Route path="/" element={BaseLayout} errorElement={NotFound}>
             <Route path="/" redirect={PagePath.Home} match={{ end: true }} />
             <Route path={PagePath.Home} element={Home} />
             <Route path={PagePath.Adminbase} element={AdminLayout} errorElement={NotFound}>

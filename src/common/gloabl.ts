@@ -72,7 +72,9 @@ export enum Icon_type {
   icon_rank = 'icon-rank',
   icon_del = 'icon-delete',
   icon_fold = 'icon-fold',
-  icon_refresh = 'icon-refresh'
+  icon_refresh = 'icon-refresh',
+  icon_detail = 'iconDetail',
+  icon_detail2 = 'iconDetail2'
 }
 
 export enum VaultItemType {

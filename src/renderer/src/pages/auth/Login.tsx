@@ -38,6 +38,7 @@ export default function Register(): JSX.Element {
       })
     )
   }, [appstore.user_list])
+
   async function OnRegister() {
     form.validateFields().then(async (values) => {
       console.log(values)
@@ -65,7 +66,6 @@ export default function Register(): JSX.Element {
         appstore.Login(user)
         if (isLock) {
           history.go(-1)
-          // history.replace(PagePath.Home)
         } else {
           history.replace(PagePath.Home)
         }
@@ -74,13 +74,6 @@ export default function Register(): JSX.Element {
   }
   return (
     <div className=" bg-slate-100">
-      {/* <Button
-        onClick={() => {
-          history.go(-1)
-        }}
-      >
-        go back
-      </Button> */}
       {contextHolder}
       <div className=" fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex flex-col items-center">

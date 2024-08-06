@@ -1,13 +1,22 @@
 import { LastUserInfo, LoginInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { BaseService } from './base.service'
 import AppModel from '@main/models/app.model'
-import { ApiResp, ApiRespCode, defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
+import {
+  ApiResp,
+  ApiRespCode,
+  defaultUserSetInfo,
+  EntityType,
+  UserSetInfo
+} from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export class UserService extends BaseService<User> {
+  userinfo: User = null
   constructor() {
     super(new User())
+    this.userinfo = null
   }
 
   public async Login(info: LoginInfo): Promise<ApiResp<User>> {
@@ -25,6 +34,7 @@ export class UserService extends BaseService<User> {
       const res_code = AppModel.getInstance().myencode.Login(users[0], info.password)
       res.code = res_code
       if (res_code == ApiRespCode.SUCCESS) {
+        this.userinfo = users[0]
         AppModel.getInstance().Login(users[0].id)
         res.data = users[0]
       }
@@ -40,11 +50,12 @@ export class UserService extends BaseService<User> {
       code: ApiRespCode.other_err,
       data: { user: null, has_init_key: false }
     }
-    const last_userid = AppModel.getInstance().GetLastUser()
+    const last_userid = AppModel.getInstance().GetLastUserId()
     if (last_userid) {
       const user = await super.GetOne('id', last_userid)
       if (user.length > 0) {
         ret.data.user = user[0]
+        this.userinfo = user[0]
         ret.data.has_init_key = AppModel.getInstance().myencode.hasKey(user[0])
         ret.code = ApiRespCode.SUCCESS
       }
@@ -60,6 +71,7 @@ export class UserService extends BaseService<User> {
 
   public async Logout(): Promise<ApiResp<void>> {
     const res: ApiResp<void> = { code: ApiRespCode.SUCCESS }
+    this.userinfo = null
     AppModel.getInstance().LoginOut()
     return res
   }
@@ -93,11 +105,19 @@ export class UserService extends BaseService<User> {
     return await super.UpdateOne2(user, true)
   }
 
-  override fixEntityPost(item: User) {
+  override fixEntityOut(item: User) {
     item.user_set = JSON.parse((item.user_set as string) || '{}') as UserSetInfo
     item.user_set = { ...defaultUserSetInfo, ...item.user_set }
+    if (this.userinfo && this.userinfo.id == item.id) {
+      this.userinfo = item
+    }
   }
-  override fiexEntityPre(entity: User): void {
+  override fiexEntityIn(entity: User): void {
     entity.user_set = JSON.stringify(entity.user_set)
+  }
+
+  AfterChange(): void {
+    AppEvent.emit(AppEventType.UserChange)
+    AppEvent.emit(AppEventType.DataChange, EntityType.user)
   }
 }

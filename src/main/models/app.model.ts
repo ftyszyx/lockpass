@@ -9,13 +9,15 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import { APP_VER_CODE, Default_Lang, SQL_VER_CODE } from '@common/gloabl'
+import { APP_VER_CODE, Default_Lang, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
 import { initAllApi } from '@main/api/index.api'
-import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
+import robot from 'robotjs'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
+import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -31,9 +33,12 @@ class AppModel {
   public vault: VaultService | null = null
   public vaultItem: VaultItemService | null = null
   private _lock: boolean = false
+  private _lock_timeout: number = 0
   private _logined: boolean = false
   public user: UserService | null = null
   private _set_path: string = ''
+  private checkInterval: NodeJS.Timeout | null = null
+
   private set: AppSet = {
     lang: Default_Lang,
     app_ver: APP_VER_CODE,
@@ -61,6 +66,7 @@ class AppModel {
 
   Quit() {
     globalShortcut.unregisterAll()
+    if (this.checkInterval) clearInterval(this.checkInterval)
   }
 
   init() {
@@ -68,8 +74,12 @@ class AppModel {
     initAllApi()
     this.initGlobalShortcut(defaultUserSetInfo)
     app.on('browser-window-blur', () => {
-      this.quickwin.CheckBlurClick()
+      AppEvent.emit(AppEventType.windowBlur)
+      // this.quickwin.CheckBlurClick()
     })
+    this.checkInterval = setInterval(() => {
+      this.performLockCheck()
+    }, 1000)
   }
 
   initWin() {
@@ -108,9 +118,15 @@ class AppModel {
     this.saveSet()
   }
 
-  public GetLastUser() {
+  public GetLastUserId() {
     if (this.set.cur_user_uid && this.set.cur_user_uid > 0) return this.set.cur_user_uid
     return null
+  }
+
+  public IsSystemInit() {
+    const lastuserid = this.GetLastUserId()
+    if (lastuserid) return AppModel.getInstance().myencode.hasKey(lastuserid)
+    return false
   }
 
   public CurLang() {
@@ -130,32 +146,41 @@ class AppModel {
   }
 
   public showMsgErr(msg: string, duration: number = 3000) {
-    this.mainwin?.content.send(MainToWebMsg.ShowErrorMsg, msg, duration)
+    AppEvent.emit(AppEventType.Message, 'error', msg, duration)
+    // this.mainwin?.content.send(MainToWebMsg.ShowErrorMsg, msg, duration)
   }
   public showMsgInfo(msg: string, duration: number = 3000) {
-    this.mainwin?.content.send(MainToWebMsg.ShowInfoMsg, msg, duration)
+    AppEvent.emit(AppEventType.Message, 'info', msg, duration)
+    // this.mainwin?.content.send(MainToWebMsg.ShowInfoMsg, msg, duration)
   }
-  public sendmsg(event: string, ...args: any[]) {
-    this.mainwin?.content.send(event, ...args)
+
+  private performLockCheck() {
+    if (this.IsLock()) return
+    const setinfo = this.user.userinfo.user_set as UserSetInfo
+    if (setinfo.normal_autolock_time == 0) return
+    const cuttime = new Date().getTime() / 1000
+    if (this._lock_timeout < cuttime) {
+      this.LockApp()
+    }
   }
 
   public LockApp() {
     this._lock = true
-  }
-
-  public UnLockApp() {
-    this._lock = false
+    AppEvent.emit(AppEventType.LockApp)
   }
 
   public IsLock() {
-    return this._lock
+    return this._lock || !this._logined
   }
 
   public Login(uid: number) {
     this.set.cur_user_uid = uid
     this._logined = true
-    this.UnLockApp()
+    this._lock = false
+    const setinfo = this.user.userinfo.user_set as UserSetInfo
+    this._lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
     this.saveSet()
+    AppEvent.emit(AppEventType.LoginOk)
   }
 
   public IsLogin() {
@@ -165,6 +190,11 @@ class AppModel {
   public LoginOut() {
     this.myencode?.LoginOut()
     this._logined = false
+    this.LockApp()
+  }
+
+  public curUserInfo() {
+    return this.user.userinfo
   }
 
   public initGlobalShortcut(setinfo: UserSetInfo) {
@@ -181,6 +211,16 @@ class AppModel {
       Log.info('shortcut_global_quick_lock')
       this.LockApp()
     })
+  }
+
+  AutoFill(info: VaultItem) {
+    if (info.vault_item_type == VaultItemType.Login) {
+      var logininfo = info.info as LoginPasswordInfo
+      robot.typeString(logininfo.username)
+      robot.keyTap('tab')
+      robot.typeString(logininfo.password)
+      robot.keyTap('enter')
+    }
   }
 }
 

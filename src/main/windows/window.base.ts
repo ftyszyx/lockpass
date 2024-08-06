@@ -2,6 +2,10 @@ import { BrowserWindow, screen } from 'electron'
 import icon from '../../../resources/icon.png?asset'
 import path, { join } from 'path'
 import { is } from '@electron-toolkit/utils'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
+import { appendFile } from 'fs'
+import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
+import { EntityType } from '@common/entitys/app.entity'
 export class WindowBase {
   protected witdth: number = 900
   protected height: number = 670
@@ -26,8 +30,35 @@ export class WindowBase {
     return this.window.isVisible()
   }
 
-  constructor() {}
+  constructor() {
+    AppEvent.on(AppEventType.windowBlur, () => {
+      this.CheckBlurClick()
+    })
+    AppEvent.on(AppEventType.LockApp, () => {
+      this.lockapp()
+      this.win.webContents.send(MainToWebMsg.LockApp)
+    })
+    AppEvent.on(AppEventType.LoginOk, () => {
+      this.win.webContents.send(MainToWebMsg.LoginOK)
+    })
+    AppEvent.on(AppEventType.Message, (msagetype, msg, duration) => {
+      this.win.webContents.send(MainToWebMsg.ShowMsg, msagetype, msg, duration)
+    })
+    AppEvent.on(AppEventType.VaultChange, () => {
+      this.win.webContents.send(MainToWebMsg.VaultChange)
+    })
+    AppEvent.on(AppEventType.UserChange, () => {
+      this.win.webContents.send(MainToWebMsg.UserChange)
+    })
+    AppEvent.on(AppEventType.VaultItemChange, () => {
+      this.win.webContents.send(MainToWebMsg.vaultItemChange)
+    })
+    AppEvent.on(AppEventType.DataChange, (type: EntityType) => {
+      this.win.webContents.send(MainToWebMsg.DataChange, type)
+    })
+  }
 
+  lockapp() {}
   initWin() {
     this.window = new BrowserWindow({
       width: this.witdth,

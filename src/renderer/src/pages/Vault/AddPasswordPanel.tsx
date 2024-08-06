@@ -71,7 +71,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
             values.info = JSON.stringify(values.info)
             values.user_id = appstore.cur_user?.id
             values.valut_id = cur_vault_id
-            values.passwordType = select_type
+            values.vault_item_type = select_type
             await ipc_call(webToManMsg.AddValutItem, values)
               .then(() => {
                 set_show_info(false)

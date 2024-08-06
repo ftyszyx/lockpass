@@ -62,3 +62,9 @@ export function InitCurViewType(viewtype: renderViewType) {
 export function GetCurViewType() {
   return gloabl_curViewType
 }
+
+export enum EntityType {
+  user = 'user',
+  vault = 'vault',
+  vault_item = 'vault_item'
+}

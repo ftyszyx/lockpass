@@ -121,6 +121,9 @@
   "tray.menu.lock": "锁定",
   "tray.menu.quit": "退出",
 
+  "quicksearch.autoinput": "自动输入",
+  "quicksearch.viewDetail": "查看详情",
+
   "ok": "确定",
   "edit": "编辑",
   "delete": "删除",

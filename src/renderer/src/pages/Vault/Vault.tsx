@@ -95,7 +95,7 @@ export default function Vault() {
                   layout="vertical"
                 >
                   <PaswordDetail
-                    passwordType={select_vault_item.passwordType as VaultItemType}
+                    passwordType={select_vault_item.vault_item_type as VaultItemType}
                     modal_type={show_edit ? ModalType.Edit : ModalType.View}
                   ></PaswordDetail>
                   <div className=" flex flex-row-reverse mt-2">

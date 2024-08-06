@@ -2,24 +2,52 @@ import { Input } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
 import { ModalType, VaultItemType } from '@common/gloabl'
-import { LangHelper, LangItem } from '@common/lang'
+import { LangItem } from '@common/lang'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { TextAreaProps } from 'antd/es/input'
+import {
+  CardPasswordInfo,
+  LoginPasswordInfo,
+  NoteTextPasswordInfo,
+  VaultItem
+} from '@common/entitys/vault_item.entity'
 
-export interface LoginPasswordInfo {
-  username: string
-  password: string
-  urls: string[]
+//get string for show
+export function GetPasswordInfoString(item: VaultItem): string {
+  if (item.vault_item_type == VaultItemType.Login) {
+    const info = item.info as LoginPasswordInfo
+    return `${info.username}-${info.urls.join('-')}`
+  } else if (item.vault_item_type == VaultItemType.Card) {
+    const info = item.info as CardPasswordInfo
+    return `${info.card_company}:${info.card_number}`
+  } else if (item.vault_item_type == VaultItemType.NoteBook) {
+    const info = item.info as NoteTextPasswordInfo
+    return info.note_text
+  }
+  return ''
 }
 
-export interface CardPasswordInfo {
-  card_company: string
-  card_number: string
-  card_password: string
+//which key should be used for search
+export function IsKeyForSearch(key: string): boolean {
+  if (key.indexOf('password') > -1) return false
+  return true
 }
 
-export interface NoteTextPasswordInfo {
-  note_text: string
+//search fun
+export function IsVaultItemMatchSearch(item: VaultItem, search_word: string): boolean {
+  if (item.name.includes(search_word)) return true
+  if (item.info) {
+    const keys = Object.keys(item.info)
+    const ok = keys.some((key) => {
+      if (!IsKeyForSearch(key)) return false
+      const value = item.info[key]
+      if (value == null) return false
+      if (value.toString().includes(search_word)) return true
+      return false
+    })
+    if (ok) return true
+  }
+  return false
 }
 
 export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {

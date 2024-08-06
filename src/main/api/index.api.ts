@@ -14,16 +14,34 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.GetLang, () => {
     return AppModel.getInstance().CurLang()
   })
-  //user
+
   ipcMain.handle(webToManMsg.isLock, () => {
     return AppModel.getInstance().IsLock()
   })
+
   ipcMain.handle(webToManMsg.LockApp, () => {
     AppModel.getInstance().LockApp()
   })
-  ipcMain.handle(webToManMsg.UnLockApp, () => {
-    AppModel.getInstance().UnLockApp()
+
+  ipcMain.handle(webToManMsg.IsSystemInit, () => {
+    return AppModel.getInstance().IsSystemInit()
   })
+
+  ipcMain.handle(webToManMsg.ResizeWindow, (_, viewtype: renderViewType, width, height) => {
+    if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.setSize(width, height)
+    else if (viewtype == renderViewType.Quickview)
+      AppModel.getInstance().quickwin?.setSize(width, height)
+  })
+
+  ipcMain.handle(webToManMsg.AutoFill, (_, info) => {
+    AppModel.getInstance().AutoFill(info)
+  })
+
+  //user
+  ipcMain.handle(webToManMsg.getCurUserInfo, () => {
+    return AppModel.getInstance().curUserInfo()
+  })
+
   ipcMain.handle(webToManMsg.isLogin, () => {
     return AppModel.getInstance().IsLogin()
   })
@@ -32,9 +50,6 @@ export function initAllApi() {
   })
   ipcMain.handle(webToManMsg.Register, async (_, info) => {
     return await AppModel.getInstance().user?.Register(info)
-  })
-  ipcMain.handle(webToManMsg.HasLogin, async (_) => {
-    return await AppModel.getInstance().user?.HasLogin()
   })
   ipcMain.handle(webToManMsg.Logout, async (_) => {
     return await AppModel.getInstance().user?.Logout()
@@ -73,10 +88,5 @@ export function initAllApi() {
   })
   ipcMain.handle(webToManMsg.updateValutItem, async (_, valutItem) => {
     return await AppModel.getInstance().vaultItem?.UpdateOne(valutItem)
-  })
-  ipcMain.handle(webToManMsg.ResizeWindow, (_, viewtype: renderViewType, width, height) => {
-    if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.setSize(width, height)
-    else if (viewtype == renderViewType.Quickview)
-      AppModel.getInstance().quickwin?.setSize(width, height)
   })
 }

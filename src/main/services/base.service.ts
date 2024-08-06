@@ -5,14 +5,15 @@ import { Log } from '@main/libs/log'
 
 export class BaseService<Entity extends BaseEntity> {
   constructor(public entity: Entity) {}
-  fixEntityPost(entity: Entity): void {}
-  fiexEntityPre(entity: Entity): void {}
+  fixEntityOut(entity: Entity): void {}
+  fiexEntityIn(entity: Entity): void {}
+  AfterChange(): void {}
   public async GetAll(): Promise<ApiResp<Entity[]>> {
     const res: ApiResp<Entity[]> = { code: ApiRespCode.SUCCESS, data: [] }
     try {
       res.data = await DbHlper.instance().GetAll(this.entity, null)
       res.data.forEach((item) => {
-        this.fixEntityPost(item)
+        this.fixEntityOut(item)
       })
     } catch (e: any) {
       Log.Exception(e)
@@ -26,7 +27,7 @@ export class BaseService<Entity extends BaseEntity> {
     try {
       res.data = await DbHlper.instance().GetAll(this.entity, where)
       res.data.forEach((item) => {
-        this.fixEntityPost(item)
+        this.fixEntityOut(item)
       })
     } catch (e: any) {
       Log.Exception(e)
@@ -38,7 +39,7 @@ export class BaseService<Entity extends BaseEntity> {
   public async GetOne(key: string, value: any) {
     const items = await DbHlper.instance().GetOne(this.entity, { cond: { [key]: value } })
     items.forEach((item) => {
-      this.fixEntityPost(item)
+      this.fixEntityOut(item)
     })
     return items
   }
@@ -53,8 +54,9 @@ export class BaseService<Entity extends BaseEntity> {
       if (value) entity[key] = value
     })
     try {
-      this.fiexEntityPre(entity)
+      this.fiexEntityIn(entity)
       await DbHlper.instance().AddOne(entity)
+      this.AfterChange()
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err
@@ -73,19 +75,20 @@ export class BaseService<Entity extends BaseEntity> {
         res.code = ApiRespCode.data_not_find
         return res
       }
-      this.fiexEntityPre(chang_values)
+      this.fiexEntityIn(chang_values)
       await DbHlper.instance().UpdateOne(this.entity, old[0], chang_values)
       if (return_new) {
         const users = await DbHlper.instance().GetOne(this.entity, {
           cond: { id: chang_values.id }
         })
         if (users && users.length > 0) {
-          this.fixEntityPost(users[0])
+          this.fixEntityOut(users[0])
           res.data = users[0]
         } else {
           res.code = ApiRespCode.data_not_find
         }
       }
+      this.AfterChange()
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err
@@ -101,6 +104,7 @@ export class BaseService<Entity extends BaseEntity> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     try {
       await DbHlper.instance().DelOne(this.entity, 'id', id)
+      this.AfterChange()
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err

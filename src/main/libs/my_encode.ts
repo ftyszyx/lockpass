@@ -22,6 +22,10 @@ export class MyEncode {
     return path.join(PathHelper.getHomeDir(), `secret_${user.id}.key`)
   }
 
+  private getKeyPathByuserid(userid: number) {
+    return path.join(PathHelper.getHomeDir(), `secret_${userid}.key`)
+  }
+
   public HasLogin() {
     return this._pass_hash != null
   }
@@ -30,8 +34,8 @@ export class MyEncode {
     this._pass_hash = null
   }
 
-  public hasKey(user: User) {
-    const key_path = this.getKeyPath(user)
+  public hasKey(userid: number) {
+    const key_path = this.getKeyPathByuserid(userid)
     if (fs.existsSync(key_path)) {
       return true
     }
