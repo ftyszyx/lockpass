@@ -29,7 +29,12 @@ export enum webToManMsg {
   LockApp = 'LockApp',
   UnLockApp = 'UnLockApp',
   IsSystemInit = 'IsSystemInit',
-  AutoFill = 'AutoFill'
+  AutoFill = 'AutoFill',
+  ShortCutKeyChange = 'ShortCutKeyChange',
+  CheckShortKey = 'CheckShortKey',
+  getMousePos = 'getMousePos',
+  showWindows = 'showWindows',
+  ShowVaultItem = 'ShowItem'
 }
 
 export enum MainToWebMsg {
@@ -39,5 +44,6 @@ export enum MainToWebMsg {
   UserChange = 'userchange',
   VaultChange = 'vaultchange',
   vaultItemChange = 'vaultItemChange',
-  DataChange = 'DataChange'
+  DataChange = 'DataChange',
+  ShowVaulteItem = 'ShowVaulteItem'
 }

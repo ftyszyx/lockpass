@@ -7,12 +7,13 @@ export interface AppsetStore {
   lang: LangItem
   setLang: (lang: LangItem) => void
   SetInitOK: (ok: boolean) => void
+  getText: (str: string, ...args: any[]) => string
   //menu
   fold_menu: boolean
   ToggleFoldMenu: () => void
 }
 export const use_appset = create<AppsetStore>((set, _) => {
-  ConsoleLog.LogInfo('use_appset create')
+  ConsoleLog.LogTrace('use_appset create')
   return {
     fold_menu: false,
     lang: null,
@@ -31,6 +32,9 @@ export const use_appset = create<AppsetStore>((set, _) => {
       set((state) => {
         return { ...state, lang: lang }
       })
+    },
+    getText(str, ...args) {
+      return this.lang?.getText(str, ...args)
     }
   }
 })

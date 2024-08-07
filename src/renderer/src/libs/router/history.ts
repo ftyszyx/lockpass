@@ -80,11 +80,11 @@ export function createHashHistory(options: HistoryOptions): History {
     return res
   }
   function createUrl(window: Window, to: LocationDef): string {
-    let base = window.document.querySelector('base')
+    const base = window.document.querySelector('base')
     let href = ''
     if (base && base.getAttribute('href')) {
-      let url = window.location.href
-      let hashIndex = url.indexOf('#')
+      const url = window.location.href
+      const hashIndex = url.indexOf('#')
       href = hashIndex === -1 ? url : url.slice(0, hashIndex)
     }
     const res = href + '#' + createPath(window, to)

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Button, Dropdown, Menu as MenuAntd, Modal } from 'antd'
+import { Dropdown, Menu as MenuAntd } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/Icon'
@@ -14,7 +14,6 @@ import AddValutPanel from '@renderer/pages/Vault/AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
-import { set } from 'lodash'
 interface MenuProps {
   className?: string
 }
@@ -69,7 +68,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
       const regs = pathToRegexp(menuinfo.url, [], { end: true, start: true })
       if (regs.test(location.PathName)) {
         setChosedKey([menuinfo.id.toString()])
-        let new_opens = [menuinfo.id.toString()]
+        const new_opens = [menuinfo.id.toString()]
         let cur_menu = menuinfo
         while (cur_menu.parent && cur_menu.parent != '0') {
           const parent_id = cur_menu.parent
@@ -104,7 +103,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
               items: [
                 {
                   key: 'password_gen',
-                  label: appset.lang.getText('menu.password_gen')
+                  label: appset.lang?.getText('menu.password_gen')
                 }
               ]
             }}

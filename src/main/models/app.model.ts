@@ -1,7 +1,7 @@
 import { MyEncode } from '@main/libs/my_encode'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
-import { app, BrowserWindow, crashReporter, globalShortcut } from 'electron'
+import { app, crashReporter, globalShortcut, screen } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
 import { VaultItemService } from '@main/services/vault_item.service'
@@ -72,10 +72,11 @@ class AppModel {
   init() {
     this.initWin()
     initAllApi()
-    this.initGlobalShortcut(defaultUserSetInfo)
+    this.initGlobalShortcut()
     app.on('browser-window-blur', () => {
       AppEvent.emit(AppEventType.windowBlur)
-      // this.quickwin.CheckBlurClick()
+      // this.last_point = screen.getCursorScreenPoint()
+      // console.log('get lastpoint', this.last_point)
     })
     this.checkInterval = setInterval(() => {
       this.performLockCheck()
@@ -180,6 +181,7 @@ class AppModel {
     const setinfo = this.user.userinfo.user_set as UserSetInfo
     this._lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
     this.saveSet()
+    this.initGlobalShortcut()
     AppEvent.emit(AppEventType.LoginOk)
   }
 
@@ -197,30 +199,56 @@ class AppModel {
     return this.user.userinfo
   }
 
-  public initGlobalShortcut(setinfo: UserSetInfo) {
+  public initGlobalShortcut() {
+    let setinfo = defaultUserSetInfo
+    const curuserinfo = this.curUserInfo()
+    if (curuserinfo) {
+      setinfo = curuserinfo.user_set as UserSetInfo
+    }
     globalShortcut.unregisterAll()
-    globalShortcut.register(setinfo.shortcut_global_open_main, () => {
-      Log.info('shortcut_global_open_main')
-      this.mainwin?.show()
-    })
-    globalShortcut.register(setinfo.shortcut_global_quick_find, () => {
-      Log.info('shortcut_global_quick_find')
-      this.quickwin?.show()
-    })
-    globalShortcut.register(setinfo.shortcut_global_quick_lock, () => {
-      Log.info('shortcut_global_quick_lock')
-      this.LockApp()
+    Object.keys(setinfo).forEach((key) => {
+      if (key.startsWith('shortcut_global')) {
+        const value = setinfo[key]
+        if (value && value.length > 0) {
+          const res = globalShortcut.register(value, () => {
+            if (key == 'shortcut_global_open_main') this.mainwin?.show()
+            if (key == 'shortcut_global_quick_find') this.quickwin?.show()
+            if (key == 'shortcut_global_quick_lock') this.LockApp()
+          })
+          Log.info('register global key:', value, res)
+        }
+      }
     })
   }
 
+  public IsKeyRegisted(key: string) {
+    return globalShortcut.isRegistered(key)
+  }
+
+  private last_point = { x: 0, y: 0 }
+
+  setLastPoint(point: { x: number; y: number }) {
+    console.log('set last point', point)
+    this.last_point = point
+  }
+
   AutoFill(info: VaultItem) {
+    this.quickwin.hide()
     if (info.vault_item_type == VaultItemType.Login) {
-      var logininfo = info.info as LoginPasswordInfo
-      robot.typeString(logininfo.username)
+      const logininfo = info.info as LoginPasswordInfo
+      console.log('move mouse', this.last_point)
+      robot.moveMouse(this.last_point.x, this.last_point.y)
+      robot.mouseClick()
+      robot.setKeyboardDelay(1)
+      robot.typeStringDelayed(logininfo.username, 6000)
       robot.keyTap('tab')
-      robot.typeString(logininfo.password)
+      robot.typeStringDelayed(logininfo.password, 6000)
       robot.keyTap('enter')
     }
+  }
+
+  getScreenPoint() {
+    return screen.getCursorScreenPoint()
   }
 }
 

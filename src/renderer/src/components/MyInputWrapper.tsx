@@ -3,7 +3,6 @@ import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, InputRef, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import Icon from './Icon'
-import { PasswordGenContent, PasswordGenContentRef } from '@renderer/pages/Vault/PasswordGenContent'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
 
 interface MyInputProps<InputPropsT> {
@@ -21,11 +20,11 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
   const appset = use_appset() as AppsetStore
   const [hoverState, setHoverState] = useState(false)
   const [showPasswordGen, setShowPasswordGen] = useState(false)
+  const [showRandomPasswordBtn, setShowRandomPasswordBtn] = useState(false)
   const [messageApi, contextHolder] = message.useMessage()
   const [showPassword, setShowPassword] = useState(false)
   const inputRef = useRef<InputRef>(null)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
-  console.log('show type', props.show_type, props.is_password)
   const isedit = props.show_type == ModalType.Edit || props.show_type == ModalType.Add
   const getPasswordVisible = () => {
     if (!props.is_password) return null
@@ -47,14 +46,18 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
   useEffect(() => {
     function handleFocus() {
       if (isedit && props.is_password) {
-        console.log('focus')
-        setShowPasswordGen(true)
+        setShowRandomPasswordBtn(true)
       }
     }
-    function handleBlur() {
+    function handleBlur(event) {
       if (isedit && props.is_password) {
-        console.log('blur')
-        // setShowPasswordGen(false)
+        console.log('handleBlur', event)
+        if (event.relatedTarget && event.relatedTarget.id == 'randomPasswordBtn') {
+          // console.log('classname', event.relatedTarget.className)
+          // console.log('id', event.relatedTarget.id)
+          return
+        }
+        setShowRandomPasswordBtn(false)
       }
     }
     const inputElement = inputRef.current.input
@@ -89,6 +92,23 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
         {...getPasswordVisible()}
         readOnly={props.show_type == ModalType.View}
       ></props.inputElement>
+      {showRandomPasswordBtn && (
+        <div className=" absolute left-1 z-10 bottom-[-35px]">
+          <Button
+            type="default"
+            id="randomPasswordBtn"
+            icon={<Icon type={Icon_type.icon_lock2} svg></Icon>}
+            className=" text-blue-500 font-sans font-bold"
+            onClick={() => {
+              console.log('show panel')
+              setShowRandomPasswordBtn(false)
+              setShowPasswordGen(true)
+            }}
+          >
+            {appset.getText('vaultitem.createrandom')}
+          </Button>
+        </div>
+      )}
       {showPasswordGen && (
         <PasswordGenPanel
           show={showPasswordGen}

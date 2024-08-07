@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import AppModel from '../models/app.model'
-import { webToManMsg } from '../../common/entitys/ipcmsg.entity'
+import { MainToWebMsg, webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { WhereDef } from '@common/entitys/db.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
@@ -33,8 +33,33 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.setSize(width, height)
   })
 
+  ipcMain.handle(webToManMsg.showWindows, (_, viewtype: renderViewType, showorHide: boolean) => {
+    if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.showOrHide(showorHide)
+    else if (viewtype == renderViewType.Quickview)
+      AppModel.getInstance().quickwin?.showOrHide(showorHide)
+  })
+
+  // ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_item_id) => {
+  //   const mainwin = AppModel.getInstance().mainwin
+  //   if (mainwin) {
+  //     mainwin.show()
+  //     mainwin.content.send(MainToWebMsg.ShowVaulteItem, vault_item_id)
+  //   }
+  // })
+
   ipcMain.handle(webToManMsg.AutoFill, (_, info) => {
-    AppModel.getInstance().AutoFill(info)
+    return AppModel.getInstance().AutoFill(info)
+  })
+
+  ipcMain.handle(webToManMsg.getMousePos, () => {
+    return AppModel.getInstance().getScreenPoint()
+  })
+
+  ipcMain.handle(webToManMsg.ShortCutKeyChange, (_) => {
+    AppModel.getInstance().initGlobalShortcut()
+  })
+  ipcMain.handle(webToManMsg.CheckShortKey, (_, key) => {
+    return AppModel.getInstance().IsKeyRegisted(key)
   })
 
   //user

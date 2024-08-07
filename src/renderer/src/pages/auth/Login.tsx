@@ -1,12 +1,12 @@
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
-import { RegisterInfo, User } from '@common/entitys/user.entity'
+import { LastUserInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory } from '@renderer/libs/router'
 import { GetAllUsers, ipc_call } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { AutoComplete, AutoCompleteProps, Button, Form, Input, message, Select } from 'antd'
+import { AutoComplete, AutoCompleteProps, Button, Form, Input, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useState } from 'react'
 interface RegisterInfo2 extends RegisterInfo {
@@ -19,6 +19,7 @@ export default function Register(): JSX.Element {
   const history = useHistory()
   ConsoleLog.LogInfo('register render', history.PathName)
   const [options, setOptions] = useState<AutoCompleteProps['options']>([])
+  const [lastUser, setLastUser] = useState<User>(null)
   const appstore = use_appstore() as AppStore
   const isReigster = history.PathName == PagePath.register
   const isLogin = history.PathName == PagePath.Login
@@ -30,6 +31,13 @@ export default function Register(): JSX.Element {
 
   async function initData() {
     await GetAllUsers(appstore, lang, messageApi)
+    await ipc_call<LastUserInfo>(webToManMsg.GetLastUserInfo)
+      .then((res) => {
+        setLastUser(res.user)
+      })
+      .catch((e) => {
+        messageApi.error(lang.getText(`err.${e.code}`))
+      })
   }
   useEffect(() => {
     setOptions(
@@ -56,7 +64,7 @@ export default function Register(): JSX.Element {
   async function onLogin() {
     form.validateFields().then(async (values) => {
       if (!values.username) {
-        values.username = appstore.cur_user?.username
+        values.username = lastUser?.username
       }
       const user = await ipc_call<User>(webToManMsg.Login, values).catch((error) => {
         messageApi.error(lang.getText(`err.${error.code}`))

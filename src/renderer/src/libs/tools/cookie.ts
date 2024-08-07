@@ -1,7 +1,7 @@
 export function setCookie(name: string, value: string, day: number) {
   let expires = ''
   if (day) {
-    var date = new Date()
+    const date = new Date()
     date.setTime(date.getTime() + day * 24 * 60 * 60 * 1000)
     expires = '; expires=' + date.toUTCString()
   }

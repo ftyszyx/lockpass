@@ -1,6 +1,6 @@
 import { ModalType } from '@common/gloabl'
 import { Rule } from 'antd/es/form'
-import React, { HtmlHTMLAttributes } from 'react'
+import React from 'react'
 
 export interface prop_field {
   [k: string]: any

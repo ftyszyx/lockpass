@@ -50,7 +50,7 @@ export function Column(options: ColumnOptions): PropertyDecorator {
     const col_type = options.type || 'VARCHAR'
     Reflect.defineMetadata(Column_Name_KEY, col_name, object, propertyName)
     Reflect.defineMetadata(Column_Type_KEY, col_type, object, propertyName)
-    for (let key in options) {
+    for (const key in options) {
       Reflect.defineMetadata(key, options[key], object, propertyName)
     }
   }

@@ -3,8 +3,8 @@ desc: 密码生成器
 © 2024 zyx
 date:2024/08/02 16:14:17
 */
-import { Form, Input, message, Select } from 'antd'
-import { forwardRef, Ref, useEffect, useImperativeHandle, useState } from 'react'
+import { Form, Input, InputRef, message, Select } from 'antd'
+import { forwardRef, Ref, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useForm } from 'antd/es/form/Form'
 import { PasswordTypeFileList } from '@renderer/entitys/password.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -34,6 +34,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
   const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
   const [messageApi, contextHolder] = message.useMessage()
+  const inputref = useRef<InputRef>(null)
   useImperativeHandle(ref, () => {
     return {
       ReFresh: () => {
@@ -52,7 +53,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
 
   async function UpdateSet() {
     const setinfo = (await form.validateFields()) as PasswordTypeInfo
-    let appsetinfo = appstore.GetUserSet()
+    const appsetinfo = appstore.GetUserSet()
     appsetinfo.password_type_conf = { ...appsetinfo.password_type_conf, ...setinfo }
     appsetinfo.password_type = password_type as GenPasswordType
     await ChangeAppset(appstore, appset, appsetinfo, messageApi)
@@ -70,6 +71,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
     }
     setValue(password)
   }
+
   useEffect(() => {
     props.onChange(value)
   }, [value])
@@ -77,7 +79,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
   function genRandomPassword(setinfo: PasswordTypeInfo) {
     let randomchars = RAND_LETTERS
     if (setinfo.random_number) randomchars += RAND_NUMBERS
-    let password_arr = []
+    const password_arr = []
     if (setinfo.random_capitalize) {
       password_arr.push(RAND_CAP_LETTERS[Math.floor(Math.random() * RAND_CAP_LETTERS.length)])
     }
@@ -124,7 +126,13 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
       {contextHolder}
       <div className="flex flex-col space-y-1">
         <div>
-          <Input value={value}></Input>
+          <Input
+            value={value}
+            ref={inputref}
+            onChange={(event) => {
+              setValue(event.target.value)
+            }}
+          ></Input>
         </div>
         <div className=" flex flex-row justify-between">
           <div> {appset.lang.getText('passwordGenPanel.password_type')}</div>

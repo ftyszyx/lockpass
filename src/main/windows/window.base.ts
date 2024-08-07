@@ -1,11 +1,12 @@
 import { BrowserWindow, screen } from 'electron'
 import icon from '../../../resources/icon.png?asset'
-import path, { join } from 'path'
+import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
-import { appendFile } from 'fs'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
 import { EntityType } from '@common/entitys/app.entity'
+import { Log } from '@main/libs/log'
+import AppModel from '@main/models/app.model'
 export class WindowBase {
   protected witdth: number = 900
   protected height: number = 670
@@ -89,20 +90,30 @@ export class WindowBase {
   }
 
   show() {
+    Log.info('show window', this.url)
+    AppModel.getInstance().setLastPoint(screen.getCursorScreenPoint())
     this.win.show()
   }
 
   hide() {
+    Log.info('hide window', this.url)
     this.window.hide()
     this.window.setSkipTaskbar(true)
+  }
+
+  showOrHide(show: boolean) {
+    if (show) this.show()
+    else this.hide
   }
 
   setSize(width: number, height: number) {
     const oldsize = this.win.getSize()
     if (width <= 0) width = oldsize[0]
     if (height <= 0) height = oldsize[1]
-    // console.log('change size', width, height)
-    this.window.setSize(width, height)
+    this.win.setMinimumSize(width, height)
+    const [minWidth, minHeight] = this.win.getMinimumSize()
+    console.log('change size', width, height, this.url, oldsize, minWidth, minHeight)
+    this.window.setSize(width, height, true)
   }
 
   CheckBlurClick() {

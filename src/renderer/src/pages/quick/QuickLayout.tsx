@@ -7,7 +7,7 @@ import { getAllVault, getAllVaultItem, ipc_call_normal } from '@renderer/libs/to
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { message } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export default function QucickLayout(props: ChildProps): JSX.Element {
   const appstore = use_appstore() as AppStore
@@ -16,14 +16,14 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   useEffect(() => {
     const timer = setInterval(() => {
       checkSize()
-    }, 1000)
+    }, 500)
     return () => {
       clearInterval(timer)
     }
   }, [])
 
   useEffect(() => {
-    initData()
+    initUserData()
     window.electron.ipcRenderer.on(MainToWebMsg.DataChange, (_, changetype: EntityType) => {
       ConsoleLog.LogInfo('data change', changetype)
       if (changetype == EntityType.vault) getAllVault(appstore, appset.lang, messageApi)
@@ -32,7 +32,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
     })
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOK, () => {
       ConsoleLog.LogInfo('login ok')
-      initData()
+      initUserData()
     })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.DataChange)
@@ -40,16 +40,24 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
     }
   }, [])
 
-  async function initData() {
+  async function initUserData() {
     const curuser = await ipc_call_normal<User>(webToManMsg.getCurUserInfo)
     appstore.SetUser(curuser)
+  }
+
+  async function initvaultData() {
     await getAllVault(appstore, appset.lang, messageApi)
     await getAllVaultItem(appstore, appset.lang, messageApi)
   }
 
+  useEffect(() => {
+    initvaultData()
+  }, [appstore.cur_user])
+
   async function checkSize() {
     const rect = document.body.getBoundingClientRect()
     if (rect.height == window.innerHeight) return
+    console.log('checkSize', rect, window.innerHeight)
     await window.electron.ipcRenderer.invoke(
       webToManMsg.ResizeWindow,
       renderViewType.Quickview,

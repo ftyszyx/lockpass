@@ -15,9 +15,9 @@ export interface MyTreeInfo<EntityT> {
 
 //获取树
 export const GetCommonTree = <T extends TreeSrcType>(src_items: T[]): MyTreeInfo<T> => {
-  let tree_nodes: TreeNodeType<T>[] = []
-  let datalist: TreeNodeType<T>[] = []
-  let datamap = new Map<string, TreeNodeType<T>>()
+  const tree_nodes: TreeNodeType<T>[] = []
+  const datalist: TreeNodeType<T>[] = []
+  const datamap = new Map<string, TreeNodeType<T>>()
   const menu_map = new Map<string, T>()
   if (src_items.length > 0) {
     src_items.forEach((item) => {

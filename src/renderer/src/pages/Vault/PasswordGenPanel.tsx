@@ -27,6 +27,7 @@ export default function PasswordGenPanel(props: PasswordGenPanelProps): JSX.Elem
       open={props.show}
       style={props.style}
       closable={false}
+      mask={false}
       onCancel={() => {
         props.onClose()
       }}

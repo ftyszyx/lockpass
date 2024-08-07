@@ -78,7 +78,7 @@ class DbHlper {
       if (value == undefined || value == null) {
         return 'default'
       } else if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
-        let res = value.toString()
+        const res = value.toString()
         return `'${res}'`
       } else {
         return `${value.toString()}`
@@ -126,7 +126,7 @@ class DbHlper {
   }
 
   private _exesql(sql_str: string, ext_msg: string = ''): Promise<void> {
-    let conn = this.getconnection()
+    const conn = this.getconnection()
     return new Promise((resolve, reject) => {
       if (this.show_log) Log.info('exesql:', sql_str)
       conn.exec(sql_str, (err, row) => {
@@ -141,7 +141,7 @@ class DbHlper {
   }
 
   private _runSql(sql_str: string, ext_msg: string = ''): Promise<void> {
-    let conn = this.getconnection()
+    const conn = this.getconnection()
     return new Promise((resolve, reject) => {
       if (this.show_log) Log.info('runsql:', sql_str)
       conn.exec(sql_str, (err, row) => {
@@ -184,14 +184,14 @@ class DbHlper {
           reject(new Error(err.message))
         } else {
           // if (this.show_log) Log.info('rows:', rows)
-          let res: T[] = []
+          const res: T[] = []
           for (let i = 0; i < rows.length; i++) {
             const item = new obj_type()
             for (let j = 0; j < keys.length; j++) {
               const key = keys[j]
               const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
               if (col_name) {
-                let col_value = rows[i][col_name]
+                const col_value = rows[i][col_name]
                 if (col_value == undefined || col_value == null) continue
                 item[key] = this.decode_table_str(obj, key, col_value)
               }
@@ -208,7 +208,7 @@ class DbHlper {
     const table_name = obj[Table_Name_KEY]
     const encode_value = this.encode_table_str(obj, key, value)
     const col_value = this.getColumnValue(obj, key, encode_value)
-    let sql_str = `delete from ${table_name} where ${key}=${col_value}`
+    const sql_str = `delete from ${table_name} where ${key}=${col_value}`
     return await this._runSql(sql_str, `del:${table_name}`)
   }
 
@@ -307,11 +307,11 @@ class DbHlper {
 
   public GetTotalCount(obj: BaseEntity, where: WhereDef<BaseEntity>): Promise<number> {
     const table_name = obj[Table_Name_KEY]
-    let keystr = 'count(*)'
+    const keystr = 'count(*)'
     let sql_str = `select ${keystr} from ${table_name} where `
     sql_str += this.getWhreSql(obj, where)
     return new Promise((resolve, reject) => {
-      let conn = this.getconnection()
+      const conn = this.getconnection()
       if (this.show_log) Log.info('runsql:', sql_str)
       conn.all(sql_str, (err, rows) => {
         if (err) {
@@ -337,13 +337,13 @@ class DbHlper {
   }
 
   public InitTables() {
-    let conn = this.getconnection()
+    const conn = this.getconnection()
     const initFunc = (obj: BaseEntity) => {
-      let table_name = obj[Table_Name_KEY]
+      const table_name = obj[Table_Name_KEY]
       let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
       let index_desc = ''
       let sequence_desc = ''
-      let keys = Reflect.ownKeys(obj)
+      const keys = Reflect.ownKeys(obj)
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i]
         const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)

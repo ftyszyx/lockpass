@@ -1,6 +1,7 @@
 import { EntityType, UserSetInfo } from '@common/entitys/app.entity'
 import { LangHelper } from '@common/lang'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
+import { getStrWidth } from '@main/libs/str'
 import AppModel from '@main/models/app.model'
 import { app, Menu, Tray } from 'electron'
 import path from 'path'
@@ -20,26 +21,44 @@ export class MyTray {
         mainwin.show()
       }
     })
-    // AppEvent.on(AppEventType.LoginOk, () => {
-    //   this.updateMenu(AppModel.getInstance().curUserInfo().user_set as UserSetInfo)
-    // })
-    // AppEvent.on(AppEventType.DataChange, (type) => {
-    //   if (type == EntityType.user) {
-    //     this.updateMenu(AppModel.getInstance().curUserInfo().user_set as UserSetInfo)
-    //   }
-    // })
+    AppEvent.on(AppEventType.LoginOk, () => {
+      this.updateMenu(AppModel.getInstance().curUserInfo().user_set as UserSetInfo)
+    })
+    AppEvent.on(AppEventType.DataChange, (type) => {
+      if (type == EntityType.user) {
+        this.updateMenu(AppModel.getInstance().curUserInfo().user_set as UserSetInfo)
+      }
+    })
+  }
+
+  getLabelStr(label: string, value: string = ''): string {
+    value = (value || '').trim()
+    if (value.length <= 0) return label
+    const labelWidth = getStrWidth(label)
+    const targetwidth = 25
+    const padwidth = targetwidth - labelWidth
+    if (padwidth <= 0) return label + value
+    const res = label + ' '.repeat(padwidth) + value
+    console.log('res', res)
+    return res
   }
 
   public updateMenu(setinfo: UserSetInfo) {
     const contextmenu = Menu.buildFromTemplate([
       {
-        label: LangHelper.getString('tray.menu.openlockpass'),
+        label: this.getLabelStr(
+          LangHelper.getString('tray.menu.openlockpass'),
+          setinfo?.shortcut_global_open_main
+        ),
         click: () => {
           AppModel.getInstance().mainwin.show()
         }
       },
       {
-        label: LangHelper.getString('tray.menu.openquick'),
+        label: this.getLabelStr(
+          LangHelper.getString('tray.menu.openquick'),
+          setinfo?.shortcut_global_quick_find
+        ),
         click: () => {
           AppModel.getInstance().quickwin.show()
         }
@@ -48,13 +67,16 @@ export class MyTray {
         type: 'separator'
       },
       {
-        label: LangHelper.getString('tray.menu.lock').padEnd(30),
+        label: this.getLabelStr(
+          LangHelper.getString('tray.menu.lock'),
+          setinfo?.shortcut_global_quick_lock
+        ),
         click: () => {
           AppModel.getInstance().LockApp()
         }
       },
       {
-        label: LangHelper.getString('tray.menu.quit'),
+        label: this.getLabelStr(LangHelper.getString('tray.menu.quit')),
         click: () => {
           app.quit()
         }

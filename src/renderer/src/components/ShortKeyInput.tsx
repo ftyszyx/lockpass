@@ -19,7 +19,7 @@ export default function ShortKeyInput(props: ShortKeyInputProps) {
   const appset = use_appset() as AppsetStore
   const inputRef = useRef<InputRef>(null)
   useEffect(() => {
-    let press_controls = new Set<string>()
+    const press_controls = new Set<string>()
     let press_key = ''
     const handleKeyDown = (event: KeyboardEvent) => {
       let eventKey = event.key

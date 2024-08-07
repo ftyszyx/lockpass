@@ -61,7 +61,6 @@ export enum Icon_type {
   icon_set = 'icon-set',
   normal_set = 'icon-set2',
   shortcut_local_set = 'icon-shortcut',
-  shortcut_global_set = 'icon-shortcut',
   icon_add = 'icon-add',
   icon_log = 'icon-log',
   icon_help = 'icon-help',
@@ -73,8 +72,8 @@ export enum Icon_type {
   icon_del = 'icon-delete',
   icon_fold = 'icon-fold',
   icon_refresh = 'icon-refresh',
-  icon_detail = 'iconDetail',
-  icon_detail2 = 'iconDetail2'
+  icon_detail = 'icon-viewDetail',
+  icon_detail2 = 'icon-viewDetail2'
 }
 
 export enum VaultItemType {

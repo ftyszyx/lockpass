@@ -68,7 +68,7 @@ export class MyEncode {
   }
 
   public cleanKey(user: User) {
-    let key_path = this.getKeyPath(user)
+    const key_path = this.getKeyPath(user)
     if (fs.existsSync(key_path)) {
       fs.unlinkSync(key_path)
     }
@@ -76,9 +76,9 @@ export class MyEncode {
 
   public Register(user: User, password: string) {
     // prettier-ignore
-    let key_data = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
+    const key_data = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
     const rand_len = 25
-    let randbytes = randomBytes(rand_len)
+    const randbytes = randomBytes(rand_len)
     let key = ''
     for (let i = 0; i < rand_len; i++) {
       key += key_data[randbytes[i] % key_data.length]

@@ -1,10 +1,11 @@
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
+import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { Icon_type } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import ShortKeyInput from '@renderer/components/ShortKeyInput'
 import { NormalSetFiledList, SetMenuItem } from '@renderer/entitys/set.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { ChangeAppset } from '@renderer/libs/tools/other'
+import { ChangeAppset, ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Form, Button, message } from 'antd'
@@ -21,7 +22,19 @@ export default function AdminSet() {
     form.validateFields().then(async (values) => {
       const setinfo = appstore.cur_user.user_set as UserSetInfo
       const newset = { ...setinfo, ...values }
+      if (select_item == SetMenuItem.shortcut_global) {
+        Object.keys(values).map(async (key) => {
+          const res = await ipc_call_normal(webToManMsg.CheckShortKey, values[key])
+          if (res) {
+            messageApi.error(appset.getText(`set.key_conflict`, values[key]))
+            return
+          }
+        })
+      }
       await ChangeAppset(appstore, appset, newset, messageApi)
+      if (select_item == SetMenuItem.shortcut_global) {
+        await ipc_call_normal(webToManMsg.ShortCutKeyChange)
+      }
     })
   }
   // useEffect(() => {

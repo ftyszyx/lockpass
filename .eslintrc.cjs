@@ -7,6 +7,8 @@ module.exports = {
     '@electron-toolkit/eslint-config-prettier'
   ],
   rules: {
-    endOfLine: 'auto'
+    endOfLine: 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }

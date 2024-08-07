@@ -3,7 +3,7 @@ import Icon from '@renderer/components/Icon'
 import IconSelect from '@renderer/components/IconSelect'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { FieldInfo } from '@renderer/entitys/form.entity'
-import { GetPasswordFilelist, PasswordFileListDic } from '@renderer/entitys/VaultItem.entity'
+import { GetPasswordFilelist } from '@renderer/entitys/VaultItem.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Form, Input } from 'antd'
@@ -43,7 +43,6 @@ export default function PaswordDetail(props: props) {
       </div>
       <div>
         {GetPasswordFilelist(props.passwordType, appset.lang).map((item: FieldInfo) => {
-          console.log('item', item)
           return (
             <Form.Item
               className=" mb-2  "

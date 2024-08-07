@@ -48,7 +48,7 @@ export default function Vault() {
             }}
           ></Icon>
           <Input
-            placeholder={appset.lang.getText('vault.global_search', appstore.cur_user?.username)}
+            placeholder={appset.getText('vault.global_search', appstore.cur_user?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
               if (newvalue.target.value) {
@@ -77,8 +77,8 @@ export default function Vault() {
           {/*  right side content*/}
           <div className="flex flex-grow">
             {select_vault_item && (
-              <div className=" flex flex-col w-full p-4">
-                <div className="flex flex-row-reverse">
+              <div className=" flex flex-col w-full">
+                <div className="flex flex-row-reverse   p-4 border-b-2 border-solid border-gray-200">
                   <Button
                     type="primary"
                     onClick={() => {
@@ -88,74 +88,76 @@ export default function Vault() {
                     {show_edit ? appset.lang.getText('cancel') : appset.lang.getText('edit')}
                   </Button>
                 </div>
-                <Form
-                  form={form}
-                  className="flex-grow"
-                  initialValues={select_vault_item}
-                  layout="vertical"
-                >
-                  <PaswordDetail
-                    passwordType={select_vault_item.vault_item_type as VaultItemType}
-                    modal_type={show_edit ? ModalType.Edit : ModalType.View}
-                  ></PaswordDetail>
-                  <div className=" flex flex-row-reverse mt-2">
-                    {show_edit && (
-                      <Form.Item>
-                        <Popconfirm
-                          title={appset.lang.getText('vault.edit_title')}
-                          description={appset.lang.getText(
-                            'vault.sure_edit',
-                            select_vault_item.name
-                          )}
-                          okText={appset.lang.getText('ok')}
-                          cancelText={appset.lang.getText('cancel')}
-                          onConfirm={async () => {
-                            const values = await form.validateFields()
-                            values.info = JSON.stringify(values.info)
-                            values.id = select_vault_item.id
-                            await ipc_call(webToManMsg.updateValutItem, values)
-                              .then(async () => {
-                                set_show_edit(false)
-                                await getAllVaultItem(appstore, appset.lang, messageApi)
-                              })
-                              .catch((err) => {
-                                messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
-                              })
-                          }}
-                        >
-                          <Button type="primary" htmlType="submit">
-                            {appset.lang.getText('save')}
-                          </Button>
-                        </Popconfirm>
-                      </Form.Item>
-                    )}
-                    {show_edit && (
-                      <Form.Item className=" mr-3">
-                        <Popconfirm
-                          title={appset.lang.getText('vault.delete_title')}
-                          description={appset.lang.getText(
-                            'vault.sure_delete',
-                            select_vault_item.name
-                          )}
-                          onConfirm={async () => {
-                            await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
-                              .then(async () => {
-                                set_show_edit(false)
-                                await getAllVaultItem(appstore, appset.lang, messageApi)
-                              })
-                              .catch((err) => {
-                                messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
-                              })
-                          }}
-                          okText={appset.lang.getText('ok')}
-                          cancelText={appset.lang.getText('cancel')}
-                        >
-                          <Button type="dashed">{appset.lang.getText('delete')}</Button>
-                        </Popconfirm>
-                      </Form.Item>
-                    )}
-                  </div>
-                </Form>
+                <div className="p-4">
+                  <Form
+                    form={form}
+                    className="flex-grow"
+                    initialValues={select_vault_item}
+                    layout="vertical"
+                  >
+                    <PaswordDetail
+                      passwordType={select_vault_item.vault_item_type as VaultItemType}
+                      modal_type={show_edit ? ModalType.Edit : ModalType.View}
+                    ></PaswordDetail>
+                    <div className=" flex flex-row-reverse mt-2">
+                      {show_edit && (
+                        <Form.Item>
+                          <Popconfirm
+                            title={appset.lang.getText('vault.edit_title')}
+                            description={appset.lang.getText(
+                              'vault.sure_edit',
+                              select_vault_item.name
+                            )}
+                            okText={appset.lang.getText('ok')}
+                            cancelText={appset.lang.getText('cancel')}
+                            onConfirm={async () => {
+                              const values = await form.validateFields()
+                              values.info = JSON.stringify(values.info)
+                              values.id = select_vault_item.id
+                              await ipc_call(webToManMsg.updateValutItem, values)
+                                .then(async () => {
+                                  set_show_edit(false)
+                                  await getAllVaultItem(appstore, appset.lang, messageApi)
+                                })
+                                .catch((err) => {
+                                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                                })
+                            }}
+                          >
+                            <Button type="primary" htmlType="submit">
+                              {appset.lang.getText('save')}
+                            </Button>
+                          </Popconfirm>
+                        </Form.Item>
+                      )}
+                      {show_edit && (
+                        <Form.Item className=" mr-3">
+                          <Popconfirm
+                            title={appset.lang.getText('vault.delete_title')}
+                            description={appset.lang.getText(
+                              'vault.sure_delete',
+                              select_vault_item.name
+                            )}
+                            onConfirm={async () => {
+                              await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
+                                .then(async () => {
+                                  set_show_edit(false)
+                                  await getAllVaultItem(appstore, appset.lang, messageApi)
+                                })
+                                .catch((err) => {
+                                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                                })
+                            }}
+                            okText={appset.lang.getText('ok')}
+                            cancelText={appset.lang.getText('cancel')}
+                          >
+                            <Button type="dashed">{appset.lang.getText('delete')}</Button>
+                          </Popconfirm>
+                        </Form.Item>
+                      )}
+                    </div>
+                  </Form>
+                </div>
               </div>
             )}
             {!select_vault_item && (

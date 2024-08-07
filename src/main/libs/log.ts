@@ -57,11 +57,11 @@ export class Log {
 
   static initialize() {
     const date = new Date()
-    let log_dir = `${PathHelper.getHomeDir()}/log`
+    const log_dir = `${PathHelper.getHomeDir()}/log`
     if (!fs.existsSync(log_dir)) {
       fs.mkdirSync(log_dir)
     }
-    let log_path = `${log_dir}/lockpass-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`
+    const log_path = `${log_dir}/lockpass-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`
     // console.log(`log path: ${log_path}`)
     Log.logWriter = new FileLogWriter(log_path, true)
   }

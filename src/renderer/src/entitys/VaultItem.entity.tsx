@@ -1,7 +1,7 @@
 import { Input } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
-import { ModalType, VaultItemType } from '@common/gloabl'
+import { ControlKey, ModalType, VaultItemType } from '@common/gloabl'
 import { LangItem } from '@common/lang'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { TextAreaProps } from 'antd/es/input'
@@ -16,7 +16,7 @@ import {
 export function GetPasswordInfoString(item: VaultItem): string {
   if (item.vault_item_type == VaultItemType.Login) {
     const info = item.info as LoginPasswordInfo
-    return `${info.username}-${info.urls.join('-')}`
+    return `${info.username}${info.urls ? '-' + info.urls.join('-') : ''}`
   } else if (item.vault_item_type == VaultItemType.Card) {
     const info = item.info as CardPasswordInfo
     return `${info.card_company}:${info.card_number}`
@@ -118,7 +118,7 @@ export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
   ]
 }
 
-export function NotePasswordFieldList(lang: LangItem): FieldInfo[] {
+export function NotePasswordFieldList(_: LangItem): FieldInfo[] {
   return [
     {
       field_name: 'note_text',
@@ -147,4 +147,27 @@ export const GetPasswordFilelist = (type: VaultItemType, lang: LangItem): FieldI
     default:
       return []
   }
+}
+
+export interface PasswordRenderDetail {
+  key: string
+  shortCut: string
+}
+
+export const GetPasswordRenderDetailList = (vaule: VaultItem): PasswordRenderDetail[] => {
+  switch (vaule.vault_item_type) {
+    case VaultItemType.Login:
+      return [
+        { key: 'username', shortCut: `${ControlKey.ctrl}+C` },
+        { key: 'password', shortCut: `${ControlKey.ctrl}+${ControlKey.Shift}+C` }
+      ]
+    case VaultItemType.Card:
+      return [
+        { key: 'card_number', shortCut: `${ControlKey.ctrl}+${ControlKey.Shift}+C` },
+        { key: 'card_password', shortCut: `${ControlKey.ctrl}+${ControlKey.Alt}+C` }
+      ]
+    case VaultItemType.NoteBook:
+      return [{ key: 'note_text', shortCut: `${ControlKey.ctrl}+${ControlKey.Shift}+C` }]
+  }
+  return []
 }

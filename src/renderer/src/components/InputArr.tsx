@@ -30,7 +30,7 @@ export default function InputArr(props: InputArrProps) {
   }
 
   const handleRemoveInput = (index: number) => {
-    let newinputs = [].concat(inputs)
+    const newinputs = [].concat(inputs)
     newinputs.splice(index, 1)
     setInputs(newinputs)
     props.onChange(newinputs) // 移除输入时，更新外部状态
