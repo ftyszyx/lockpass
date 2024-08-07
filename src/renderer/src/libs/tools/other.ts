@@ -60,7 +60,7 @@ export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi
         appstore.setValuts(res)
       })
       .catch((e) => {
-        messageApi.error(lang.getText(`err.${e.code}`))
+        messageApi.error(lang?.getText(`err.${e.code}`))
       })
   }
 }
@@ -80,7 +80,7 @@ export async function getAllVaultItem(
         appstore.setValutItems(res)
       })
       .catch((e) => {
-        messageApi.error(lang.getText(`err.${e.code}`))
+        messageApi.error(lang?.getText(`err.${e.code}`))
       })
   }
 }

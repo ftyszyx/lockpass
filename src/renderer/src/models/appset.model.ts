@@ -13,7 +13,7 @@ export interface AppsetStore {
   ToggleFoldMenu: () => void
 }
 export const use_appset = create<AppsetStore>((set, _) => {
-  ConsoleLog.LogTrace('use_appset create')
+  ConsoleLog.LogInfo('use_appset create')
   return {
     fold_menu: false,
     lang: null,

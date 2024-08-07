@@ -53,8 +53,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
       if (isedit && props.is_password) {
         console.log('handleBlur', event)
         if (event.relatedTarget && event.relatedTarget.id == 'randomPasswordBtn') {
-          // console.log('classname', event.relatedTarget.className)
-          // console.log('id', event.relatedTarget.id)
           return
         }
         setShowRandomPasswordBtn(false)

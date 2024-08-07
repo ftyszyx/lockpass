@@ -12,7 +12,6 @@ import { ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, Input, InputRef, message } from 'antd'
-import { clipboard } from 'electron'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function QuickSearch() {
@@ -191,7 +190,7 @@ export default function QuickSearch() {
                     key={item.key}
                     className="flex flex-row items-center justify-between"
                     onClick={() => {
-                      clipboard.writeText(selectItem[item.key])
+                      navigator.clipboard.writeText(selectItem[item.key])
                       messageApi.success(
                         appset.getText(
                           'copy_success_arg',
