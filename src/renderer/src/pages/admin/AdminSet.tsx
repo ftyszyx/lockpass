@@ -24,10 +24,12 @@ export default function AdminSet() {
       const newset = { ...setinfo, ...values }
       if (select_item == SetMenuItem.shortcut_global) {
         Object.keys(values).map(async (key) => {
-          const res = await ipc_call_normal(webToManMsg.CheckShortKey, values[key])
-          if (res) {
-            messageApi.error(appset.getText(`set.key_conflict`, values[key]))
-            return
+          if (setinfo[key] != values[key]) {
+            const res = await ipc_call_normal(webToManMsg.CheckShortKey, values[key])
+            if (res) {
+              messageApi.error(appset.getText(`set.key_conflict`, values[key]))
+              return
+            }
           }
         })
       }
@@ -37,94 +39,103 @@ export default function AdminSet() {
       }
     })
   }
-  // useEffect(() => {
-  //   form.resetFields()
-  // }, [select_item])
-  ConsoleLog.LogInfo('AdminSet render', appstore.cur_user.user_set)
+  ConsoleLog.LogInfo('AdminSet render', appstore.cur_user?.user_set)
 
   return (
     <div className=" flex flex-row h-full">
       {messageContext}
-      {/* left menu */}
-      <div className=" w-[150px] flex flex-col border-solid border-r-2 border-gray-300">
-        {Object.keys(SetMenuItem).map((item) => {
-          return (
-            <div
-              key={item}
-              onClick={() => {
-                set_select_item(item)
-              }}
-              className={` rounded-sm text-sm font-bold font-sans flex flex-row items-center cursor-pointer p-2 ${item == select_item ? 'bg-gray-200' : ''} h-[50px]`}
-            >
-              <Icon className="w-[30px] h-[30px] mr-2" type={Icon_type[`${item}_set`]} svg></Icon>
-              <span> {appset.lang.getText(`set.menu.${item}`)}</span>
-            </div>
-          )
-        })}
-      </div>
-      {/* right content */}
-      <div className="flex-grow flex flex-col p-4">
-        <Form
-          form={form}
-          initialValues={appstore.cur_user.user_set as UserSetInfo}
-          onFieldsChange={async () => {
-            if (select_item == SetMenuItem.normal) {
-              await onSave()
-            }
-          }}
-        >
-          {select_item == SetMenuItem.normal &&
-            NormalSetFiledList.map((item) => {
+      {appstore.cur_user && appstore.cur_user.user_set && (
+        <>
+          {/* left menu */}
+          <div className=" w-[150px] flex flex-col border-solid border-r-2 border-gray-300">
+            {Object.keys(SetMenuItem).map((item) => {
               return (
-                <Form.Item
-                  key={item.field_name}
-                  label={appset.lang.getText(`set.menu.${item.field_name}`)}
-                  name={item.field_name}
+                <div
+                  key={item}
+                  onClick={() => {
+                    set_select_item(item)
+                  }}
+                  className={` rounded-sm text-sm font-bold font-sans flex flex-row items-center cursor-pointer p-2 ${item == select_item ? 'bg-gray-200' : ''} h-[50px]`}
                 >
-                  <item.render></item.render>
-                </Form.Item>
+                  <Icon
+                    className="w-[30px] h-[30px] mr-2"
+                    type={Icon_type[`${item}_set`]}
+                    svg
+                  ></Icon>
+                  <span> {appset.lang.getText(`set.menu.${item}`)}</span>
+                </div>
               )
             })}
-          {(select_item == SetMenuItem.shortcut_global ||
-            select_item == SetMenuItem.shortcut_local) &&
-            Object.keys(defaultUserSetInfo).map((key) => {
-              if (key.startsWith(select_item)) {
-                console.log('key', key)
-                return (
-                  <Form.Item key={key} label={appset.lang.getText(`set.menu.${key}`)} name={key}>
-                    <ShortKeyInput></ShortKeyInput>
-                  </Form.Item>
-                )
-              }
-              return null
-            })}
-          {/* save button */}
-          {(select_item == SetMenuItem.shortcut_global ||
-            select_item == SetMenuItem.shortcut_local) && (
-            <Form.Item>
-              <div className=" flex flex-row-reverse">
-                <Button onClick={onSave} type="primary" htmlType="submit" className="">
-                  {appset.lang.getText('save')}
-                </Button>
-                <Button
-                  className="mr-3"
-                  onClick={() => {
-                    Object.keys(defaultUserSetInfo).map((key) => {
-                      if (key.startsWith(select_item)) {
-                        const setvalue = { [key]: defaultUserSetInfo[key] }
-                        console.log('set ', setvalue)
-                        form.setFieldsValue(setvalue)
-                      }
-                    })
-                  }}
-                >
-                  {appset.lang.getText('recover_default')}
-                </Button>
-              </div>
-            </Form.Item>
-          )}
-        </Form>
-      </div>
+          </div>
+          {/* right content */}
+          <div className="flex-grow flex flex-col p-4">
+            <Form
+              form={form}
+              initialValues={appstore.cur_user.user_set as UserSetInfo}
+              onFieldsChange={async () => {
+                if (select_item == SetMenuItem.normal) {
+                  await onSave()
+                }
+              }}
+            >
+              {select_item == SetMenuItem.normal &&
+                NormalSetFiledList.map((item) => {
+                  return (
+                    <Form.Item
+                      key={item.field_name}
+                      label={appset.lang.getText(`set.menu.${item.field_name}`)}
+                      name={item.field_name}
+                    >
+                      <item.render></item.render>
+                    </Form.Item>
+                  )
+                })}
+              {(select_item == SetMenuItem.shortcut_global ||
+                select_item == SetMenuItem.shortcut_local) &&
+                Object.keys(defaultUserSetInfo).map((key) => {
+                  if (key.startsWith(select_item)) {
+                    console.log('key', key)
+                    return (
+                      <Form.Item
+                        key={key}
+                        label={appset.lang.getText(`set.menu.${key}`)}
+                        name={key}
+                      >
+                        <ShortKeyInput></ShortKeyInput>
+                      </Form.Item>
+                    )
+                  }
+                  return null
+                })}
+              {/* save button */}
+              {(select_item == SetMenuItem.shortcut_global ||
+                select_item == SetMenuItem.shortcut_local) && (
+                <Form.Item>
+                  <div className=" flex flex-row-reverse">
+                    <Button onClick={onSave} type="primary" htmlType="submit" className="">
+                      {appset.lang.getText('save')}
+                    </Button>
+                    <Button
+                      className="mr-3"
+                      onClick={() => {
+                        Object.keys(defaultUserSetInfo).map((key) => {
+                          if (key.startsWith(select_item)) {
+                            const setvalue = { [key]: defaultUserSetInfo[key] }
+                            console.log('set ', setvalue)
+                            form.setFieldsValue(setvalue)
+                          }
+                        })
+                      }}
+                    >
+                      {appset.lang.getText('recover_default')}
+                    </Button>
+                  </div>
+                </Form.Item>
+              )}
+            </Form>
+          </div>
+        </>
+      )}
     </div>
   )
 }

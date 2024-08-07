@@ -48,9 +48,11 @@
   "set.menu.normal_lock_with_pc": "随电脑锁定",
   "set.menu.shortcut_global_quick_find": "全局快速查找",
   "set.menu.shortcut_global_quick_lock": "全局快速锁定",
+  "set.menu.shortcut_global_open_main": "全局打开主界面",
   "set.menu.shortcut_local_find": "快速锁定",
   "set.menu.shortcut_local_view_shortcut": "打开快捷列表页面",
   "set.key_conflict": "快捷键冲突:{0}",
+  "set.placeholder.shortcut": "请输入快捷键",
 
   "myencode.passworderror": "账号或密码错误",
   "auth.register.userexist": "用户名重复",

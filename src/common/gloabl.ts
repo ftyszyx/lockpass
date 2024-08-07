@@ -61,6 +61,7 @@ export enum Icon_type {
   icon_set = 'icon-set',
   normal_set = 'icon-set2',
   shortcut_local_set = 'icon-shortcut',
+  shortcut_global_set = 'icon-shortcut1',
   icon_add = 'icon-add',
   icon_log = 'icon-log',
   icon_help = 'icon-help',
