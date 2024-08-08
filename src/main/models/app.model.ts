@@ -271,11 +271,11 @@ class AppModel {
     let res: string | null = null
     try {
       const back_dir_name = `backup_${Math.ceil(new Date().getTime() / 1000)}`
-      let backup_path = path.join(PathHelper.getHomeDir(), 'backup')
-      if (!fs.existsSync(backup_path)) {
-        fs.mkdirSync(backup_path)
+      const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup')
+      if (!fs.existsSync(backup_path_dir)) {
+        fs.mkdirSync(backup_path_dir)
       }
-      backup_path = path.join(backup_path, back_dir_name)
+      const backup_path = path.join(backup_path_dir, back_dir_name)
       if (!fs.existsSync(backup_path)) {
         fs.mkdirSync(backup_path)
       }
@@ -285,7 +285,7 @@ class AppModel {
       await this.BackupFile(dbpath, backup_path)
       await this.BackupFile(this._set_path, backup_path)
       await this.BackupFile(this.myencode.getKeyPath(), backup_path)
-      const zip_file = path.join(PathHelper.getHomeDir(), `${back_dir_name}.zip`)
+      const zip_file = path.join(backup_path_dir, `${back_dir_name}.zip`)
       await zl.archiveFolder(backup_path, zip_file)
       res = zip_file
     } catch (e) {
