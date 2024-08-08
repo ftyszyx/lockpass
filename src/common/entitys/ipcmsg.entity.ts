@@ -39,7 +39,9 @@ export enum webToManMsg {
   BackupSystem = 'BackupSystem',
   RecoverSystemFromBackup = 'RestoreSystem',
   QuitAPP = 'QuitAPP',
-  RestartApp = 'RestartApp'
+  RestartApp = 'RestartApp',
+  CloseDb = 'CloseDb',
+  OpenDb = 'OpenDb'
 }
 
 export enum MainToWebMsg {

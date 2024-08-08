@@ -8,6 +8,7 @@ import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 import { ColumnType } from '@common/decorator/db.decorator'
 import { PathHelper } from './path'
 import AppModel from '@main/models/app.model'
+import { sleep } from '@common/help'
 
 class DbHlper {
   private static _instance: DbHlper
@@ -46,11 +47,11 @@ class DbHlper {
   }
 
   public async CloseAll() {
-    await this.Wait()
-    await this.CloseConnect()
-    await this.Wait()
-    this.db = null
-    // await this.CloseDb()
+    await this.CloseDb().catch((_) => {})
+    await sleep(1000)
+    await this.OpenDb()
+    await sleep(1000)
+    await this.CloseDb()
   }
 
   public async CloseDb() {

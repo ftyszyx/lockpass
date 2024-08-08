@@ -36,7 +36,8 @@ export default function Register(): JSX.Element {
         setLastUser(res.user)
       })
       .catch((e) => {
-        messageApi.error(lang.getText(`err.${e.code}`))
+        ConsoleLog.LogError('GetLastUserInfo', e)
+        // messageApi.error(lang.getText(`err.${e.code}`))
       })
   }
   useEffect(() => {
@@ -54,10 +55,13 @@ export default function Register(): JSX.Element {
         message.error('两次密码不一致')
         return
       }
-      await ipc_call<null>(webToManMsg.Register, values).catch((err) => {
-        messageApi.error(lang.getText(`err.${err.code}`))
-      })
-      history.replace(PagePath.Login)
+      await ipc_call<null>(webToManMsg.Register, values)
+        .then(() => {
+          history.replace(PagePath.Login)
+        })
+        .catch((err) => {
+          messageApi.error(lang.getText(`err.${err.code}`))
+        })
     })
   }
 

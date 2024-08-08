@@ -5,6 +5,7 @@ import { WhereDef } from '@common/entitys/db.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { renderViewType } from '@common/entitys/app.entity'
+import DbHlper from '@main/libs/db_help'
 
 export function initAllApi() {
   //system
@@ -80,6 +81,14 @@ export function initAllApi() {
 
   ipcMain.handle(webToManMsg.RestartApp, () => {
     app.relaunch()
+  })
+
+  ipcMain.handle(webToManMsg.CloseDb, async () => {
+    return await DbHlper.instance().CloseAll()
+  })
+
+  ipcMain.handle(webToManMsg.OpenDb, async () => {
+    return await DbHlper.instance().OpenDb()
   })
 
   //user

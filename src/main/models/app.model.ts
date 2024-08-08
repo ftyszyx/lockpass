@@ -250,10 +250,22 @@ class AppModel {
     return screen.getCursorScreenPoint()
   }
 
-  sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms))
+  private async BackupFile(srcpath: string, backup_path: string) {
+    Log.info(`backup file begin:${srcpath}`)
+    const filename = path.basename(srcpath)
+    const dest = path.join(backup_path, filename)
+    return new Promise((resolve, reject) => {
+      fs.copyFile(srcpath, dest, (err) => {
+        if (err) {
+          Log.error(`backup file error:${srcpath}->${dest}`, err)
+          reject(false)
+        } else {
+          Log.info(`backup file ok:${srcpath}->${dest}`)
+          resolve(true)
+        }
+      })
+    })
   }
-
   //生成备份
   async BackupSystem() {
     let res: string | null = null
@@ -267,19 +279,12 @@ class AppModel {
       if (!fs.existsSync(backup_path)) {
         fs.mkdirSync(backup_path)
       }
-      const backupFile = (srcpath: string) => {
-        Log.info(`backup file begin:${srcpath}`)
-        const filename = path.basename(srcpath)
-        const dest = path.join(backup_path, filename)
-        fs.copyFileSync(srcpath, dest)
-        Log.info(`back file:${srcpath}->${dest}`)
-      }
       await DbHlper.instance().CloseAll()
-      await this.sleep(2000)
+      // await this.sleep(2000)
       const dbpath = DbHlper.instance().getDbPath()
-      backupFile(dbpath)
-      backupFile(this._set_path)
-      backupFile(this.myencode.getKeyPath())
+      await this.BackupFile(dbpath, backup_path)
+      await this.BackupFile(this._set_path, backup_path)
+      await this.BackupFile(this.myencode.getKeyPath(), backup_path)
       const zip_file = path.join(PathHelper.getHomeDir(), `${back_dir_name}.zip`)
       await zl.archiveFolder(backup_path, zip_file)
       res = zip_file

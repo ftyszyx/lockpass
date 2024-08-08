@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { message } from 'antd'
+import { Button, message } from 'antd'
 import {
   getAllVault,
   getAllVaultItem,
@@ -68,13 +68,26 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   return (
     <div>
       {messageContex}
-      {/* <button
-        onClick={async () => {
-          await UpdateMenu(appstore, appset.lang)
-        }}
-      >
-        test
-      </button> */}
+      {
+        <div>
+          {/* <Button
+            type="primary"
+            onClick={async () => {
+              await ipc_call_normal(webToManMsg.OpenDb)
+            }}
+          >
+            open db
+          </Button>
+          <Button
+            type="primary"
+            onClick={async () => {
+              await ipc_call_normal(webToManMsg.CloseDb)
+            }}
+          >
+            close db
+          </Button> */}
+        </div>
+      }
       {props.children}
     </div>
   )
