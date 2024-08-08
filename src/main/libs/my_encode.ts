@@ -5,25 +5,41 @@ import { PathHelper } from './path'
 import { User } from '@common/entitys/user.entity'
 import { ApiRespCode } from '@common/entitys/app.entity'
 import { Log } from './log'
-interface SecretyKeyInfo {
+import { SECRET_VER_CODE } from '@common/gloabl'
+interface SecretyItemInfo {
+  uid: number
   key: string
   valid_data: string
-  ver: string
+}
+interface SecretySet {
+  users: SecretyItemInfo[]
+  ver: number
 }
 
 export class MyEncode {
   private _pass_hash: Buffer | null = null
   private _encode_alg = 'aes-256-cbc'
-  private secret_ver: string = '1.0'
-
-  constructor() {}
-
-  private getKeyPath(user: User) {
-    return path.join(PathHelper.getHomeDir(), `secret_${user.id}.key`)
+  private _set: SecretySet = { ver: SECRET_VER_CODE, users: [] }
+  private _set_path: string = ''
+  constructor() {
+    this._set_path = this.getKeyPath()
+    if (fs.existsSync(this._set_path)) {
+      this.LoadSet()
+    } else {
+      this.saveSet()
+    }
   }
 
-  private getKeyPathByuserid(userid: number) {
-    return path.join(PathHelper.getHomeDir(), `secret_${userid}.key`)
+  private saveSet() {
+    fs.writeFileSync(this._set_path, JSON.stringify(this._set))
+  }
+
+  LoadSet() {
+    this._set = JSON.parse(fs.readFileSync(this._set_path).toString())
+  }
+
+  getKeyPath() {
+    return path.join(PathHelper.getHomeDir(), `secret.key`)
   }
 
   public HasLogin() {
@@ -35,43 +51,28 @@ export class MyEncode {
   }
 
   public hasKey(userid: number) {
-    const key_path = this.getKeyPathByuserid(userid)
-    if (fs.existsSync(key_path)) {
-      return true
-    }
-    return false
+    return this._set.users.some((item) => item.uid == userid)
   }
 
   public Login(user: User, password: string): ApiRespCode {
     this._pass_hash = null
-    const key_path = this.getKeyPath(user)
-    if (fs.existsSync(key_path)) {
-      const keyinfo_str = fs.readFileSync(key_path).toString()
-      const keyinfo: SecretyKeyInfo = JSON.parse(keyinfo_str)
-      if (keyinfo.ver != this.secret_ver) {
-        return ApiRespCode.ver_not_match
-      }
-      const hash = this.getPassHash(keyinfo.key, password)
-      try {
-        const encode_data = this.Decode2(keyinfo.valid_data, hash)
-        if (encode_data !== this.getUserValidStr(user)) {
-          return ApiRespCode.password_err
-        }
-      } catch (e: any) {
-        Log.Exception(e)
+    if (this._set.ver != SECRET_VER_CODE) {
+      return ApiRespCode.ver_not_match
+    }
+    const keyinfo = this._set.users.find((item) => item.uid == user.id)
+    if (keyinfo == null) return ApiRespCode.key_not_found
+    const hash = this.getPassHash(keyinfo.key, password)
+    try {
+      const encode_data = this.Decode2(keyinfo.valid_data, hash)
+      if (encode_data !== this.getUserValidStr(user)) {
         return ApiRespCode.password_err
       }
-      this._pass_hash = hash
-      return ApiRespCode.SUCCESS
+    } catch (e: any) {
+      Log.Exception(e)
+      return ApiRespCode.password_err
     }
-    return ApiRespCode.key_not_found
-  }
-
-  public cleanKey(user: User) {
-    const key_path = this.getKeyPath(user)
-    if (fs.existsSync(key_path)) {
-      fs.unlinkSync(key_path)
-    }
+    this._pass_hash = hash
+    return ApiRespCode.SUCCESS
   }
 
   public Register(user: User, password: string) {
@@ -86,11 +87,11 @@ export class MyEncode {
         key += '-'
       }
     }
-    const key_path = this.getKeyPath(user)
     const hash = this.getPassHash(key, password)
     const valid_data = this.Encode2(this.getUserValidStr(user), hash)
-    const keyinfo: SecretyKeyInfo = { key, valid_data, ver: this.secret_ver }
-    fs.writeFileSync(key_path, JSON.stringify(keyinfo))
+    const keyinfo: SecretyItemInfo = { key, valid_data, uid: user.id }
+    this._set.users.push(keyinfo)
+    this.saveSet()
   }
 
   private getUserValidStr(user: User) {

@@ -31,7 +31,8 @@
     "electron-updater": "^6.1.7",
     "path-to-regexp": "^6.2.2",
     "reflect-metadata": "^0.2.2",
-    "robotjs": "^0.6.0"
+    "robotjs": "^0.6.0",
+    "zip-lib": "^1.0.4"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",

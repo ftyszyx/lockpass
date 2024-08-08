@@ -1,7 +1,7 @@
 import { MyEncode } from '@main/libs/my_encode'
 import { Log } from '@main/libs/log'
 import DbHlper from '@main/libs/db_help'
-import { app, crashReporter, globalShortcut, screen } from 'electron'
+import { app, dialog, crashReporter, globalShortcut, screen } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
 import { VaultItemService } from '@main/services/vault_item.service'
@@ -18,6 +18,7 @@ import robot from 'robotjs'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
+import zl from 'zip-lib'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -46,11 +47,28 @@ class AppModel {
     cur_user_uid: 0
   }
 
-  constructor() {
+  private static instance: AppModel
+  public static getInstance() {
+    if (!AppModel.instance) {
+      AppModel.instance = new AppModel()
+    }
+    return AppModel.instance
+  }
+
+  constructor() {}
+
+  Quit() {
+    globalShortcut.unregisterAll()
+    if (this.checkInterval) clearInterval(this.checkInterval)
+  }
+
+  async init() {
     Log.initialize()
     this.myencode = new MyEncode()
-    Log.info('AppModel init')
-    DbHlper.instance().InitTables()
+    Log.info('begin open db')
+    await DbHlper.instance().OpenDb()
+    Log.info('init tables')
+    await DbHlper.instance().InitTables()
     this.vault = new VaultService()
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
@@ -62,21 +80,11 @@ class AppModel {
       companyName: 'MyCompany',
       uploadToServer: false
     })
-  }
-
-  Quit() {
-    globalShortcut.unregisterAll()
-    if (this.checkInterval) clearInterval(this.checkInterval)
-  }
-
-  init() {
     this.initWin()
     initAllApi()
     this.initGlobalShortcut()
     app.on('browser-window-blur', () => {
       AppEvent.emit(AppEventType.windowBlur)
-      // this.last_point = screen.getCursorScreenPoint()
-      // console.log('get lastpoint', this.last_point)
     })
     this.checkInterval = setInterval(() => {
       this.performLockCheck()
@@ -132,14 +140,6 @@ class AppModel {
 
   public CurLang() {
     return this.set.lang
-  }
-
-  private static instance: AppModel
-  public static getInstance() {
-    if (!AppModel.instance) {
-      AppModel.instance = new AppModel()
-    }
-    return AppModel.instance
   }
 
   public initLang() {
@@ -228,7 +228,6 @@ class AppModel {
   private last_point = { x: 0, y: 0 }
 
   setLastPoint(point: { x: number; y: number }) {
-    console.log('set last point', point)
     this.last_point = point
   }
 
@@ -249,6 +248,127 @@ class AppModel {
 
   getScreenPoint() {
     return screen.getCursorScreenPoint()
+  }
+
+  sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
+  //生成备份
+  async BackupSystem() {
+    let res: string | null = null
+    try {
+      const back_dir_name = `backup_${Math.ceil(new Date().getTime() / 1000)}`
+      let backup_path = path.join(PathHelper.getHomeDir(), 'backup')
+      if (!fs.existsSync(backup_path)) {
+        fs.mkdirSync(backup_path)
+      }
+      backup_path = path.join(backup_path, back_dir_name)
+      if (!fs.existsSync(backup_path)) {
+        fs.mkdirSync(backup_path)
+      }
+      const backupFile = (srcpath: string) => {
+        Log.info(`backup file begin:${srcpath}`)
+        const filename = path.basename(srcpath)
+        const dest = path.join(backup_path, filename)
+        fs.copyFileSync(srcpath, dest)
+        Log.info(`back file:${srcpath}->${dest}`)
+      }
+      await DbHlper.instance().CloseAll()
+      await this.sleep(2000)
+      const dbpath = DbHlper.instance().getDbPath()
+      backupFile(dbpath)
+      backupFile(this._set_path)
+      backupFile(this.myencode.getKeyPath())
+      const zip_file = path.join(PathHelper.getHomeDir(), `${back_dir_name}.zip`)
+      await zl.archiveFolder(backup_path, zip_file)
+      res = zip_file
+    } catch (e) {
+      Log.error('gen backup error:', e)
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
+    }
+    await DbHlper.instance().OpenDb()
+    return res
+  }
+
+  async RecoverSystemFromBackup() {
+    let res = true
+    try {
+      const { canceled, filePaths } = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [{ name: 'zip', extensions: ['zip'] }]
+      })
+
+      if (canceled || !filePaths || filePaths.length == 0) {
+        AppEvent.emit(
+          AppEventType.Message,
+          'error',
+          LangHelper.getString('main.backup.filenotselect')
+        )
+        return false
+      }
+      res = await this.RecoverSystemFromBackupFile(filePaths[0])
+    } catch (e) {
+      Log.error('restore backup error:', e)
+      res = false
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
+    }
+    return res
+  }
+
+  //还原备份
+  async RecoverSystemFromBackupFile(zipfile_path: string) {
+    let res = true
+    try {
+      if (fs.existsSync(zipfile_path) == false) {
+        Log.error('zip file not exists:', zipfile_path)
+        AppEvent.emit(
+          AppEventType.Message,
+          'error',
+          LangHelper.getString('main.backup.zipfilenotfound', zipfile_path)
+        )
+        return false
+      }
+      await DbHlper.instance().CloseDb()
+      const fiename = path.basename(zipfile_path.replace('.zip', ''))
+      const backup_path = path.join(PathHelper.getHomeDir(), fiename)
+      Log.info(`extract backup file:${zipfile_path}->${backup_path}`)
+      await zl.extract(zipfile_path, backup_path)
+
+      const restoreFile = (dest: string) => {
+        const destfile = path.basename(dest)
+        const srcpath = path.join(backup_path, destfile)
+        if (fs.existsSync(srcpath) == false) {
+          Log.error('restore file not exists:', srcpath)
+          AppEvent.emit(
+            AppEventType.Message,
+            'error',
+            LangHelper.getString('main.backup.zipfilenotfound', srcpath)
+          )
+          return false
+        }
+        fs.copyFileSync(srcpath, dest)
+        Log.info(`restore file ok:${srcpath}->${dest}`)
+        return true
+      }
+
+      const restoreAll = () => {
+        const dbpath = DbHlper.instance().getDbPath()
+        if (restoreFile(dbpath) == false) return false
+        if (restoreFile(this._set_path) == false) return false
+        if (restoreFile(this.myencode.getKeyPath()) == false) return false
+        return true
+      }
+      if (restoreAll() === true) this.myencode.LoadSet()
+      else res = false
+    } catch (e) {
+      Log.error('restore backup error:', e)
+      res = false
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
+    }
+    Log.info('recover system from backup:', res)
+    await DbHlper.instance().OpenDb()
+    return res
   }
 }
 

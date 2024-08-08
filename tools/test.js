@@ -1,24 +1,19 @@
-// import { Segmenter } from 'intl-segmenter'
-const { Segmenter } = require('intl-segmenter')
+const fs = require('fs')
+const zlib = require('zlib')
+const pipeline = require('stream').pipeline
 
-str1 = '打开lockpass'
-str2 = '锁定'
-str3 = '打开快速访问'
-right1 = 'Shift+CommandOrControl+b'
-right2 = 'CommandOrControl+ Shift+up'
-right3 = 'CommandOrControl+ Shift+l'
-// const segmenter = new Intl.Segmenter()
-const segementer = new Segmenter()
-function getstr(text1, txt2) {
-  const length = 0
-  for (const _ of segemter.segment(text1)) {
-    // eslint-disable-line no-unused-vars
-    length++
-  }
-  console.log(text1, length)
-  return text1.padEnd(20, 'A') + txt2
+function do_gzip(src_path, dest_path) {
+  const gzip = zlib.createGzip()
+  const src = fs.createReadStream(src_path)
+  const dest = fs.createWriteStream(dest_path)
+  src.pipe(gzip).pipe(dest)
+  dest.on('finish', () => {
+    console.log('File successfully compressed')
+  })
+  dest.on('error', (err) => {
+    console.error('An error occurred:', err)
+    process.exitCode = 1
+  })
 }
 
-console.log(getstr(str1, right1))
-console.log(getstr(str2, right2))
-console.log(getstr(str3, right3))
+do_gzip('back', 'back.gz')

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Dropdown, Menu as MenuAntd } from 'antd'
-import { DownOutlined } from '@ant-design/icons'
+import { Dropdown, Menu as MenuAntd, Modal } from 'antd'
+import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/Icon'
 import { pathToRegexp, Key } from 'path-to-regexp'
@@ -14,6 +14,10 @@ import AddValutPanel from '@renderer/pages/Vault/AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
+import { ipc_call_normal } from '@renderer/libs/tools/other'
+import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+const { confirm } = Modal
+
 interface MenuProps {
   className?: string
 }
@@ -98,12 +102,56 @@ export default function MyMenu(props: MenuProps): JSX.Element {
               onClick: (item) => {
                 if (item.key === 'password_gen') {
                   setShowPasswordGen(true)
+                } else if (item.key === 'systembackup') {
+                  ipc_call_normal<string>(webToManMsg.BackupSystem).then((filepath) => {
+                    if (filepath == null) return
+                    confirm({
+                      title: appset.getText('menu.backup.ok.title'),
+                      icon: <ExclamationCircleOutlined />,
+                      content: appset.getText('menu.backup.ok.content', filepath),
+                      okText: appset.getText('ok'),
+                      cancelText: appset.getText('cancel')
+                    })
+                  })
+                } else if (item.key === 'systemRecover') {
+                  confirm({
+                    title: appset.getText('menu.recover.sure.title'),
+                    icon: <ExclamationCircleOutlined />,
+                    content: appset.getText('menu.recover.sure.content'),
+                    okText: appset.getText('ok'),
+                    cancelText: appset.getText('cancel'),
+                    onOk: () => {
+                      ipc_call_normal<boolean>(webToManMsg.RecoverSystemFromBackup).then((res) => {
+                        if (res) {
+                          confirm({
+                            title: appset.getText('menu.recover.ok.title'),
+                            icon: <ExclamationCircleOutlined />,
+                            content: appset.getText('menu.recover.ok.content'),
+                            okText: appset.getText('ok'),
+                            cancelText: appset.getText('cancel'),
+                            onOk: async () => {
+                              // await ipc_call_normal(webToManMsg.RestartApp)
+                              await ipc_call_normal(webToManMsg.QuitAPP)
+                            }
+                          })
+                        }
+                      })
+                    }
+                  })
                 }
               },
               items: [
                 {
                   key: 'password_gen',
-                  label: appset.lang?.getText('menu.password_gen')
+                  label: appset.getText('menu.password_gen')
+                },
+                {
+                  key: 'systembackup',
+                  label: appset.getText('menu.systembackup')
+                },
+                {
+                  key: 'systemRecover',
+                  label: appset.getText('menu.systemRecover')
                 }
               ]
             }}

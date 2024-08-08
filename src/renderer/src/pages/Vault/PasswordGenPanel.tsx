@@ -13,7 +13,7 @@ interface PasswordGenPanelProps {
   show: boolean
   calssName?: string
   showUse?: boolean
-  style: React.CSSProperties
+  style?: React.CSSProperties
   onOk: (value: string) => void
   onClose: () => void
 }

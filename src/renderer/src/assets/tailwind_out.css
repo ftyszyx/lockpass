@@ -659,10 +659,6 @@ video {
   margin-left: 1.25rem !important;
 }
 
-.ml-\[100px\] {
-  margin-left: 100px !important;
-}
-
 .mr-2 {
   margin-right: 0.5rem !important;
 }
@@ -1082,11 +1078,6 @@ video {
   line-height: 2.5rem !important;
 }
 
-.text-9xl {
-  font-size: 8rem !important;
-  line-height: 1 !important;
-}
-
 .text-\[20px\] {
   font-size: 20px !important;
 }
@@ -1145,11 +1136,6 @@ video {
 .text-white {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
-}
-
-.text-zinc-400 {
-  --tw-text-opacity: 1 !important;
-  color: rgb(161 161 170 / var(--tw-text-opacity)) !important;
 }
 
 .shadow-md {

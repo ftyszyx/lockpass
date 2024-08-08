@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { ipcMain, app } from 'electron'
 import AppModel from '../models/app.model'
 import { MainToWebMsg, webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { WhereDef } from '@common/entitys/db.entity'
@@ -64,6 +64,22 @@ export function initAllApi() {
   })
   ipcMain.handle(webToManMsg.CheckShortKey, (_, key) => {
     return AppModel.getInstance().IsKeyRegisted(key)
+  })
+
+  ipcMain.handle(webToManMsg.BackupSystem, async () => {
+    return await AppModel.getInstance().BackupSystem()
+  })
+
+  ipcMain.handle(webToManMsg.RecoverSystemFromBackup, async () => {
+    return await AppModel.getInstance().RecoverSystemFromBackup()
+  })
+
+  ipcMain.handle(webToManMsg.QuitAPP, () => {
+    app.quit()
+  })
+
+  ipcMain.handle(webToManMsg.RestartApp, () => {
+    app.relaunch()
   })
 
   //user

@@ -35,7 +35,11 @@ export enum webToManMsg {
   getMousePos = 'getMousePos',
   showWindows = 'showWindows',
   ShowVaultItem = 'ShowItem',
-  UpdateTrayMenu = 'UpdateTrayMenu'
+  UpdateTrayMenu = 'UpdateTrayMenu',
+  BackupSystem = 'BackupSystem',
+  RecoverSystemFromBackup = 'RestoreSystem',
+  QuitAPP = 'QuitAPP',
+  RestartApp = 'RestartApp'
 }
 
 export enum MainToWebMsg {

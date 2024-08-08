@@ -126,6 +126,14 @@
   "passwordGenPanel.password_type": "密码类型",
 
   "menu.password_gen": "密码生成器",
+  "menu.systembackup": "系统备份",
+  "menu.systemRecover": "系统还原",
+  "menu.backup.ok.title": "备份成功",
+  "menu.backup.ok.content": "文件地址:{0}",
+  "menu.recover.sure.title": "注意",
+  "menu.recover.sure.content": "还原系统会清空当前数据，确定还原吗?",
+  "menu.recover.ok.title": "还原成功",
+  "menu.recover.ok.content": "系统已还原,需要重启软件",
 
   "tray.menu.openlockpass": "打开lockpass",
   "tray.menu.openquick": "打开快速访问",
@@ -148,5 +156,13 @@
   "recover_default": "恢复默认",
   "save_success": "修改成功",
   "copy_success": "复制成功",
-  "copy_success_arg": "{0}复制成功"
+  "copy_success_arg": "{0}复制成功",
+
+  "main.backup.zipfilenotfound": "备份文件不存在:{0}",
+  "main.backup.error": "系统错误",
+  "main.backup.filenotselect": "请选择备份文件",
+
+  "404.title": "404",
+  "404.desc": "页面不存在",
+  "404.back": "返回首页"
 }

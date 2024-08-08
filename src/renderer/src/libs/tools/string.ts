@@ -14,7 +14,7 @@ export function getLabelStr(label: string, value: string = ''): string {
   if (value.length <= 0) return label
   const labelWidth = getStrWidth(label)
   const vaulewidth = getStrWidth(value)
-  const targetWidth = 250 // 目标宽度，可以根据需要调整
+  const targetWidth = 350 // 目标宽度，可以根据需要调整
   const padWidth = targetWidth - labelWidth - vaulewidth
   console.log('labelWidth', label, labelWidth, vaulewidth, padWidth)
   if (padWidth <= 0) return label + value

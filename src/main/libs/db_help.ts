@@ -8,6 +8,7 @@ import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 import { ColumnType } from '@common/decorator/db.decorator'
 import { PathHelper } from './path'
 import AppModel from '@main/models/app.model'
+
 class DbHlper {
   private static _instance: DbHlper
   public user: User
@@ -26,13 +27,92 @@ class DbHlper {
   static instance() {
     if (!DbHlper._instance) {
       DbHlper._instance = new DbHlper()
-      const dbpath = `${PathHelper.getHomeDir()}/lockpass.db`
-      DbHlper._instance.db = new duckdb.Database(dbpath, {
-        access_mode: 'READ_WRITE',
-        max_memory: '512MB'
-      })
     }
     return DbHlper._instance
+  }
+
+  public async Wait() {
+    return new Promise<void>((resolve, reject) => {
+      this.db.wait((err) => {
+        if (err) {
+          Log.info('wait ', err)
+          reject(err)
+        } else {
+          Log.info('wait ok')
+          resolve()
+        }
+      })
+    })
+  }
+
+  public async CloseAll() {
+    await this.Wait()
+    await this.CloseConnect()
+    await this.Wait()
+    this.db = null
+    // await this.CloseDb()
+  }
+
+  public async CloseDb() {
+    if (this.db == null) return
+    return new Promise<void>((resolve, reject) => {
+      this.db.close!((error) => {
+        if (error) {
+          Log.error('close db err', error)
+          reject(error)
+          return
+        }
+        this.db = null
+        Log.info('close db ok')
+        resolve()
+      })
+    })
+  }
+
+  public async CloseConnect() {
+    return new Promise<void>((resolve, reject) => {
+      if (this.db) {
+        this.getconnection().close((error) => {
+          if (error) {
+            Log.error('close connection err', error)
+            reject(error)
+            return
+          }
+          Log.info('close connection ok')
+          resolve()
+        })
+      } else {
+        resolve()
+      }
+    })
+  }
+
+  public async OpenDb() {
+    if (this.db) return
+    return new Promise<void>((resolve, reject) => {
+      const dbpath = this.getDbPath()
+      this.db = new duckdb.Database(
+        dbpath,
+        {
+          access_mode: 'READ_WRITE',
+          max_memory: '512MB'
+        },
+        (err) => {
+          if (err) {
+            Log.error('open db err', err)
+            this.db = null
+            reject(err)
+            return
+          }
+          Log.info('open db ok')
+          resolve()
+        }
+      )
+    })
+  }
+
+  public getDbPath() {
+    return `${PathHelper.getHomeDir()}/lockpass.db`
   }
 
   public useMainConnect() {
@@ -44,8 +124,9 @@ class DbHlper {
   }
 
   private getconnection() {
-    if (this._use_main_connection) return this.db
-    return this.db?.connect()
+    return this.db
+    // if (this._use_main_connection) return this.db
+    // return this.db?.connect()
   }
 
   public encode_table_str(obj: BaseEntity, key: string, value: any): string {
@@ -336,59 +417,70 @@ class DbHlper {
     return this._runSqlWithResult(obj, sql_str, `search:${table_name}`)
   }
 
-  public InitTables() {
-    const conn = this.getconnection()
-    const initFunc = (obj: BaseEntity) => {
-      const table_name = obj[Table_Name_KEY]
-      let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
-      let index_desc = ''
-      let sequence_desc = ''
-      const keys = Reflect.ownKeys(obj)
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i]
-        const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)
-        const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
-        const isprimary = Reflect.getMetadata('primary', obj, key)
-        if (!col_type) continue
-        table_desc += `${col_name} ${col_type}`
-        if (isprimary) {
-          sequence_desc += `CREATE SEQUENCE IF NOT EXISTS ${col_name}_seq start 101;\n`
-          table_desc += " PRIMARY KEY default nextval('" + col_name + "_seq')"
+  public async initOneTable(obj: BaseEntity) {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        const table_name = obj[Table_Name_KEY]
+        Log.info('init table:', table_name)
+        let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
+        let index_desc = ''
+        let sequence_desc = ''
+        const keys = Reflect.ownKeys(obj)
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)
+          const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
+          const isprimary = Reflect.getMetadata('primary', obj, key)
+          if (!col_type) continue
+          table_desc += `${col_name} ${col_type}`
+          if (isprimary) {
+            sequence_desc += `CREATE SEQUENCE IF NOT EXISTS ${col_name}_seq start 101;\n`
+            table_desc += " PRIMARY KEY default nextval('" + col_name + "_seq')"
+          }
+          const default_value = Reflect.getMetadata('default', obj, key)
+          if (default_value != undefined || default_value != null) {
+            table_desc += ` DEFAULT '${default_value}' `
+          }
+          if (Reflect.getMetadata('unique', obj, key)) {
+            table_desc += ' UNIQUE'
+          }
+          if (Reflect.getMetadata('notNull', obj, key)) {
+            table_desc += ' NOT NULL'
+          }
+          if (i < keys.length - 1) {
+            table_desc += ','
+          }
+          table_desc += '\n'
+          const index_name = Reflect.getMetadata('index_name', obj, key)
+          if (index_name) {
+            const unique_index = Reflect.getMetadata('unique_index', obj, key)
+            index_desc += `CREATE ${unique_index ? 'UNIQUE' : ''} INDEX IF NOT EXISTS ${index_name} ON ${table_name} (${col_name});\n`
+          }
         }
-        const default_value = Reflect.getMetadata('default', obj, key)
-        if (default_value != undefined || default_value != null) {
-          table_desc += ` DEFAULT '${default_value}' `
-        }
-        if (Reflect.getMetadata('unique', obj, key)) {
-          table_desc += ' UNIQUE'
-        }
-        if (Reflect.getMetadata('notNull', obj, key)) {
-          table_desc += ' NOT NULL'
-        }
-        if (i < keys.length - 1) {
-          table_desc += ','
-        }
-        table_desc += '\n'
-        const index_name = Reflect.getMetadata('index_name', obj, key)
-        if (index_name) {
-          const unique_index = Reflect.getMetadata('unique_index', obj, key)
-          index_desc += `CREATE ${unique_index ? 'UNIQUE' : ''} INDEX IF NOT EXISTS ${index_name} ON ${table_name} (${col_name});\n`
-        }
+        table_desc += ');'
+        const sql_str = sequence_desc + '\n' + table_desc + '\n' + index_desc
+        if (this.show_log) Log.info('runsql:', sql_str)
+        const conn = this.getconnection()
+        conn.exec(sql_str, (err, _) => {
+          if (err) {
+            Log.Exception(err, 'create table err', obj[Table_Name_KEY], err.message)
+            reject(err)
+          } else {
+            Log.info('init table ok', table_name)
+            resolve()
+          }
+        })
+      } catch (err: any) {
+        Log.Exception(err, 'init table err')
+        reject(err)
       }
-      table_desc += ');'
-      const sql_str = sequence_desc + '\n' + table_desc + '\n' + index_desc
-      if (this.show_log) Log.info('runsql:', sql_str)
-      conn.each(sql_str, (err, row) => {
-        if (err) {
-          Log.Exception(err, 'create table err', obj[Table_Name_KEY], err.message)
-        }
-      })
-    }
-    if (conn) {
-      initFunc(this.user)
-      initFunc(this.vault)
-      initFunc(this.vaultItem)
-    }
+    })
+  }
+
+  public async InitTables() {
+    await this.initOneTable(this.user)
+    await this.initOneTable(this.vault)
+    await this.initOneTable(this.vaultItem)
   }
 }
 
