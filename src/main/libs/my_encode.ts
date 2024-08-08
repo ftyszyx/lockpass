@@ -111,6 +111,10 @@ export class MyEncode {
 
   Encode2(data: string, key: Buffer): string {
     try {
+      if (key == null) {
+        Log.error('key is null')
+        return ''
+      }
       const iv = randomBytes(16)
       const cliper = createCipheriv(this._encode_alg, key, iv)
       let encrypted = cliper.update(data, 'utf8', 'base64url')
@@ -129,6 +133,10 @@ export class MyEncode {
 
   Decode2(data: string, key: Buffer): string {
     try {
+      if (key == null) {
+        Log.error('key is null')
+        return ''
+      }
       const [data_str, iv_str] = data.split('|')
       const iv = Buffer.from(iv_str, 'base64url')
       const decipher = createDecipheriv(this._encode_alg, key, iv)

@@ -6,7 +6,8 @@ import Icon from '@renderer/components/Icon'
 import {
   GetPasswordInfoString,
   GetPasswordRenderDetailList,
-  IsVaultItemMatchSearch
+  IsVaultItemMatchSearch,
+  PasswordRenderDetailKey
 } from '@renderer/entitys/VaultItem.entity'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
@@ -48,6 +49,7 @@ export default function QuickSearch() {
   useEffect(() => {
     foucsInput()
   }, [])
+
   const selectItemRef = useRef(selectItem)
   const showitemsRef = useRef(showitems)
   selectItemRef.current = selectItem
@@ -55,6 +57,10 @@ export default function QuickSearch() {
   useEffect(() => {
     if (selectItem == null && showitems.length > 0) {
       setSelectItem(showitems[0])
+    }
+    if (showitems.length == 0) {
+      setShowDetail(false)
+      setSelectItem(null)
     }
   }, [showitems])
 
@@ -80,8 +86,34 @@ export default function QuickSearch() {
     }
   }
 
+  async function CopyAndClose(key: string) {
+    navigator.clipboard.writeText(selectItem[key])
+    messageApi.success(appset.getText('copy_success_arg', appset.getText(`vaultitem.label.${key}`)))
+    await HideWin()
+  }
+
+  function handlerCopy(keytype: PasswordRenderDetailKey) {
+    if (selectItem == null) return
+    const keyinfo = GetPasswordRenderDetailList(selectItem).find((item) => item.shortCut == keytype)
+    if (keyinfo) {
+      CopyAndClose(keyinfo.key)
+    }
+  }
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key == 'c') {
+        handlerCopy(PasswordRenderDetailKey.ctrl_C)
+        return
+      }
+      if (event.ctrlKey && event.altKey && event.key == 'c') {
+        handlerCopy(PasswordRenderDetailKey.ctrl_alt_c)
+        return
+      }
+      if (event.ctrlKey && event.shiftKey && event.key == 'c') {
+        handlerCopy(PasswordRenderDetailKey.ctrl_shift_C)
+        return
+      }
       switch (event.key) {
         case 'ArrowUp':
           // 处理向上箭头键
@@ -90,6 +122,13 @@ export default function QuickSearch() {
         case 'ArrowDown':
           // 处理向下箭头键
           moveSelectPos('down')
+          break
+        case 'ArrowRight':
+          if (selectItem) setShowDetail(true)
+          break
+        case 'ArrowLeft':
+          setShowDetail(false)
+          setSelectItem(null)
           break
         case 'Enter':
           // 处理回车键
@@ -166,38 +205,37 @@ export default function QuickSearch() {
               </div>
             )
           })}
-        {show_dettail && (
+        {show_dettail && selectItem && (
           <div>
             {/* hader */}
-            <div className=" flex flex-row">
-              <Icon type={selectItem?.icon} svg></Icon>
+            <div className=" flex flex-row items-center py-2 border-solid border-b-gray-200 border-b-2">
+              <Icon
+                type={selectItem?.icon}
+                className="w-[30px] h-[30px] bg-gray-200 rounded-md mr-2"
+                svg
+              ></Icon>
               <div className=" flex flex-grow flex-col">
-                <div>{selectItem?.name}</div>
+                <div className=" font-sans font-bold">{selectItem?.name}</div>
                 <div>{GetPasswordInfoString(selectItem)}</div>
               </div>
               <Icon
-                type={Icon_type.icon_del}
+                type={Icon_type.icon_close1}
+                className="nodrag hover:bg-green-400 cursor-pointer w-[40px] h-[40px] p-2 rounded-md"
                 onClick={() => {
                   setShowDetail(false)
                 }}
+                svg
               ></Icon>
             </div>
             {/* body */}
-            <div className=" flex flex-col">
+            <div className=" flex flex-col space-y-2 text-sm font-sans border-b-2 border-solid border-gray-200">
               {GetPasswordRenderDetailList(selectItem).map((item) => {
                 return (
                   <div
                     key={item.key}
-                    className="flex flex-row items-center justify-between"
+                    className=" rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2"
                     onClick={() => {
-                      navigator.clipboard.writeText(selectItem[item.key])
-                      messageApi.success(
-                        appset.getText(
-                          'copy_success_arg',
-                          appset.getText(`vaultitem.label.${item.key}`)
-                        )
-                      )
-                      HideWin()
+                      CopyAndClose(item.key)
                     }}
                   >
                     <div>
@@ -211,8 +249,10 @@ export default function QuickSearch() {
                 )
               })}
             </div>
-            <div>
+            <div className=" py-2 ">
               <Button
+                className=" m-auto w-full nodrag"
+                type="primary"
                 onClick={async () => {
                   await GotoMain(selectItem)
                   await HideWin()
@@ -221,6 +261,22 @@ export default function QuickSearch() {
                 {appset.getText('quicksearch.gotoView')}
               </Button>
             </div>
+          </div>
+        )}
+        {selectItem && (
+          <div className="flex flex-row justify-between border-solid border-gray-200 border-t-2 py-2">
+            {!show_dettail && (
+              <div className=" flex flex-row items-center space-x-2 font-sans font-bold">
+                <div className=" bg-gray-200 py-1 px-2 rounded-md">{'→'}</div>
+                <div>{appset.getText('quicksearch.rightclick')}</div>
+              </div>
+            )}
+            {show_dettail && (
+              <div className=" flex flex-row items-center space-x-2 font-sans font-bold">
+                <div className=" bg-gray-200 py-1 px-2 rounded-md">{'←'}</div>
+                <div>{appset.getText('quicksearch.leftclick')}</div>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -51,7 +51,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   }
 
   useEffect(() => {
-    initvaultData()
+    if (appstore.HaveLogin()) initvaultData()
   }, [appstore.cur_user])
 
   async function checkSize() {

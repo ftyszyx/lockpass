@@ -38,6 +38,8 @@
 
   "quicksearch.input.placeholder": "搜索",
   "quicksearch.copy": "复制:{0}",
+  "quicksearch.rightclick": "查看详情",
+  "quicksearch.leftclick": "返回",
 
   "set.menu.normal": "常规",
   "set.menu.shortcut_local": "软件内快捷键",

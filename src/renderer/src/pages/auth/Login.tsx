@@ -3,7 +3,7 @@ import { PagePath } from '@common/entitys/page.entity'
 import { LastUserInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory } from '@renderer/libs/router'
-import { GetAllUsers, ipc_call } from '@renderer/libs/tools/other'
+import { GetAllUsers, ipc_call, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { AutoComplete, AutoCompleteProps, Button, Form, Input, message } from 'antd'
@@ -72,6 +72,7 @@ export default function Register(): JSX.Element {
       if (user) {
         message.success(lang.getText('auth.login.success'))
         appstore.Login(user)
+        await UpdateMenu(appstore, lang)
         if (isLock) {
           history.go(-1)
         } else {

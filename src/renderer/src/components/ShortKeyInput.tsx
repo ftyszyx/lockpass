@@ -29,7 +29,7 @@ export default function ShortKeyInput(props: ShortKeyInputProps) {
         press_key = ''
         press_controls.add(key)
       } else {
-        press_key = eventKey
+        press_key = eventKey.toUpperCase()
       }
       let shortcutString = Array.from(press_controls).join('+')
       if (press_key) {

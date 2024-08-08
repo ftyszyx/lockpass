@@ -9,6 +9,7 @@ import { LangItem } from '@common/lang'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { User } from '@common/entitys/user.entity'
 import { AppsetStore } from '@renderer/models/appset.model'
+import { getLabelStr } from './string'
 
 export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
   try {
@@ -100,4 +101,16 @@ export async function ChangeAppset(
     .catch((e) => {
       messageApi.error(appset.lang.getText(`err.${e.code}`))
     })
+}
+
+export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
+  const userset = appsotre.GetUserSet()
+  await ipc_call_normal(webToManMsg.UpdateTrayMenu, {
+    openlockpass: getLabelStr(
+      lang.getText('tray.menu.openlockpass'),
+      userset.shortcut_global_open_main
+    ),
+    lock: getLabelStr(lang.getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
+    openquick: getLabelStr(lang.getText('tray.menu.openquick'), userset.shortcut_global_quick_find)
+  })
 }

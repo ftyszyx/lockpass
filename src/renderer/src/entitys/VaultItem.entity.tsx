@@ -154,20 +154,26 @@ export interface PasswordRenderDetail {
   shortCut: string
 }
 
+export enum PasswordRenderDetailKey {
+  ctrl_C = `${ControlKey.ctrl}+C`,
+  ctrl_shift_C = `${ControlKey.ctrl}+${ControlKey.Shift}+C`,
+  ctrl_alt_c = `${ControlKey.ctrl}+${ControlKey.Alt}+C`
+}
+
 export const GetPasswordRenderDetailList = (vaule: VaultItem): PasswordRenderDetail[] => {
   switch (vaule.vault_item_type) {
     case VaultItemType.Login:
       return [
-        { key: 'username', shortCut: `${ControlKey.ctrl}+C` },
-        { key: 'password', shortCut: `${ControlKey.ctrl}+${ControlKey.Shift}+C` }
+        { key: 'username', shortCut: PasswordRenderDetailKey.ctrl_C },
+        { key: 'password', shortCut: PasswordRenderDetailKey.ctrl_alt_c }
       ]
     case VaultItemType.Card:
       return [
-        { key: 'card_number', shortCut: `${ControlKey.ctrl}+${ControlKey.Shift}+C` },
-        { key: 'card_password', shortCut: `${ControlKey.ctrl}+${ControlKey.Alt}+C` }
+        { key: 'card_number', shortCut: PasswordRenderDetailKey.ctrl_C },
+        { key: 'card_password', shortCut: PasswordRenderDetailKey.ctrl_alt_c }
       ]
     case VaultItemType.NoteBook:
-      return [{ key: 'note_text', shortCut: `${ControlKey.ctrl}+${ControlKey.Shift}+C` }]
+      return [{ key: 'note_text', shortCut: PasswordRenderDetailKey.ctrl_C }]
   }
   return []
 }

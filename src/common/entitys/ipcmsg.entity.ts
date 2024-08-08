@@ -34,7 +34,8 @@ export enum webToManMsg {
   CheckShortKey = 'CheckShortKey',
   getMousePos = 'getMousePos',
   showWindows = 'showWindows',
-  ShowVaultItem = 'ShowItem'
+  ShowVaultItem = 'ShowItem',
+  UpdateTrayMenu = 'UpdateTrayMenu'
 }
 
 export enum MainToWebMsg {

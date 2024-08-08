@@ -33,19 +33,23 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.setSize(width, height)
   })
 
+  ipcMain.handle(webToManMsg.UpdateTrayMenu, (_, setinfo) => {
+    AppModel.getInstance().my_tray?.updateMenu(setinfo)
+  })
+
   ipcMain.handle(webToManMsg.showWindows, (_, viewtype: renderViewType, showorHide: boolean) => {
     if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.showOrHide(showorHide)
     else if (viewtype == renderViewType.Quickview)
       AppModel.getInstance().quickwin?.showOrHide(showorHide)
   })
 
-  // ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_item_id) => {
-  //   const mainwin = AppModel.getInstance().mainwin
-  //   if (mainwin) {
-  //     mainwin.show()
-  //     mainwin.content.send(MainToWebMsg.ShowVaulteItem, vault_item_id)
-  //   }
-  // })
+  ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_item_id) => {
+    const mainwin = AppModel.getInstance().mainwin
+    if (mainwin) {
+      mainwin.show()
+      mainwin.content.send(MainToWebMsg.ShowVaulteItem, vault_item_id)
+    }
+  })
 
   ipcMain.handle(webToManMsg.AutoFill, (_, info) => {
     return AppModel.getInstance().AutoFill(info)

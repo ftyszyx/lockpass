@@ -39,10 +39,10 @@ export interface UserSetInfo {
 export const defaultUserSetInfo: UserSetInfo = {
   normal_autolock_time: 5,
   normal_lock_with_pc: true,
-  shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.Shift}+a`,
-  shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.Shift}+l`,
-  shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+up`,
-  shortcut_local_find: `${ControlKey.ctrl}+f`,
+  shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.Shift}+A`,
+  shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.Shift}+L`,
+  shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Up`,
+  shortcut_local_find: `${ControlKey.ctrl}+F`,
   shortcut_local_view_shortcut: `${ControlKey.ctrl}+/`,
   password_type: GenPasswordType.random,
   password_type_conf: DefaultPasswordTypeConf

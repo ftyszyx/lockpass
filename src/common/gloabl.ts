@@ -74,7 +74,9 @@ export enum Icon_type {
   icon_fold = 'icon-fold',
   icon_refresh = 'icon-refresh',
   icon_detail = 'icon-viewDetail',
-  icon_detail2 = 'icon-viewDetail2'
+  icon_detail2 = 'icon-viewDetail2',
+  icon_close = 'icon-close',
+  icon_close1 = 'icon-close1'
 }
 
 export enum VaultItemType {

@@ -4,6 +4,7 @@ import { Vault } from '@common/entitys/vault.entity'
 import { LangItem } from '@common/lang'
 import { create } from '@renderer/libs/state'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
+import { ConsoleLog } from '@renderer/libs/Console'
 export interface AppStore {
   vaults: Vault[]
   setValuts: (valuts: Vault[]) => void
@@ -43,14 +44,14 @@ export const use_appstore = create<AppStore>((set, get) => {
     Login(info: User) {
       set((state) => {
         const res = { ...state, cur_user: info }
-        console.log('login', res)
+        ConsoleLog.LogInfo('login', res)
         return res
       })
     },
     SetUser(user: User) {
       set((state) => {
         const res = { ...state, cur_user: user }
-        console.log('set user', res)
+        ConsoleLog.LogInfo('set user', res)
         return res
       })
     },

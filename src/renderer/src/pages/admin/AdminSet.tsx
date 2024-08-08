@@ -5,7 +5,7 @@ import Icon from '@renderer/components/Icon'
 import ShortKeyInput from '@renderer/components/ShortKeyInput'
 import { NormalSetFiledList, SetMenuItem } from '@renderer/entitys/set.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { ChangeAppset, ipc_call_normal } from '@renderer/libs/tools/other'
+import { ChangeAppset, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Form, Button, message } from 'antd'
@@ -37,6 +37,7 @@ export default function AdminSet() {
       if (select_item == SetMenuItem.shortcut_global) {
         await ipc_call_normal(webToManMsg.ShortCutKeyChange)
       }
+      await UpdateMenu(appstore, appset.lang)
     })
   }
   ConsoleLog.LogInfo('AdminSet render', appstore.cur_user?.user_set)

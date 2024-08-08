@@ -6,7 +6,12 @@ import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { message } from 'antd'
-import { getAllVault, getAllVaultItem, ipc_call_normal } from '@renderer/libs/tools/other'
+import {
+  getAllVault,
+  getAllVaultItem,
+  ipc_call_normal,
+  UpdateMenu
+} from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
@@ -63,6 +68,13 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   return (
     <div>
       {messageContex}
+      {/* <button
+        onClick={async () => {
+          await UpdateMenu(appstore, appset.lang)
+        }}
+      >
+        test
+      </button> */}
       {props.children}
     </div>
   )

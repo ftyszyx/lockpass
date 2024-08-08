@@ -21,44 +21,35 @@ export class MyTray {
         mainwin.show()
       }
     })
-    AppEvent.on(AppEventType.LoginOk, () => {
-      this.updateMenu(AppModel.getInstance().curUserInfo().user_set as UserSetInfo)
-    })
-    AppEvent.on(AppEventType.DataChange, (type) => {
-      if (type == EntityType.user) {
-        this.updateMenu(AppModel.getInstance().curUserInfo().user_set as UserSetInfo)
-      }
-    })
   }
 
   getLabelStr(label: string, value: string = ''): string {
     value = (value || '').trim()
     if (value.length <= 0) return label
     const labelWidth = getStrWidth(label)
-    const targetwidth = 25
+    const targetwidth = 15
     const padwidth = targetwidth - labelWidth
     if (padwidth <= 0) return label + value
-    const res = label + ' '.repeat(padwidth) + value
+    const res = label + 'A'.repeat(padwidth) + value
     console.log('res', res)
     return res
   }
 
-  public updateMenu(setinfo: UserSetInfo) {
+  getLabelStr2(key: string, tryinfo: Record<string, string> | null) {
+    if (tryinfo == null) return LangHelper.getString(`tray.menu.${key}`)
+    return tryinfo[key] || LangHelper.getString(`tray.menu.${key}`)
+  }
+
+  public updateMenu(tryinfo: Record<string, string> | null) {
     const contextmenu = Menu.buildFromTemplate([
       {
-        label: this.getLabelStr(
-          LangHelper.getString('tray.menu.openlockpass'),
-          setinfo?.shortcut_global_open_main
-        ),
+        label: this.getLabelStr2('openlockpass', tryinfo),
         click: () => {
           AppModel.getInstance().mainwin.show()
         }
       },
       {
-        label: this.getLabelStr(
-          LangHelper.getString('tray.menu.openquick'),
-          setinfo?.shortcut_global_quick_find
-        ),
+        label: this.getLabelStr2('openquick', tryinfo),
         click: () => {
           AppModel.getInstance().quickwin.show()
         }
@@ -67,10 +58,7 @@ export class MyTray {
         type: 'separator'
       },
       {
-        label: this.getLabelStr(
-          LangHelper.getString('tray.menu.lock'),
-          setinfo?.shortcut_global_quick_lock
-        ),
+        label: this.getLabelStr2('lock', tryinfo),
         click: () => {
           AppModel.getInstance().LockApp()
         }
