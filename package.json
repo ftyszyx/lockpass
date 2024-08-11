@@ -32,6 +32,7 @@
     "path-to-regexp": "^6.2.2",
     "reflect-metadata": "^0.2.2",
     "robotjs": "^0.6.0",
+    "sqlite3": "^5.1.7",
     "zip-lib": "^1.0.4"
   },
   "devDependencies": {

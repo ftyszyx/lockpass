@@ -9,7 +9,6 @@ import {
   UserSetInfo
 } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
-import DbHlper from '@main/libs/db_help'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export class UserService extends BaseService<User> {
@@ -83,16 +82,16 @@ export class UserService extends BaseService<User> {
       res.code = ApiRespCode.user_exit
     }
     try {
-      await DbHlper.instance().beginTransaction()
+      await AppModel.getInstance().db_helper.beginTransaction()
       await super.AddOne({ username: info.username, user_set: '' } as User)
       const userinfo = await super.GetOne('username', info.username)
       AppModel.getInstance().myencode.Register(userinfo[0], info.password)
-      DbHlper.instance().commitTransaction()
+      AppModel.getInstance().db_helper.commitTransaction()
       res.code = ApiRespCode.SUCCESS
     } catch (e: any) {
       res.code = ApiRespCode.db_err
       Log.Exception(e)
-      await DbHlper.instance().rollbackTransaction()
+      await AppModel.getInstance().db_helper.rollbackTransaction()
     }
     return res
   }

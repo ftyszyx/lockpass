@@ -84,11 +84,11 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.CloseDb, async () => {
-    return await DbHlper.instance().CloseAll()
+    return await AppModel.getInstance().db_helper.CloseDB()
   })
 
   ipcMain.handle(webToManMsg.OpenDb, async () => {
-    return await DbHlper.instance().OpenDb()
+    return await AppModel.getInstance().db_helper.OpenDb()
   })
 
   //user

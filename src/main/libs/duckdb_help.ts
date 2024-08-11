@@ -10,8 +10,8 @@ import { PathHelper } from './path'
 import AppModel from '@main/models/app.model'
 import { sleep } from '@common/help'
 
-class DbHlper {
-  private static _instance: DbHlper
+class DuckDbHelper {
+  private static _instance: DuckDbHelper
   public user: User
   public vault: Vault
   public vaultItem: VaultItem
@@ -26,10 +26,10 @@ class DbHlper {
 
   public db: duckdb.Database | null = null
   static instance() {
-    if (!DbHlper._instance) {
-      DbHlper._instance = new DbHlper()
+    if (!DuckDbHelper._instance) {
+      DuckDbHelper._instance = new DuckDbHelper()
     }
-    return DbHlper._instance
+    return DuckDbHelper._instance
   }
 
   public async Wait() {
@@ -485,4 +485,4 @@ class DbHlper {
   }
 }
 
-export default DbHlper
+export default DuckDbHelper

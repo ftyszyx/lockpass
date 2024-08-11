@@ -1,4 +1,5 @@
 {
+  "prettier.endOfLine": "lf",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

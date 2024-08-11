@@ -1,6 +1,5 @@
 import { MyEncode } from '@main/libs/my_encode'
 import { Log } from '@main/libs/log'
-import DbHlper from '@main/libs/db_help'
 import { app, dialog, crashReporter, globalShortcut, screen } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
@@ -19,6 +18,7 @@ import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
+import { SqliteHelper } from '@main/libs/sqlite_help'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -37,6 +37,7 @@ class AppModel {
   private _lock_timeout: number = 0
   private _logined: boolean = false
   public user: UserService | null = null
+  public db_helper: SqliteHelper = new SqliteHelper()
   private _set_path: string = ''
   private checkInterval: NodeJS.Timeout | null = null
 
@@ -55,7 +56,9 @@ class AppModel {
     return AppModel.instance
   }
 
-  constructor() {}
+  constructor() {
+    //empty
+  }
 
   Quit() {
     globalShortcut.unregisterAll()
@@ -64,14 +67,18 @@ class AppModel {
 
   async init() {
     Log.initialize()
+    Log.info('init myencode')
     this.myencode = new MyEncode()
-    Log.info('begin open db')
-    await DbHlper.instance().OpenDb()
-    Log.info('init tables')
-    await DbHlper.instance().InitTables()
+    Log.info('init entity')
     this.vault = new VaultService()
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
+    Log.info('begin open db')
+    await this.db_helper.OpenDb()
+    Log.info('init tables')
+    await this.db_helper.initOneTable(this.user.entity)
+    await this.db_helper.initOneTable(this.vault.entity)
+    await this.db_helper.initOneTable(this.vaultItem.entity)
     this._initSet()
     this.initLang()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
@@ -279,9 +286,9 @@ class AppModel {
       if (!fs.existsSync(backup_path)) {
         fs.mkdirSync(backup_path)
       }
-      await DbHlper.instance().CloseAll()
+      await this.db_helper.CloseDB()
       // await this.sleep(2000)
-      const dbpath = DbHlper.instance().getDbPath()
+      const dbpath = this.db_helper.getDbPath()
       await this.BackupFile(dbpath, backup_path)
       await this.BackupFile(this._set_path, backup_path)
       await this.BackupFile(this.myencode.getKeyPath(), backup_path)
@@ -292,7 +299,7 @@ class AppModel {
       Log.error('gen backup error:', e)
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
-    await DbHlper.instance().OpenDb()
+    await this.db_helper.OpenDb()
     return res
   }
 
@@ -334,7 +341,7 @@ class AppModel {
         )
         return false
       }
-      await DbHlper.instance().CloseDb()
+      await this.db_helper.CloseDB()
       const fiename = path.basename(zipfile_path.replace('.zip', ''))
       const backup_path = path.join(PathHelper.getHomeDir(), fiename)
       Log.info(`extract backup file:${zipfile_path}->${backup_path}`)
@@ -358,7 +365,7 @@ class AppModel {
       }
 
       const restoreAll = () => {
-        const dbpath = DbHlper.instance().getDbPath()
+        const dbpath = this.db_helper.getDbPath()
         if (restoreFile(dbpath) == false) return false
         if (restoreFile(this._set_path) == false) return false
         if (restoreFile(this.myencode.getKeyPath()) == false) return false
@@ -372,7 +379,7 @@ class AppModel {
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
     Log.info('recover system from backup:', res)
-    await DbHlper.instance().OpenDb()
+    await this.db_helper.OpenDb()
     return res
   }
 }
