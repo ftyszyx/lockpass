@@ -514,11 +514,8 @@ NAN_METHOD(keyTap)
 			return Nan::ThrowError("Invalid key code specified.");
 			break;
 		default:
-			toggleKeyCode(key, true, flags);
+			tapKeyCode(key, flags);
 			microsleep(keyboardDelay);
-			toggleKeyCode(key, false, flags);
-			microsleep(keyboardDelay);
-			break;
 	}
 
 	info.GetReturnValue().Set(Nan::New(1));
@@ -582,7 +579,7 @@ NAN_METHOD(keyToggle)
 		}
 	}
 
-	//Get the actual key.
+	//Get the acutal key.
 	switch(CheckKeyCodes(k, &key))
 	{
 		case -1:
@@ -593,57 +590,36 @@ NAN_METHOD(keyToggle)
 			break;
 		default:
 			toggleKeyCode(key, down, flags);
-			microsleep(keyboardDelay);
+			  microsleep(keyboardDelay);
 	}
 
 	info.GetReturnValue().Set(Nan::New(1));
 }
 
-NAN_METHOD(unicodeTap)
-{
-	size_t value = info[0]->Int32Value(Nan::GetCurrentContext()).FromJust();
-
-	if (value != 0) {
-		unicodeTap(value);
-
-		info.GetReturnValue().Set(Nan::New(1));
-	} else {
-		return Nan::ThrowError("Invalid character typed.");
-	}
-}
-
 NAN_METHOD(typeString)
 {
-	if (info.Length() > 0) {
-		char *str;
-		Nan::Utf8String string(info[0]);
+	char *str;
+	Nan::Utf8String string(info[0]);
 
-		str = *string;
+	str = *string;
 
-		typeStringDelayed(str, 0);
+	typeString(str);
 
-		info.GetReturnValue().Set(Nan::New(1));
-	} else {
-		return Nan::ThrowError("Invalid number of arguments.");
-	}
+	info.GetReturnValue().Set(Nan::New(1));
 }
 
 NAN_METHOD(typeStringDelayed)
 {
-	if (info.Length() > 0) {
-		char *str;
-		Nan::Utf8String string(info[0]);
+	char *str;
+	Nan::Utf8String string(info[0]);
 
-		str = *string;
+	str = *string;
 
 	size_t cpm = Nan::To<int32_t>(info[1]).FromJust();
 
-		typeStringDelayed(str, cpm);
+	typeStringDelayed(str, cpm);
 
-		info.GetReturnValue().Set(Nan::New(1));
-	} else {
-		return Nan::ThrowError("Invalid number of arguments.");
-	}
+	info.GetReturnValue().Set(Nan::New(1));
 }
 
 NAN_METHOD(setKeyboardDelay)
@@ -899,9 +875,6 @@ NAN_MODULE_INIT(InitAll)
 
 	Nan::Set(target, Nan::New("keyToggle").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(keyToggle)).ToLocalChecked());
-
-	Nan::Set(target, Nan::New("unicodeTap").ToLocalChecked(),
-		Nan::GetFunction(Nan::New<FunctionTemplate>(unicodeTap)).ToLocalChecked());
 
 	Nan::Set(target, Nan::New("typeString").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(typeString)).ToLocalChecked());

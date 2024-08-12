@@ -246,15 +246,11 @@ class AppModel {
       console.log('move mouse', this.last_point)
       robot.moveMouse(this.last_point.x, this.last_point.y)
       robot.mouseClick()
-      await sleep(1000)
-      robot.setKeyboardDelay(100)
       console.log('enter username,', logininfo.username)
       robot.typeString(logininfo.username)
-      await sleep(1000)
       robot.keyTap('tab')
       console.log('enter pass,', logininfo.password)
       robot.typeString(logininfo.password)
-      await sleep(1000)
       robot.keyTap('enter')
     }
   }

@@ -68,7 +68,7 @@ MMKeyCode keyCodeForChar(const char c)
 	/* OS X does not appear to have a built-in function for this, so instead we
 	 * have to write our own. */
 	static CFMutableDictionaryRef charToCodeDict = NULL;
-	size_t code;
+	CGKeyCode code;
 	UniChar character = c;
 	CFStringRef charStr = NULL;
 
