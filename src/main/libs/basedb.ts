@@ -157,7 +157,12 @@ export class BaseDb {
     let sql_str = 'update ' + table_name + ' set '
     const keys = Reflect.ownKeys(entity)
     keys.splice(keys.indexOf('id'), 1)
-    sql_str += this.getupdateOneSql(entity, obj_old, obj, keys as string[])
+    const update_sql = this.getupdateOneSql(entity, obj_old, obj, keys as string[])
+    if (update_sql.trim().length == 0) {
+      Log.info('no update value')
+      return
+    }
+    sql_str += update_sql
     sql_str += ` where id=${obj.id}`
     return await this._exesql(sql_str)
   }

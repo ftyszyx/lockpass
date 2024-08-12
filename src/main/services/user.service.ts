@@ -39,9 +39,8 @@ export class UserService extends BaseService<User> {
       }
     } catch (e: any) {
       Log.Exception(e)
-    } finally {
-      return res
     }
+    return res
   }
 
   public async GetLastUserInfo(): Promise<ApiResp<LastUserInfo>> {

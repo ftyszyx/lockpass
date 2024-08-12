@@ -19,6 +19,7 @@ import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
+import { sleep } from '@common/help'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -238,17 +239,22 @@ class AppModel {
     this.last_point = point
   }
 
-  AutoFill(info: VaultItem) {
+  async AutoFill(info: VaultItem) {
     this.quickwin.hide()
     if (info.vault_item_type == VaultItemType.Login) {
       const logininfo = info.info as LoginPasswordInfo
       console.log('move mouse', this.last_point)
       robot.moveMouse(this.last_point.x, this.last_point.y)
       robot.mouseClick()
-      robot.setKeyboardDelay(1)
-      robot.typeStringDelayed(logininfo.username, 6000)
+      await sleep(1000)
+      robot.setKeyboardDelay(100)
+      console.log('enter username,', logininfo.username)
+      robot.typeString(logininfo.username)
+      await sleep(1000)
       robot.keyTap('tab')
-      robot.typeStringDelayed(logininfo.password, 6000)
+      console.log('enter pass,', logininfo.password)
+      robot.typeString(logininfo.password)
+      await sleep(1000)
       robot.keyTap('enter')
     }
   }

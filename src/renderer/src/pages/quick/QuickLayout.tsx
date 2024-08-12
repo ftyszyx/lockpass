@@ -27,8 +27,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
     window.electron.ipcRenderer.on(MainToWebMsg.DataChange, (_, changetype: EntityType) => {
       ConsoleLog.LogInfo('data change', changetype)
       if (changetype == EntityType.vault) getAllVault(appstore, appset.lang, messageApi)
-      else if (changetype == EntityType.vault_item)
-        getAllVaultItem(appstore, appset.lang, messageApi)
+      else if (changetype == EntityType.vault_item) initvaultData(appstore, appset.lang, messageApi)
     })
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOK, () => {
       ConsoleLog.LogInfo('login ok')

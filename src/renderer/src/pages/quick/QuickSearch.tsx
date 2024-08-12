@@ -132,17 +132,24 @@ export default function QuickSearch() {
           break
         case 'Enter':
           // 处理回车键
-          if (selectItemRef.current) {
-            autoInput(selectItemRef.current)
-          }
           break
         default:
           break
       }
     }
+    const handleKeyUP = async (event: KeyboardEvent) => {
+      if (event.key == 'Enter') {
+        console.log('key up')
+        if (selectItemRef.current) {
+          await autoInput(selectItemRef.current)
+        }
+      }
+    }
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUP)
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUP)
     }
   }, [])
 

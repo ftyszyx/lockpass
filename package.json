@@ -20,18 +20,17 @@
     "build:linux": "electron-vite build && electron-builder --linux",
     "get:ver": "electron -v&&electron -a",
     "tailwind": "tailwindcss -i ./src/renderer/src/assets/tailwind.css -o ./src/renderer/src/assets/tailwind_out.css --watch",
-    "rebuild": "electron-rebuild -f -o robotjs"
+    "rebuild": "electron-rebuild -f -o robotjs "
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "antd": "^5.17.4",
-    "duckdb": "^1.0.0",
     "electron-updater": "^6.1.7",
     "path-to-regexp": "^6.2.2",
     "reflect-metadata": "^0.2.2",
-    "robotjs": "^0.6.0",
+    "robotjs": "file:third_lib/robotjs",
     "sqlite3": "^5.1.7",
     "zip-lib": "^1.0.4"
   },
