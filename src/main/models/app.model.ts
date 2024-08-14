@@ -381,6 +381,12 @@ class AppModel {
     await this.db_helper.OpenDb()
     return res
   }
+
+  //导入
+  async ImportCsvFile() {}
+
+  //导出
+  async ExportCsvFile() {}
 }
 
 export default AppModel
