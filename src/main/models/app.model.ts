@@ -243,13 +243,10 @@ class AppModel {
     this.quickwin.hide()
     if (info.vault_item_type == VaultItemType.Login) {
       const logininfo = info.info as LoginPasswordInfo
-      console.log('move mouse', this.last_point)
       robot.moveMouse(this.last_point.x, this.last_point.y)
       robot.mouseClick()
-      console.log('enter username,', logininfo.username)
       robot.typeString(logininfo.username)
       robot.keyTap('tab')
-      console.log('enter pass,', logininfo.password)
       robot.typeString(logininfo.password)
       robot.keyTap('enter')
     }
