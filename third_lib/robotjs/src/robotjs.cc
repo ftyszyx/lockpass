@@ -325,7 +325,7 @@ ScreenPos GetPosByArg(const Napi::CallbackInfo &info)
 	return pos_info;
 }
 
-void GetStrByArg(Napi::CallbackInfo &info, int index, char *str)
+void GetStrByArg(Napi::CallbackInfo &info, int index, std::string &out)
 {
 	Napi::Env env = info.Env();
 	if (info.Length() >= index + 1)
@@ -334,7 +334,7 @@ void GetStrByArg(Napi::CallbackInfo &info, int index, char *str)
 		{
 			Napi::TypeError::New(env, "args error").ThrowAsJavaScriptException();
 		}
-		strcpy(str, info[index].As<Napi::String>().Utf8Value().c_str());
+		out = info[index].As<Napi::String>().Utf8Value();
 	}
 }
 
@@ -468,9 +468,9 @@ void node_keyToggle(Napi::CallbackInfo &info)
 	MMKeyCode key = getKeyCodeFromArg(info, 0);
 	MMKeyFlags flags = getKeyModifiedByArg(info, 2);
 	bool down = false;
-	char down_arg[100] = "";
+	std::string down_arg;
 	GetStrByArg(info, 1, down_arg);
-	if (strcmp(down_arg, "down"))
+	if (strcmp(down_arg.c_str(), "down"))
 	{
 		down = true;
 	}
@@ -482,9 +482,9 @@ void node_keyToggle(Napi::CallbackInfo &info)
 void node_typeString(Napi::CallbackInfo &info)
 {
 	Napi::Env env = info.Env();
-	char str[1000] = "";
-	GetStrByArg(info, 0, str);
-	typeStringDelayed(str, 0);
+	std::string type_str;
+	GetStrByArg(info, 0, type_str);
+	typeStringDelayed(type_str.c_str(), 10);
 	CheckCallback(info);
 }
 
