@@ -29,6 +29,7 @@
 
   "vaultitem.label.username": "用户名",
   "vaultitem.label.password": "密码",
+  "vaultitem.label.card_password": "密码",
   "vaultitem.label.remarks": "备注",
   "vaultitem.label.url": "网址",
   "vaultitem.label.bank": "银行",

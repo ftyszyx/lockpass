@@ -49,8 +49,8 @@ export default function QuickSearch() {
     })
   }
   useEffect(() => {
-    foucsInput()
-  }, [])
+    if (show_detail == false) foucsInput()
+  }, [show_detail])
 
   const selectItemRef = useRef(selectItem)
   const showitemsRef = useRef(showitems)
@@ -76,44 +76,50 @@ export default function QuickSearch() {
     })
   }
 
+  function getIndex(index: number, max: number) {
+    if (index < 0) return max + index
+    if (index >= max) return index - max
+    return index
+  }
+
+  const SELECT_ITEM_STR = 'selectItem'
+  const GOTO_STR = 'goto'
   function moveSelectPos(dir: string) {
     const showitems = showitemsRef.current
     const selectItem = selectItemRef.current
     const show_detail = showDetailRef.current
     const selectDetail = selectDetailItemRef.current
+    console.log('moveSelectPos', dir)
     if (show_detail) {
-      const new_list = ['selectItem']
+      const new_list = [SELECT_ITEM_STR]
+      if (selectItem == null) return
       GetPasswordRenderDetailList(selectItem).forEach((item) => {
         new_list.push(item.key)
       })
-      new_list.push('goto')
-      const curindex2 = new_list.findIndex((item) => item == selectDetail)
+      new_list.push(GOTO_STR)
+      console.log('new list', new_list, selectDetail)
+      let curindex2 = new_list.findIndex((item) => item == selectDetail)
       if (dir == 'up') {
-        if (curindex2 > 0) setSelectDetailItem(new_list[curindex2 - 1])
+        curindex2 = getIndex(curindex2 - 1, new_list.length)
       } else {
-        if (curindex2 < new_list.length - 1) setSelectDetailItem(new_list[curindex2 + 1])
+        curindex2 = getIndex(curindex2 + 1, new_list.length)
       }
+      setSelectDetailItem(new_list[curindex2])
+      selectDetailItemRef.current = new_list[curindex2]
+      console.log('selectdetail', new_list[curindex2], curindex2)
       return
     }
     if (showitems.length == 0) return
+    let curindex = 0
     if (selectItem) {
-      const curindex = showitems.findIndex((item) => item.id == selectItem.id)
-      if (dir == 'up') {
-        if (curindex > 0) {
-          setSelectItem(showitems[curindex - 1])
-        }
-      } else {
-        if (curindex < showitems.length - 1) {
-          setSelectItem(showitems[curindex + 1])
-        }
-      }
-    } else {
-      if (dir == 'up') {
-        setSelectItem(showitems[showitems.length - 1])
-      } else {
-        setSelectItem(showitems[0])
-      }
+      curindex = showitems.findIndex((item) => item.id == selectItem.id)
     }
+    if (dir == 'up') {
+      curindex = getIndex(curindex - 1, showitems.length)
+    } else {
+      curindex = getIndex(curindex + 1, showitems.length)
+    }
+    setSelectItem(showitems[curindex])
   }
 
   async function CopyAndClose(key: string) {
@@ -132,6 +138,10 @@ export default function QuickSearch() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const selectItem = selectItemRef.current
+      const showdetail = showDetailRef.current
+      const selectItemDetail = selectDetailItemRef.current
+      console.log('handlekeydown', event.key, selectItem)
       if (event.ctrlKey && event.key == 'c') {
         handlerCopy(PasswordRenderDetailKey.ctrl_C)
         return
@@ -161,6 +171,17 @@ export default function QuickSearch() {
           setSelectItem(null)
           break
         case 'Enter':
+          if (show_detail) {
+            if (selectItemDetail == SELECT_ITEM_STR) {
+              setShowDetail(false)
+              setSelectItem(null)
+            } else if (selectItemDetail == GOTO_STR) {
+              GotoMain(selectItem)
+              HideWin()
+            } else {
+              CopyAndClose(selectItemDetail)
+            }
+          }
           // 处理回车键
           break
         default:
@@ -230,6 +251,7 @@ export default function QuickSearch() {
                         <div>{appset.getText('quicksearch.viewDetail')}</div>
                       </>
                     )}
+                    k
                   </>
                 )}
                 <Icon
@@ -257,7 +279,7 @@ export default function QuickSearch() {
               </div>
               <Icon
                 type={Icon_type.icon_close1}
-                className={`nodrag hover:bg-green-400 cursor-pointer w-[40px] h-[40px] p-2 rounded-md ${select_detail_item == 'itemSelect' ? 'bg-green-300' : ''} `}
+                className={`nodrag hover:bg-green-400 cursor-pointer w-[40px] h-[40px] p-2 rounded-md ${select_detail_item == SELECT_ITEM_STR ? 'bg-green-300' : ''} `}
                 onClick={() => {
                   setShowDetail(false)
                 }}
@@ -270,7 +292,7 @@ export default function QuickSearch() {
                 return (
                   <div
                     key={item.key}
-                    className={`rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2 ${select_detail_item == item.key ? 'bg-green-300' : ''}`}
+                    className={`rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2 ${select_detail_item == item.key ? ' bg-green-400' : ''}`}
                     onClick={() => {
                       CopyAndClose(item.key)
                     }}
@@ -286,9 +308,9 @@ export default function QuickSearch() {
                 )
               })}
             </div>
-            <div className=" py-2 ">
+            <div className={`py-2 ${select_detail_item == GOTO_STR ? ' bg-green-300' : ''}`}>
               <Button
-                className=" m-auto w-full nodrag"
+                className=" m-auto w-full nodrag "
                 type="primary"
                 onClick={async () => {
                   await GotoMain(selectItem)
