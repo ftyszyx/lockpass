@@ -21,7 +21,9 @@ export default function QuickSearch() {
   const [search, setSearch] = useState('')
   const [selectItem, setSelectItem] = useState<VaultItem>(null)
   const [messageApi, contextHolder] = message.useMessage()
-  const [show_dettail, setShowDetail] = useState(false)
+  const [show_detail, setShowDetail] = useState(false)
+  const [select_detail_item, setSelectDetailItem] = useState('selectItem')
+  const selectDetailItemRef = useRef(select_detail_item)
   const inputref = useRef<InputRef>(null)
   const showitems = useMemo(() => {
     if (search && search.trim().length > 0) {
@@ -54,6 +56,10 @@ export default function QuickSearch() {
   const showitemsRef = useRef(showitems)
   selectItemRef.current = selectItem
   showitemsRef.current = showitems
+  const showDetailRef = useRef(show_detail)
+  useEffect(() => {
+    showDetailRef.current = show_detail
+  }, [show_detail])
   useEffect(() => {
     if (selectItem == null && showitems.length > 0) {
       setSelectItem(showitems[0])
@@ -73,15 +79,39 @@ export default function QuickSearch() {
   function moveSelectPos(dir: string) {
     const showitems = showitemsRef.current
     const selectItem = selectItemRef.current
+    const show_detail = showDetailRef.current
+    const selectDetail = selectDetailItemRef.current
+    if (show_detail) {
+      const new_list = ['selectItem']
+      GetPasswordRenderDetailList(selectItem).forEach((item) => {
+        new_list.push(item.key)
+      })
+      new_list.push('goto')
+      const curindex2 = new_list.findIndex((item) => item == selectDetail)
+      if (dir == 'up') {
+        if (curindex2 > 0) setSelectDetailItem(new_list[curindex2 - 1])
+      } else {
+        if (curindex2 < new_list.length - 1) setSelectDetailItem(new_list[curindex2 + 1])
+      }
+      return
+    }
     if (showitems.length == 0) return
-    const curindex = showitems.findIndex((item) => item.id == selectItem.id)
-    if (dir == 'up') {
-      if (curindex > 0) {
-        setSelectItem(showitems[curindex - 1])
+    if (selectItem) {
+      const curindex = showitems.findIndex((item) => item.id == selectItem.id)
+      if (dir == 'up') {
+        if (curindex > 0) {
+          setSelectItem(showitems[curindex - 1])
+        }
+      } else {
+        if (curindex < showitems.length - 1) {
+          setSelectItem(showitems[curindex + 1])
+        }
       }
     } else {
-      if (curindex < showitems.length - 1) {
-        setSelectItem(showitems[curindex + 1])
+      if (dir == 'up') {
+        setSelectItem(showitems[showitems.length - 1])
+      } else {
+        setSelectItem(showitems[0])
       }
     }
   }
@@ -167,7 +197,7 @@ export default function QuickSearch() {
         placeholder={appset.lang?.getText('quicksearch.input.placeholder')}
       ></Input>
       <div className="flex flex-col">
-        {!show_dettail &&
+        {!show_detail &&
           showitems.map((item) => {
             return (
               <div
@@ -212,7 +242,7 @@ export default function QuickSearch() {
               </div>
             )
           })}
-        {show_dettail && selectItem && (
+        {show_detail && selectItem && (
           <div>
             {/* hader */}
             <div className=" flex flex-row items-center py-2 border-solid border-b-gray-200 border-b-2">
@@ -227,7 +257,7 @@ export default function QuickSearch() {
               </div>
               <Icon
                 type={Icon_type.icon_close1}
-                className="nodrag hover:bg-green-400 cursor-pointer w-[40px] h-[40px] p-2 rounded-md"
+                className={`nodrag hover:bg-green-400 cursor-pointer w-[40px] h-[40px] p-2 rounded-md ${select_detail_item == 'itemSelect' ? 'bg-green-300' : ''} `}
                 onClick={() => {
                   setShowDetail(false)
                 }}
@@ -240,7 +270,7 @@ export default function QuickSearch() {
                 return (
                   <div
                     key={item.key}
-                    className=" rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2"
+                    className={`rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2 ${select_detail_item == item.key ? 'bg-green-300' : ''}`}
                     onClick={() => {
                       CopyAndClose(item.key)
                     }}
@@ -272,13 +302,13 @@ export default function QuickSearch() {
         )}
         {selectItem && (
           <div className="flex flex-row justify-between border-solid border-gray-200 border-t-2 py-2">
-            {!show_dettail && (
+            {!show_detail && (
               <div className=" flex flex-row items-center space-x-2 font-sans font-bold">
                 <div className=" bg-gray-200 py-1 px-2 rounded-md">{'→'}</div>
                 <div>{appset.getText('quicksearch.rightclick')}</div>
               </div>
             )}
-            {show_dettail && (
+            {show_detail && (
               <div className=" flex flex-row items-center space-x-2 font-sans font-bold">
                 <div className=" bg-gray-200 py-1 px-2 rounded-md">{'←'}</div>
                 <div>{appset.getText('quicksearch.leftclick')}</div>

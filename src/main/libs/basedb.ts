@@ -82,7 +82,7 @@ export class BaseDb {
   }
 
   protected getupdateOneSql(entity: BaseEntity, obj_old: any, obj: any, keys: string[]): string {
-    let sql_str = ''
+    const changelist = []
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
       let element = obj[key]
@@ -92,13 +92,10 @@ export class BaseDb {
       if (old_value == element) continue
       const col_value = this.getColumnValue(entity, key, element)
       if (col_value) {
-        sql_str += `${key}=${col_value}`
-        if (i < keys.length - 1) {
-          sql_str += ','
-        }
+        changelist.push(`${key}=${col_value}`)
       }
     }
-    return sql_str
+    return changelist.join(',')
   }
 
   protected async _exesql(sql_str: string): Promise<void> {
