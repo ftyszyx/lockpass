@@ -27,7 +27,7 @@ export default function QuickSearch() {
   const inputref = useRef<InputRef>(null)
   const showitems = useMemo(() => {
     if (search && search.trim().length > 0) {
-      return appstore.vaut_items.filter((item) => {
+      return appstore.vault_items.filter((item) => {
         if (IsVaultItemMatchSearch(item, search)) return true
         return false
       })
@@ -129,6 +129,7 @@ export default function QuickSearch() {
   }
 
   function handlerCopy(keytype: PasswordRenderDetailKey) {
+    const selectItem = selectItemRef.current
     if (selectItem == null) return
     const keyinfo = GetPasswordRenderDetailList(selectItem).find((item) => item.shortCut == keytype)
     if (keyinfo) {
@@ -139,7 +140,7 @@ export default function QuickSearch() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const selectItem = selectItemRef.current
-      const showdetail = showDetailRef.current
+      const show_detail = showDetailRef.current
       const selectItemDetail = selectDetailItemRef.current
       console.log('handlekeydown', event.key, selectItem)
       if (event.ctrlKey && event.key == 'c') {
@@ -179,6 +180,7 @@ export default function QuickSearch() {
               GotoMain(selectItem)
               HideWin()
             } else {
+              console.log('copy and close', selectItemDetail)
               CopyAndClose(selectItemDetail)
             }
           }
@@ -190,8 +192,7 @@ export default function QuickSearch() {
     }
     const handleKeyUP = async (event: KeyboardEvent) => {
       if (event.key == 'Enter') {
-        console.log('key up')
-        if (selectItemRef.current) {
+        if (selectItemRef.current && !show_detail) {
           await autoInput(selectItemRef.current)
         }
       }

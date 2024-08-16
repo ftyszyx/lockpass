@@ -16,7 +16,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   useEffect(() => {
     const timer = setInterval(() => {
       checkSize()
-    }, 500)
+    }, 300)
     return () => {
       clearInterval(timer)
     }
@@ -56,7 +56,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   async function checkSize() {
     const rect = document.body.getBoundingClientRect()
     if (rect.height == window.innerHeight) return
-    console.log('checkSize', rect, window.innerHeight)
+    // console.log('checkSize', rect, window.innerHeight)
     await window.electron.ipcRenderer.invoke(
       webToManMsg.ResizeWindow,
       renderViewType.Quickview,

@@ -103,7 +103,7 @@ export class WindowBase {
 
   showOrHide(show: boolean) {
     if (show) this.show()
-    else this.hide
+    else this.hide()
   }
 
   setSize(width: number, height: number) {

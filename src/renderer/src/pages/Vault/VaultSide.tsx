@@ -8,6 +8,7 @@ import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Icon_type, VaultItemType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import { IsVaultItemMatchSearch } from '@renderer/entitys/VaultItem.entity'
+import { ConsoleLog } from '@renderer/libs/Console'
 import { useRouterStore } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Select } from 'antd'
@@ -27,25 +28,26 @@ export default function VaultSide(props: VaultSideProps) {
   const cur_vault_id = parseInt(route_data.match?.params['id'])
   const show_items = useMemo(() => {
     if (props.global_search_keyword && props.global_search_keyword.length > 0) {
-      return appstore.vaut_items.filter((item) => {
+      return appstore.vault_items.filter((item) => {
         if (IsVaultItemMatchSearch(item, props.global_search_keyword)) return true
         return false
       })
     }
     if (search_Password_type === SelectAll) {
-      return appstore.vaut_items.filter((item) => item.valut_id == cur_vault_id)
+      return appstore.vault_items.filter((item) => item.valut_id == cur_vault_id)
     } else {
-      return appstore.vaut_items.filter(
+      return appstore.vault_items.filter(
         (item) => item.vault_item_type === search_Password_type && item.valut_id == cur_vault_id
       )
     }
   }, [
     appstore.vaults,
     search_Password_type,
-    appstore.vaut_items,
+    appstore.vault_items,
     cur_vault_id,
     props.global_search_keyword
   ])
+  ConsoleLog.LogInfo(`render VaultSide `, show_items, appstore.vault_items)
   useEffect(() => {
     if (show_items.length > 0) {
       if (

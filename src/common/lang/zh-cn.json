@@ -24,6 +24,7 @@
   "vaultitem.placeholder.urls": "请输入网址",
   "vaultitem.placeholder.bank": "请输入银行名",
   "vaultitem.placeholder.card_number": "请输入卡号",
+  "vaultitem.placeholder.note_text": "请输入文本",
   "vaultitem.placeholder.shortcut": "请输入快捷键",
   "vaultitem.createrandom": "生成随机密码",
 

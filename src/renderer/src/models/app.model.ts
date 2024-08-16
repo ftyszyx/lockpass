@@ -8,7 +8,7 @@ import { ConsoleLog } from '@renderer/libs/Console'
 export interface AppStore {
   vaults: Vault[]
   setValuts: (valuts: Vault[]) => void
-  vaut_items: VaultItem[]
+  vault_items: VaultItem[]
   setValutItems: (valutItems: VaultItem[]) => void
   //user
   cur_user?: User
@@ -31,7 +31,7 @@ export const use_appstore = create<AppStore>((set, get) => {
       })
     },
     vaults: [],
-    vaut_items: [],
+    vault_items: [],
     GetUserSet() {
       if (!get().cur_user) return defaultUserSetInfo
       return get().cur_user.user_set as UserSetInfo
@@ -75,7 +75,7 @@ export const use_appstore = create<AppStore>((set, get) => {
     //vault item
     setValutItems(valutItems) {
       set((state) => {
-        return { ...state, vaut_items: valutItems }
+        return { ...state, vault_items: valutItems }
       })
     }
   }

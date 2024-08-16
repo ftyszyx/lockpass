@@ -5,13 +5,8 @@ import { useEffect } from 'react'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { Button, message } from 'antd'
-import {
-  getAllVault,
-  getAllVaultItem,
-  ipc_call_normal,
-  UpdateMenu
-} from '@renderer/libs/tools/other'
+import { message } from 'antd'
+import { getAllVault, getAllVaultItem, ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
@@ -25,6 +20,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       history.push(PagePath.Lock)
     })
     window.electron.ipcRenderer.on(MainToWebMsg.ShowVaulteItem, (_, vaultid) => {
+      ConsoleLog.LogInfo('ShowVaulteItem', vaultid)
       history.push(PagePath.Admin_valutitem_full.replace(':id', vaultid))
     })
     return () => {
@@ -59,7 +55,9 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   async function initAllData() {
+    ConsoleLog.LogInfo('initAllData')
     if (appstore.HaveLogin()) {
+      ConsoleLog.LogInfo('initAllData have login')
       await getAllVault(appstore, appset.lang, messageApi)
       await getAllVaultItem(appstore, appset.lang, messageApi)
     }
