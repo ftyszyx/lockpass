@@ -1,6 +1,4 @@
-import { EntityType, UserSetInfo } from '@common/entitys/app.entity'
 import { LangHelper } from '@common/lang'
-import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { getStrWidth } from '@main/libs/str'
 import AppModel from '@main/models/app.model'
 import { app, Menu, Tray } from 'electron'
