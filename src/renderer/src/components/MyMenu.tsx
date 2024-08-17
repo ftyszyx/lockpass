@@ -3,8 +3,15 @@ import { Dropdown, Menu as MenuAntd, Modal } from 'antd'
 import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/Icon'
-import { pathToRegexp, Key } from 'path-to-regexp'
-import { MyMenuType, getAllMenus, MenuValutID, ValutAddEvent } from '@renderer/entitys/menu.entity'
+import { pathToRegexp } from 'path-to-regexp'
+import {
+  MyMenuType,
+  getAllMenus,
+  MenuValutID,
+  ValutAddEvent,
+  MenuVaultBaseId,
+  MenuParamNull
+} from '@renderer/entitys/menu.entity'
 import { Link, useHistory } from '@renderer/libs/router'
 import { GetCommonTree } from '@renderer/libs/tools/tree'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
@@ -33,6 +40,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
 
   const menutree_info = useMemo(() => {
     const menulist = getAllMenus({
+      lang: appset.lang,
       CallEvent: async (event: string) => {
         if (event === ValutAddEvent) {
           setShowAddValut(true)
@@ -40,28 +48,30 @@ export default function MyMenu(props: MenuProps): JSX.Element {
       }
     })
     appstore.vaults.forEach((item) => {
+      const id = MenuVaultBaseId + item.id
       menulist.push({
-        id: item.id,
-        key: item.id + '',
+        id,
+        key: id.toString(),
         sorts: 1000 + item.id,
         title: item.name,
         icon_style_type: item.icon,
-        url: `${PagePath.Admin_valutitem}/${item.id}`,
+        url: `${PagePath.vault}/${item.id}/${MenuParamNull}`,
         parent: MenuValutID + ''
       })
     })
     menulist.sort((a, b) => {
       return a.sorts - b.sorts
     })
-    return GetCommonTree<MyMenuType>(menulist)
-  }, [appstore.vaults])
+    const res = GetCommonTree<MyMenuType>(menulist)
+    return res
+  }, [appstore.vaults, appset.lang])
+  ConsoleLog.LogInfo('render mymenu', appstore.vaults, menutree_info.datalist)
   /** 处理原始数据，将原始数据处理为层级关系 **/
   const treeDom = useMemo(() => {
     menutree_info.datalist.forEach((item) => {
       item.icon = <Icon type={item.icon_style_type}></Icon>
       item.label = item.title
     })
-    ConsoleLog.LogInfo('treeDom', menutree_info.trees)
     return menutree_info.trees as ItemType<MenuItemType>[]
   }, [menutree_info])
 
@@ -130,7 +140,6 @@ export default function MyMenu(props: MenuProps): JSX.Element {
                             okText: appset.getText('ok'),
                             cancelText: appset.getText('cancel'),
                             onOk: async () => {
-                              // await ipc_call_normal(webToManMsg.RestartApp)
                               await ipc_call_normal(webToManMsg.QuitAPP)
                             }
                           })
@@ -171,9 +180,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
           onSelect={(e) => {
             const menuinfo = menutree_info.datamap.get(e.key)
             if (menuinfo) {
-              const params_keys: Key[] = []
-              pathToRegexp(menuinfo.url, params_keys)
-              location.push(menuinfo.url)
+              if (menuinfo.url || '' !== '') location.push(menuinfo.url)
               setChosedKey([menuinfo.key])
             }
           }}

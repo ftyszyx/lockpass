@@ -7,9 +7,10 @@ date:2024/07/31 17:08:51
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Icon_type, VaultItemType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
+import { MenuParamNull } from '@renderer/entitys/menu.entity'
 import { IsVaultItemMatchSearch } from '@renderer/entitys/VaultItem.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { useRouterStore } from '@renderer/libs/router'
+import { useHistory, useRouterStore } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Select } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
@@ -25,7 +26,9 @@ export default function VaultSide(props: VaultSideProps) {
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
   const appstore = use_appstore() as AppStore
   const route_data = useRouterStore()
-  const cur_vault_id = parseInt(route_data.match?.params['id'])
+  const history = useHistory()
+  const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
+  const cur_vault_item_id = parseInt(route_data.match?.params['vault_item_id'])
   const show_items = useMemo(() => {
     if (props.global_search_keyword && props.global_search_keyword.length > 0) {
       return appstore.vault_items.filter((item) => {
@@ -47,7 +50,14 @@ export default function VaultSide(props: VaultSideProps) {
     cur_vault_id,
     props.global_search_keyword
   ])
-  ConsoleLog.LogInfo(`render VaultSide `, show_items, appstore.vault_items)
+  ConsoleLog.LogInfo(
+    `render VaultSide `,
+    show_items,
+    appstore.vault_items,
+    props,
+    cur_vault_id,
+    cur_vault_item_id
+  )
   useEffect(() => {
     if (show_items.length > 0) {
       if (
@@ -60,6 +70,15 @@ export default function VaultSide(props: VaultSideProps) {
       DoSelectItem(null)
     }
   }, [show_items])
+
+  useEffect(() => {
+    if (cur_vault_item_id.toString() != MenuParamNull) {
+      const item = show_items.find((item) => item.id == cur_vault_item_id)
+      if (item) {
+        DoSelectItem(item)
+      }
+    }
+  }, [history.PathName])
 
   const DoSelectItem = (vault_item: VaultItem) => {
     set_select_vault_item(vault_item)

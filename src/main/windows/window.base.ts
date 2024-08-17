@@ -1,5 +1,5 @@
 import { BrowserWindow, screen } from 'electron'
-import icon from '../../../resources/icon.png?asset'
+import icon from '../../../resources/iconlock.png?asset'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
@@ -17,6 +17,7 @@ export class WindowBase {
   protected haveFrame: boolean = true //是否无边框
   protected ontop: boolean = false
   protected wintype: string = 'normal'
+
   private window: BrowserWindow | null = null
 
   get content() {
@@ -32,8 +33,8 @@ export class WindowBase {
   }
 
   constructor() {
-    AppEvent.on(AppEventType.windowBlur, () => {
-      this.CheckBlurClick()
+    AppEvent.on(AppEventType.windowBlur, (windows: BrowserWindow) => {
+      this.CheckBlurClick(windows)
     })
     AppEvent.on(AppEventType.LockApp, () => {
       this.lockapp()
@@ -59,7 +60,9 @@ export class WindowBase {
     })
   }
 
-  lockapp() {}
+  lockapp() {
+    return
+  }
   initWin() {
     this.window = new BrowserWindow({
       width: this.witdth,
@@ -67,6 +70,7 @@ export class WindowBase {
       alwaysOnTop: this.ontop,
       type: this.wintype,
       show: false,
+      icon,
       resizable: this.resizeable,
       closable: this.closeable,
       frame: this.haveFrame,
@@ -116,8 +120,10 @@ export class WindowBase {
     this.window.setSize(width, height, true)
   }
 
-  CheckBlurClick() {
-    if (!this.click_outsize_close) return
+  CheckBlurClick(windows: BrowserWindow) {
+    if (!this.click_outsize_close || this.window.isVisible() == false) return
+    if (this.window != windows) return
+    // console.log('checkblurclick', windows, this.window == windows, this.window.isVisible())
     const { x, y } = screen.getCursorScreenPoint()
     const rect = this.win.getBounds()
     if (x < rect.x || x > rect.x + rect.width || y < rect.y || y > rect.y + rect.height) {

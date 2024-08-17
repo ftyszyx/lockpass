@@ -1,6 +1,6 @@
 export class ConsoleLog {
   static LogInfo(...args: any[]) {
-    if (import.meta.env.DEV) console.info(`[INFO][${new Date().toLocaleString()}]`, ...args)
+    if (import.meta.env.DEV) console.log(`[INFO][${new Date().toLocaleString()}] `, ...args)
   }
 
   static LogError(...args: any[]) {

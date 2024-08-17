@@ -1,6 +1,6 @@
 import { MyEncode } from '@main/libs/my_encode'
 import { Log } from '@main/libs/log'
-import { app, dialog, crashReporter, globalShortcut, screen } from 'electron'
+import { app, dialog, crashReporter, globalShortcut, screen, BrowserWindow } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
 import { VaultItemService } from '@main/services/vault_item.service'
@@ -19,7 +19,7 @@ import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
-import { sleep } from '@common/help'
+import { AppService } from '@main/services/app.service'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -34,6 +34,7 @@ class AppModel {
   public myencode: MyEncode | null = null
   public vault: VaultService | null = null
   public vaultItem: VaultItemService | null = null
+  public appInfo: AppService | null = null
   private _lock: boolean = false
   private _lock_timeout: number = 0
   private _logined: boolean = false
@@ -74,12 +75,14 @@ class AppModel {
     this.vault = new VaultService()
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
+    this.appInfo = new AppService()
     Log.info('begin open db')
     await this.db_helper.OpenDb()
     Log.info('init tables')
     await this.db_helper.initOneTable(this.user.entity)
     await this.db_helper.initOneTable(this.vault.entity)
     await this.db_helper.initOneTable(this.vaultItem.entity)
+    await this.db_helper.initOneTable(this.appInfo.entity)
     this._initSet()
     this.initLang()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
@@ -91,8 +94,8 @@ class AppModel {
     this.initWin()
     initAllApi()
     this.initGlobalShortcut()
-    app.on('browser-window-blur', () => {
-      AppEvent.emit(AppEventType.windowBlur)
+    app.on('browser-window-blur', (event, windows: BrowserWindow) => {
+      AppEvent.emit(AppEventType.windowBlur, windows)
     })
     this.checkInterval = setInterval(() => {
       this.performLockCheck()

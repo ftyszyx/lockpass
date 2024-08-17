@@ -1,11 +1,14 @@
 import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type } from '@common/gloabl'
+import { LangItem } from '@common/lang'
 import Icon from '@renderer/components/Icon'
 import { ReactNode } from 'react'
 //id list
 export const MenuValutID = 1
 export const MenuSetID = 2
 export const MenuLog = 3
+
+export const MenuVaultBaseId = 1000
 //event list
 export const ValutAddEvent = 'ValutAddEvent'
 
@@ -24,7 +27,9 @@ export interface MyMenuType {
 
 interface AllMenuProps {
   CallEvent: (event: string) => Promise<void>
+  lang: LangItem
 }
+
 export function getAllMenus(props: AllMenuProps): MyMenuType[] {
   return [
     {
@@ -32,7 +37,7 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
       key: MenuValutID + '',
       title: (
         <div className="flex flex-row items-center">
-          <div key={'title'}>密码库</div>
+          <div key={'title'}>{props.lang?.getText('menu.vault')}</div>
           <Icon
             key="icon"
             className=" ml-5"
@@ -53,7 +58,7 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
     {
       id: MenuSetID,
       key: MenuSetID + '',
-      title: '设置',
+      title: props.lang?.getText('menu.setting'),
       sorts: 2,
       icon_style_type: Icon_type.icon_set,
       parent: '0',

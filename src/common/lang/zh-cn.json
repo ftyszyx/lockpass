@@ -26,6 +26,8 @@
   "vaultitem.placeholder.card_number": "请输入卡号",
   "vaultitem.placeholder.note_text": "请输入文本",
   "vaultitem.placeholder.shortcut": "请输入快捷键",
+  "vaultitem.placeholder.card_password": "请输入密码",
+  "vaultitem.placeholder.card_company": "请输入银行名",
   "vaultitem.createrandom": "生成随机密码",
 
   "vaultitem.label.username": "用户名",
@@ -34,6 +36,7 @@
   "vaultitem.label.remarks": "备注",
   "vaultitem.label.url": "网址",
   "vaultitem.label.bank": "银行",
+  "vaultitem.label.card_company": "银行",
   "vaultitem.label.card_number": "卡号",
   "vaultitem.label.note": "笔记",
   "vaultitem.label.note_text": "笔记",
@@ -163,6 +166,9 @@
   "main.backup.zipfilenotfound": "备份文件不存在:{0}",
   "main.backup.error": "系统错误",
   "main.backup.filenotselect": "请选择备份文件",
+
+  "menu.vault": "保险库",
+  "menu.setting": "设置",
 
   "404.title": "404",
   "404.desc": "页面不存在",

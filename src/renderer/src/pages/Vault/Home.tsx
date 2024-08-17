@@ -75,7 +75,7 @@ export default function Home() {
                       type="icon-goto"
                       className=" text-gray-400"
                       onClick={() => {
-                        history.push(`${PagePath.Admin_valutitem}/${valut.id}`)
+                        history.push(`${PagePath.vault}/${valut.id}`)
                       }}
                     ></Icon>
                   </div>

@@ -5,8 +5,8 @@ export enum PagePath {
 
   Lock = '/lock',
   Adminbase = '/admin',
-  Admin_valutitem = '/admin/valutitems',
-  Admin_valutitem_full = '/admin/valutitems/:id',
+  vault = '/admin/valut',
+  Vault_full = '/admin/valut/:vault_id/:vault_item_id',
   Admin_set = '/admin/set',
   Admin_log = '/admin/log',
   Err404 = '/404',

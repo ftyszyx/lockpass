@@ -43,11 +43,11 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.showOrHide(showorHide)
   })
 
-  ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_item_id) => {
+  ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_id, vault_item_id) => {
     const mainwin = AppModel.getInstance().mainwin
     if (mainwin) {
       mainwin.show()
-      mainwin.content.send(MainToWebMsg.ShowVaulteItem, vault_item_id)
+      mainwin.content.send(MainToWebMsg.ShowVaulteItem, vault_id, vault_item_id)
     }
   })
 

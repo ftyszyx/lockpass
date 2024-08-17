@@ -45,11 +45,11 @@ const RootRouter = () => {
               {/*  prettier-ignore */}
               <Route
               path={PagePath.Adminbase}
-              redirect={PagePath.Admin_valutitem}
+              redirect={PagePath.vault}
               match={{ end: true }}
             />
               <Route path={PagePath.Admin_set} element={AdminSet} />
-              <Route path={PagePath.Admin_valutitem_full} element={Vault} />
+              <Route path={PagePath.Vault_full} element={Vault} />
               <Route path={PagePath.Admin_log} element={AdminLog} />
             </Route>
           </Route>

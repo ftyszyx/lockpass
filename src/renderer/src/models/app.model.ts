@@ -12,6 +12,7 @@ export interface AppStore {
   setValutItems: (valutItems: VaultItem[]) => void
   //user
   cur_user?: User
+  login_flag: boolean
   Login: (user: User) => void
   SetUser: (user: User) => void
   LoginOut: () => void
@@ -25,6 +26,7 @@ export const use_appstore = create<AppStore>((set, get) => {
     user_list: [],
     cur_user: null,
     lock_timeout: 0,
+    login_flag: false,
     setLang(lang: LangItem) {
       set((state) => {
         return { ...state, lang: lang }
@@ -38,12 +40,12 @@ export const use_appstore = create<AppStore>((set, get) => {
     },
     LoginOut() {
       set((state) => {
-        return { ...state, cur_user: null }
+        return { ...state, cur_user: null, login_flag: false }
       })
     },
     Login(info: User) {
       set((state) => {
-        const res = { ...state, cur_user: info }
+        const res = { ...state, cur_user: info, login_flag: true }
         ConsoleLog.LogInfo('login', res)
         return res
       })
@@ -56,7 +58,7 @@ export const use_appstore = create<AppStore>((set, get) => {
       })
     },
     HaveLogin() {
-      if (get().cur_user) {
+      if (get().cur_user && get().login_flag) {
         return true
       }
       return false

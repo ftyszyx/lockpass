@@ -40,7 +40,7 @@ export default function QuickSearch() {
   }
 
   async function GotoMain(info: VaultItem) {
-    await ipc_call_normal(webToManMsg.ShowVaultItem, info.id)
+    await ipc_call_normal(webToManMsg.ShowVaultItem, info.valut_id, info.id)
   }
 
   function foucsInput() {
@@ -193,7 +193,11 @@ export default function QuickSearch() {
     const handleKeyUP = async (event: KeyboardEvent) => {
       if (event.key == 'Enter') {
         if (selectItemRef.current && !show_detail) {
-          await autoInput(selectItemRef.current)
+          if (selectItemRef.current.vault_item_type != VaultItemType.Login) {
+            setShowDetail(true)
+          } else {
+            await autoInput(selectItemRef.current)
+          }
         }
       }
     }

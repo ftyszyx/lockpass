@@ -19,9 +19,11 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
     window.electron.ipcRenderer.on(MainToWebMsg.LockApp, () => {
       history.push(PagePath.Lock)
     })
-    window.electron.ipcRenderer.on(MainToWebMsg.ShowVaulteItem, (_, vaultid) => {
-      ConsoleLog.LogInfo('ShowVaulteItem', vaultid)
-      history.push(PagePath.Admin_valutitem_full.replace(':id', vaultid))
+    window.electron.ipcRenderer.on(MainToWebMsg.ShowVaulteItem, (_, vaultid, vault_item_id) => {
+      ConsoleLog.LogInfo('ShowVaulteItem', vaultid, vault_item_id)
+      history.push(
+        PagePath.Vault_full.replace(':vault_id', vaultid).replace(':vault_item_id', vault_item_id)
+      )
     })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LockApp)
@@ -55,9 +57,8 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   async function initAllData() {
-    ConsoleLog.LogInfo('initAllData')
     if (appstore.HaveLogin()) {
-      ConsoleLog.LogInfo('initAllData have login')
+      console.log('initAllData')
       await getAllVault(appstore, appset.lang, messageApi)
       await getAllVaultItem(appstore, appset.lang, messageApi)
     }

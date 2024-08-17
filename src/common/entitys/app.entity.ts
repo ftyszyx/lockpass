@@ -1,5 +1,13 @@
 import { ControlKey } from '@common/gloabl'
 import { DefaultPasswordTypeConf, GenPasswordType, PasswordTypeInfo } from './password.entity'
+import { Column, Entity } from '@common/decorator/db.decorator'
+import { BaseEntity } from './db.entity'
+
+@Entity({ name: 'app' })
+export class AppEntity extends BaseEntity {
+  @Column({ type: 'VARCHAR' })
+  app_set: string | object
+}
 
 export interface ApiResp<T> {
   code: ApiRespCode // 状态，200成功

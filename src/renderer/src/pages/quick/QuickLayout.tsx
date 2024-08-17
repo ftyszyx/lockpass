@@ -23,14 +23,12 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   }, [])
 
   useEffect(() => {
-    initUserData()
     window.electron.ipcRenderer.on(MainToWebMsg.DataChange, (_, changetype: EntityType) => {
       ConsoleLog.LogInfo('data change', changetype)
       if (changetype == EntityType.vault) getAllVault(appstore, appset.lang, messageApi)
       else if (changetype == EntityType.vault_item) initvaultData()
     })
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOK, () => {
-      ConsoleLog.LogInfo('login ok')
       initUserData()
     })
     return () => {
@@ -41,16 +39,17 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
 
   async function initUserData() {
     const curuser = await ipc_call_normal<User>(webToManMsg.getCurUserInfo)
-    appstore.SetUser(curuser)
+    appstore.Login(curuser)
   }
 
   async function initvaultData() {
+    if (appstore.HaveLogin() == false) return
     await getAllVault(appstore, appset.lang, messageApi)
     await getAllVaultItem(appstore, appset.lang, messageApi)
   }
 
   useEffect(() => {
-    if (appstore.HaveLogin()) initvaultData()
+    initvaultData()
   }, [appstore.cur_user])
 
   async function checkSize() {
