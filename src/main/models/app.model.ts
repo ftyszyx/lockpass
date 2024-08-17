@@ -20,6 +20,7 @@ import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
+import { AliDrive } from '@main/libs/ali_drive'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -36,6 +37,7 @@ class AppModel {
   public vaultItem: VaultItemService | null = null
   public appInfo: AppService | null = null
   private _lock: boolean = false
+  public ali_drive: AliDrive = new AliDrive()
   private _lock_timeout: number = 0
   private _logined: boolean = false
   public user: UserService | null = null
@@ -94,7 +96,7 @@ class AppModel {
     this.initWin()
     initAllApi()
     this.initGlobalShortcut()
-    app.on('browser-window-blur', (event, windows: BrowserWindow) => {
+    app.on('browser-window-blur', (_, windows: BrowserWindow) => {
       AppEvent.emit(AppEventType.windowBlur, windows)
     })
     this.checkInterval = setInterval(() => {
@@ -386,10 +388,14 @@ class AppModel {
   }
 
   //导入
-  async ImportCsvFile() {}
+  async ImportCsvFile() {
+    return
+  }
 
   //导出
-  async ExportCsvFile() {}
+  async ExportCsvFile() {
+    return
+  }
 }
 
 export default AppModel

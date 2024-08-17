@@ -43,6 +43,10 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.showOrHide(showorHide)
   })
 
+  ipcMain.handle(webToManMsg.Backup_alidrive, () => {
+    return AppModel.getInstance().ali_drive.auth()
+  })
+
   ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_id, vault_item_id) => {
     const mainwin = AppModel.getInstance().mainwin
     if (mainwin) {
@@ -59,18 +63,18 @@ export function initAllApi() {
     return AppModel.getInstance().getScreenPoint()
   })
 
-  ipcMain.handle(webToManMsg.ShortCutKeyChange, (_) => {
+  ipcMain.handle(webToManMsg.ShortCutKeyChange, () => {
     AppModel.getInstance().initGlobalShortcut()
   })
   ipcMain.handle(webToManMsg.CheckShortKey, (_, key) => {
     return AppModel.getInstance().IsKeyRegisted(key)
   })
 
-  ipcMain.handle(webToManMsg.BackupSystem, async () => {
+  ipcMain.handle(webToManMsg.Backup_local, async () => {
     return await AppModel.getInstance().BackupSystem()
   })
 
-  ipcMain.handle(webToManMsg.RecoverSystemFromBackup, async () => {
+  ipcMain.handle(webToManMsg.Recover_local, async () => {
     return await AppModel.getInstance().RecoverSystemFromBackup()
   })
 
@@ -104,7 +108,7 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.Register, async (_, info) => {
     return await AppModel.getInstance().user?.Register(info)
   })
-  ipcMain.handle(webToManMsg.Logout, async (_) => {
+  ipcMain.handle(webToManMsg.Logout, async () => {
     return await AppModel.getInstance().user?.Logout()
   })
   ipcMain.handle(webToManMsg.getAllUser, async () => {

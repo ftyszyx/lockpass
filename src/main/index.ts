@@ -24,3 +24,11 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+  console.log('second-instance', commandLine, workingDirectory, event)
+})
+
+app.on('open-url', (event, url) => {
+  console.log('open-url', url)
+})

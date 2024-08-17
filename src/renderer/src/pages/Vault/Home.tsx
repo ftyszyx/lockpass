@@ -1,5 +1,4 @@
 import { PagePath } from '@common/entitys/page.entity'
-import { Vault } from '@common/entitys/vaults.entity'
 import { ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import { useHistory } from '@renderer/libs/router'
@@ -10,6 +9,8 @@ import AddValutPanel from './AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { getAllVault } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { Vault } from '@common/entitys/vault.entity'
+import MyDropDown from '@renderer/components/MyDropDown'
 export default function Home() {
   ConsoleLog.LogInfo('home render')
   const history = useHistory()
@@ -30,8 +31,11 @@ export default function Home() {
   return (
     <div>
       <div className=" bg-gray-100 p-8">
-        <div className=" mx-auto">
-          <h1 className="text-2xl font-semibold mb-4">密码库</h1>
+        <div className="">
+          <div className=" flex flex-row space-x-1 items-center mb-4">
+            <h1 className="text-2xl font-semibold ">密码库</h1>
+            <MyDropDown />
+          </div>
           <Button
             className="mb-4"
             type="primary"

@@ -131,6 +131,11 @@
   "passwordGenPanel.password_type": "密码类型",
 
   "menu.password_gen": "密码生成器",
+  "menu.backup_local": "本地备份",
+  "menu.backup_drive": "云备份",
+  "menu.backup_drive_alidrive": "阿里云盘",
+  "menu.backup_drive_alidrive_do": "备份到阿里云盘",
+  "menu.backup_drive_alidrive_recover": "从阿里云盘还原",
   "menu.systembackup": "系统备份",
   "menu.systemRecover": "系统还原",
   "menu.backup.ok.title": "备份成功",

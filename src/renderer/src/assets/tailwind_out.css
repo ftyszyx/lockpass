@@ -630,11 +630,6 @@ video {
   margin: auto !important;
 }
 
-.mx-auto {
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
 .mb-0 {
   margin-bottom: 0px !important;
 }
