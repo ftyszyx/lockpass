@@ -8,6 +8,7 @@ export enum AppEventType {
   VaultChange = 'VaultChange',
   UserChange = 'UserChange',
   VaultItemChange = 'VaultItemChange',
-  DataChange = 'DataChange'
+  DataChange = 'DataChange',
+  DeepLink = 'DeepLink'
 }
 export const AppEvent = new EventEmitter()

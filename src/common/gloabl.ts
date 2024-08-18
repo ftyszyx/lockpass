@@ -11,7 +11,8 @@ export const Table_Name_KEY = 'table_name'
 export const COlumn_Encode_key = 'encode'
 
 //global string
-export const SYS_TEM_NAME = 'passlock'
+export const SYS_TEM_NAME = 'lockpass'
+export const SYS_PROTOL_URL = 'lockpass://'
 
 export const Default_Lang = 'zh-cn'
 

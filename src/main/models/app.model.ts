@@ -20,12 +20,13 @@ import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
-import { AliDrive } from '@main/libs/ali_drive'
+import { AliDrive, AliyunData } from '@main/libs/ali_drive'
 export interface AppSet {
   lang: string
   sql_ver: number
   app_ver: number
   cur_user_uid?: number
+  aliyun_data?: AliyunData
 }
 
 class AppModel {
@@ -37,7 +38,7 @@ class AppModel {
   public vaultItem: VaultItemService | null = null
   public appInfo: AppService | null = null
   private _lock: boolean = false
-  public ali_drive: AliDrive = new AliDrive()
+  public ali_drive: AliDrive | null = null
   private _lock_timeout: number = 0
   private _logined: boolean = false
   public user: UserService | null = null
@@ -86,6 +87,7 @@ class AppModel {
     await this.db_helper.initOneTable(this.vaultItem.entity)
     await this.db_helper.initOneTable(this.appInfo.entity)
     this._initSet()
+    this.ali_drive = new AliDrive()
     this.initLang()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
     crashReporter.start({
@@ -137,6 +139,15 @@ class AppModel {
   public changeLang(lang: string) {
     this.set.lang = lang
     this.initLang()
+    this.saveSet()
+  }
+
+  public get aliyunData() {
+    return this.set.aliyun_data
+  }
+
+  public setAliyunData(data: AliyunData) {
+    this.set.aliyun_data = data
     this.saveSet()
   }
 

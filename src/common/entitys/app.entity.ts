@@ -26,6 +26,12 @@ export enum ApiRespCode {
   form_err = 6,
   data_not_find = 7,
   update_err = 8,
+  //aliyun
+  aliyun_err = 100,
+  alyun_not_auth = 101,
+  aliyun_file_exit = 102,
+  aliyun_upload_err = 103,
+
   //common
   other_err = 205,
   db_err = 206,
