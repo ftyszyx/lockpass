@@ -11,7 +11,7 @@ import { PasswordGenContent, PasswordGenContentRef } from './PasswordGenContent'
 import { useRef, useState } from 'react'
 interface PasswordGenPanelProps {
   show: boolean
-  calssName?: string
+  className?: string
   showUse?: boolean
   style?: React.CSSProperties
   onOk: (value: string) => void
@@ -23,7 +23,7 @@ export default function PasswordGenPanel(props: PasswordGenPanelProps): JSX.Elem
   const passwordContenRef = useRef<PasswordGenContentRef>(null)
   return (
     <Modal
-      className={props.calssName ? props.calssName : ''}
+      className={props.className ? props.className : ''}
       open={props.show}
       style={props.style}
       closable={false}

@@ -5,9 +5,17 @@ import { SYS_PROTOL_URL } from '@common/gloabl'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { downloadFileFromUrl, SendRequest } from '../net_help'
 import AppModel from '@main/models/app.model'
-import { AliyunCreateFileResp, AliyunData, AliyunDriveInfo, AliyunFileDownloadInfo } from './def'
+import {
+  AliyunCreateFileResp,
+  AliyunData,
+  AliyunDriveInfo,
+  AliyunFileCateGory,
+  AliyunFileDownloadInfo,
+  AliyunFileListItem,
+  AliyunFilelistResp,
+  aliyunFileType
+} from './def'
 import fs from 'fs'
-import https from 'https'
 
 export class AliDrive {
   private _host: string = 'https://openapi.alipan.com'
@@ -18,6 +26,7 @@ export class AliDrive {
   private _redirect_url: string = SYS_PROTOL_URL
   protected server: LoopbackServer | null = null
   private _authData: AliyunData | null = null
+  private _parent_dir_name: string = 'lockpass_backup'
 
   constructor() {
     AppEvent.on(AppEventType.DeepLink, async (url: string) => {
@@ -31,6 +40,10 @@ export class AliDrive {
       await this.getToken(code)
     })
     this._authData = AppModel.getInstance().aliyunData
+  }
+
+  get parent_dir_name() {
+    return this._parent_dir_name
   }
 
   get RedirectUrl() {
@@ -111,8 +124,9 @@ export class AliDrive {
     return res
   }
 
-  async uploadFile(parentfile_id: string, file_name: string, local_path: string) {
-    const res = await this.createFile(parentfile_id, file_name)
+  async uploadFile(file_name: string, local_path: string) {
+    let res = await this.createFolderInRoot(this._parent_dir_name)
+    res = await this.createFile(res.file_id, file_name)
     if (res.exit) {
       throw new Error('file exit')
     }
@@ -132,8 +146,9 @@ export class AliDrive {
     })
   }
 
-  async downloadFile(parentfile_id: string, file_name: string, local_path: string) {
-    const res = await this.createFile(parentfile_id, file_name)
+  async downloadFile(file_name: string, local_path: string) {
+    let res = await this.createFolderInRoot(this._parent_dir_name)
+    res = await this.createFile(res.file_id, file_name)
     if (!res.exit) {
       throw new Error('file not exit')
     }
@@ -144,5 +159,22 @@ export class AliDrive {
       expire_sec: 900
     })
     await downloadFileFromUrl(downloadInfo.url, local_path)
+  }
+
+  async getLatestFiliList(
+    filetype: AliyunFileCateGory,
+    type: aliyunFileType
+  ): Promise<AliyunFileListItem[]> {
+    const parent_info = await this.createFolderInRoot(this._parent_dir_name)
+    const url = `${this._host}/adrive/v1.0/openFile/list`
+    const res = await SendRequest<AliyunFilelistResp>(url, 'POST', this.getHeaders(), {
+      drive_id: this._authData.drive_info.default_drive_id,
+      parent_file_id: parent_info.file_id,
+      file_cateGory: filetype,
+      order_by: 'created_at',
+      order_direction: 'DESC',
+      type
+    })
+    return res.items
   }
 }

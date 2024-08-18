@@ -1,3 +1,5 @@
+import { BackupFileItem } from '@common/entitys/backup.entity'
+
 export interface AliyunData {
   access_token: string
   refresh_token: string
@@ -38,3 +40,19 @@ export interface AliyunFileDownloadInfo {
   method: string
   description: string
 }
+
+export interface AliyunFileListItem extends BackupFileItem {
+  parent_file_id: string
+  url?: string
+  thumbnail?: string
+  play_cursor: string
+  video_media_metadata: object
+}
+
+export interface AliyunFilelistResp {
+  items: AliyunFileListItem[]
+  next_marker: string
+}
+
+export type AliyunFileCateGory = 'video' | 'doc' | 'audio' | 'zip' | 'others' | 'image'
+export type aliyunFileType = 'file' | 'folder' | 'all'

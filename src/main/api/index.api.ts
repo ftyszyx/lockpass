@@ -44,7 +44,15 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.Backup_alidrive, () => {
-    return AppModel.getInstance().ali_drive.auth()
+    return AppModel.getInstance().BackupByAliyun()
+  })
+
+  ipcMain.handle(webToManMsg.Recover_alidrive, (_, filename) => {
+    return AppModel.getInstance().RecoverByAliyun(filename)
+  })
+
+  ipcMain.handle(webToManMsg.GetAllBackups_alidrive, async () => {
+    return await AppModel.getInstance().GetAliyunBackupList()
   })
 
   ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_id, vault_item_id) => {

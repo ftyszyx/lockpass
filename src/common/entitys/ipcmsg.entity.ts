@@ -40,6 +40,7 @@ export enum webToManMsg {
   Recover_local = 'RestoreFromLocal',
   Backup_alidrive = 'BackupFromAliDrive',
   Recover_alidrive = 'RestoreFromAliDrive',
+  GetAllBackups_alidrive = 'GetAllBackupsFromAliDrive',
   QuitAPP = 'QuitAPP',
   RestartApp = 'RestartApp',
   CloseDb = 'CloseDb',

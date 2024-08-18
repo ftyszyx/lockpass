@@ -5,12 +5,14 @@ import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import FileListSelectDialog from './FileListSelectDialog'
 const { confirm } = Modal
 interface MyDropDownProps {
   className?: string
 }
 export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [showPasswordGen, setShowPasswordGen] = useState(false)
+  const [showSelectBackupFile, setShowSelectBackupFile] = useState(false)
   const appset = use_appset() as AppsetStore
   return (
     <>
@@ -31,7 +33,20 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                 })
               })
             } else if (item.key === 'backup_drive_alidrive_do') {
-              await ipc_call_normal<boolean>(webToManMsg.Backup_alidrive)
+              ipc_call_normal<boolean>(webToManMsg.Backup_alidrive).then((res) => {
+                if (res) {
+                  confirm({
+                    title: appset.getText('menu.backup.ok.title'),
+                    icon: <ExclamationCircleOutlined />,
+                    content: appset.getText(
+                      'menu.backup.ok.content',
+                      appset.getText('menu.backup_drive_alidrive_do')
+                    ),
+                    okText: appset.getText('ok'),
+                    cancelText: appset.getText('cancel')
+                  })
+                }
+              })
             } else if (item.key === 'recover_drive_alidrive_do') {
               return
             } else if (item.key === 'local_recover_do') {
@@ -116,6 +131,17 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             setShowPasswordGen(false)
           }}
         ></PasswordGenPanel>
+      )}
+      {showSelectBackupFile && (
+        <FileListSelectDialog
+          show={showSelectBackupFile}
+          onClose={() => {
+            setShowSelectBackupFile(false)
+          }}
+          onOk={() => {
+            setShowSelectBackupFile(false)
+          }}
+        ></FileListSelectDialog>
       )}
     </>
   )

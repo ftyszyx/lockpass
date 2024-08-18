@@ -111,7 +111,7 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
         <PasswordGenPanel
           show={showPasswordGen}
           showUse={true}
-          calssName="fixed  w-[300px]"
+          className="fixed  w-[300px]"
           style={{ top: modalPosition.top, left: modalPosition.left }}
           onOk={(value) => {
             props.onChange(value)

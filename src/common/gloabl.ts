@@ -14,6 +14,8 @@ export const COlumn_Encode_key = 'encode'
 export const SYS_TEM_NAME = 'lockpass'
 export const SYS_PROTOL_URL = 'lockpass://'
 
+export const DRIVE_BACK_UP_PATH = 'lockpass_backup'
+
 export const Default_Lang = 'zh-cn'
 
 export function createInstance<T>(type: new (...args: any[]) => T, ...args: any[]): T {

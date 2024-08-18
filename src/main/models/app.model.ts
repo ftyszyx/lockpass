@@ -8,7 +8,13 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import { APP_VER_CODE, Default_Lang, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
+import {
+  APP_VER_CODE,
+  Default_Lang,
+  DRIVE_BACK_UP_PATH,
+  SQL_VER_CODE,
+  VaultItemType
+} from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -20,7 +26,8 @@ import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
-import { AliDrive, AliyunData } from '@main/libs/ali_drive'
+import { AliDrive } from '@main/libs/ali_drive'
+import { AliyunData } from '@main/libs/ali_drive/def'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -289,7 +296,7 @@ class AppModel {
     })
   }
   //生成备份
-  async BackupSystem() {
+  async BackupSystem(): Promise<string> {
     let res: string | null = null
     try {
       const back_dir_name = `backup_${Math.ceil(new Date().getTime() / 1000)}`
@@ -398,10 +405,42 @@ class AppModel {
     return res
   }
 
-  //导入
-  async ImportCsvFile() {
-    return
+  async BackupByAliyun() {
+    if (this.ali_drive.needAuth()) {
+      this.ali_drive.auth()
+      return null
+    }
+    const zip_file = await this.BackupSystem()
+    if (zip_file == null) return null
+    const filename = path.basename(zip_file)
+    await this.ali_drive.uploadFile(filename, zip_file)
+    return `${this.ali_drive.parent_dir_name}/${filename}`
   }
+
+  async RecoverByAliyun(backup_file_name: string) {
+    if (this.ali_drive.needAuth()) {
+      this.ali_drive.auth()
+      return
+    }
+    const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup_aliyun')
+    if (fs.existsSync(backup_path_dir) == false) {
+      fs.mkdirSync(backup_path_dir)
+    }
+    const backup_file_path = path.join(backup_path_dir, backup_file_name)
+    await this.ali_drive.downloadFile(backup_file_name, backup_file_path)
+    await this.RecoverSystemFromBackupFile(backup_file_path)
+  }
+
+  async GetAliyunBackupList() {
+    if (this.ali_drive.needAuth()) {
+      this.ali_drive.auth()
+      return []
+    }
+    return await this.ali_drive.getLatestFiliList('zip', 'file')
+  }
+
+  //导入
+  async ImportCsvFile() {}
 
   //导出
   async ExportCsvFile() {
