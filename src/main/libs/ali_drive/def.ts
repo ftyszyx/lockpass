@@ -50,6 +50,22 @@ export interface AliyunFileListItem extends BackupFileItem {
   video_media_metadata: object
 }
 
+export interface AliyunFileInfo {
+  drive_id: string
+  file_id: string
+  name: string
+  size: number
+  file_extension: string
+  content_hash: string
+  category: string
+  type: string
+  created_at: string
+  updated_at: string
+  url?: string
+  thumbnail?: string
+  download_url?: string
+}
+
 export interface AliyunFilelistResp {
   items: AliyunFileListItem[]
   next_marker: string

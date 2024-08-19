@@ -11,12 +11,12 @@ import {
   AliyunDriveInfo,
   AliyunFileCateGory,
   AliyunFileDownloadInfo,
+  AliyunFileInfo,
   AliyunFileListItem,
   AliyunFilelistResp,
   aliyunFileType
 } from './def'
 import fs from 'fs'
-import https from 'https'
 import { ShowInfoToMain } from '../other.help'
 import { LangHelper } from '@common/lang'
 
@@ -162,7 +162,7 @@ export class AliDrive {
       const pos = this._partsize * (number - 1)
       const size = Math.min(file.length - pos, this._partsize)
       Log.Info(`upload part ${number} size ${size} pos ${pos} `)
-      await uploadFileToUrl(
+      const res2 = await uploadFileToUrl(
         part.upload_url,
         {
           method: 'PUT',
@@ -177,7 +177,19 @@ export class AliDrive {
         pos,
         size
       )
+      Log.Info(`upload part ${number} ok res:${res2}`)
     }
+    const fileinfo = await SendRequest<AliyunFileInfo>(
+      `${this._host}/adrive/v1.0/openFile/complete`,
+      'POST',
+      this.getHeaders(),
+      {
+        drive_id: this._authData.drive_info.default_drive_id,
+        file_id: res.file_id,
+        upload_id: res.upload_id
+      }
+    )
+    Log.Info('upload file ok', JSON.stringify(fileinfo))
   }
 
   async downloadFile(file_name: string, local_path: string) {

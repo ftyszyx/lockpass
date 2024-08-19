@@ -1,4 +1,5 @@
 import { BackupFileItem } from '@common/entitys/backup.entity'
+import { FormatTime, getFileSize } from '@common/help'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Modal } from 'antd'
 
@@ -23,7 +24,13 @@ export default function FileListSelectDialog(props: FileListSelectDialogProps): 
       }}
     >
       <div className=" flex flex-col">
+        <div className=" flex flex-row">
+          <span className=" flex-1">{appset.getText('filelistselect.name')}</span>
+          <span>{appset.getText('filelistselect.size')}</span>
+          <span>{appset.getText('filelistselect.updatetime')}</span>
+        </div>
         {props.filelist.map((item) => {
+          const updateat = new Date(item.updated_at)
           return (
             <div
               onClick={() => {
@@ -33,8 +40,8 @@ export default function FileListSelectDialog(props: FileListSelectDialogProps): 
               className="flex flex-row items-center"
             >
               <span className="flex-1">{item.name}</span>
-              <span>{item.updated_at}</span>
-              <span>{item.size}</span>
+              <span className=" w-[100px]">{getFileSize(item.size)}</span>
+              <span>{FormatTime(updateat)}</span>
             </div>
           )
         })}

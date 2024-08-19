@@ -80,7 +80,6 @@ export async function uploadFileToUrl(
       })
       res.on('end', () => {
         if (res.statusCode === 200) {
-          Log.Info('update part ${number} ok')
           resolve(data)
         } else {
           Log.Error(`upload part  error ${data}`)
@@ -98,5 +97,6 @@ export async function uploadFileToUrl(
         reject(new Error(`upload error  read file error:${error.message}`))
       }
     })
+    req.end()
   })
 }

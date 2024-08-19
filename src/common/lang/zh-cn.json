@@ -184,6 +184,10 @@
   "mydropmenu.aliyunneedauth": "阿里云盘需要授权",
   "mydropmenu.aliyunauthok": "阿里云授权成功,请重新操作",
 
+  "filelistselect.name": "文件名",
+  "filelistselect.size": "大小",
+  "filelistselect.updatetime": "修改时间",
+
   "alidrive.uploaderror": "上传失败",
 
   "menu.vault": "保险库",
