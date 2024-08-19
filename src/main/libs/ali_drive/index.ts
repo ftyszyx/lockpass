@@ -3,7 +3,7 @@ import LoopbackServer from '../LoopbackServer'
 import { Log } from '../log'
 import { SYS_PROTOL_URL } from '@common/gloabl'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
-import { downloadFileFromUrl, SendRequest } from '../net_help'
+import { downloadFileFromUrl, SendRequest, uploadFileToUrl } from '../net_help'
 import AppModel from '@main/models/app.model'
 import {
   AliyunCreateFileResp,
@@ -16,17 +16,21 @@ import {
   aliyunFileType
 } from './def'
 import fs from 'fs'
+import https from 'https'
+import { ShowInfoToMain } from '../other.help'
+import { LangHelper } from '@common/lang'
 
 export class AliDrive {
   private _host: string = 'https://openapi.alipan.com'
   private _clientid: string = '34cb815617784156a4504565d8c55bd0'
-  private _scope: string = 'file:all:read,file:all:write'
+  private _scope: string = 'user:base,file:all:read,file:all:write'
   private _callback_path: string = 'auth'
   private _sceret: string = 'b4dda1481a4e45d28a8372df93a5f475'
   private _redirect_url: string = SYS_PROTOL_URL
   protected server: LoopbackServer | null = null
   private _authData: AliyunData | null = null
   private _parent_dir_name: string = 'lockpass_backup'
+  private _partsize: number = 1024 * 1024 * 1024 * 4
 
   constructor() {
     AppEvent.on(AppEventType.DeepLink, async (url: string) => {
@@ -37,7 +41,7 @@ export class AliDrive {
       const code = params.get('code')
       if (!code) return
       console.log('code', code)
-      await this.getToken(code)
+      await this.getTokenByCode(code)
     })
     this._authData = AppModel.getInstance().aliyunData
   }
@@ -57,31 +61,52 @@ export class AliDrive {
     shell.openExternal(url)
   }
 
-  async getToken(code: string) {
+  async getTokenByCode(code: string) {
+    await this.getToken(code, null)
+  }
+
+  async getTokenByRefreshToken(refresh_token: string) {
+    await this.getToken(null, refresh_token)
+  }
+
+  async getToken(code: string, refresh_token: string) {
     const url = new URL(`${this._host}/oauth/access_token`)
+    const senddata = {
+      client_id: this._clientid,
+      client_secret: this._sceret
+    }
+    if (code) {
+      senddata['code'] = code
+      senddata['grant_type'] = 'authorization_code'
+    }
+    if (refresh_token) {
+      senddata['refresh_token'] = refresh_token
+      senddata['grant_type'] = 'refresh_token'
+    }
     const res = await SendRequest<AliyunData>(
       url.toString(),
       'POST',
       {
         'Content-Type': 'application/json'
       },
-      {
-        client_id: this._clientid,
-        client_secret: this._sceret,
-        code: code,
-        grant_type: 'authorization_code'
-      }
+      senddata
     )
     this._authData = res
-    this._authData.expires_in = Math.floor(Date.now() / 1000) + this._authData.expires_in * 1000
+    this._authData.expires_in = Math.floor(Date.now() / 1000) + this._authData.expires_in
+    this._authData.refresh_token_expire_time = Math.floor(Date.now() / 1000) + 90 * 24 * 60 * 60
     this._authData.drive_info = await this.getDriveInfo()
     AppModel.getInstance().setAliyunData(this._authData)
-    Log.info('get authData ok', JSON.stringify(this._authData))
+    Log.Info('get authData ok', JSON.stringify(this._authData))
+    ShowInfoToMain(LangHelper.getString('mydropmenu.aliyunauthok'))
   }
 
-  public needAuth() {
+  async needAuth() {
     const timenow = Math.floor(Date.now() / 1000)
-    return !this._authData || this._authData.expires_in < timenow
+    if (!this._authData) return true
+    if (this._authData.expires_in > timenow) return false
+    if (this._authData.refresh_token_expire_time < timenow) return true
+    await this.getTokenByRefreshToken(this._authData.refresh_token)
+    return false
   }
 
   private getHeaders() {
@@ -93,7 +118,7 @@ export class AliDrive {
 
   private async getDriveInfo(): Promise<AliyunDriveInfo> {
     const url = `${this._host}/adrive/v1.0/user/getDriveInfo`
-    return await SendRequest<AliyunDriveInfo>(url, 'GET', this.getHeaders(), null)
+    return await SendRequest<AliyunDriveInfo>(url, 'POST', this.getHeaders(), null)
   }
 
   async createFolderInRoot(folder_name: string): Promise<AliyunCreateFileResp> {
@@ -124,26 +149,35 @@ export class AliDrive {
     return res
   }
 
-  async uploadFile(file_name: string, local_path: string) {
+  async UploadFile(file_name: string, local_path: string) {
     let res = await this.createFolderInRoot(this._parent_dir_name)
     res = await this.createFile(res.file_id, file_name)
     if (res.exit) {
       throw new Error('file exit')
     }
     const file = fs.readFileSync(local_path)
-    res.part_info_list.forEach(async (part) => {
+    for (let i = 0; i < res.part_info_list.length; i++) {
+      const part = res.part_info_list[i]
       const number = part.part_number
-      const pos = part.part_size * (number - 1)
-      const size = Math.min(file.length - pos, part.part_size)
-      await SendRequest(
+      const pos = this._partsize * (number - 1)
+      const size = Math.min(file.length - pos, this._partsize)
+      Log.Info(`upload part ${number} size ${size} pos ${pos} `)
+      await uploadFileToUrl(
         part.upload_url,
-        'PUT',
         {
-          'Content-Lenght': size.toString()
+          method: 'PUT',
+          headers: {
+            'Content-Length': size,
+            Authorization: `${this._authData.token_type} ${this._authData.access_token}`,
+            'Transfer-Encoding': 'chunked',
+            connection: 'keep-alive'
+          }
         },
-        Buffer.from(file, pos, size)
+        file,
+        pos,
+        size
       )
-    })
+    }
   }
 
   async downloadFile(file_name: string, local_path: string) {

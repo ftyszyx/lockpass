@@ -6,6 +6,7 @@ import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import FileListSelectDialog from './FileListSelectDialog'
+import { BackupFileItem } from '@common/entitys/backup.entity'
 const { confirm } = Modal
 interface MyDropDownProps {
   className?: string
@@ -13,6 +14,7 @@ interface MyDropDownProps {
 export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [showPasswordGen, setShowPasswordGen] = useState(false)
   const [showSelectBackupFile, setShowSelectBackupFile] = useState(false)
+  const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
   const appset = use_appset() as AppsetStore
   return (
     <>
@@ -38,16 +40,18 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                   confirm({
                     title: appset.getText('menu.backup.ok.title'),
                     icon: <ExclamationCircleOutlined />,
-                    content: appset.getText(
-                      'menu.backup.ok.content',
-                      appset.getText('menu.backup_drive_alidrive_do')
-                    ),
+                    content: appset.getText('menu.backup.ok.content', res),
                     okText: appset.getText('ok'),
                     cancelText: appset.getText('cancel')
                   })
                 }
               })
             } else if (item.key === 'recover_drive_alidrive_do') {
+              ipc_call_normal<BackupFileItem[]>(webToManMsg.GetAllBackups_alidrive).then((res) => {
+                if (res == null || res.length <= 0) return
+                SetBackupList(res)
+                setShowSelectBackupFile(true)
+              })
               return
             } else if (item.key === 'local_recover_do') {
               confirm({
@@ -135,11 +139,35 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
       {showSelectBackupFile && (
         <FileListSelectDialog
           show={showSelectBackupFile}
+          filelist={BackupList}
           onClose={() => {
             setShowSelectBackupFile(false)
           }}
-          onOk={() => {
+          onOk={(item) => {
             setShowSelectBackupFile(false)
+            confirm({
+              title: appset.getText('menu.recover.sure.title'),
+              icon: <ExclamationCircleOutlined />,
+              content: appset.getText('menu.recover.sure.content'),
+              okText: appset.getText('ok'),
+              cancelText: appset.getText('cancel'),
+              onOk: () => {
+                ipc_call_normal<boolean>(webToManMsg.Recover_alidrive, item.name).then((res) => {
+                  if (res) {
+                    confirm({
+                      title: appset.getText('menu.recover.ok.title'),
+                      icon: <ExclamationCircleOutlined />,
+                      content: appset.getText('menu.recover.ok.content'),
+                      okText: appset.getText('ok'),
+                      cancelText: appset.getText('cancel'),
+                      onOk: async () => {
+                        await ipc_call_normal(webToManMsg.QuitAPP)
+                      }
+                    })
+                  }
+                })
+              }
+            })
           }}
         ></FileListSelectDialog>
       )}

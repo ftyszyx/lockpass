@@ -66,7 +66,7 @@ export class Log {
     Log.logWriter = new FileLogWriter(log_path, true)
   }
 
-  static debug(...args) {
+  static Debug(...args) {
     if (Log.log_level > LogLevel.Debug) {
       return
     }
@@ -75,7 +75,7 @@ export class Log {
     console.log(logstr)
   }
 
-  static info(...args) {
+  static Info(...args) {
     if (Log.log_level > LogLevel.Info) {
       return
     }
@@ -85,7 +85,7 @@ export class Log {
     // console.log(`${ConsoleColor.FgGreen}${logstr}${ConsoleColor.FgGreen}`)
   }
 
-  static error(...args) {
+  static Error(...args) {
     if (Log.log_level > LogLevel.Error) {
       return
     }

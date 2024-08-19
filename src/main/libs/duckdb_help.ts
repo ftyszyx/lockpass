@@ -36,10 +36,10 @@ class DuckDbHelper {
     return new Promise<void>((resolve, reject) => {
       this.db.wait((err) => {
         if (err) {
-          Log.info('wait ', err)
+          Log.Info('wait ', err)
           reject(err)
         } else {
-          Log.info('wait ok')
+          Log.Info('wait ok')
           resolve()
         }
       })
@@ -59,12 +59,12 @@ class DuckDbHelper {
     return new Promise<void>((resolve, reject) => {
       this.db.close!((error) => {
         if (error) {
-          Log.error('close db err', error)
+          Log.Error('close db err', error)
           reject(error)
           return
         }
         this.db = null
-        Log.info('close db ok')
+        Log.Info('close db ok')
         resolve()
       })
     })
@@ -75,11 +75,11 @@ class DuckDbHelper {
       if (this.db) {
         this.getconnection().close((error) => {
           if (error) {
-            Log.error('close connection err', error)
+            Log.Error('close connection err', error)
             reject(error)
             return
           }
-          Log.info('close connection ok')
+          Log.Info('close connection ok')
           resolve()
         })
       } else {
@@ -100,12 +100,12 @@ class DuckDbHelper {
         },
         (err) => {
           if (err) {
-            Log.error('open db err', err)
+            Log.Error('open db err', err)
             this.db = null
             reject(err)
             return
           }
-          Log.info('open db ok')
+          Log.Info('open db ok')
           resolve()
         }
       )
@@ -210,7 +210,7 @@ class DuckDbHelper {
   private _exesql(sql_str: string, ext_msg: string = ''): Promise<void> {
     const conn = this.getconnection()
     return new Promise((resolve, reject) => {
-      if (this.show_log) Log.info('exesql:', sql_str)
+      if (this.show_log) Log.Info('exesql:', sql_str)
       conn.exec(sql_str, (err, row) => {
         if (err) {
           Log.Exception(err, `run sql:${sql_str} ext:${ext_msg}  err: ${err.message}`)
@@ -225,7 +225,7 @@ class DuckDbHelper {
   private _runSql(sql_str: string, ext_msg: string = ''): Promise<void> {
     const conn = this.getconnection()
     return new Promise((resolve, reject) => {
-      if (this.show_log) Log.info('runsql:', sql_str)
+      if (this.show_log) Log.Info('runsql:', sql_str)
       conn.exec(sql_str, (err, row) => {
         if (err) {
           Log.Exception(err, `run sql:${sql_str} ext:${ext_msg}  `)
@@ -259,7 +259,7 @@ class DuckDbHelper {
     const keys = Reflect.ownKeys(obj) as string[]
     const conn = this.getconnection()
     return new Promise((resolve, reject) => {
-      if (this.show_log) Log.info('runsql:', sql_str)
+      if (this.show_log) Log.Info('runsql:', sql_str)
       conn.all(sql_str, (err, rows) => {
         if (err) {
           Log.Exception(err, `run sql:${sql_str} ext:${ext_msg} err: ${err.message}`)
@@ -297,7 +297,7 @@ class DuckDbHelper {
   public async UpdateOne(entity: BaseEntity, obj_old: any, obj: any): Promise<void> {
     const table_name = entity[Table_Name_KEY]
     if (!obj.id) {
-      Log.error('update entity id is null')
+      Log.Error('update entity id is null')
       return Promise.reject(new Error('update entity id is null'))
     }
     let sql_str = 'update ' + table_name + ' set '
@@ -394,7 +394,7 @@ class DuckDbHelper {
     sql_str += this.getWhreSql(obj, where)
     return new Promise((resolve, reject) => {
       const conn = this.getconnection()
-      if (this.show_log) Log.info('runsql:', sql_str)
+      if (this.show_log) Log.Info('runsql:', sql_str)
       conn.all(sql_str, (err, rows) => {
         if (err) {
           reject(new Error(err.message))
@@ -422,7 +422,7 @@ class DuckDbHelper {
     return new Promise<void>((resolve, reject) => {
       try {
         const table_name = obj[Table_Name_KEY]
-        Log.info('init table:', table_name)
+        Log.Info('init table:', table_name)
         let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
         let index_desc = ''
         let sequence_desc = ''
@@ -460,14 +460,14 @@ class DuckDbHelper {
         }
         table_desc += ');'
         const sql_str = sequence_desc + '\n' + table_desc + '\n' + index_desc
-        if (this.show_log) Log.info('runsql:', sql_str)
+        if (this.show_log) Log.Info('runsql:', sql_str)
         const conn = this.getconnection()
         conn.exec(sql_str, (err, _) => {
           if (err) {
             Log.Exception(err, 'create table err', obj[Table_Name_KEY], err.message)
             reject(err)
           } else {
-            Log.info('init table ok', table_name)
+            Log.Info('init table ok', table_name)
             resolve()
           }
         })

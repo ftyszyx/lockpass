@@ -3,6 +3,7 @@ import { BackupFileItem } from '@common/entitys/backup.entity'
 export interface AliyunData {
   access_token: string
   refresh_token: string
+  refresh_token_expire_time: number
   expires_in: number
   token_type: string
   drive_info: AliyunDriveInfo

@@ -94,13 +94,13 @@ export class WindowBase {
   }
 
   show() {
-    Log.info('show window', this.url)
+    Log.Info('show window', this.url)
     AppModel.getInstance().setLastPoint(screen.getCursorScreenPoint())
     this.win.show()
   }
 
   hide() {
-    Log.info('hide window', this.url)
+    Log.Info('hide window', this.url)
     this.window.hide()
     this.window.setSkipTaskbar(true)
   }

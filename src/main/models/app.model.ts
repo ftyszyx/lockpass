@@ -8,13 +8,7 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import {
-  APP_VER_CODE,
-  Default_Lang,
-  DRIVE_BACK_UP_PATH,
-  SQL_VER_CODE,
-  VaultItemType
-} from '@common/gloabl'
+import { APP_VER_CODE, Default_Lang, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -28,6 +22,7 @@ import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
 import { AliDrive } from '@main/libs/ali_drive'
 import { AliyunData } from '@main/libs/ali_drive/def'
+import { ShowErrToMain } from '@main/libs/other.help'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -79,16 +74,16 @@ class AppModel {
 
   async init() {
     Log.initialize()
-    Log.info('init myencode')
+    Log.Info('init myencode')
     this.myencode = new MyEncode()
-    Log.info('init entity')
+    Log.Info('init entity')
     this.vault = new VaultService()
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
     this.appInfo = new AppService()
-    Log.info('begin open db')
+    Log.Info('begin open db')
     await this.db_helper.OpenDb()
-    Log.info('init tables')
+    Log.Info('init tables')
     await this.db_helper.initOneTable(this.user.entity)
     await this.db_helper.initOneTable(this.vault.entity)
     await this.db_helper.initOneTable(this.vaultItem.entity)
@@ -128,15 +123,20 @@ class AppModel {
       fs.writeFileSync(this._set_path, JSON.stringify(this.set))
     } else {
       const saveinfo = JSON.parse(fs.readFileSync(this._set_path).toString())
-      Object.keys(saveinfo).forEach((key) => {
-        const initvalue = this.set[key]
-        if (initvalue != undefined && initvalue != null) {
-          this.set[key] = saveinfo[key]
+      let have_new_property = false
+      Object.keys(this.set).forEach((key) => {
+        const initvalue = saveinfo[key]
+        if (initvalue === undefined || initvalue === null) {
+          saveinfo[key] = this.set[key]
+          have_new_property = true
         }
       })
-      this.saveSet()
+      this.set = saveinfo
+      if (have_new_property) {
+        this.saveSet()
+      }
     }
-    Log.info('set:', JSON.stringify(this.set))
+    Log.Info('set:', JSON.stringify(this.set))
   }
 
   public saveSet() {
@@ -175,15 +175,6 @@ class AppModel {
 
   public initLang() {
     LangHelper.setLang(this.set.lang)
-  }
-
-  public showMsgErr(msg: string, duration: number = 3000) {
-    AppEvent.emit(AppEventType.Message, 'error', msg, duration)
-    // this.mainwin?.content.send(MainToWebMsg.ShowErrorMsg, msg, duration)
-  }
-  public showMsgInfo(msg: string, duration: number = 3000) {
-    AppEvent.emit(AppEventType.Message, 'info', msg, duration)
-    // this.mainwin?.content.send(MainToWebMsg.ShowInfoMsg, msg, duration)
   }
 
   private performLockCheck() {
@@ -246,7 +237,7 @@ class AppModel {
             if (key == 'shortcut_global_quick_find') this.quickwin?.show()
             if (key == 'shortcut_global_quick_lock') this.LockApp()
           })
-          Log.info('register global key:', value, res)
+          Log.Info('register global key:', value, res)
         }
       }
     })
@@ -280,16 +271,16 @@ class AppModel {
   }
 
   private async BackupFile(srcpath: string, backup_path: string) {
-    Log.info(`backup file begin:${srcpath}`)
+    Log.Info(`backup file begin:${srcpath}`)
     const filename = path.basename(srcpath)
     const dest = path.join(backup_path, filename)
     return new Promise((resolve, reject) => {
       fs.copyFile(srcpath, dest, (err) => {
         if (err) {
-          Log.error(`backup file error:${srcpath}->${dest}`, err)
+          Log.Error(`backup file error:${srcpath}->${dest}`, err)
           reject(false)
         } else {
-          Log.info(`backup file ok:${srcpath}->${dest}`)
+          Log.Info(`backup file ok:${srcpath}->${dest}`)
           resolve(true)
         }
       })
@@ -309,7 +300,6 @@ class AppModel {
         fs.mkdirSync(backup_path)
       }
       await this.db_helper.CloseDB()
-      // await this.sleep(2000)
       const dbpath = this.db_helper.getDbPath()
       await this.BackupFile(dbpath, backup_path)
       await this.BackupFile(this._set_path, backup_path)
@@ -318,7 +308,7 @@ class AppModel {
       await zl.archiveFolder(backup_path, zip_file)
       res = zip_file
     } catch (e) {
-      Log.error('gen backup error:', e)
+      Log.Error('gen backup error:', e)
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
     await this.db_helper.OpenDb()
@@ -343,7 +333,7 @@ class AppModel {
       }
       res = await this.RecoverSystemFromBackupFile(filePaths[0])
     } catch (e) {
-      Log.error('restore backup error:', e)
+      Log.Error('restore backup error:', e)
       res = false
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
@@ -355,7 +345,7 @@ class AppModel {
     let res = true
     try {
       if (fs.existsSync(zipfile_path) == false) {
-        Log.error('zip file not exists:', zipfile_path)
+        Log.Error('zip file not exists:', zipfile_path)
         AppEvent.emit(
           AppEventType.Message,
           'error',
@@ -366,14 +356,14 @@ class AppModel {
       await this.db_helper.CloseDB()
       const fiename = path.basename(zipfile_path.replace('.zip', ''))
       const backup_path = path.join(PathHelper.getHomeDir(), fiename)
-      Log.info(`extract backup file:${zipfile_path}->${backup_path}`)
+      Log.Info(`extract backup file:${zipfile_path}->${backup_path}`)
       await zl.extract(zipfile_path, backup_path)
 
       const restoreFile = (dest: string) => {
         const destfile = path.basename(dest)
         const srcpath = path.join(backup_path, destfile)
         if (fs.existsSync(srcpath) == false) {
-          Log.error('restore file not exists:', srcpath)
+          Log.Error('restore file not exists:', srcpath)
           AppEvent.emit(
             AppEventType.Message,
             'error',
@@ -382,7 +372,7 @@ class AppModel {
           return false
         }
         fs.copyFileSync(srcpath, dest)
-        Log.info(`restore file ok:${srcpath}->${dest}`)
+        Log.Info(`restore file ok:${srcpath}->${dest}`)
         return true
       }
 
@@ -396,32 +386,48 @@ class AppModel {
       if (restoreAll() === true) this.myencode.LoadSet()
       else res = false
     } catch (e) {
-      Log.error('restore backup error:', e)
+      Log.Error('restore backup error:', e)
       res = false
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
-    Log.info('recover system from backup:', res)
+    Log.Info('recover system from backup:', res)
     await this.db_helper.OpenDb()
     return res
   }
-
-  async BackupByAliyun() {
-    if (this.ali_drive.needAuth()) {
+  //aliyun drive
+  private async checkAlidriveAuth(): Promise<boolean> {
+    const needauth = await this.ali_drive?.needAuth()
+    if (needauth) {
       this.ali_drive.auth()
-      return null
+      AppEvent.emit(
+        AppEventType.Message,
+        'error',
+        LangHelper.getString('mydropmenu.aliyunneedauth')
+      )
+      return false
     }
+    return true
+  }
+
+  async BackupByAliyun(): Promise<string | null> {
+    if ((await this.checkAlidriveAuth()) == false) return null
     const zip_file = await this.BackupSystem()
     if (zip_file == null) return null
     const filename = path.basename(zip_file)
-    await this.ali_drive.uploadFile(filename, zip_file)
+    Log.Info(`begin upload file ${zip_file} to aliyun:`)
+    try {
+      await this.ali_drive.UploadFile(filename, zip_file)
+    } catch (e: any) {
+      Log.Exception(e, 'upload file error:', e.message)
+      ShowErrToMain(LangHelper.getString('alidrive.uploaderror'))
+      return null
+    }
+    Log.Info('upload file ok')
     return `${this.ali_drive.parent_dir_name}/${filename}`
   }
 
   async RecoverByAliyun(backup_file_name: string) {
-    if (this.ali_drive.needAuth()) {
-      this.ali_drive.auth()
-      return
-    }
+    if ((await this.checkAlidriveAuth()) == false) return null
     const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup_aliyun')
     if (fs.existsSync(backup_path_dir) == false) {
       fs.mkdirSync(backup_path_dir)
@@ -432,10 +438,7 @@ class AppModel {
   }
 
   async GetAliyunBackupList() {
-    if (this.ali_drive.needAuth()) {
-      this.ali_drive.auth()
-      return []
-    }
+    if ((await this.checkAlidriveAuth()) == false) return []
     return await this.ali_drive.getLatestFiliList('zip', 'file')
   }
 

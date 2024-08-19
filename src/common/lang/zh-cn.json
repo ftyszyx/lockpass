@@ -69,7 +69,14 @@
   "auth.login.needinit": "需要初始化系统",
   "auth.login.fail": "登陆失败: {0}",
   "auth.login.title": "登陆",
+  "auth.login.password_not_match": "密码不匹配",
   "auth.login.gotoRegister": "没有账号，去注册",
+  "auth.login.account": "账号名",
+  "auth.login.main_password": "主密码",
+  "auth.login.main_password_repeat": "再次输入主密码",
+  "auth.login.placeholder.account": "请输入账号名",
+  "auth.login.placeholder.main_password": "请输入主密码",
+  "auth.login.placeholder.main_password_repeat": "请输入主密码",
   "auth.lock.title": "解锁",
 
   "register.title": "初始化你的账号",
@@ -173,6 +180,11 @@
   "main.backup.zipfilenotfound": "备份文件不存在:{0}",
   "main.backup.error": "系统错误",
   "main.backup.filenotselect": "请选择备份文件",
+
+  "mydropmenu.aliyunneedauth": "阿里云盘需要授权",
+  "mydropmenu.aliyunauthok": "阿里云授权成功,请重新操作",
+
+  "alidrive.uploaderror": "上传失败",
 
   "menu.vault": "保险库",
   "menu.setting": "设置",

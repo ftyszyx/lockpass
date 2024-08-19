@@ -49,11 +49,13 @@ export enum webToManMsg {
 
 export enum MainToWebMsg {
   ShowMsg = 'ShowMsg',
+  ShowMsgMain = 'ShowMsgMain',
   LockApp = 'lockApp',
   LoginOK = 'LoginOk',
   UserChange = 'userchange',
   VaultChange = 'vaultchange',
   vaultItemChange = 'vaultItemChange',
   DataChange = 'DataChange',
-  ShowVaulteItem = 'ShowVaulteItem'
+  ShowVaulteItem = 'ShowVaulteItem',
+  AliyunAuthOk = 'AliyunAuthOk'
 }

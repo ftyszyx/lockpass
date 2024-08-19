@@ -5,10 +5,12 @@ export enum AppEventType {
   windowBlur = 'windowBlur',
   LoginOk = 'LoginOk',
   Message = 'Message',
+  MainMessage = 'MainMessage',
   VaultChange = 'VaultChange',
   UserChange = 'UserChange',
   VaultItemChange = 'VaultItemChange',
   DataChange = 'DataChange',
-  DeepLink = 'DeepLink'
+  DeepLink = 'DeepLink',
+  AliyuAuthOk = 'AliyuAuthOk'
 }
 export const AppEvent = new EventEmitter()

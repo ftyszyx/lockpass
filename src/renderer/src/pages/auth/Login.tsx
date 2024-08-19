@@ -3,7 +3,7 @@ import { PagePath } from '@common/entitys/page.entity'
 import { LastUserInfo, RegisterInfo, User } from '@common/entitys/user.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory } from '@renderer/libs/router'
-import { GetAllUsers, ipc_call, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
+import { GetAllUsers, ipc_call, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { AutoComplete, AutoCompleteProps, Button, Form, Input, message } from 'antd'
@@ -52,7 +52,7 @@ export default function Register(): JSX.Element {
     form.validateFields().then(async (values) => {
       console.log(values)
       if (values.password_repeat !== values.password) {
-        message.error('两次密码不一致')
+        message.error(lang.getText('auth.login.password_not_match'))
         return
       }
       await ipc_call<null>(webToManMsg.Register, values)
@@ -99,16 +99,29 @@ export default function Register(): JSX.Element {
           </div>
           <Form form={form} layout="vertical" onFinish={() => {}}>
             {(isReigster || isLogin) && (
-              <Form.Item label="你的账号名" required name="username">
-                <AutoComplete options={options} placeholder="请输入你的名字" />
+              <Form.Item label={lang.getText('auth.login.account')} required name="username">
+                <AutoComplete
+                  options={options}
+                  placeholder={lang.getText('auth.login.placeholder.account')}
+                />
               </Form.Item>
             )}
-            <Form.Item label="初始密码" name="password" required>
-              <Input.Password placeholder="请输入初始密码" size="large" />
+            <Form.Item label={lang.getText('auth.login.main_password')} name="password" required>
+              <Input.Password
+                placeholder={lang.getText('auth.login.placeholder.main_password')}
+                size="large"
+              />
             </Form.Item>
             {isReigster && (
-              <Form.Item label="再次输入初始密码" name="password_repeat" required>
-                <Input.Password placeholder="请输入初始密码" size="large" />
+              <Form.Item
+                label={lang.getText('auth.login.main_password_repeat')}
+                name="password_repeat"
+                required
+              >
+                <Input.Password
+                  placeholder={lang.getText('auth.login.placeholder.main_password_repeat')}
+                  size="large"
+                />
               </Form.Item>
             )}
             <Form.Item>

@@ -10,8 +10,13 @@ function App(): JSX.Element {
       if (type == 'error') messageApi.error(msg, duration)
       else if (type == 'info') messageApi.info(msg, duration)
     })
+    window.electron.ipcRenderer.on(MainToWebMsg.ShowMsgMain, (_, type, msg, duration) => {
+      if (type == 'error') messageApi.error(msg, duration)
+      else if (type == 'info') messageApi.info(msg, duration)
+    })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowMsg)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowMsgMain)
     }
   }, [])
   ConsoleLog.LogInfo('develop', import.meta.env.DEV)
