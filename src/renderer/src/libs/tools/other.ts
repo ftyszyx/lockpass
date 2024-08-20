@@ -75,9 +75,6 @@ export async function getAllVaultItem(
     const where2: WhereDef<VaultItem> = { cond: { user_id: appstore.cur_user.id } }
     await ipc_call<VaultItem[]>(webToManMsg.GetAllValutItems, where2)
       .then((res) => {
-        res.forEach((item) => {
-          item.info = JSON.parse((item.info as string) || '{}')
-        })
         appstore.setValutItems(res)
       })
       .catch((e) => {

@@ -8,6 +8,16 @@ export class VaultItemService extends BaseService<VaultItem> {
     super(new VaultItem())
   }
 
+  fixEntityIn(info: VaultItem): void {
+    if (info.info) {
+      info.info = JSON.stringify(info.info)
+    }
+  }
+
+  fixEntityOut(info: VaultItem): void {
+    info.info = JSON.parse((info.info as string) || '{}')
+  }
+
   AfterChange(): void {
     AppEvent.emit(AppEventType.VaultItemChange)
     AppEvent.emit(AppEventType.DataChange, EntityType.vault_item)

@@ -70,7 +70,6 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
           }}
           onOk={async () => {
             const values = await form.validateFields()
-            values.info = JSON.stringify(values.info)
             values.user_id = appstore.cur_user?.id
             values.valut_id = cur_vault_id
             values.vault_item_type = select_type

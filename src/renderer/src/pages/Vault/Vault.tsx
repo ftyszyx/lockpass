@@ -112,7 +112,6 @@ export default function Vault() {
                             cancelText={appset.lang.getText('cancel')}
                             onConfirm={async () => {
                               const values = await form.validateFields()
-                              values.info = JSON.stringify(values.info)
                               values.id = select_vault_item.id
                               await ipc_call(webToManMsg.updateValutItem, values)
                                 .then(async () => {

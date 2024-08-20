@@ -8,7 +8,7 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import { APP_VER_CODE, Default_Lang, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
+import { APP_VER_CODE, Default_Lang, Icon_type, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -17,8 +17,10 @@ import robot from 'robotjs'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import {
+  CardPasswordInfo,
+  getVaultImportItems,
   LoginPasswordInfo,
-  vaultImportItem,
+  NoteTextPasswordInfo,
   VaultImportType,
   VaultItem
 } from '@common/entitys/vault_item.entity'
@@ -28,6 +30,7 @@ import { AppService } from '@main/services/app.service'
 import { AliDrive } from '@main/libs/ali_drive'
 import { AliyunData } from '@main/libs/ali_drive/def'
 import { ShowErrToMain } from '@main/libs/other.help'
+import { GetFiledInfo, SetFiledInfo } from '@common/help'
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -456,6 +459,7 @@ class AppModel {
 
   //导入
   async ImportCsvFile(import_type: VaultImportType): Promise<boolean> {
+    const cur_user = this.curUserInfo()
     let res = true
     try {
       const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -470,26 +474,101 @@ class AppModel {
         )
         return false
       }
+      const add_vault_name = import_type.toString()
+      let vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
+      if (!vault_old) {
+        await this.vault.AddOne({ user_id: cur_user.id, name: add_vault_name })
+        vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
+      }
       const filepath = filePaths[0]
       const data = fs.readFileSync(filepath).toString()
       const items = data.split('\n')
       const fileds = items[0].split(',')
+      const vaultitems = []
+      const importitems = getVaultImportItems(import_type)
       for (let i = 1; i < items.length; i++) {
+        if (items[i].trim().length == 0) continue
         const values = items[i].split(',')
+        const info = {
+          user_id: cur_user.id,
+          vault_id: vault_old.id,
+          vault_item_type: VaultItemType.Login,
+          icon: Icon_type.icon_login
+        }
         for (let j = 0; j < fileds.length; j++) {
           const filed_name = fileds[j]
+          const value = values[j]
+          const importinfo = importitems[filed_name]
+          if (importinfo == null) continue
+          const table_key = importinfo.key
+          const key_arr = table_key.split('.')
+          SetFiledInfo(info, key_arr, value)
         }
+        vaultitems.push(info)
       }
+      this.vaultItem.AddMany(vaultitems)
     } catch (e) {
       Log.Error('import csv file error:', e)
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.import.error'))
+      res = false
     }
     return res
   }
 
   //导出
   async ExportCsvFile() {
-    return
+    try {
+      const { canceled, filePaths } = await dialog.showOpenDialog({
+        properties: ['openDirectory']
+      })
+      if (canceled || !filePaths || filePaths.length == 0) {
+        AppEvent.emit(
+          AppEventType.Message,
+          'error',
+          LangHelper.getString('main.import.filenotselect')
+        )
+        return null
+      }
+      const csv_path = path.join(filePaths[0], 'export_lockpass.csv')
+      const userinfo = this.curUserInfo()
+      const items = await this.vaultItem.GetMany({ cond: { user_id: userinfo.id } })
+      const writestream = fs.createWriteStream(csv_path)
+      const keylist = []
+      Object.keys(VaultItem).forEach((key) => {
+        if (key == 'info') {
+          Object.keys(LoginPasswordInfo).forEach((subkey) => {
+            keylist.push(`info.${subkey}`)
+          })
+          Object.keys(NoteTextPasswordInfo).forEach((subkey) => {
+            keylist.push(`info.${subkey}`)
+          })
+          Object.keys(CardPasswordInfo).forEach((subkey) => {
+            keylist.push(`info.${subkey}`)
+          })
+        }
+        keylist.push(key)
+      })
+      writestream.write(keylist.join(',') + '\n')
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        keylist.forEach((key) => {
+          const value = GetFiledInfo(item, key.split('.'))
+          if (value == null || value == undefined) {
+            writestream.write(',')
+            return
+          }
+          writestream.write(`${value}`)
+          writestream.write(',')
+        })
+        writestream.write('\n')
+      }
+      writestream.close()
+      return csv_path
+    } catch (e) {
+      Log.Error('export csv file error:', e)
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.export.error'))
+      return null
+    }
   }
 }
 

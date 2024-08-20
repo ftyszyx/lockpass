@@ -25,17 +25,17 @@ export class UserService extends BaseService<User> {
       return res
     }
     try {
-      const users = await super.GetOne('username', info.username)
-      if (users.length <= 0) {
+      const user = await super.GetOne({ username: info.username })
+      if (!user) {
         res.code = ApiRespCode.user_notfind
         return res
       }
-      const res_code = AppModel.getInstance().myencode.Login(users[0], info.password)
+      const res_code = AppModel.getInstance().myencode.Login(user, info.password)
       res.code = res_code
       if (res_code == ApiRespCode.SUCCESS) {
-        this.userinfo = users[0]
-        AppModel.getInstance().Login(users[0].id)
-        res.data = users[0]
+        this.userinfo = user
+        AppModel.getInstance().Login(user.id)
+        res.data = user
       }
     } catch (e: any) {
       Log.Exception(e)
@@ -50,11 +50,11 @@ export class UserService extends BaseService<User> {
     }
     const last_userid = AppModel.getInstance().GetLastUserId()
     if (last_userid) {
-      const user = await super.GetOne('id', last_userid)
-      if (user.length > 0) {
-        ret.data.user = user[0]
-        this.userinfo = user[0]
-        ret.data.has_init_key = AppModel.getInstance().myencode.hasKey(user[0])
+      const user = await super.GetOne({ id: last_userid })
+      if (!user) {
+        ret.data.user = user
+        this.userinfo = user
+        ret.data.has_init_key = AppModel.getInstance().myencode.hasKey(user.id)
         ret.code = ApiRespCode.SUCCESS
       }
     }
@@ -76,15 +76,15 @@ export class UserService extends BaseService<User> {
 
   public async Register(info: RegisterInfo): Promise<ApiResp<null>> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
-    const users = await super.GetOne('username', info.username)
-    if (users && users.length > 0) {
+    const user = await super.GetOne({ username: info.username })
+    if (user) {
       res.code = ApiRespCode.user_exit
     }
     try {
       await AppModel.getInstance().db_helper.beginTransaction()
-      await super.AddOne({ username: info.username, user_set: '' } as User)
-      const userinfo = await super.GetOne('username', info.username)
-      AppModel.getInstance().myencode.Register(userinfo[0], info.password)
+      await super.AddOneApi({ username: info.username, user_set: '' } as User)
+      const userinfo = await super.GetOne({ username: info.username })
+      AppModel.getInstance().myencode.Register(userinfo, info.password)
       AppModel.getInstance().db_helper.commitTransaction()
       res.code = ApiRespCode.SUCCESS
     } catch (e: any) {
@@ -110,7 +110,7 @@ export class UserService extends BaseService<User> {
       this.userinfo = item
     }
   }
-  override fiexEntityIn(entity: User): void {
+  override fixEntityIn(entity: User): void {
     entity.user_set = JSON.stringify(entity.user_set)
   }
 

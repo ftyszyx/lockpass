@@ -1,5 +1,5 @@
 import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
-import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
+import { BaseEntity, SearchField, WhereDef } from '@common/entitys/db.entity'
 import { Log } from '@main/libs/log'
 import AppModel from '@main/models/app.model'
 
@@ -12,7 +12,7 @@ export class BaseService<Entity extends BaseEntity> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fiexEntityIn(_: Entity): void {
+  fixEntityIn(_: Entity): void {
     return
   }
 
@@ -34,13 +34,18 @@ export class BaseService<Entity extends BaseEntity> {
     return res
   }
 
-  public async FindAll(where: WhereDef<Entity>): Promise<ApiResp<Entity[]>> {
+  public async GetMany(where: WhereDef<Entity>): Promise<Entity[]> {
+    const items = await AppModel.getInstance().db_helper.GetAll(this.entity, where)
+    items.forEach((item) => {
+      this.fixEntityOut(item)
+    })
+    return items
+  }
+
+  public async GetManyApi(where: WhereDef<Entity>): Promise<ApiResp<Entity[]>> {
     const res: ApiResp<Entity[]> = { code: ApiRespCode.SUCCESS, data: [] }
     try {
-      res.data = await AppModel.getInstance().db_helper.GetAll(this.entity, where)
-      res.data.forEach((item) => {
-        this.fixEntityOut(item)
-      })
+      res.data = await this.GetMany(where)
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err
@@ -48,18 +53,38 @@ export class BaseService<Entity extends BaseEntity> {
     return res
   }
 
-  public async GetOne(key: string, value: any) {
-    const items = await AppModel.getInstance().db_helper.GetOne(this.entity, {
-      cond: { [key]: value }
-    })
+  public async GetOne(cond: SearchField<Entity>) {
+    const items = await AppModel.getInstance().db_helper.GetOne(this.entity, { cond })
     items.forEach((item) => {
       this.fixEntityOut(item)
     })
-    return items
+    if (items.length > 0) {
+      return items[0]
+    }
+    return null
   }
 
-  public async AddOne(obj: Record<string, any>): Promise<ApiResp<null>> {
+  public async AddMany(list: Entity[]): Promise<ApiResp<null>> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
+    const dbhelpr = AppModel.getInstance().db_helper
+    try {
+      dbhelpr.beginTransaction()
+      for (let i = 0; i < list.length; i++) {
+        const entity = this.objToEntity(list[i])
+        this.fixEntityIn(entity)
+        await AppModel.getInstance().db_helper.AddOne(entity)
+      }
+      dbhelpr.commitTransaction()
+      this.AfterChange()
+    } catch (e: any) {
+      Log.Exception(e)
+      res.code = ApiRespCode.db_err
+      dbhelpr.rollbackTransaction()
+    }
+    return res
+  }
+
+  objToEntity(obj: Record<string, any>): Entity {
     const co_fun = this.entity.constructor as new () => Entity
     const entity = new co_fun()
     const keys = Object.keys(obj)
@@ -67,10 +92,19 @@ export class BaseService<Entity extends BaseEntity> {
       const value = obj[key]
       if (value) entity[key] = value
     })
+    return entity
+  }
+  public async AddOne(obj: Record<string, any>) {
+    const entity = this.objToEntity(obj)
+    this.fixEntityIn(entity)
+    await AppModel.getInstance().db_helper.AddOne(entity)
+    this.AfterChange()
+  }
+
+  public async AddOneApi(obj: Record<string, any>): Promise<ApiResp<null>> {
+    const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     try {
-      this.fiexEntityIn(entity)
-      await AppModel.getInstance().db_helper.AddOne(entity)
-      this.AfterChange()
+      await this.AddOne(obj)
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err
@@ -91,7 +125,7 @@ export class BaseService<Entity extends BaseEntity> {
         res.code = ApiRespCode.data_not_find
         return res
       }
-      this.fiexEntityIn(chang_values)
+      this.fixEntityIn(chang_values)
       await AppModel.getInstance().db_helper.UpdateOne(this.entity, old[0], chang_values)
       if (return_new) {
         const users = await AppModel.getInstance().db_helper.GetOne(this.entity, {

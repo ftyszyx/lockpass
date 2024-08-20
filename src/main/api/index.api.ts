@@ -131,16 +131,16 @@ export function initAllApi() {
 
   //valut
   ipcMain.handle(webToManMsg.GetAllValuts, async (_, cond: WhereDef<Vault>) => {
-    return await AppModel.getInstance().vault?.FindAll(cond)
+    return await AppModel.getInstance().vault?.GetManyApi(cond)
   })
   ipcMain.handle(webToManMsg.GetAllValutItems, async (_, cond: WhereDef<VaultItem>) => {
-    return await AppModel.getInstance().vaultItem?.FindAll(cond)
+    return await AppModel.getInstance().vaultItem?.GetManyApi(cond)
   })
   ipcMain.handle(webToManMsg.AddValut, async (_, valut) => {
-    return await AppModel.getInstance().vault?.AddOne(valut)
+    return await AppModel.getInstance().vault?.AddOneApi(valut)
   })
   ipcMain.handle(webToManMsg.AddValutItem, async (_, valutItem) => {
-    return await AppModel.getInstance().vaultItem?.AddOne(valutItem)
+    return await AppModel.getInstance().vaultItem?.AddOneApi(valutItem)
   })
   ipcMain.handle(webToManMsg.DeleteValut, async (_, vault_id) => {
     return await AppModel.getInstance().vault?.DeleteOne(vault_id)
