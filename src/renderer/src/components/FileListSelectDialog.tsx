@@ -19,15 +19,16 @@ export default function FileListSelectDialog(props: FileListSelectDialogProps): 
       open={props.show}
       title={appset.getText('backupfilelistselect.title')}
       style={props.style}
+      footer={null}
       onCancel={() => {
         props.onClose()
       }}
     >
       <div className=" flex flex-col">
-        <div className=" flex flex-row">
-          <span className=" flex-1">{appset.getText('filelistselect.name')}</span>
-          <span>{appset.getText('filelistselect.size')}</span>
-          <span>{appset.getText('filelistselect.updatetime')}</span>
+        <div className=" flex flex-row font-sans font-bold ">
+          <span className="w-[50%]">{appset.getText('filelistselect.name')}</span>
+          <span className="w-[40%]">{appset.getText('filelistselect.updatetime')}</span>
+          <span className="w-[10%]">{appset.getText('filelistselect.size')}</span>
         </div>
         {props.filelist.map((item) => {
           const updateat = new Date(item.updated_at)
@@ -37,11 +38,11 @@ export default function FileListSelectDialog(props: FileListSelectDialogProps): 
                 props.onOk(item)
               }}
               key={item.file_id}
-              className="flex flex-row items-center"
+              className="flex flex-row py-2 border-b-2 border-solid border-gray-200 cursor-pointer hover:bg-green-300 rounded-sm"
             >
-              <span className="flex-1">{item.name}</span>
-              <span className=" w-[100px]">{getFileSize(item.size)}</span>
-              <span>{FormatTime(updateat)}</span>
+              <span className="w-[50%]">{item.name}</span>
+              <span className="w-[40%]">{FormatTime(updateat)}</span>
+              <span className="w-[10%]">{getFileSize(item.size)}</span>
             </div>
           )
         })}

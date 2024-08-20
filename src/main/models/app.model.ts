@@ -136,7 +136,7 @@ class AppModel {
         this.saveSet()
       }
     }
-    Log.Info('set:', JSON.stringify(this.set))
+    // Log.Info('set:', JSON.stringify(this.set))
   }
 
   public saveSet() {
@@ -343,6 +343,8 @@ class AppModel {
   //还原备份
   async RecoverSystemFromBackupFile(zipfile_path: string) {
     let res = true
+    const fiename = path.basename(zipfile_path.replace('.zip', ''))
+    const backup_path = path.join(PathHelper.getHomeDir(), fiename)
     try {
       if (fs.existsSync(zipfile_path) == false) {
         Log.Error('zip file not exists:', zipfile_path)
@@ -354,8 +356,6 @@ class AppModel {
         return false
       }
       await this.db_helper.CloseDB()
-      const fiename = path.basename(zipfile_path.replace('.zip', ''))
-      const backup_path = path.join(PathHelper.getHomeDir(), fiename)
       Log.Info(`extract backup file:${zipfile_path}->${backup_path}`)
       await zl.extract(zipfile_path, backup_path)
 
@@ -391,6 +391,7 @@ class AppModel {
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
     Log.Info('recover system from backup:', res)
+    fs.rmSync(backup_path, { recursive: true, force: true })
     await this.db_helper.OpenDb()
     return res
   }
@@ -427,6 +428,7 @@ class AppModel {
   }
 
   async RecoverByAliyun(backup_file_name: string) {
+    Log.Info(`begin download file ${backup_file_name} from aliyun:`)
     if ((await this.checkAlidriveAuth()) == false) return null
     const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup_aliyun')
     if (fs.existsSync(backup_path_dir) == false) {
@@ -434,7 +436,9 @@ class AppModel {
     }
     const backup_file_path = path.join(backup_path_dir, backup_file_name)
     await this.ali_drive.downloadFile(backup_file_name, backup_file_path)
-    await this.RecoverSystemFromBackupFile(backup_file_path)
+    const res = await this.RecoverSystemFromBackupFile(backup_file_path)
+    if (res) Log.Info('recover system from aliyun ok')
+    return res
   }
 
   async GetAliyunBackupList() {
@@ -443,7 +447,9 @@ class AppModel {
   }
 
   //导入
-  async ImportCsvFile() {}
+  async ImportCsvFile() {
+    return
+  }
 
   //导出
   async ExportCsvFile() {

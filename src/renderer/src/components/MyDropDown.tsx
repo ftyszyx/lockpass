@@ -148,7 +148,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             confirm({
               title: appset.getText('menu.recover.sure.title'),
               icon: <ExclamationCircleOutlined />,
-              content: appset.getText('menu.recover.sure.content'),
+              content: appset.getText('menu.recover.sure.content_alidrive', item.name),
               okText: appset.getText('ok'),
               cancelText: appset.getText('cancel'),
               onOk: () => {

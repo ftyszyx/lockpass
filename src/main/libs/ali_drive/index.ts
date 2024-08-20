@@ -17,7 +17,7 @@ import {
   aliyunFileType
 } from './def'
 import fs from 'fs'
-import { ShowInfoToMain } from '../other.help'
+import { ShowErrToMain, ShowInfoToMain } from '../other.help'
 import { LangHelper } from '@common/lang'
 
 export class AliDrive {
@@ -97,7 +97,9 @@ export class AliDrive {
     this._authData.drive_info = await this.getDriveInfo()
     AppModel.getInstance().setAliyunData(this._authData)
     Log.Info('get authData ok', JSON.stringify(this._authData))
-    ShowInfoToMain(LangHelper.getString('mydropmenu.aliyunauthok'))
+    if (code) {
+      ShowInfoToMain(LangHelper.getString('mydropmenu.aliyunauthok'))
+    }
   }
 
   async needAuth() {
@@ -152,7 +154,7 @@ export class AliDrive {
   async UploadFile(file_name: string, local_path: string) {
     let res = await this.createFolderInRoot(this._parent_dir_name)
     res = await this.createFile(res.file_id, file_name)
-    if (res.exit) {
+    if (res.exist) {
       throw new Error('file exit')
     }
     const file = fs.readFileSync(local_path)
@@ -193,10 +195,11 @@ export class AliDrive {
   }
 
   async downloadFile(file_name: string, local_path: string) {
-    let res = await this.createFolderInRoot(this._parent_dir_name)
-    res = await this.createFile(res.file_id, file_name)
-    if (!res.exit) {
-      throw new Error('file not exit')
+    const res1 = await this.createFolderInRoot(this._parent_dir_name)
+    const res = await this.createFile(res1.file_id, file_name)
+    if (!res.exist) {
+      ShowErrToMain(LangHelper.getString('alidrive.filenotexit', file_name))
+      throw new Error(`file not exit:${file_name}`)
     }
     const url = `${this._host}/adrive/v1.0/openFile/getDownloadUrl`
     const downloadInfo = await SendRequest<AliyunFileDownloadInfo>(url, 'POST', this.getHeaders(), {

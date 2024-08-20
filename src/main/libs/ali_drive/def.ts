@@ -30,7 +30,7 @@ export interface AliyunCreateFileResp {
   upload_id?: string
   parent_file_id: string
   available: boolean
-  exit: boolean
+  exist: boolean
   rapid_upload: boolean
   part_info_list: AliyunPartInfo[]
 }

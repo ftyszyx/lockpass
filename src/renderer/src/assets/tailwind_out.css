@@ -670,6 +670,10 @@ video {
   margin-top: 0.5rem !important;
 }
 
+.mt-1 {
+  margin-top: 0.25rem !important;
+}
+
 .inline {
   display: inline !important;
 }
@@ -796,6 +800,26 @@ video {
 
 .w-full {
   width: 100% !important;
+}
+
+.w-\[20\%\] {
+  width: 20% !important;
+}
+
+.w-\[30\%\] {
+  width: 30% !important;
+}
+
+.w-\[50\%\] {
+  width: 50% !important;
+}
+
+.w-\[10\%\] {
+  width: 10% !important;
+}
+
+.w-\[40\%\] {
+  width: 40% !important;
 }
 
 .flex-1 {

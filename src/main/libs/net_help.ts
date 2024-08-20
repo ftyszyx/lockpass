@@ -2,7 +2,6 @@ import { net } from 'electron'
 import { Log } from './log'
 import https, { RequestOptions } from 'https'
 import fs from 'fs'
-import { error } from 'console'
 
 export async function SendRequest<T>(
   url: string,
@@ -32,6 +31,7 @@ export async function SendRequest<T>(
           reject(new Error(res.message))
           return
         }
+        // Log.Info(`req ${url} ok ${data} `)
         resolve(res as T)
       })
     })
