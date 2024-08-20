@@ -11,6 +11,7 @@ import { ipc_call } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useRouterStore } from '@renderer/libs/router'
 import PaswordDetail from './PasswordDetail'
+import { ConsoleLog } from '@renderer/libs/Console'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -28,7 +29,8 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
   const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
   const route_data = useRouterStore()
-  const cur_vault_id = parseInt(route_data.match?.params['id'])
+  const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
+  ConsoleLog.LogInfo(`AddPasswordPanel render:${cur_vault_id}`)
   return (
     <div className=" relative">
       {show_password_type && (

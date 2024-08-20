@@ -52,6 +52,7 @@ export enum MainToWebMsg {
   ShowMsgMain = 'ShowMsgMain',
   LockApp = 'lockApp',
   LoginOK = 'LoginOk',
+  LoginOut = 'LoginOut',
   UserChange = 'userchange',
   VaultChange = 'vaultchange',
   vaultItemChange = 'vaultItemChange',

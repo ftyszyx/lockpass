@@ -172,6 +172,7 @@
   "cancel": "取消",
   "use": "使用",
   "refresh": "刷新",
+  "app_exit": "程序退出",
   "recover": "恢复",
   "recover_default": "恢复默认",
   "save_success": "修改成功",
@@ -184,6 +185,7 @@
 
   "mydropmenu.aliyunneedauth": "阿里云盘需要授权",
   "mydropmenu.aliyunauthok": "阿里云授权成功,请重新操作",
+  "mydropmenu.change_account": "切换账号",
 
   "filelistselect.name": "文件名",
   "filelistselect.size": "大小",
@@ -194,6 +196,7 @@
 
   "menu.vault": "保险库",
   "menu.setting": "设置",
+  "menu.about": "关于",
 
   "404.title": "404",
   "404.desc": "页面不存在",

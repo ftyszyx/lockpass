@@ -43,3 +43,34 @@ export interface CardPasswordInfo {
 export interface NoteTextPasswordInfo {
   note_text: string
 }
+
+export interface vaultImportItem {
+  table_col_name: string
+  csv_col_name: string
+}
+
+export enum VaultImportType {
+  google = 'google',
+  edge = 'edge'
+}
+
+export function getVaultImportItems(type: VaultImportType): vaultImportItem[] {
+  if (type == VaultImportType.edge) {
+    return [
+      { table_col_name: 'name', csv_col_name: 'name' },
+      { table_col_name: 'info.urls', csv_col_name: 'url' },
+      { table_col_name: 'info.username', csv_col_name: 'username' },
+      { table_col_name: 'info.password', csv_col_name: 'password' },
+      { table_col_name: 'remarks', csv_col_name: 'note' }
+    ]
+  } else if (type == VaultImportType.google) {
+    return [
+      { table_col_name: 'name', csv_col_name: 'name' },
+      { table_col_name: 'info.urls', csv_col_name: 'url' },
+      { table_col_name: 'info.username', csv_col_name: 'username' },
+      { table_col_name: 'info.password', csv_col_name: 'password' },
+      { table_col_name: 'remarks', csv_col_name: 'note' }
+    ]
+  }
+  return []
+}

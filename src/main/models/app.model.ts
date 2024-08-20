@@ -16,7 +16,12 @@ import { initAllApi } from '@main/api/index.api'
 import robot from 'robotjs'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
-import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
+import {
+  LoginPasswordInfo,
+  vaultImportItem,
+  VaultImportType,
+  VaultItem
+} from '@common/entitys/vault_item.entity'
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
@@ -68,8 +73,10 @@ class AppModel {
   }
 
   Quit() {
+    AppEvent.emit(AppEventType.APPQuit)
     globalShortcut.unregisterAll()
     if (this.checkInterval) clearInterval(this.checkInterval)
+    app.quit()
   }
 
   async init() {
@@ -214,7 +221,8 @@ class AppModel {
   public LoginOut() {
     this.myencode?.LoginOut()
     this._logined = false
-    this.LockApp()
+    this._lock = true
+    AppEvent.emit(AppEventType.LoginOut)
   }
 
   public curUserInfo() {
@@ -447,8 +455,36 @@ class AppModel {
   }
 
   //导入
-  async ImportCsvFile() {
-    return
+  async ImportCsvFile(import_type: VaultImportType): Promise<boolean> {
+    let res = true
+    try {
+      const { canceled, filePaths } = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [{ name: 'csv', extensions: ['csv'] }]
+      })
+      if (canceled || !filePaths || filePaths.length == 0) {
+        AppEvent.emit(
+          AppEventType.Message,
+          'error',
+          LangHelper.getString('main.import.filenotselect')
+        )
+        return false
+      }
+      const filepath = filePaths[0]
+      const data = fs.readFileSync(filepath).toString()
+      const items = data.split('\n')
+      const fileds = items[0].split(',')
+      for (let i = 1; i < items.length; i++) {
+        const values = items[i].split(',')
+        for (let j = 0; j < fileds.length; j++) {
+          const filed_name = fileds[j]
+        }
+      }
+    } catch (e) {
+      Log.Error('import csv file error:', e)
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.import.error'))
+    }
+    return res
   }
 
   //导出

@@ -58,6 +58,13 @@ export class WindowBase {
     AppEvent.on(AppEventType.DataChange, (type: EntityType) => {
       this.win.webContents.send(MainToWebMsg.DataChange, type)
     })
+    AppEvent.on(AppEventType.APPQuit, () => {
+      this.close()
+    })
+    AppEvent.on(AppEventType.LoginOut, () => {
+      this.lockapp()
+      this.win.webContents.send(MainToWebMsg.LoginOut)
+    })
   }
 
   lockapp() {
@@ -103,6 +110,11 @@ export class WindowBase {
     Log.Info('hide window', this.url)
     this.window.hide()
     this.window.setSkipTaskbar(true)
+  }
+
+  close() {
+    Log.Info('close window', this.url)
+    this.window.close()
   }
 
   showOrHide(show: boolean) {

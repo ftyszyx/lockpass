@@ -87,7 +87,7 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.QuitAPP, () => {
-    app.quit()
+    AppModel.getInstance().Quit()
   })
 
   ipcMain.handle(webToManMsg.RestartApp, () => {

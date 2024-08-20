@@ -60,7 +60,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
     const res = GetCommonTree<MyMenuType>(menulist)
     return res
   }, [appstore.vaults, appset.lang])
-  ConsoleLog.LogInfo('render mymenu', appstore.vaults, menutree_info.datalist)
+  ConsoleLog.LogInfo('render mymenu')
   /** 处理原始数据，将原始数据处理为层级关系 **/
   const treeDom = useMemo(() => {
     menutree_info.datalist.forEach((item) => {

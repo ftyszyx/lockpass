@@ -7,6 +7,7 @@ import { ReactNode } from 'react'
 export const MenuValutID = 1
 export const MenuSetID = 2
 export const MenuLog = 3
+export const MenuAboutId = 4
 
 export const MenuVaultBaseId = 1000
 //event list
@@ -63,6 +64,15 @@ export function getAllMenus(props: AllMenuProps): MyMenuType[] {
       icon_style_type: Icon_type.icon_set,
       parent: '0',
       url: PagePath.Admin_set
+    },
+    {
+      id: MenuAboutId,
+      key: MenuAboutId + '',
+      title: props.lang?.getText('menu.about'),
+      sorts: 3,
+      icon_style_type: Icon_type.icon_about,
+      parent: '0',
+      url: PagePath.Admin_about
     }
     // {
     //   id: MenuLog,

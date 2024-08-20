@@ -4,6 +4,7 @@ export enum AppEventType {
   LockApp = 'LockApp',
   windowBlur = 'windowBlur',
   LoginOk = 'LoginOk',
+  LoginOut = 'LoginOut',
   Message = 'Message',
   MainMessage = 'MainMessage',
   VaultChange = 'VaultChange',
@@ -11,6 +12,7 @@ export enum AppEventType {
   VaultItemChange = 'VaultItemChange',
   DataChange = 'DataChange',
   DeepLink = 'DeepLink',
-  AliyuAuthOk = 'AliyuAuthOk'
+  AliyuAuthOk = 'AliyuAuthOk',
+  APPQuit = 'APPQuit'
 }
 export const AppEvent = new EventEmitter()

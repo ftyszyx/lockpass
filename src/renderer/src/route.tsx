@@ -16,6 +16,7 @@ import { GetCurViewType, renderViewType } from '@common/entitys/app.entity'
 import QucickLayout from './pages/quick/QuickLayout'
 import QuickSearch from './pages/quick/QuickSearch'
 import BaseLayout from './layouts/BaseLayout'
+import AdminAbout from './pages/admin/AdminAbout'
 
 const RootRouter = () => {
   const appset = use_appset() as AppsetStore
@@ -51,6 +52,7 @@ const RootRouter = () => {
               <Route path={PagePath.Admin_set} element={AdminSet} />
               <Route path={PagePath.Vault_full} element={Vault} />
               <Route path={PagePath.Admin_log} element={AdminLog} />
+              <Route path={PagePath.Admin_about} element={AdminAbout} />
             </Route>
           </Route>
         </Route>

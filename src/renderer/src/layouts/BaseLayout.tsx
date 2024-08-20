@@ -8,6 +8,7 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { message } from 'antd'
 import { getAllVault, getAllVaultItem, ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { User } from '@common/entitys/user.entity'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
@@ -25,9 +26,14 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
         PagePath.Vault_full.replace(':vault_id', vaultid).replace(':vault_item_id', vault_item_id)
       )
     })
+    window.electron.ipcRenderer.on(MainToWebMsg.LoginOut, () => {
+      appstore.LoginOut()
+      history.push(PagePath.Login)
+    })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LockApp)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowVaulteItem)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LoginOut)
     }
   }, [])
 
@@ -36,20 +42,36 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [])
 
   async function checkStatus() {
+    ConsoleLog.LogInfo('checkStatus')
     const hasinit = await ipc_call_normal<boolean>(webToManMsg.IsSystemInit)
     if (hasinit === false) {
+      ConsoleLog.LogInfo('checkStatus no init')
       history.replace(PagePath.register)
       return
     }
     const islogin = await ipc_call_normal<boolean>(webToManMsg.isLogin)
     if (islogin === false) {
+      ConsoleLog.LogInfo('checkStatus no login')
       history.replace(PagePath.Login)
       return
     }
+
     const isLock = await ipc_call_normal<boolean>(webToManMsg.isLock)
     if (isLock === true) {
+      ConsoleLog.LogInfo('check status is lock')
       history.push(PagePath.Lock)
+      return
     }
+
+    if (appstore.HaveLogin() == false) {
+      await initUserData()
+    }
+  }
+
+  async function initUserData() {
+    ConsoleLog.LogInfo('initUserData')
+    const curuser = await ipc_call_normal<User>(webToManMsg.getCurUserInfo)
+    appstore.Login(curuser)
   }
 
   useEffect(() => {
@@ -57,8 +79,10 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   async function initAllData() {
+    ConsoleLog.LogInfo(
+      `initAllData havelogin:${appstore.HaveLogin()} cur_user:${appstore.cur_user}`
+    )
     if (appstore.HaveLogin()) {
-      console.log('initAllData')
       await getAllVault(appstore, appset.lang, messageApi)
       await getAllVaultItem(appstore, appset.lang, messageApi)
     }

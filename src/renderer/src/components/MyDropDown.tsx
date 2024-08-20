@@ -23,6 +23,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           onClick: async (item) => {
             if (item.key === 'password_gen') {
               setShowPasswordGen(true)
+            } else if (item.key == 'change_account') {
+              await ipc_call_normal(webToManMsg.Logout)
+            } else if (item.key == 'exit') {
+              ipc_call_normal(webToManMsg.QuitAPP)
             } else if (item.key === 'local_backup_do') {
               ipc_call_normal<string>(webToManMsg.Backup_local).then((filepath) => {
                 if (filepath == null) return
@@ -117,6 +121,14 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                   ]
                 }
               ]
+            },
+            {
+              key: 'app_exit',
+              label: appset.getText('exit')
+            },
+            {
+              key: 'change_account',
+              label: appset.getText('mydropmenu.change_account')
             }
           ]
         }}

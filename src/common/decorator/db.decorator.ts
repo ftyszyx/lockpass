@@ -44,14 +44,14 @@ export interface TableOptions {
 }
 
 export function Column(options: ColumnOptions): PropertyDecorator {
-  return function (object: Object, propertyName: string | symbol) {
+  return function (instance: object, propertyName: string | symbol) {
     if (!options) options = {} as ColumnOptions
     const col_name = options.name || propertyName.toString()
     const col_type = options.type || 'VARCHAR'
-    Reflect.defineMetadata(Column_Name_KEY, col_name, object, propertyName)
-    Reflect.defineMetadata(Column_Type_KEY, col_type, object, propertyName)
+    Reflect.defineMetadata(Column_Name_KEY, col_name, instance, propertyName)
+    Reflect.defineMetadata(Column_Type_KEY, col_type, instance, propertyName)
     for (const key in options) {
-      Reflect.defineMetadata(key, options[key], object, propertyName)
+      Reflect.defineMetadata(key, options[key], instance, propertyName)
     }
   }
 }
