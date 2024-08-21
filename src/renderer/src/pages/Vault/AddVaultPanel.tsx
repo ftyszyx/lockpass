@@ -1,6 +1,6 @@
 import { Vault } from '@common/entitys/vault.entity'
 import { Icon_type, ModalType, VaultItemTypeIcon } from '@common/gloabl'
-import { Button, Form, Input, message, Modal, Select } from 'antd'
+import { Button, Form, Input, message, Modal, Popconfirm, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import TextArea from 'antd/es/input/TextArea'
 import Icon from '@renderer/components/Icon'
@@ -62,8 +62,10 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
         footer={(_, { OkBtn, CancelBtn }) => (
           <>
             {pros.show_del && (
-              <Button
-                onClick={async () => {
+              <Popconfirm
+                title={appset.getText('addvaultpanel.del.title')}
+                description={appset.getText('addvaultpanel.del.content')}
+                onConfirm={async () => {
                   await ipc_call(webToManMsg.DeleteValut, pros.edit_info.id)
                     .then(() => {
                       pros.onDelOk?.()
@@ -73,8 +75,8 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                     })
                 }}
               >
-                删除
-              </Button>
+                <Button>删除</Button>
+              </Popconfirm>
             )}
             <CancelBtn />
             <OkBtn />

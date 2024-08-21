@@ -151,10 +151,10 @@ export function initAllApi() {
     return await AppModel.getInstance().vaultItem?.AddOneApi(valutItem)
   })
   ipcMain.handle(webToManMsg.DeleteValut, async (_, vault_id) => {
-    return await AppModel.getInstance().vault?.DeleteOne(vault_id)
+    return await AppModel.getInstance().vault?.DeleteByIdApi(vault_id)
   })
   ipcMain.handle(webToManMsg.DeleteValutItem, async (_, vault_item_id) => {
-    return await AppModel.getInstance().vaultItem?.DeleteOne(vault_item_id)
+    return await AppModel.getInstance().vaultItem?.DeleteByIdApi(vault_item_id)
   })
   ipcMain.handle(webToManMsg.UpdateValut, async (_, new_valut) => {
     return await AppModel.getInstance().vault?.UpdateOne(new_valut)

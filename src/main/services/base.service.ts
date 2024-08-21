@@ -150,11 +150,20 @@ export class BaseService<Entity extends BaseEntity> {
     return this.UpdateOne2(chang_values, false)
   }
 
-  public async DeleteOne(id: number): Promise<ApiResp<null>> {
+  public async DeleteById(id: number) {
+    await AppModel.getInstance().db_helper.DelMany(this.entity, { cond: { id } })
+    this.AfterChange()
+  }
+
+  public async DeleteMany(cond: WhereDef<Entity>) {
+    await AppModel.getInstance().db_helper.DelMany(this.entity, cond)
+    this.AfterChange()
+  }
+
+  public async DeleteByIdApi(id: number): Promise<ApiResp<null>> {
     const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
     try {
-      await AppModel.getInstance().db_helper.DelOne(this.entity, 'id', id)
-      this.AfterChange()
+      await this.DeleteById(id)
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err

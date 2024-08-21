@@ -204,6 +204,9 @@
   "alidrive.uploaderror": "上传失败",
   "alidrive.filenotexit": "云盘中不存在文件:{0}",
 
+  "addvaultpanel.del.title": "删除保险库",
+  "addvaultpanel.del.content": "确定删除保险库:{0}吗?会同时删除保险库中的所有项目",
+
   "menu.vault": "保险库",
   "menu.setting": "设置",
   "menu.about": "关于",

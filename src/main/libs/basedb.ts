@@ -137,11 +137,10 @@ export class BaseDb {
     return res
   }
 
-  public async DelOne(obj: BaseEntity, key: string, value: string | number): Promise<void> {
+  public async DelMany(obj: BaseEntity, where: WhereDef<BaseEntity>): Promise<void> {
     const table_name = obj[Table_Name_KEY]
-    const encode_value = this.encode_table_str(obj, key, value)
-    const col_value = this.getColumnValue(obj, key, encode_value)
-    const sql_str = `delete from ${table_name} where ${key}=${col_value}`
+    let sql_str = `delete from ${table_name} where `
+    sql_str += this.getWhreSql(obj, where)
     return await this._runSql(sql_str)
   }
 
