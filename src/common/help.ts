@@ -33,3 +33,7 @@ export function GetFiledInfo(info: object, keys: string[]) {
   }
   return obj
 }
+
+export function GetImportVaultName(type: string) {
+  return `import_${type}`
+}

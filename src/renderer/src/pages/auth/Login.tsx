@@ -17,13 +17,13 @@ export default function Register(): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm<RegisterInfo2>()
   const history = useHistory()
-  ConsoleLog.LogInfo('register render', history.PathName)
   const [options, setOptions] = useState<AutoCompleteProps['options']>([])
   const [lastUser, setLastUser] = useState<User>(null)
   const appstore = use_appstore() as AppStore
   const isReigster = history.PathName == PagePath.register
-  const isLogin = history.PathName == PagePath.Login
-  const isLock = history.PathName == PagePath.Lock
+  const isLogin = history.PathName == PagePath.Login && appstore.HaveLogin()
+  const isLock = history.PathName == PagePath.Lock && appstore.HaveLogin() == false
+  ConsoleLog.LogInfo('register render', history.PathName, isLogin, isLock)
   const lang = (use_appset() as AppsetStore).lang
   useEffect(() => {
     initData()
@@ -37,7 +37,6 @@ export default function Register(): JSX.Element {
       })
       .catch((e) => {
         ConsoleLog.LogError('GetLastUserInfo', e)
-        // messageApi.error(lang.getText(`err.${e.code}`))
       })
   }
   useEffect(() => {

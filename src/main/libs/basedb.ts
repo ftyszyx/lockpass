@@ -5,7 +5,7 @@ import { ColumnType } from '@common/decorator/db.decorator'
 import AppModel from '@main/models/app.model'
 
 export class BaseDb {
-  public show_log: boolean = false
+  public show_log: boolean = true
   // Add a comment to explain the purpose of the empty constructor
   constructor() {
     // Empty constructor
@@ -26,7 +26,7 @@ export class BaseDb {
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
-      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+      if (col_type == 'VARCHAR') {
         return AppModel.getInstance().myencode.Encode(value.toString())
       }
     }
@@ -38,7 +38,7 @@ export class BaseDb {
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
-      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+      if (col_type == 'VARCHAR') {
         return AppModel.getInstance().myencode.Decode(value.toString())
       }
     }
@@ -53,7 +53,7 @@ export class BaseDb {
       if (value === undefined || value === null) {
         if (default_value != undefined || default_value != null || isprimary) return undefined
         else return `''`
-      } else if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+      } else if (col_type == 'VARCHAR') {
         const res = value.toString()
         return `'${res}'`
       } else {
@@ -210,22 +210,19 @@ export class BaseDb {
   }
 
   private getWhreSql(obj: BaseEntity, where: WhereDef<BaseEntity>): string {
-    let sql_str = ''
-    Object.keys(where.cond).every((key, indx, _) => {
+    const serach_arr = []
+    Object.keys(where.cond).every((key) => {
       let search_val = where.cond[key]
       if (search_val == undefined || search_val == null)
         throw new Error(`search value is null key:${key}`)
       search_val = this.encode_table_str(obj, key, search_val)
       const col_value = this.getColumnValue(obj, key, search_val)
       if (col_value) {
-        sql_str += ` ${key}=${col_value}`
-        if (indx < Object.keys(where).length - 1) {
-          sql_str += where.andor
-        }
+        serach_arr.push(` ${key}=${col_value}`)
       }
       return true
     })
-    return sql_str
+    return serach_arr.join(where.andor || ' AND ')
   }
 
   public GetOne<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {

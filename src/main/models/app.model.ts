@@ -30,7 +30,8 @@ import { AppService } from '@main/services/app.service'
 import { AliDrive } from '@main/libs/ali_drive'
 import { AliyunData } from '@main/libs/ali_drive/def'
 import { ShowErrToMain } from '@main/libs/other.help'
-import { GetFiledInfo, SetFiledInfo } from '@common/help'
+import { GetFiledInfo, GetImportVaultName, SetFiledInfo } from '@common/help'
+
 export interface AppSet {
   lang: string
   sql_ver: number
@@ -463,6 +464,10 @@ class AppModel {
     let res = true
     try {
       const { canceled, filePaths } = await dialog.showOpenDialog({
+        title: LangHelper.getString(
+          'importcsvtype.opencsvtitle',
+          LangHelper.getString(`importcsvtype.${import_type}`)
+        ),
         properties: ['openFile'],
         filters: [{ name: 'csv', extensions: ['csv'] }]
       })
@@ -474,12 +479,17 @@ class AppModel {
         )
         return false
       }
-      const add_vault_name = import_type.toString()
+      Log.Info('import csv file:', filePaths[0])
+      const add_vault_name = GetImportVaultName(import_type)
       let vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
       if (!vault_old) {
         await this.vault.AddOne({ user_id: cur_user.id, name: add_vault_name })
         vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
+        if (vault_old == null) {
+          throw new Error('add vault error')
+        }
       }
+      Log.Info(`get vault ok:${add_vault_name}`)
       const filepath = filePaths[0]
       const data = fs.readFileSync(filepath).toString()
       const items = data.split('\n')
@@ -507,9 +517,9 @@ class AppModel {
         vaultitems.push(info)
       }
       this.vaultItem.AddMany(vaultitems)
-    } catch (e) {
-      Log.Error('import csv file error:', e)
-      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.import.error'))
+    } catch (e: any) {
+      Log.Exception(e, 'import csv file error:')
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('importcsvtype.error'))
       res = false
     }
     return res

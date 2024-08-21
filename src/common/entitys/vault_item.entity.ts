@@ -15,7 +15,7 @@ export class VaultItem extends BaseEntity {
   @Column({ type: 'VARCHAR', notNull: true })
   icon: string
 
-  @Column({ type: 'VARCHAR', encode: true, notNull: true })
+  @Column({ type: 'VARCHAR', notNull: true })
   name: string
 
   @Column({ type: 'VARCHAR', encode: true, default: '' })
@@ -45,7 +45,7 @@ export class NoteTextPasswordInfo {
 }
 
 export enum VaultImportType {
-  google = 'google',
+  chrome = 'chrome',
   edge = 'edge'
 }
 
@@ -54,7 +54,7 @@ export interface ImportItemInfo {
 }
 
 export function getVaultImportItems(type: VaultImportType): Record<string, ImportItemInfo> {
-  if (type == VaultImportType.edge || type == VaultImportType.google) {
+  if (type == VaultImportType.edge || type == VaultImportType.chrome) {
     return {
       name: { key: 'name' },
       url: { key: 'info.urls' },

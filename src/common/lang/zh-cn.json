@@ -188,10 +188,18 @@
   "mydropmenu.change_account": "切换账号",
   "mydropmenu.importcsv": "导入csv",
   "mydropmenu.exportcsv": "导出csv",
+  "mydropmenu.importcsv.title": "导入csv成功",
+  "mydropmenu.importcsv.content": "导入内容在新的保险库:{0}中",
 
   "filelistselect.name": "文件名",
   "filelistselect.size": "大小",
   "filelistselect.updatetime": "修改时间",
+
+  "importcsvtype.title": "选择导入类型",
+  "importcsvtype.edge": "edge浏览器",
+  "importcsvtype.chrome": "chrome浏览器",
+  "importcsvtype.opencsvtitle": "请选择从{0}导出的csv文件",
+  "importcsvtype.error": "导入失败",
 
   "alidrive.uploaderror": "上传失败",
   "alidrive.filenotexit": "云盘中不存在文件:{0}",

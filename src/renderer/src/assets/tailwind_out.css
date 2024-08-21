@@ -810,6 +810,10 @@ video {
   width: 100% !important;
 }
 
+.flex-1 {
+  flex: 1 1 0% !important;
+}
+
 .flex-grow {
   flex-grow: 1 !important;
 }
@@ -928,6 +932,14 @@ video {
 
 .rounded-sm {
   border-radius: 0.125rem !important;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem !important;
+}
+
+.border-2 {
+  border-width: 2px !important;
 }
 
 .border-\[1px\] {

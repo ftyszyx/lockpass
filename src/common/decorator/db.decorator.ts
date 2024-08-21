@@ -7,23 +7,11 @@ export type ColumnType =
   | 'BOOLEAN' //ogical boolean (true/false)
   | 'DATE' //calendar date (year, month day)
   | 'DOUBLE' //double precision floating-point number
-  | 'INTEGER' //signed four-byte integer
-  | 'HUGEINT' //signed sixteen-byte integer
-  | 'REAL' //single precision floating-point number
-  | 'SMALLINT' //signed two-byte integer
-  | 'TIME' //time of day (no time zone)
-  | 'TIMESTAMP WITH TIME ZONE' //
   | 'TIMESTAMP'
   | 'TINYINT'
-  | 'UBIGINT'
-  | 'UHUGEINT'
-  | 'UINTEGER'
-  | 'USMALLINT'
-  | 'UUID'
+  | 'INTEGER'
   | 'VARCHAR'
-  //compose type
-  | 'INTEGER[]'
-  | 'VARCHAR[]'
+//compose type
 
 export interface ColumnOptions {
   comment?: string

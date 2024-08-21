@@ -5,7 +5,6 @@ import { BaseEntity } from './db.entity'
 export class Vault extends BaseEntity {
   @Column({
     type: 'VARCHAR',
-    encode: true,
     unique_index: true,
     index_name: 'name_index',
     notNull: true
