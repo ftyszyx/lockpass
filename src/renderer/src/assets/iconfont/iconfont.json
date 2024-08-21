@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "16627017",
+      "name": "edge",
+      "font_class": "edge",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "11770188",
       "name": "about",
       "font_class": "about",
