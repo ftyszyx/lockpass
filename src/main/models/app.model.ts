@@ -458,7 +458,7 @@ class AppModel {
   }
 
   //导入
-  async ImportCsvFile(import_type: VaultImportType): Promise<boolean> {
+  async ImportCsv(import_type: VaultImportType): Promise<boolean> {
     const cur_user = this.curUserInfo()
     let res = true
     try {
@@ -516,7 +516,7 @@ class AppModel {
   }
 
   //导出
-  async ExportCsvFile() {
+  async ExportCsv() {
     try {
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ['openDirectory']

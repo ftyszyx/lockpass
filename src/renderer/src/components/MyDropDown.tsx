@@ -27,6 +27,9 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               await ipc_call_normal(webToManMsg.Logout)
             } else if (item.key == 'exit') {
               ipc_call_normal(webToManMsg.QuitAPP)
+            } else if (item.key == 'importcsv') {
+            } else if (item.key == 'exportcsv') {
+              ipc_call_normal(webToManMsg.ExputCSV)
             } else if (item.key === 'local_backup_do') {
               ipc_call_normal<string>(webToManMsg.Backup_local).then((filepath) => {
                 if (filepath == null) return
@@ -121,6 +124,14 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                   ]
                 }
               ]
+            },
+            {
+              key: 'importcsv',
+              label: appset.getText('mydropmenu.importcsv')
+            },
+            {
+              key: 'exportcsv',
+              label: appset.getText('mydropmenu.exportcsv')
             },
             {
               key: 'app_exit',

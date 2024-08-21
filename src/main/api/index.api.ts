@@ -3,7 +3,7 @@ import AppModel from '../models/app.model'
 import { MainToWebMsg, webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { WhereDef } from '@common/entitys/db.entity'
 import { Vault } from '@common/entitys/vault.entity'
-import { VaultItem } from '@common/entitys/vault_item.entity'
+import { VaultImportType, VaultItem } from '@common/entitys/vault_item.entity'
 import { renderViewType } from '@common/entitys/app.entity'
 
 export function initAllApi() {
@@ -53,6 +53,14 @@ export function initAllApi() {
 
   ipcMain.handle(webToManMsg.GetAllBackups_alidrive, async () => {
     return await AppModel.getInstance().GetAliyunBackupList()
+  })
+
+  ipcMain.handle(webToManMsg.ImportCSV, (_, type: VaultImportType) => {
+    return AppModel.getInstance().ImportCsv(type)
+  })
+
+  ipcMain.handle(webToManMsg.ExputCSV, (_) => {
+    return AppModel.getInstance().ExportCsv()
   })
 
   ipcMain.handle(webToManMsg.ShowVaultItem, (_, vault_id, vault_item_id) => {

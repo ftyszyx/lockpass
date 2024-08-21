@@ -42,6 +42,8 @@ export enum webToManMsg {
   Recover_alidrive = 'RestoreFromAliDrive',
   GetAllBackups_alidrive = 'GetAllBackupsFromAliDrive',
   QuitAPP = 'QuitAPP',
+  ImportCSV = 'ImportCSV',
+  ExputCSV = 'ExputCSV',
   RestartApp = 'RestartApp',
   CloseDb = 'CloseDb',
   OpenDb = 'OpenDb'
