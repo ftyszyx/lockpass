@@ -71,7 +71,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
           onOk={async () => {
             const values = await form.validateFields()
             values.user_id = appstore.cur_user?.id
-            values.valut_id = cur_vault_id
+            values.vault_id = cur_vault_id
             values.vault_item_type = select_type
             await ipc_call(webToManMsg.AddValutItem, values)
               .then(() => {

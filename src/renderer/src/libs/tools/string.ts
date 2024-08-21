@@ -16,7 +16,7 @@ export function getLabelStr(label: string, value: string = ''): string {
   const vaulewidth = getStrWidth(value)
   const targetWidth = 350 // 目标宽度，可以根据需要调整
   const padWidth = targetWidth - labelWidth - vaulewidth
-  console.log('labelWidth', label, labelWidth, vaulewidth, padWidth)
+  // console.log('labelWidth', label, labelWidth, vaulewidth, padWidth)
   if (padWidth <= 0) return label + value
   // 计算填充字符的数量
   const padChar = ' '

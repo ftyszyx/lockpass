@@ -143,7 +143,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             },
             {
               key: 'app_exit',
-              label: appset.getText('exit')
+              label: appset.getText('app_exit')
             },
             {
               key: 'change_account',

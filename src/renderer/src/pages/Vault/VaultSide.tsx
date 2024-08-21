@@ -37,10 +37,10 @@ export default function VaultSide(props: VaultSideProps) {
       })
     }
     if (search_Password_type === SelectAll) {
-      return appstore.vault_items.filter((item) => item.valut_id == cur_vault_id)
+      return appstore.vault_items.filter((item) => item.vault_id == cur_vault_id)
     } else {
       return appstore.vault_items.filter(
-        (item) => item.vault_item_type === search_Password_type && item.valut_id == cur_vault_id
+        (item) => item.vault_item_type === search_Password_type && item.vault_id == cur_vault_id
       )
     }
   }, [

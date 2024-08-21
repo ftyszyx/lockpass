@@ -40,7 +40,7 @@ export default function QuickSearch() {
   }
 
   async function GotoMain(info: VaultItem) {
-    await ipc_call_normal(webToManMsg.ShowVaultItem, info.valut_id, info.id)
+    await ipc_call_normal(webToManMsg.ShowVaultItem, info.vault_id, info.id)
   }
 
   function foucsInput() {

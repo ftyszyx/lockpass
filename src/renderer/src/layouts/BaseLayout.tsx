@@ -18,6 +18,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   ConsoleLog.LogInfo('baselayout render')
   useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.LockApp, () => {
+      ConsoleLog.LogInfo('LockApp event')
       history.push(PagePath.Lock)
     })
     window.electron.ipcRenderer.on(MainToWebMsg.ShowVaulteItem, (_, vaultid, vault_item_id) => {
@@ -27,6 +28,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       )
     })
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOut, () => {
+      ConsoleLog.LogInfo('LoginOut event')
       appstore.LoginOut()
       history.push(PagePath.Login)
     })
@@ -79,9 +81,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   async function initAllData() {
-    ConsoleLog.LogInfo(
-      `initAllData havelogin:${appstore.HaveLogin()} cur_user:${appstore.cur_user}`
-    )
+    ConsoleLog.LogInfo(`initAllData havelogin:${appstore.HaveLogin()} `, appstore.cur_user)
     if (appstore.HaveLogin()) {
       await getAllVault(appstore, appset.lang, messageApi)
       await getAllVaultItem(appstore, appset.lang, messageApi)

@@ -8,7 +8,14 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import { APP_VER_CODE, Default_Lang, Icon_type, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
+import {
+  APP_VER_CODE,
+  Default_Lang,
+  Icon_type,
+  SQL_VER_CODE,
+  VaultItemType,
+  VaultItemTypeIcon
+} from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -18,9 +25,11 @@ import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import {
   CardPasswordInfo,
+  Csv2TableCol,
   getVaultImportItems,
   LoginPasswordInfo,
   NoteTextPasswordInfo,
+  TableCol2Csv,
   VaultImportType,
   VaultItem
 } from '@common/entitys/vault_item.entity'
@@ -483,7 +492,11 @@ class AppModel {
       const add_vault_name = GetImportVaultName(import_type)
       let vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
       if (!vault_old) {
-        await this.vault.AddOne({ user_id: cur_user.id, name: add_vault_name })
+        await this.vault.AddOne({
+          user_id: cur_user.id,
+          name: add_vault_name,
+          icon: `icon-${VaultItemTypeIcon[import_type]}`
+        })
         vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
         if (vault_old == null) {
           throw new Error('add vault error')
@@ -506,13 +519,11 @@ class AppModel {
           icon: Icon_type.icon_login
         }
         for (let j = 0; j < fileds.length; j++) {
-          const filed_name = fileds[j]
-          const value = values[j]
+          const filed_name = fileds[j].trim()
+          const value = values[j].trim()
           const importinfo = importitems[filed_name]
           if (importinfo == null) continue
-          const table_key = importinfo.key
-          const key_arr = table_key.split('.')
-          SetFiledInfo(info, key_arr, value)
+          Csv2TableCol(info, importinfo, value)
         }
         vaultitems.push(info)
       }
@@ -562,7 +573,7 @@ class AppModel {
       for (let i = 0; i < items.length; i++) {
         const item = items[i]
         keylist.forEach((key) => {
-          const value = GetFiledInfo(item, key.split('.'))
+          const value = TableCol2Csv(item, key)
           if (value == null || value == undefined) {
             writestream.write(',')
             return

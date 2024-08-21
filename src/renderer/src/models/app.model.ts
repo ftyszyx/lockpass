@@ -40,6 +40,7 @@ export const use_appstore = create<AppStore>((set, get) => {
     },
     LoginOut() {
       set((state) => {
+        ConsoleLog.LogInfo('login out')
         return { ...state, cur_user: null, login_flag: false }
       })
     },

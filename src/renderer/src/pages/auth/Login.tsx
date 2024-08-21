@@ -21,8 +21,8 @@ export default function Register(): JSX.Element {
   const [lastUser, setLastUser] = useState<User>(null)
   const appstore = use_appstore() as AppStore
   const isReigster = history.PathName == PagePath.register
-  const isLogin = history.PathName == PagePath.Login && appstore.HaveLogin()
-  const isLock = history.PathName == PagePath.Lock && appstore.HaveLogin() == false
+  const isLogin = history.PathName == PagePath.Login
+  const isLock = history.PathName == PagePath.Lock
   ConsoleLog.LogInfo('register render', history.PathName, isLogin, isLock)
   const lang = (use_appset() as AppsetStore).lang
   useEffect(() => {

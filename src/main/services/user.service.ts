@@ -51,7 +51,7 @@ export class UserService extends BaseService<User> {
     const last_userid = AppModel.getInstance().GetLastUserId()
     if (last_userid) {
       const user = await super.GetOne({ id: last_userid })
-      if (!user) {
+      if (user != null) {
         ret.data.user = user
         this.userinfo = user
         ret.data.has_init_key = AppModel.getInstance().myencode.hasKey(user.id)
