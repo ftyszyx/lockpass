@@ -3,7 +3,12 @@ import { Dropdown, message, Modal } from 'antd'
 import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
-import { getAllVault, getAllVaultItem, ipc_call_normal } from '@renderer/libs/tools/other'
+import {
+  getAllVault,
+  GetAllVaultData,
+  getAllVaultItem,
+  ipc_call_normal
+} from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import FileListSelectDialog from './FileListSelectDialog'
 import { BackupFileItem } from '@common/entitys/backup.entity'
@@ -221,8 +226,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             setShowSelectImportType(false)
             const res = await ipc_call_normal<boolean>(webToManMsg.ImportCSV, type)
             if (res) {
-              await getAllVault(appstore, appset.lang, messageApi)
-              await getAllVaultItem(appstore, appset.lang, messageApi)
+              await GetAllVaultData(appstore, appset.lang, messageApi)
               confirm({
                 title: appset.getText('mydropmenu.importcsv.title'),
                 icon: <ExclamationCircleOutlined />,

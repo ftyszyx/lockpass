@@ -527,7 +527,7 @@ class AppModel {
         }
         vaultitems.push(info)
       }
-      this.vaultItem.AddMany(vaultitems)
+      await this.vaultItem.AddMany(vaultitems)
     } catch (e: any) {
       Log.Exception(e, 'import csv file error:')
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('importcsvtype.error'))

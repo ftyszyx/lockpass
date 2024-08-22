@@ -66,6 +66,15 @@ export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi
   }
 }
 
+export async function GetAllVaultData(
+  appstore: AppStore,
+  lang: LangItem,
+  messageApi: MessageInstance
+) {
+  await getAllVault(appstore, lang, messageApi)
+  await getAllVaultItem(appstore, lang, messageApi)
+}
+
 export async function getAllVaultItem(
   appstore: AppStore,
   lang: LangItem,

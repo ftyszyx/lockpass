@@ -91,10 +91,10 @@ export default function Register(): JSX.Element {
         <div className="flex flex-col items-center">
           <div className=" text-4xl text-black mb-3 font-bold font-sans">
             {isReigster
-              ? lang.getText('register.title')
+              ? lang?.getText('register.title')
               : isLogin
-                ? lang.getText('auth.login.title')
-                : lang.getText('auth.lock.title')}
+                ? lang?.getText('auth.login.title')
+                : lang?.getText('auth.lock.title')}
           </div>
           <Form form={form} layout="vertical" onFinish={() => {}}>
             {(isReigster || isLogin) && (

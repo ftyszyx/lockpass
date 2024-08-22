@@ -42,7 +42,7 @@ export default function FileListSelectDialog(props: FileListSelectDialogProps): 
             >
               <span className="w-[50%]">{item.name}</span>
               <span className="w-[40%]">{FormatTime(updateat)}</span>
-              <span className="w-[10%]">{getFileSize(item.size)}</span>
+              <span className="w-[15%]">{getFileSize(item.size)}</span>
             </div>
           )
         })}

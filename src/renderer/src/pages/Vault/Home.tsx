@@ -11,6 +11,7 @@ import { getAllVault } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Vault } from '@common/entitys/vault.entity'
 import MyDropDown from '@renderer/components/MyDropDown'
+import { MenuParamNull } from '@renderer/entitys/menu.entity'
 export default function Home() {
   ConsoleLog.LogInfo('home render')
   const history = useHistory()
@@ -79,7 +80,7 @@ export default function Home() {
                       type="icon-goto"
                       className=" text-gray-400"
                       onClick={() => {
-                        history.push(`${PagePath.vault}/${valut.id}`)
+                        history.push(`${PagePath.vault}/${valut.id}/${MenuParamNull}`)
                       }}
                     ></Icon>
                   </div>

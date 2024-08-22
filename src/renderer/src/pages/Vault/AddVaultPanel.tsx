@@ -8,6 +8,7 @@ import { ipc_call } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { GetStrComp } from '@renderer/components/OtherHelp'
 const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 16 } }
 
 interface AmdinAddvalutProps {
@@ -64,7 +65,9 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
             {pros.show_del && (
               <Popconfirm
                 title={appset.getText('addvaultpanel.del.title')}
-                description={appset.getText('addvaultpanel.del.content')}
+                description={GetStrComp(
+                  appset.getText('addvaultpanel.del.content', pros.edit_info?.name)
+                )}
                 onConfirm={async () => {
                   await ipc_call(webToManMsg.DeleteValut, pros.edit_info.id)
                     .then(() => {

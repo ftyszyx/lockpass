@@ -221,6 +221,7 @@ export class AliDrive {
       parent_file_id: parent_info.file_id,
       file_cateGory: filetype,
       order_by: 'created_at',
+      limit: 10,
       order_direction: 'DESC',
       type
     })
