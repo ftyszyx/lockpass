@@ -28,7 +28,7 @@ export default function PaswordDetail(props: props) {
             items={Object.keys(VaultItemTypeIcon).map((key) => {
               return {
                 value: VaultItemTypeIcon[key],
-                label: <Icon type={VaultItemTypeIcon[key]} className=" w-[50px] h-[50px]" svg />
+                label: <Icon type={VaultItemTypeIcon[key]} className=" w-[40px] h-[40px]" svg />
               }
             })}
           ></IconSelect>

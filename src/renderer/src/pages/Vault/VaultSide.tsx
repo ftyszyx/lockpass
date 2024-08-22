@@ -50,14 +50,7 @@ export default function VaultSide(props: VaultSideProps) {
     cur_vault_id,
     props.global_search_keyword
   ])
-  ConsoleLog.LogInfo(
-    `render VaultSide `,
-    show_items,
-    appstore.vault_items,
-    props,
-    cur_vault_id,
-    cur_vault_item_id
-  )
+  ConsoleLog.LogInfo(`render VaultSide `)
   useEffect(() => {
     if (show_items.length > 0) {
       if (
@@ -118,7 +111,7 @@ export default function VaultSide(props: VaultSideProps) {
         <Icon type={Icon_type.icon_rank} />
       </div>
       {/* item list */}
-      <div className=" flex flex-col">
+      <div className=" flex flex-col overflow-auto " style={{ height: 'calc(100vh - 90px)' }}>
         {show_items.map((vault_item) => (
           <div
             onClick={() => {

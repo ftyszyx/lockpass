@@ -75,7 +75,7 @@ export default function Vault() {
             }}
           ></VaultSide>
           {/*  right side content*/}
-          <div className="flex flex-grow">
+          <div className="flex flex-grow  overflow-auto">
             {select_vault_item && (
               <div className=" flex flex-col w-full">
                 <div className="flex flex-row-reverse   p-4 border-b-2 border-solid border-gray-200">
@@ -88,7 +88,7 @@ export default function Vault() {
                     {show_edit ? appset.lang.getText('cancel') : appset.lang.getText('edit')}
                   </Button>
                 </div>
-                <div className="p-4">
+                <div className="p-2">
                   <Form
                     form={form}
                     className="flex-grow"

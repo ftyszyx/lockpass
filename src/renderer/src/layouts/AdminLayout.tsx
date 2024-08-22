@@ -7,7 +7,7 @@ function AdminLayout(props: ChildProps): JSX.Element {
       <MyMenu />
       {/* right side */}
       <div className=" flex-grow">
-        <div className=" h-full min-h-[280px]">{props.children}</div>
+        <div className=" h-[100vh] min-h-[280px]">{props.children}</div>
       </div>
     </div>
   )

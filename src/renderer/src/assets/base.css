@@ -138,3 +138,11 @@ em {
   height: 30px;
   border: 0px;
 }
+
+.vault-sider {
+  height: calc(100vh - 90px);
+}
+
+.vault-conent {
+  height: calc(100vh - 90px);
+}

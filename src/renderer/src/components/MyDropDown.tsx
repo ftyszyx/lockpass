@@ -100,6 +100,9 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               label: appset.getText('menu.password_gen')
             },
             {
+              type: 'divider'
+            },
+            {
               key: 'backup_local',
               label: appset.getText('menu.backup_local'),
               children: [
@@ -134,12 +137,18 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               ]
             },
             {
+              type: 'divider'
+            },
+            {
               key: 'importcsv',
               label: appset.getText('mydropmenu.importcsv')
             },
             {
               key: 'exportcsv',
               label: appset.getText('mydropmenu.exportcsv')
+            },
+            {
+              type: 'divider'
             },
             {
               key: 'app_exit',

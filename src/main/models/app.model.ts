@@ -495,7 +495,7 @@ class AppModel {
         await this.vault.AddOne({
           user_id: cur_user.id,
           name: add_vault_name,
-          icon: `icon-${VaultItemTypeIcon[import_type]}`
+          icon: `icon-${import_type.toString()}`
         })
         vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
         if (vault_old == null) {
