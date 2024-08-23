@@ -26,6 +26,7 @@ import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import {
   CardPasswordInfo,
   Csv2TableCol,
+  GetExportFieldList,
   getVaultImportItems,
   LoginPasswordInfo,
   NoteTextPasswordInfo,
@@ -551,24 +552,11 @@ class AppModel {
         return null
       }
       const csv_path = path.join(filePaths[0], 'export_lockpass.csv')
+      Log.Info('export csv file:', csv_path)
       const userinfo = this.curUserInfo()
       const items = await this.vaultItem.GetMany({ cond: { user_id: userinfo.id } })
       const writestream = fs.createWriteStream(csv_path)
-      const keylist = []
-      Object.keys(VaultItem).forEach((key) => {
-        if (key == 'info') {
-          Object.keys(LoginPasswordInfo).forEach((subkey) => {
-            keylist.push(`info.${subkey}`)
-          })
-          Object.keys(NoteTextPasswordInfo).forEach((subkey) => {
-            keylist.push(`info.${subkey}`)
-          })
-          Object.keys(CardPasswordInfo).forEach((subkey) => {
-            keylist.push(`info.${subkey}`)
-          })
-        }
-        keylist.push(key)
-      })
+      const keylist = GetExportFieldList()
       writestream.write(keylist.join(',') + '\n')
       for (let i = 0; i < items.length; i++) {
         const item = items[i]

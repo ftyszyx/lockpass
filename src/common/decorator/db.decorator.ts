@@ -11,7 +11,39 @@ export type ColumnType =
   | 'TINYINT'
   | 'INTEGER'
   | 'VARCHAR'
+  | 'VARCHAR[]'
+
 //compose type
+
+export type ColumnTypeCatgory = 'number' | 'string' | 'boolean' | 'object' | 'array'
+
+export function getColumTypeCategory(type: ColumnType): ColumnTypeCatgory {
+  if (
+    type == 'BIGINT' ||
+    type == 'INT' ||
+    type == 'DOUBLE' ||
+    type == 'TINYINT' ||
+    type == 'INTEGER'
+  ) {
+    return 'number'
+  }
+  if (type == 'VARCHAR') {
+    return 'string'
+  }
+  if (type == 'VARCHAR[]') {
+    return 'array'
+  }
+  if (type == 'BOOLEAN') {
+    return 'boolean'
+  }
+  if (type == 'BLOB') {
+    return 'object'
+  }
+  if (type == 'DATE' || type == 'TIMESTAMP') {
+    return 'string'
+  }
+  return 'object'
+}
 
 export interface ColumnOptions {
   comment?: string

@@ -1,5 +1,6 @@
 import { Column, Entity } from '@common/decorator/db.decorator'
 import { BaseEntity } from './db.entity'
+import { ColumnType } from '@common/decorator/db.decorator'
 
 @Entity({ name: 'valut_item' })
 export class VaultItem extends BaseEntity {
@@ -29,18 +30,25 @@ export class VaultItem extends BaseEntity {
 }
 
 export class LoginPasswordInfo {
+  @Column({ type: 'VARCHAR' })
   username: string
+  @Column({ type: 'VARCHAR' })
   password: string
+  @Column({ type: 'VARCHAR[]' })
   urls: string[]
 }
 
 export class CardPasswordInfo {
+  @Column({ type: 'VARCHAR' })
   card_company: string
+  @Column({ type: 'VARCHAR' })
   card_number: string
+  @Column({ type: 'VARCHAR' })
   card_password: string
 }
 
 export class NoteTextPasswordInfo {
+  @Column({ type: 'VARCHAR' })
   note_text: string
 }
 
@@ -53,17 +61,17 @@ export type TableImportColType = 'string' | 'number' | 'array'
 
 export interface ImportItemInfo {
   key: string
-  table_type: TableImportColType
+  type: ColumnType
 }
 
 export function getVaultImportItems(type: VaultImportType): Record<string, ImportItemInfo> {
   if (type == VaultImportType.edge || type == VaultImportType.chrome) {
     return {
-      name: { key: 'name', table_type: 'string' },
-      url: { key: 'info.urls', table_type: 'array' },
-      username: { key: 'info.username', table_type: 'string' },
-      password: { key: 'info.password', table_type: 'string' },
-      note: { key: 'remarks', table_type: 'string' }
+      name: { key: 'name', type: 'VARCHAR' },
+      url: { key: 'info.urls', type: 'VARCHAR[]' },
+      username: { key: 'info.username', type: 'VARCHAR' },
+      password: { key: 'info.password', type: 'VARCHAR' },
+      note: { key: 'remarks', type: 'VARCHAR' }
     }
   }
   return {}
@@ -77,7 +85,7 @@ export function Csv2TableCol(table_row: object, typeinfo: ImportItemInfo, csv_va
     if (!obj[keys[i]]) obj[keys[i]] = {}
     obj = obj[keys[i]]
   }
-  if (typeinfo.table_type == 'array') {
+  if (typeinfo.type == 'VARCHAR[]') {
     if (csv_value.startsWith('[') && csv_value.endsWith(']')) {
       obj[keys[keys.length - 1]] = JSON.parse(csv_value)
     } else {
@@ -100,4 +108,22 @@ export function TableCol2Csv(table_row: object, key: string): string {
   if (obj instanceof Array) return JSON.stringify(obj)
   // if (obj instanceof Object) return JSON.stringify(obj)
   return obj.toString()
+}
+
+export function GetExportFieldList() {
+  const fieldlist = []
+  Object.keys(new VaultItem()).forEach((key) => {
+    if (key == 'info') {
+      Object.keys(new LoginPasswordInfo()).forEach((subkey) => {
+        fieldlist.push(`info.${subkey}`)
+      })
+      Object.keys(new NoteTextPasswordInfo()).forEach((subkey) => {
+        fieldlist.push(`info.${subkey}`)
+      })
+      Object.keys(new CardPasswordInfo()).forEach((subkey) => {
+        fieldlist.push(`info.${subkey}`)
+      })
+    } else fieldlist.push(key)
+  })
+  return fieldlist
 }

@@ -26,7 +26,7 @@ export class BaseDb {
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
-      if (col_type == 'VARCHAR') {
+      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
         return AppModel.getInstance().myencode.Encode(value.toString())
       }
     }
@@ -38,7 +38,7 @@ export class BaseDb {
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
-      if (col_type == 'VARCHAR') {
+      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
         return AppModel.getInstance().myencode.Decode(value.toString())
       }
     }
@@ -53,7 +53,7 @@ export class BaseDb {
       if (value === undefined || value === null) {
         if (default_value != undefined || default_value != null || isprimary) return undefined
         else return `''`
-      } else if (col_type == 'VARCHAR') {
+      } else if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
         const res = value.toString()
         return `'${res}'`
       } else {

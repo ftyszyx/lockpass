@@ -190,6 +190,8 @@
   "mydropmenu.exportcsv": "导出csv",
   "mydropmenu.importcsv.title": "导入csv成功",
   "mydropmenu.importcsv.content": "导入内容在新的保险库:{0}中",
+  "mydropmenu.exportcsv.title": "导出csv成功",
+  "mydropmenu.exportcsv.content": "文件路径:{0}",
 
   "filelistselect.name": "文件名",
   "filelistselect.size": "大小",

@@ -3,12 +3,7 @@ import { Dropdown, message, Modal } from 'antd'
 import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
-import {
-  getAllVault,
-  GetAllVaultData,
-  getAllVaultItem,
-  ipc_call_normal
-} from '@renderer/libs/tools/other'
+import { GetAllVaultData, ipc_call_normal } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import FileListSelectDialog from './FileListSelectDialog'
 import { BackupFileItem } from '@common/entitys/backup.entity'
@@ -38,13 +33,22 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             } else if (item.key == 'change_account') {
               await ipc_call_normal(webToManMsg.Logout)
             } else if (item.key == 'exit') {
-              ipc_call_normal(webToManMsg.QuitAPP)
+              await ipc_call_normal(webToManMsg.QuitAPP)
             } else if (item.key == 'importcsv') {
               setShowSelectImportType(true)
             } else if (item.key == 'exportcsv') {
-              ipc_call_normal(webToManMsg.ExputCSV)
+              const res = await ipc_call_normal<string>(webToManMsg.ExputCSV)
+              if (res == null) return
+              confirm({
+                title: appset.getText('mydropmenu.exportcsv.title'),
+                icon: <ExclamationCircleOutlined />,
+                content: appset.getText('mydropmenu.exportcsv.content', res),
+                okText: appset.getText('ok'),
+                cancelText: appset.getText('cancel'),
+                onOk: async () => {}
+              })
             } else if (item.key === 'local_backup_do') {
-              ipc_call_normal<string>(webToManMsg.Backup_local).then((filepath) => {
+              await ipc_call_normal<string>(webToManMsg.Backup_local).then((filepath) => {
                 if (filepath == null) return
                 confirm({
                   title: appset.getText('menu.backup.ok.title'),
@@ -55,7 +59,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                 })
               })
             } else if (item.key === 'backup_drive_alidrive_do') {
-              ipc_call_normal<boolean>(webToManMsg.Backup_alidrive).then((res) => {
+              await ipc_call_normal<boolean>(webToManMsg.Backup_alidrive).then((res) => {
                 if (res) {
                   confirm({
                     title: appset.getText('menu.backup.ok.title'),
@@ -67,11 +71,13 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                 }
               })
             } else if (item.key === 'recover_drive_alidrive_do') {
-              ipc_call_normal<BackupFileItem[]>(webToManMsg.GetAllBackups_alidrive).then((res) => {
-                if (res == null || res.length <= 0) return
-                SetBackupList(res)
-                setShowSelectBackupFile(true)
-              })
+              await ipc_call_normal<BackupFileItem[]>(webToManMsg.GetAllBackups_alidrive).then(
+                (res) => {
+                  if (res == null || res.length <= 0) return
+                  SetBackupList(res)
+                  setShowSelectBackupFile(true)
+                }
+              )
               return
             } else if (item.key === 'local_recover_do') {
               confirm({
@@ -80,8 +86,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                 content: appset.getText('menu.recover.sure.content'),
                 okText: appset.getText('ok'),
                 cancelText: appset.getText('cancel'),
-                onOk: () => {
-                  ipc_call_normal<boolean>(webToManMsg.Recover_local).then((res) => {
+                onOk: async () => {
+                  await ipc_call_normal<boolean>(webToManMsg.Recover_local).then((res) => {
                     if (res) {
                       confirm({
                         title: appset.getText('menu.recover.ok.title'),
