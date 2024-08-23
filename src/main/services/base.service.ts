@@ -94,6 +94,7 @@ export class BaseService<Entity extends BaseEntity> {
     })
     return entity
   }
+
   public async AddOne(obj: Record<string, any>) {
     const entity = this.objToEntity(obj)
     this.fixEntityIn(entity)

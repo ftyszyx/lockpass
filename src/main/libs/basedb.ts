@@ -1,7 +1,7 @@
 import { Log } from './log'
 import { COlumn_Encode_key, Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
 import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
-import { ColumnType } from '@common/decorator/db.decorator'
+import { ColumnType, getColumTypeCategory } from '@common/decorator/db.decorator'
 import AppModel from '@main/models/app.model'
 
 export class BaseDb {
@@ -24,9 +24,10 @@ export class BaseDb {
   protected encode_table_str(obj: BaseEntity, key: string, value: any): string {
     if (value == undefined || value == null || value == '') return value
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
+    const category = getColumTypeCategory(col_type)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
-      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+      if (category !== 'number') {
         return AppModel.getInstance().myencode.Encode(value.toString())
       }
     }
@@ -36,9 +37,10 @@ export class BaseDb {
   protected decode_table_str(obj: BaseEntity, key: string, value: any): string {
     if (value == undefined || value == null || value == '') return value
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
+    const category = getColumTypeCategory(col_type)
     const encode_type = Reflect.getMetadata(COlumn_Encode_key, obj, key)
     if (encode_type) {
-      if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+      if (category !== 'number') {
         return AppModel.getInstance().myencode.Decode(value.toString())
       }
     }
@@ -47,17 +49,18 @@ export class BaseDb {
 
   protected getColumnValue(obj: BaseEntity, key: string, value: any): string {
     const col_type: ColumnType = Reflect.getMetadata(Column_Type_KEY, obj, key)
+    const category = getColumTypeCategory(col_type)
     const isprimary = Reflect.getMetadata('primary', obj, key)
     const default_value = Reflect.getMetadata('default', obj, key)
     if (col_type) {
       if (value === undefined || value === null) {
         if (default_value != undefined || default_value != null || isprimary) return undefined
         else return `''`
-      } else if (col_type == 'VARCHAR' || col_type == 'VARCHAR[]') {
+      } else if (category == 'number') {
+        return `${value.toString()}`
+      } else {
         const res = value.toString()
         return `'${res}'`
-      } else {
-        return `${value.toString()}`
       }
     }
     return null

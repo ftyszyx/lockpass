@@ -15,7 +15,7 @@ export type ColumnType =
 
 //compose type
 
-export type ColumnTypeCatgory = 'number' | 'string' | 'boolean' | 'object' | 'array'
+export type ColumnTypeCatgory = 'number' | 'string' | 'boolean' | 'object' | 'array' | 'unkown'
 
 export function getColumTypeCategory(type: ColumnType): ColumnTypeCatgory {
   if (
@@ -27,7 +27,7 @@ export function getColumTypeCategory(type: ColumnType): ColumnTypeCatgory {
   ) {
     return 'number'
   }
-  if (type == 'VARCHAR') {
+  if (type == 'VARCHAR' || type == 'BLOB' || type == 'TIMESTAMP' || type == 'DATE') {
     return 'string'
   }
   if (type == 'VARCHAR[]') {
@@ -36,13 +36,7 @@ export function getColumTypeCategory(type: ColumnType): ColumnTypeCatgory {
   if (type == 'BOOLEAN') {
     return 'boolean'
   }
-  if (type == 'BLOB') {
-    return 'object'
-  }
-  if (type == 'DATE' || type == 'TIMESTAMP') {
-    return 'string'
-  }
-  return 'object'
+  return 'unkown'
 }
 
 export interface ColumnOptions {

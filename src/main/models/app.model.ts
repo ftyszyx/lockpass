@@ -556,12 +556,16 @@ class AppModel {
       const userinfo = this.curUserInfo()
       const items = await this.vaultItem.GetMany({ cond: { user_id: userinfo.id } })
       const writestream = fs.createWriteStream(csv_path)
-      const keylist = GetExportFieldList()
+      const fieldlist = GetExportFieldList()
+      const keylist = fieldlist.reduce((pre: string[], cur) => {
+        pre.push(cur.db_key)
+        return pre
+      }, [])
       writestream.write(keylist.join(',') + '\n')
       for (let i = 0; i < items.length; i++) {
         const item = items[i]
-        keylist.forEach((key) => {
-          const value = TableCol2Csv(item, key)
+        fieldlist.forEach((fieldinfo) => {
+          const value = TableCol2Csv(item, fieldinfo)
           if (value == null || value == undefined) {
             writestream.write(',')
             return
