@@ -16,6 +16,7 @@
   "vault.delete_title": "删除密码",
   "vault.sure_edit": "确定修改\"{0}\"吗?",
   "vault.edit_title": "修改密码",
+  "vault.sider.total": "总数:{0}",
 
   "vaultitem.placeholder.password": "请输入密码",
   "vaultitem.placeholder.username": "请输入用户名",

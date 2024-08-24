@@ -12,6 +12,7 @@ import { IsVaultItemMatchSearch } from '@renderer/entitys/VaultItem.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory, useRouterStore } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Select } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -25,6 +26,7 @@ export default function VaultSide(props: VaultSideProps) {
   const [search_Password_type, set_Search_password_type] = useState(SelectAll)
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
   const appstore = use_appstore() as AppStore
+  const appset = use_appset() as AppsetStore
   const route_data = useRouterStore()
   const history = useHistory()
   const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
@@ -78,7 +80,10 @@ export default function VaultSide(props: VaultSideProps) {
     props.onSelect(vault_item)
   }
   return (
-    <div className="flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200">
+    <div
+      style={{ height: 'calc(100vh - 50px)' }}
+      className="flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative"
+    >
       {/* first line */}
       <div className="flex flex-row justify-between items-center p-2">
         <Select
@@ -111,7 +116,7 @@ export default function VaultSide(props: VaultSideProps) {
         <Icon type={Icon_type.icon_rank} />
       </div>
       {/* item list */}
-      <div className=" flex flex-col overflow-auto " style={{ height: 'calc(100vh - 90px)' }}>
+      <div className=" flex flex-col flex-1 overflow-auto  ">
         {show_items.map((vault_item) => (
           <div
             onClick={() => {
@@ -124,6 +129,9 @@ export default function VaultSide(props: VaultSideProps) {
             <div> {vault_item.name}</div>
           </div>
         ))}
+      </div>
+      <div className=" h-[25px]  font-bold text-sm flex flex-col items-center bg-gray-100 ">
+        <p className="">{appset.getText('vault.sider.total', show_items.length)}</p>
       </div>
     </div>
   )

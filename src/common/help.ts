@@ -19,3 +19,15 @@ export function getFileSize(size: number) {
 export function GetImportVaultName(type: string) {
   return `import_${type}`
 }
+
+export function str2csv(str: string) {
+  if (str.indexOf(',') !== -1) return `"${str.replace(/"/g, '""')}"`
+  return `${str.replace(/"/g, '""')}`
+}
+
+export function csv2str(csv: string) {
+  if (csv.startsWith('"') && csv.endsWith('"')) {
+    return csv.slice(1, csv.length - 1).replace(/""/g, '"')
+  }
+  return csv.replace(/""/g, '"')
+}

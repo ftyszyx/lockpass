@@ -8,14 +8,7 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import {
-  APP_VER_CODE,
-  Default_Lang,
-  Icon_type,
-  SQL_VER_CODE,
-  VaultItemType,
-  VaultItemTypeIcon
-} from '@common/gloabl'
+import { APP_VER_CODE, Default_Lang, Icon_type, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -24,12 +17,10 @@ import robot from 'robotjs'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import {
-  CardPasswordInfo,
   Csv2TableCol,
   GetExportFieldList,
   getVaultImportItems,
   LoginPasswordInfo,
-  NoteTextPasswordInfo,
   TableCol2Csv,
   VaultImportType,
   VaultItem
@@ -40,7 +31,8 @@ import { AppService } from '@main/services/app.service'
 import { AliDrive } from '@main/libs/ali_drive'
 import { AliyunData } from '@main/libs/ali_drive/def'
 import { ShowErrToMain } from '@main/libs/other.help'
-import { GetFiledInfo, GetImportVaultName, SetFiledInfo } from '@common/help'
+import { GetFiledInfo, GetImportVaultName, SetFiledInfo, str2csv } from '@common/help'
+import { CsvParserHelpr, ParseCsvFile } from '@main/libs/csv_parser'
 
 export interface AppSet {
   lang: string
@@ -505,23 +497,19 @@ class AppModel {
       }
       Log.Info(`get vault ok:${add_vault_name}`)
       const filepath = filePaths[0]
-      const data = fs.readFileSync(filepath).toString()
-      const items = data.split('\n')
-      const fileds = items[0].split(',')
-      const vaultitems = []
+      const results = await ParseCsvFile(filepath)
       const importitems = getVaultImportItems(import_type)
-      for (let i = 1; i < items.length; i++) {
-        if (items[i].trim().length == 0) continue
-        const values = items[i].split(',')
+      const vaultitems = []
+      for (let i = 0; i < results.rows.length; i++) {
         const info = {
           user_id: cur_user.id,
           vault_id: vault_old.id,
           vault_item_type: VaultItemType.Login,
           icon: Icon_type.icon_login
         }
-        for (let j = 0; j < fileds.length; j++) {
-          const filed_name = fileds[j].trim()
-          const value = values[j].trim()
+        for (let j = 0; j < results.headers.length; j++) {
+          const filed_name = results.headers[j].trim()
+          const value = results.rows[i][filed_name].trim()
           const importinfo = importitems[filed_name]
           if (importinfo == null) continue
           Csv2TableCol(info, importinfo, value)
@@ -570,7 +558,7 @@ class AppModel {
             writestream.write(',')
             return
           }
-          writestream.write(`${value}`)
+          writestream.write(`${str2csv(value)}`)
           writestream.write(',')
         })
         writestream.write('\n')
