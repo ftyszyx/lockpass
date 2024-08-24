@@ -59,7 +59,7 @@ export function initAllApi() {
     return AppModel.getInstance().ImportCsv(type)
   })
 
-  ipcMain.handle(webToManMsg.ExputCSV, (_) => {
+  ipcMain.handle(webToManMsg.ExputCSV, () => {
     return AppModel.getInstance().ExportCsv()
   })
 

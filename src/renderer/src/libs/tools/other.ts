@@ -48,13 +48,12 @@ export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi
       appstore.setUserList(res)
     })
     .catch((e) => {
-      messageApi.error(lang.getText(`err.${e.code}`))
+      messageApi.error(lang?.getText(`err.${e.code}`))
     })
 }
 
 export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
   if (appstore.cur_user) {
-    // ConsoleLog.LogTrace('getAllVault')
     const where: WhereDef<Vault> = { cond: { user_id: appstore.cur_user.id } }
     await ipc_call<Vault[]>(webToManMsg.GetAllValuts, where)
       .then((res) => {
@@ -113,10 +112,10 @@ export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
   const userset = appsotre.GetUserSet()
   await ipc_call_normal(webToManMsg.UpdateTrayMenu, {
     openlockpass: getLabelStr(
-      lang.getText('tray.menu.openlockpass'),
+      lang?.getText('tray.menu.openlockpass'),
       userset.shortcut_global_open_main
     ),
-    lock: getLabelStr(lang.getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
-    openquick: getLabelStr(lang.getText('tray.menu.openquick'), userset.shortcut_global_quick_find)
+    lock: getLabelStr(lang?.getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
+    openquick: getLabelStr(lang?.getText('tray.menu.openquick'), userset.shortcut_global_quick_find)
   })
 }

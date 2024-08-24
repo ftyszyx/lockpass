@@ -36,7 +36,7 @@ export default function PaswordDetail(props: props) {
         <Form.Item name="name" className="flex-grow">
           <MyInputWrapper
             inputElement={Input}
-            inputProps={{ placeholder: appset.lang.getText('name') }}
+            inputProps={{ placeholder: appset.getText('name') }}
             show_type={props.modal_type}
           />
         </Form.Item>
@@ -47,21 +47,19 @@ export default function PaswordDetail(props: props) {
             <Form.Item
               className=" mb-2  "
               name={['info', item.field_name]}
-              label={
-                item.hide_label ? '' : appset.lang.getText(`vaultitem.label.${item.field_name}`)
-              }
+              label={item.hide_label ? '' : appset.getText(`vaultitem.label.${item.field_name}`)}
               rules={item.edit_rules}
               key={item.field_name}
             >
               <item.render
                 show_type={props.modal_type}
-                placeholder={appset.lang.getText(`vaultitem.placeholder.${item.field_name}`)}
+                placeholder={appset.getText(`vaultitem.placeholder.${item.field_name}`)}
               ></item.render>
             </Form.Item>
           )
         })}
       </div>
-      <Form.Item className="mb-0" name="remarks" label={appset.lang.getText('vaultadd.remarks')}>
+      <Form.Item className="mb-0" name="remarks" label={appset.getText('vaultadd.remarks')}>
         <MyInputWrapper<TextAreaProps>
           inputProps={{ autoSize: { minRows: 4 } }}
           inputElement={TextArea}

@@ -1,13 +1,11 @@
 import {
   Column,
-  ColumnType,
   ColumnTypeCatgory,
   Entity,
   getColumTypeCategory
 } from '@common/decorator/db.decorator'
 import { BaseEntity } from './db.entity'
 import { Column_Type_KEY, VaultItemType } from '@common/gloabl'
-import { str2csv } from '@common/help'
 
 @Entity({ name: 'valut_item' })
 export class VaultItem extends BaseEntity {

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, protocol } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import AppModel from './models/app.model'
 import { SYS_TEM_NAME } from '@common/gloabl'
@@ -39,10 +39,9 @@ function setDefaultProtocol(scheme) {
     app.setAsDefaultProtocolClient(scheme)
   }
 }
+
 setDefaultProtocol(SYS_TEM_NAME)
-
 const gotTheLock = app.requestSingleInstanceLock()
-
 if (!gotTheLock) {
   app.quit()
 } else {
@@ -57,7 +56,7 @@ if (!gotTheLock) {
     AppEvent.emit(AppEventType.DeepLink, url)
   })
 
-  app.on('open-url', (event, url) => {
+  app.on('open-url', (_, url) => {
     console.log('open-url', url)
     if (BrowserWindow.getAllWindows().length === 0) {
       AppModel.getInstance().initWin()

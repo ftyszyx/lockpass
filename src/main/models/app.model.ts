@@ -31,8 +31,8 @@ import { AppService } from '@main/services/app.service'
 import { AliDrive } from '@main/libs/ali_drive'
 import { AliyunData } from '@main/libs/ali_drive/def'
 import { ShowErrToMain } from '@main/libs/other.help'
-import { GetFiledInfo, GetImportVaultName, SetFiledInfo, str2csv } from '@common/help'
-import { CsvParserHelpr, ParseCsvFile } from '@main/libs/csv_parser'
+import { GetImportVaultName, str2csv } from '@common/help'
+import { ParseCsvFile } from '@main/libs/csv_parser'
 
 export interface AppSet {
   lang: string

@@ -14,7 +14,6 @@ export class FileLogWriter {
   }
 
   private writeAyncNext() {
-    const file = this
     if (this.hasActiveAsyncWriting || this.asyncWriteQueue.length === 0) {
       return
     }
@@ -23,11 +22,11 @@ export class FileLogWriter {
     this.hasActiveAsyncWriting = true
 
     fs.writeFile(this.path, text, { encoding: 'utf-8' }, (e) => {
-      file.hasActiveAsyncWriting = false
+      this.hasActiveAsyncWriting = false
       if (e) {
-        console.log(`Couldn't write to ${file.path}. ${e.message}`)
+        console.log(`Couldn't write to ${this.path}. ${e.message}`)
       }
-      file.writeAyncNext()
+      this.writeAyncNext()
     })
   }
 
@@ -52,8 +51,6 @@ export class Log {
   static log_level: LogLevel = 0
   static time_zone: string = 'Asia/Shanghai'
   static locale: string = 'zh-CN'
-
-  constructor() {}
 
   static initialize() {
     const date = new Date()

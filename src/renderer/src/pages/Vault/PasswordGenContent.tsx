@@ -135,7 +135,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
           ></Input>
         </div>
         <div className=" flex flex-row justify-between">
-          <div> {appset.lang.getText('passwordGenPanel.password_type')}</div>
+          <div> {appset.getText('passwordGenPanel.password_type')}</div>
           <div className="">
             <Select
               className="w-[100px]"
@@ -145,7 +145,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
               {Object.keys(GenPasswordType).map((key) => {
                 return (
                   <Select.Option value={GenPasswordType[key]} key={key}>
-                    {appset.lang.getText(`passwordType.${GenPasswordType[key]}`)}
+                    {appset.getText(`passwordType.${GenPasswordType[key]}`)}
                   </Select.Option>
                 )
               })}
@@ -169,7 +169,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
                     name={item.field_name}
                     className="mb-1"
                     key={item.field_name}
-                    label={appset.lang.getText(`passwordGenPanel.${item.field_name}`)}
+                    label={appset.getText(`passwordGenPanel.${item.field_name}`)}
                   >
                     <item.render></item.render>
                   </Form.Item>

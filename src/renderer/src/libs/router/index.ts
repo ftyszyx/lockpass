@@ -91,13 +91,13 @@ export function url_join(...args: string[]): string {
       else continue
     }
     //Removing the starting slashes for each component but the first.
-    if (i > 0) text = text.replace(/^[\/]+/, '')
+    if (i > 0) text = text.replace(/^[/]+/, '')
     if (i < parts.length - 1) {
       //Removing the ending slashes for each component but the last.
-      text = text.replace(/[\/]+$/, '')
+      text = text.replace(/[/]+$/, '')
     } else {
       //For the last component we will combine multiple slashes to a single one.
-      text = text.replace(/[\/]+$/, '/')
+      text = text.replace(/[/]+$/, '/')
     }
     resArray.push(text)
   }

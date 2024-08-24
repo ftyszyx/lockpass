@@ -56,7 +56,7 @@ export default function ShortKeyInput(props: ShortKeyInputProps) {
     <div className=" relative">
       <Input
         ref={inputRef}
-        placeholder={appset.lang.getText('set.placeholder.shortcut')}
+        placeholder={appset.getText('set.placeholder.shortcut')}
         value={props.value}
         onKeyDown={(e) => e.preventDefault()} // 阻止默认行为
       />

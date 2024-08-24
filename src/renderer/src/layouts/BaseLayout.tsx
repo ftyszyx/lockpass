@@ -6,12 +6,7 @@ import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { message } from 'antd'
-import {
-  getAllVault,
-  GetAllVaultData,
-  getAllVaultItem,
-  ipc_call_normal
-} from '@renderer/libs/tools/other'
+import { GetAllVaultData, ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { User } from '@common/entitys/user.entity'
 

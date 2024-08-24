@@ -28,7 +28,7 @@ export interface MyMenuType {
 
 interface AllMenuProps {
   CallEvent: (event: string) => Promise<void>
-  lang: LangItem
+  lang: LangItem | null
 }
 
 export function getAllMenus(props: AllMenuProps): MyMenuType[] {

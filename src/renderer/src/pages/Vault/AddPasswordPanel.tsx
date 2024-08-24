@@ -79,7 +79,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
                 props.onOk?.()
               })
               .catch((err) => {
-                messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                messageApi.error(appset.getText(`err.${err.code}`), 5)
               })
           }}
           footer={(_, { OkBtn }) => (
@@ -96,7 +96,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
               props.init_info ||
               ({
                 icon: VaultItemTypeIcon[`icon_${select_type}`],
-                name: appset.lang.getText(`password_name_${select_type}`)
+                name: appset.getText(`password_name_${select_type}`)
               } as VaultItem)
             }
           >

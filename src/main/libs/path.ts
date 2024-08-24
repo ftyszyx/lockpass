@@ -1,6 +1,7 @@
 export class PathHelper {
-  constructor() {}
-  static initPath() {}
+  static initPath() {
+    return
+  }
   static getHomeDir() {
     return process.cwd()
   }

@@ -63,7 +63,7 @@ export default function AdminSet() {
                     type={Icon_type[`${item}_set`]}
                     svg
                   ></Icon>
-                  <span> {appset.lang.getText(`set.menu.${item}`)}</span>
+                  <span> {appset.getText(`set.menu.${item}`)}</span>
                 </div>
               )
             })}
@@ -84,7 +84,7 @@ export default function AdminSet() {
                   return (
                     <Form.Item
                       key={item.field_name}
-                      label={appset.lang.getText(`set.menu.${item.field_name}`)}
+                      label={appset.getText(`set.menu.${item.field_name}`)}
                       name={item.field_name}
                     >
                       <item.render></item.render>
@@ -97,11 +97,7 @@ export default function AdminSet() {
                   if (key.startsWith(select_item)) {
                     console.log('key', key)
                     return (
-                      <Form.Item
-                        key={key}
-                        label={appset.lang.getText(`set.menu.${key}`)}
-                        name={key}
-                      >
+                      <Form.Item key={key} label={appset.getText(`set.menu.${key}`)} name={key}>
                         <ShortKeyInput></ShortKeyInput>
                       </Form.Item>
                     )
@@ -114,7 +110,7 @@ export default function AdminSet() {
                 <Form.Item>
                   <div className=" flex flex-row-reverse">
                     <Button onClick={onSave} type="primary" htmlType="submit" className="">
-                      {appset.lang.getText('save')}
+                      {appset.getText('save')}
                     </Button>
                     <Button
                       className="mr-3"
@@ -128,7 +124,7 @@ export default function AdminSet() {
                         })
                       }}
                     >
-                      {appset.lang.getText('recover_default')}
+                      {appset.getText('recover_default')}
                     </Button>
                   </div>
                 </Form.Item>

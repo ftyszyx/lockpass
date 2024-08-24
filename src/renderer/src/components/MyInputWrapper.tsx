@@ -129,7 +129,7 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
             onClick={() => {
               navigator.clipboard.writeText(props.value)
               console.log('get text', props.value)
-              messageApi.success(appset.lang.getText('copy_success'))
+              messageApi.success(appset.getText('copy_success'))
             }}
             className={` flex-grow  font-bold h-full ${hoverState ? ' visible' : 'hidden'}`}
           >

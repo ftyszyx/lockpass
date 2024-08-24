@@ -39,7 +39,7 @@ export default function PasswordGenPanel(props: PasswordGenPanelProps): JSX.Elem
               props.onClose()
             }}
           >
-            {appset.lang.getText('cancel')}
+            {appset.getText('cancel')}
           </Button>
           <Icon
             onClick={() => {
@@ -57,7 +57,7 @@ export default function PasswordGenPanel(props: PasswordGenPanelProps): JSX.Elem
                 props.onOk(value)
               }}
             >
-              {appset.lang.getText('use')}
+              {appset.getText('use')}
             </Button>
           )}
         </div>

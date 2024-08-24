@@ -42,7 +42,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
-                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                  messageApi.error(appset.getText(`err.${err.code}`), 5)
                 })
             } else if (pros.show_type === ModalType.Add) {
               values.user_id = appstore.cur_user?.id
@@ -51,7 +51,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
-                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                  messageApi.error(appset.getText(`err.${err.code}`), 5)
                 })
             }
           })
@@ -88,16 +88,16 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
       >
         <Form {...formItemLayout} form={form} initialValues={pros.edit_info}>
           <Form.Item
-            label={appset.lang.getText('name')}
+            label={appset.getText('name')}
             name="name"
-            rules={[{ required: true, message: appset.lang.getText('addvault.input.name') }]}
+            rules={[{ required: true, message: appset.getText('addvault.input.name') }]}
           >
             <Input></Input>
           </Form.Item>
           <Form.Item
-            label={appset.lang.getText('icon')}
+            label={appset.getText('icon')}
             name="icon"
-            rules={[{ required: true, message: appset.lang.getText('addvault.input.icon') }]}
+            rules={[{ required: true, message: appset.getText('addvault.input.icon') }]}
           >
             <Select>
               {Object.keys(VaultItemTypeIcon).map((key) => {

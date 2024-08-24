@@ -85,7 +85,7 @@ export default function Vault() {
                       set_show_edit(!show_edit)
                     }}
                   >
-                    {show_edit ? appset.lang.getText('cancel') : appset.lang.getText('edit')}
+                    {show_edit ? appset.getText('cancel') : appset.getText('edit')}
                   </Button>
                 </div>
                 <div className="p-2">
@@ -103,13 +103,10 @@ export default function Vault() {
                       {show_edit && (
                         <Form.Item>
                           <Popconfirm
-                            title={appset.lang.getText('vault.edit_title')}
-                            description={appset.lang.getText(
-                              'vault.sure_edit',
-                              select_vault_item.name
-                            )}
-                            okText={appset.lang.getText('ok')}
-                            cancelText={appset.lang.getText('cancel')}
+                            title={appset.getText('vault.edit_title')}
+                            description={appset.getText('vault.sure_edit', select_vault_item.name)}
+                            okText={appset.getText('ok')}
+                            cancelText={appset.getText('cancel')}
                             onConfirm={async () => {
                               const values = await form.validateFields()
                               values.id = select_vault_item.id
@@ -119,12 +116,12 @@ export default function Vault() {
                                   await getAllVaultItem(appstore, appset.lang, messageApi)
                                 })
                                 .catch((err) => {
-                                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                                  messageApi.error(appset.getText(`err.${err.code}`), 5)
                                 })
                             }}
                           >
                             <Button type="primary" htmlType="submit">
-                              {appset.lang.getText('save')}
+                              {appset.getText('save')}
                             </Button>
                           </Popconfirm>
                         </Form.Item>
@@ -132,8 +129,8 @@ export default function Vault() {
                       {show_edit && (
                         <Form.Item className=" mr-3">
                           <Popconfirm
-                            title={appset.lang.getText('vault.delete_title')}
-                            description={appset.lang.getText(
+                            title={appset.getText('vault.delete_title')}
+                            description={appset.getText(
                               'vault.sure_delete',
                               select_vault_item.name
                             )}
@@ -144,13 +141,13 @@ export default function Vault() {
                                   await getAllVaultItem(appstore, appset.lang, messageApi)
                                 })
                                 .catch((err) => {
-                                  messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                                  messageApi.error(appset.getText(`err.${err.code}`), 5)
                                 })
                             }}
-                            okText={appset.lang.getText('ok')}
-                            cancelText={appset.lang.getText('cancel')}
+                            okText={appset.getText('ok')}
+                            cancelText={appset.getText('cancel')}
                           >
-                            <Button type="dashed">{appset.lang.getText('delete')}</Button>
+                            <Button type="dashed">{appset.getText('delete')}</Button>
                           </Popconfirm>
                         </Form.Item>
                       )}

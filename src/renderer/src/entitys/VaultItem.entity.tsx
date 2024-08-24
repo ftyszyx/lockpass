@@ -97,14 +97,14 @@ export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
       render: (props: FiledProps) => {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       },
-      edit_rules: [{ required: true, message: lang.getText('input.rule.bank') }]
+      edit_rules: [{ required: true, message: lang?.getText('input.rule.bank') }]
     },
     {
       field_name: 'card_number',
       render: (props: FiledProps) => {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       },
-      edit_rules: [{ required: true, message: lang.getText('input.rule.card_number') }]
+      edit_rules: [{ required: true, message: lang?.getText('input.rule.card_number') }]
     },
     {
       field_name: 'card_password',
@@ -113,12 +113,12 @@ export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
           <MyInputWrapper inputElement={Input.Password} show_type={props.show_type} {...props} />
         )
       },
-      edit_rules: [{ required: true, message: lang.getText('input.rule.password') }]
+      edit_rules: [{ required: true, message: lang?.getText('input.rule.password') }]
     }
   ]
 }
 
-export function NotePasswordFieldList(_: LangItem): FieldInfo[] {
+export function NotePasswordFieldList(): FieldInfo[] {
   return [
     {
       field_name: 'note_text',

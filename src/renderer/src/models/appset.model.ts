@@ -4,7 +4,7 @@ import { create } from '@renderer/libs/state'
 
 export interface AppsetStore {
   initOK: boolean
-  lang: LangItem
+  lang: LangItem | null
   setLang: (lang: LangItem) => void
   SetInitOK: (ok: boolean) => void
   getText: (str: string, ...args: any[]) => string
@@ -12,7 +12,8 @@ export interface AppsetStore {
   fold_menu: boolean
   ToggleFoldMenu: () => void
 }
-export const use_appset = create<AppsetStore>((set, _) => {
+
+export const use_appset = create<AppsetStore>((set) => {
   ConsoleLog.LogInfo('use_appset create')
   return {
     fold_menu: false,

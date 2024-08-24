@@ -5,18 +5,22 @@ import { ColumnType, getColumTypeCategory } from '@common/decorator/db.decorator
 import AppModel from '@main/models/app.model'
 
 export class BaseDb {
-  public show_log: boolean = true
+  public show_log: boolean = false
   // Add a comment to explain the purpose of the empty constructor
   constructor() {
     // Empty constructor
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected async run(_: string): Promise<void> {
     return Promise.resolve()
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected async all(_: string): Promise<any[]> {
     return Promise.resolve([])
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected each(_: string): Promise<any> {
     return Promise.resolve()
   }

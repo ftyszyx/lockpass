@@ -68,7 +68,7 @@ export default function InputArr(props: InputArrProps) {
           className=" cursor-pointer flex flex-row space-x-1 items-center bg-gray-300 rounded-lg border-[1px] px-3 py-1"
         >
           <Icon type={Icon_type.icon_add} />
-          <div>{appset.lang.getText('inputarr.addmore')}</div>
+          <div>{appset.getText('inputarr.addmore')}</div>
         </div>
       )}
     </div>

@@ -72,7 +72,7 @@ export default function QuickSearch() {
 
   async function autoInput(info: VaultItem) {
     await ipc_call_normal(webToManMsg.AutoFill, info).catch((err) => {
-      messageApi.error(appset.lang.getText(`err.${err.code}`))
+      messageApi.error(appset.getText(`err.${err.code}`))
     })
   }
 
@@ -220,7 +220,7 @@ export default function QuickSearch() {
         onChange={(event: any) => {
           setSearch(event.target.value)
         }}
-        placeholder={appset.lang?.getText('quicksearch.input.placeholder')}
+        placeholder={appset.getText('quicksearch.input.placeholder')}
       ></Input>
       <div className="flex flex-col">
         {!show_detail &&
