@@ -96,7 +96,7 @@ export default function Home() {
             onChange={(page) => {
               setCurPage(page)
             }}
-            onShowSizeChange={(current, size) => {
+            onShowSizeChange={(_, size) => {
               setPageNum(size)
             }}
           />

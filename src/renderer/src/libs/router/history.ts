@@ -15,7 +15,8 @@ function getCurLocation(window: Window, globalHistory: Window['history']): Locat
     key: (globalHistory.state && globalHistory.state.key) || 'default'
   }
 }
-export function createPath(window: Window, to: LocationDef): string {
+
+export function createPath(_: Window, to: LocationDef): string {
   const { search, hash } = to
   let pathname = to.pathname || '/'
   if (search && search !== '?') pathname += search.charAt(0) === '?' ? search : '?' + search

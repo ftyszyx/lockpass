@@ -143,7 +143,7 @@ export const GetPasswordFilelist = (type: VaultItemType, lang: LangItem): FieldI
     case VaultItemType.Card:
       return CardPasswordFieldList(lang)
     case VaultItemType.NoteBook:
-      return NotePasswordFieldList(lang)
+      return NotePasswordFieldList()
     default:
       return []
   }

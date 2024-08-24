@@ -1,5 +1,5 @@
 import { pathToRegexp, Key } from 'path-to-regexp'
-import { MatchOption, MatchRes } from 'kl_router'
+import { MatchOption, MatchRes } from './index'
 export function PathMatch(
   path: string = '',
   url: string = '',

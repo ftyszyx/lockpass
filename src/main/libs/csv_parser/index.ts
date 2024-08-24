@@ -25,51 +25,9 @@ interface Options {
    * @default '"'
    */
   escape?: string | number
-
-  /**
-     * Specifies the headers to use. Headers define the property key for each value in a CSV row. If no `headers` option is provided, `csv-parser` will use the first line in a CSV file as the header specification.
-     *
-     * If `false`, specifies that the first row in a data file does _not_ contain headers, and instructs the parser to use the row index as the key for each row.
-     *
-     * Suppose you have a CSV file `data.csv` which contains the data:
-     *
-     * ```
-NAME,AGE
-Daffy Duck,24
-Bugs Bunny,22
-```
-     * Using `headers: false` with the data from `data.csv` would yield:
-     * ```
-[
-  { '0': 'Daffy Duck', '1': 24 },
-  { '0': 'Bugs Bunny', '1': 22 }
-]
-```
-     */
-  readonly headers?: ReadonlyArray<string> | boolean
-
-  /**
-   * A function that can be used to modify the values of each header. Return `null` to remove the header, and it's column, from the results.
-   *
-   * @example
-   *
-   * csv({
-   *   mapHeaders: ({ header, index }) => header.toLowerCase()
-   * });
-   */
+  headers?: string[]
   readonly mapHeaders?: (args: { header: string; index: number }) => string | null
-
-  /**
-   * A function that can be used to modify the value of each column value.
-   *
-   * @example
-   *
-   * csv({
-   *   mapValues: ({ header, index, value }) => value.toLowerCase()
-   * });
-   */
   readonly mapValues?: (args: { header: string; index: number; value: any }) => any
-
   /**
    * Specifies a single-character string to denote the end of a line in a CSV file.
    *
@@ -129,25 +87,18 @@ class CsvParser extends Transform {
   state?: any
   private _prev?: Buffer | null
   private options: Options
-  headers: Pick<Options, 'headers'>
+  headers: string[]
   constructor(opts: Options = {}) {
     super({ objectMode: true, highWaterMark: 16 })
-
-    if (Array.isArray(opts)) opts = { headers: opts }
-
     const options = Object.assign({}, defaults, opts)
-
     options.customNewline = options.newline !== defaults.newline
-
     for (const key of ['newline', 'quote', 'separator']) {
       if (typeof options[key] !== 'undefined') {
         ;[options[key]] = Buffer.from(options[key])
       }
     }
-
     // if escape is not defined on the passed options, use the end value of quote
-    options.escape = (opts || {}).escape ? Buffer.from(options.escape)[0] : options.quote
-
+    this.options.escape = (opts || {}).escape ? Buffer.from(options.escape)[0] : options.quote
     this.state = {
       empty: options.raw ? Buffer.alloc(0) : '',
       escaped: false,
@@ -157,18 +108,10 @@ class CsvParser extends Transform {
       rowLength: 0,
       quoted: false
     }
-
     this._prev = null
-
-    if (options.headers === false) {
-      // enforce, as the column length check will fail if headers:false
-      options.strict = false
-    }
-
-    if (options.headers || options.headers === false) {
+    if (options.headers) {
       this.state.first = false
     }
-
     this.options = options
     this.headers = options.headers
   }
@@ -298,8 +241,7 @@ class CsvParser extends Transform {
   }
 
   writeRow(cells) {
-    const headers = this.headers === false ? cells.map((value, index) => index) : this.headers
-
+    const headers = this.headers
     const row = cells.reduce((o, cell, index) => {
       const header = headers[index]
       if (header === null) return o // skip columns
@@ -310,7 +252,6 @@ class CsvParser extends Transform {
       }
       return o
     }, {})
-
     this.push(row)
   }
 
@@ -320,7 +261,7 @@ class CsvParser extends Transform {
     cb()
   }
 
-  _transform(data, enc, cb) {
+  _transform(data, _, cb) {
     if (typeof data === 'string') {
       data = Buffer.from(data)
     }
