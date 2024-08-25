@@ -71,7 +71,6 @@ export class WindowBase {
     return
   }
   initWin() {
-    console.log('initwin', this.url)
     this.window = new BrowserWindow({
       width: this.witdth,
       height: this.height,

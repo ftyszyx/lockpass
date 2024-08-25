@@ -122,7 +122,6 @@ class AppModel {
   }
 
   initWin() {
-    console.log('initWin')
     this.mainwin = new MainWindow()
     this.mainwin.win.on('ready-to-show', () => {
       this.mainwin.show()
