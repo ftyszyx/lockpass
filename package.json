@@ -2,8 +2,8 @@
   "name": "lockpass",
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
-  "main": "./out/main/index.js",
-  "author": "example.com",
+  "main": ".vite/build/index.js",
+  "author": "zyx",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",

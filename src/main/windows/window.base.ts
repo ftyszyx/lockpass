@@ -1,5 +1,5 @@
 import { BrowserWindow, screen } from 'electron'
-import icon from '../../../resources/icon.png?asset'
+import icon from '../../../resources/icon.png'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
@@ -71,6 +71,7 @@ export class WindowBase {
     return
   }
   initWin() {
+    console.log('initwin', this.url)
     this.window = new BrowserWindow({
       width: this.witdth,
       height: this.height,
@@ -89,10 +90,11 @@ export class WindowBase {
       }
     })
     if (is.dev) this.window.webContents.openDevTools({ mode: 'detach' })
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      this.window.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/${this.url}`)
+    console.log('url', MAIN_WINDOW_VITE_DEV_SERVER_URL)
+    if (is.dev && MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+      this.win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
     } else {
-      this.window.loadFile(join(__dirname, `../renderer/${this.url}`))
+      this.win.loadFile(join(__dirname, `../render/${this.url}`))
     }
     this.window.on('close', (event) => {
       event.preventDefault()

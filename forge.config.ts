@@ -44,7 +44,7 @@ const config: ForgeConfig = {
       ],
       renderer: [
         {
-          name: 'main_window',
+          name: 'index',
           config: 'vite.renderer.config.ts'
         }
       ]

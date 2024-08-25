@@ -1356,6 +1356,7 @@ class WindowBase {
     return;
   }
   initWin() {
+    console.log("initwin", this.url);
     this.window = new electron.BrowserWindow({
       width: this.witdth,
       height: this.height,
@@ -1374,10 +1375,11 @@ class WindowBase {
       }
     });
     if (utils.is.dev) this.window.webContents.openDevTools({ mode: "detach" });
-    if (utils.is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-      this.window.loadURL(`${process.env["ELECTRON_RENDERER_URL"]}/${this.url}`);
+    console.log("url", MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    if (utils.is.dev && MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+      this.win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
     } else {
-      this.window.loadFile(path.join(__dirname, `../renderer/${this.url}`));
+      this.win.loadFile(path.join(__dirname, `../render/${this.url}`));
     }
     this.window.on("close", (event) => {
       event.preventDefault();
@@ -2620,6 +2622,7 @@ const _AppModel = class _AppModel {
     }, 1e3);
   }
   initWin() {
+    console.log("initWin");
     this.mainwin = new MainWindow();
     this.mainwin.win.on("ready-to-show", () => {
       this.mainwin.show();
