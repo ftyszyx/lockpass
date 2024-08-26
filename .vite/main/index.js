@@ -1374,8 +1374,8 @@ class WindowBase {
       }
     });
     if (utils.is.dev) this.window.webContents.openDevTools({ mode: "detach" });
-    if (utils.is.dev && "http://localhost:5174") {
-      this.win.loadURL(`${"http://localhost:5174"}/${this.url}`);
+    if (utils.is.dev && "http://localhost:5173") {
+      this.win.loadURL(`${"http://localhost:5173"}/${this.url}`);
     } else {
       this.win.loadFile(path.join(__dirname, `../render/${this.url}`));
     }
