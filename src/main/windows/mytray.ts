@@ -53,7 +53,7 @@ export class MyTray {
         }
       },
       {
-        label: this.getLabelStr(LangHelper.getString('tray.menu.quit'), null),
+        label: this.getLabelStr('quit', null),
         click: () => {
           app.quit()
         }
