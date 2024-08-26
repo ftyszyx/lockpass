@@ -11,4 +11,4 @@ crashs
 /backup
 third_lib/robotjs/build
 backup_aliyun
-.vite/build/index.js
+.vite

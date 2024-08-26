@@ -1,6 +1,6 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["./*", "src/main/**/*", "src/preload/**/*","src/common/**/*"],
+  "include": ["./*.ts","resources/*.ts", "src/main/**/*", "src/preload/**/*","src/common/**/*"],
   "compilerOptions": {
     "composite": true,
     "target": "ES2022",
