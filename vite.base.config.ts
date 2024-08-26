@@ -7,6 +7,8 @@ export const builtins = ['electron', ...builtinModules.map((m) => [m, `node:${m}
 
 export const external = [
   ...builtins,
+  'robotjs',
+  'sqlite3',
   ...Object.keys('dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {})
 ]
 

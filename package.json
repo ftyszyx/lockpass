@@ -11,7 +11,7 @@
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
-    "start": "chcp 65001 && electron-forge start -- --inspect-electron",
+    "start": "chcp 65001 && cross-env DEBUG=electron-packager electron-forge start -- --inspect-electron",
     "make": "npm run typecheck&& cross-env DEBUG=electron-packager electron-forge make",
     "publish": "electron-forge publish",
     "get:ver": "electron -v&&electron -a",

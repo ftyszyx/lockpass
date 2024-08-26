@@ -6,11 +6,14 @@ import { MakerRpm } from '@electron-forge/maker-rpm'
 import { VitePlugin } from '@electron-forge/plugin-vite'
 import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
+// import AutoUnpackNativesPlugin from '@electron-forge/plugin-auto-unpack-natives'
 
 const config: ForgeConfig = {
   packagerConfig: {
     name: 'lockpass',
-    asar: true
+    asar: {
+      unpack: '**/node_modules/robotjs/**/*,node_modules/sqlite3/**/*'
+    }
   },
   rebuildConfig: {
     onlyModules: ['robotjs']
@@ -49,6 +52,9 @@ const config: ForgeConfig = {
         }
       ]
     }),
+    // new AutoUnpackNativesPlugin({
+    //   modules: ['robotjs', 'sqlite3']
+    // }),
     // Fuses are used to enable/disable various Electron functionality
     // at package time, before code signing the application
     new FusesPlugin({

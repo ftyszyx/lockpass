@@ -32,3 +32,6 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+{"asar":{"unpack":"{**/\*.node,**/\*.node}"},
+{"asar":{"unpack":"**/node_modules/robotjs/**/_,node_modules/sqlite3/\*\*/_"},
