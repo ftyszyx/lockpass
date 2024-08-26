@@ -29,6 +29,7 @@ export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
 }
 
 export function getDefineKeys(names: string[]) {
+  console.log('names:', names)
   const define: { [name: string]: VitePluginRuntimeKeys } = {}
 
   return names.reduce((acc, name) => {

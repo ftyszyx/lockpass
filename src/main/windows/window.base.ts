@@ -89,9 +89,8 @@ export class WindowBase {
       }
     })
     if (is.dev) this.window.webContents.openDevTools({ mode: 'detach' })
-    console.log('url', MAIN_WINDOW_VITE_DEV_SERVER_URL)
     if (is.dev && MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      this.win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL)
+      this.win.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/${this.url}`)
     } else {
       this.win.loadFile(join(__dirname, `../render/${this.url}`))
     }

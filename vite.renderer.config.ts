@@ -9,11 +9,12 @@ export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>
   const { root, mode, forgeConfigSelf } = forgeEnv
   const name = forgeConfigSelf.name ?? ''
+  console.log('name:', name, root, mode)
 
   return {
-    root,
+    root: './src/renderer',
     mode,
-    base: './',
+    base: '',
     build: {
       outDir: `.vite/renderer/${name}`
     },

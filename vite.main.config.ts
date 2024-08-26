@@ -10,6 +10,7 @@ export default defineConfig((env) => {
   const define = getBuildDefine(forgeEnv)
   const config: UserConfig = {
     build: {
+      outDir: '.vite/main',
       lib: {
         entry: forgeConfigSelf.entry!,
         fileName: () => '[name].js',
