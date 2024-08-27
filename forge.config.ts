@@ -12,7 +12,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     name: 'lockpass',
     asar: {
-      unpack: '**/node_modules/robotjs/**/*,node_modules/sqlite3/**/*'
+      unpack: '*.node'
     }
   },
   rebuildConfig: {
