@@ -36,19 +36,21 @@ export class FileLogWriter {
       this.asyncWriteQueue.push(text)
       this.writeAyncNext()
       return
+    } else {
+      fs.appendFileSync(this.path, text, { encoding: 'utf-8' })
     }
   }
 }
 
 export enum LogLevel {
-  Debug,
-  Info,
-  Error
+  Debug = 0,
+  Info = 1,
+  Error = 2
 }
 
 export class Log {
   static logWriter: FileLogWriter
-  static log_level: LogLevel = 0
+  static log_level: LogLevel = LogLevel.Info
   static time_zone: string = 'Asia/Shanghai'
   static locale: string = 'zh-CN'
 
@@ -60,7 +62,7 @@ export class Log {
     }
     const log_path = `${log_dir}/lockpass-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.log`
     // console.log(`log path: ${log_path}`)
-    Log.logWriter = new FileLogWriter(log_path, true)
+    Log.logWriter = new FileLogWriter(log_path, false)
   }
 
   static Debug(...args) {

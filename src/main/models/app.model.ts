@@ -1,5 +1,5 @@
 import { MyEncode } from '@main/libs/my_encode'
-import { Log } from '@main/libs/log'
+import { Log, LogLevel } from '@main/libs/log'
 import { app, dialog, crashReporter, globalShortcut, screen, BrowserWindow } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
@@ -39,6 +39,7 @@ export interface AppSet {
   sql_ver: number
   app_ver: number
   cur_user_uid?: number
+  log_level?: LogLevel
   aliyun_data?: AliyunData
 }
 
@@ -79,14 +80,26 @@ class AppModel {
   }
 
   Quit() {
+    Log.Info('app quit begin')
     AppEvent.emit(AppEventType.APPQuit)
+    this.db_helper.CloseDB()
     globalShortcut.unregisterAll()
     if (this.checkInterval) clearInterval(this.checkInterval)
+    Log.Info('app quit')
     app.quit()
   }
 
   async init() {
+    Log.Info('app init begin')
     Log.initialize()
+    Log.Info('init set')
+    process.on('uncaughtException', (err) => {
+      Log.Exception(err, 'uncaughtException')
+      console.log(err.stack)
+    })
+    this._initSet()
+    Log.log_level = this.set.log_level || LogLevel.Info
+    Log.Info('change log level:', Log.log_level)
     Log.Info('init myencode')
     this.myencode = new MyEncode()
     Log.Info('init entity')
@@ -101,7 +114,6 @@ class AppModel {
     await this.db_helper.initOneTable(this.vault.entity)
     await this.db_helper.initOneTable(this.vaultItem.entity)
     await this.db_helper.initOneTable(this.appInfo.entity)
-    this._initSet()
     this.ali_drive = new AliDrive()
     this.initLang()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))

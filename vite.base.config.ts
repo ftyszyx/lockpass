@@ -14,11 +14,13 @@ export const external = [
 
 export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
   const { root, mode, command } = env
+  console.log('mode', mode)
 
   return {
     root,
     mode,
     build: {
+      sourcemap: mode == 'development',
       // Prevent multiple builds from interfering with each other.
       emptyOutDir: false,
       // 🚧 Multiple builds may conflict.
@@ -31,9 +33,7 @@ export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
 }
 
 export function getDefineKeys(names: string[]) {
-  console.log('names:', names)
   const define: { [name: string]: VitePluginRuntimeKeys } = {}
-
   return names.reduce((acc, name) => {
     const NAME = name.toUpperCase()
     const keys: VitePluginRuntimeKeys = {
