@@ -15,8 +15,7 @@
     "make": "npm run typecheck&& cross-env DEBUG=electron-packager electron-forge make",
     "publish": "electron-forge publish",
     "get:ver": "electron -v&&electron -a",
-    "tailwind": "tailwindcss -i ./src/renderer/src/assets/tailwind.css -o ./src/renderer/src/assets/tailwind_out.css --watch",
-    "rebuild": "electron-rebuild -f -o robotjs "
+    "tailwind": "tailwindcss -i ./src/renderer/src/assets/tailwind.css -o ./src/renderer/src/assets/tailwind_out.css --watch"
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
@@ -25,7 +24,7 @@
     "antd": "^5.17.4",
     "path-to-regexp": "^6.2.2",
     "reflect-metadata": "^0.2.2",
-    "robotjs": "file:third_lib/robotjs",
+    "robotjs_addon": "^0.6.1",
     "sqlite3": "^5.1.7",
     "zip-lib": "^1.0.4"
   },

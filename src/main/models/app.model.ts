@@ -13,7 +13,7 @@ import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
 import { initAllApi } from '@main/api/index.api'
-import robot from 'robotjs'
+import robot from 'robotjs_addon'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import {
