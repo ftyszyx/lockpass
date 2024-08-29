@@ -90,7 +90,6 @@ class AppModel {
   }
 
   async init() {
-    Log.Info('app init begin')
     Log.initialize()
     Log.Info('init set')
     process.on('uncaughtException', (err) => {

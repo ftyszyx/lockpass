@@ -89,8 +89,8 @@ export class WindowBase {
       }
     })
     if (is.dev) this.window.webContents.openDevTools({ mode: 'detach' })
-    if (is.dev && MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      this.win.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/${this.url}`)
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      this.win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/${this.url}`)
     } else {
       this.win.loadFile(join(__dirname, `../render/${this.url}`))
     }
