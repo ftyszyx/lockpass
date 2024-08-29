@@ -1,10 +1,11 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["./*.ts","resources/*.ts", "src/main/**/*", "src/preload/**/*","src/common/**/*"],
+  "include": ["./*.ts","resources/*.ts", "electron.vite.config.*","src/main/**/*", "src/preload/**/*","src/common/**/*"],
   "compilerOptions": {
     "composite": true,
     "target": "ES2022",
     "emitDecoratorMetadata":true,
+        "types": ["electron-vite/node"],
     "experimentalDecorators": true,
     "strictNullChecks": false,
     "baseUrl": ".",
