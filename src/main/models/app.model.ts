@@ -78,7 +78,6 @@ class AppModel {
 
   async init() {
     Log.initialize()
-    Log.Info('init set')
     process.on('uncaughtException', (err) => {
       Log.Exception(err, 'uncaughtException')
       console.log(err.stack)
