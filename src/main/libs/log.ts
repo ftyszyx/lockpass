@@ -2,6 +2,7 @@ import os from 'os'
 import fs from 'fs'
 import { PathHelper } from './path'
 import { ConsoleColor } from '@common/gloabl'
+import { LogLevel } from '@common/entitys/log.entity'
 
 export class FileLogWriter {
   asyncWriteQueue = []
@@ -42,12 +43,6 @@ export class FileLogWriter {
   }
 }
 
-export enum LogLevel {
-  Debug = 0,
-  Info = 1,
-  Error = 2
-}
-
 export class Log {
   static logWriter: FileLogWriter
   static log_level: LogLevel = LogLevel.Info
@@ -82,6 +77,15 @@ export class Log {
     Log.logWriter.writeLine(logstr)
     console.log(logstr)
     // console.log(`${ConsoleColor.FgGreen}${logstr}${ConsoleColor.FgGreen}`)
+  }
+
+  static Device(...args) {
+    if (Log.log_level > LogLevel.Device) {
+      return
+    }
+    const logstr = `[Device] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')}`
+    Log.logWriter.writeLine(logstr)
+    console.log(logstr)
   }
 
   static Error(...args) {

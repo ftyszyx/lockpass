@@ -43,7 +43,7 @@ export class AliDrive {
       console.log('code', code)
       await this.getTokenByCode(code)
     })
-    this._authData = AppModel.getInstance().aliyunData
+    this._authData = AppModel.getInstance().set.aliyunData
   }
 
   get parent_dir_name() {
@@ -95,7 +95,7 @@ export class AliDrive {
     this._authData.expires_in = Math.floor(Date.now() / 1000) + this._authData.expires_in
     this._authData.refresh_token_expire_time = Math.floor(Date.now() / 1000) + 90 * 24 * 60 * 60
     this._authData.drive_info = await this.getDriveInfo()
-    AppModel.getInstance().setAliyunData(this._authData)
+    AppModel.getInstance().set.setAliyunData(this._authData)
     Log.Info('get authData ok', JSON.stringify(this._authData))
     if (code) {
       ShowInfoToMain(LangHelper.getString('mydropmenu.aliyunauthok'))

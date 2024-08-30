@@ -1,5 +1,5 @@
 import { MyEncode } from '@main/libs/my_encode'
-import { Log, LogLevel } from '@main/libs/log'
+import { Log } from '@main/libs/log'
 import { app, dialog, crashReporter, globalShortcut, screen, BrowserWindow } from 'electron'
 import { ValutService as VaultService } from '@main/services/vault.service'
 import { UserService } from '@main/services/user.service'
@@ -8,7 +8,7 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import { APP_VER_CODE, Default_Lang, Icon_type, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
+import { Icon_type, VaultItemType } from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -29,19 +29,10 @@ import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
 import { AliDrive } from '@main/libs/ali_drive'
-import { AliyunData } from '@main/libs/ali_drive/def'
 import { ShowErrToMain } from '@main/libs/other.help'
 import { GetImportVaultName, str2csv } from '@common/help'
 import { ParseCsvFile } from '@main/libs/csv_parser'
-
-export interface AppSet {
-  lang: string
-  sql_ver: number
-  app_ver: number
-  cur_user_uid?: number
-  log_level?: LogLevel
-  aliyun_data?: AliyunData
-}
+import { AppSetModel } from './app.set'
 
 class AppModel {
   public mainwin: MainWindow | null = null
@@ -59,14 +50,8 @@ class AppModel {
   public db_helper: SqliteHelper = new SqliteHelper()
   private _set_path: string = ''
   private checkInterval: NodeJS.Timeout | null = null
+  set: AppSetModel | null = null
   static App_quit = false
-
-  private set: AppSet = {
-    lang: Default_Lang,
-    app_ver: APP_VER_CODE,
-    sql_ver: SQL_VER_CODE,
-    cur_user_uid: 0
-  }
 
   private static instance: AppModel
   public static getInstance() {
@@ -98,9 +83,10 @@ class AppModel {
       Log.Exception(err, 'uncaughtException')
       console.log(err.stack)
     })
-    this._initSet()
-    Log.log_level = this.set.log_level || LogLevel.Info
-    Log.Info('change log level:', Log.log_level)
+    this.set = new AppSetModel()
+    Log.Info('init win')
+    this.initWin()
+    initAllApi()
     Log.Info('init myencode')
     this.myencode = new MyEncode()
     Log.Info('init entity')
@@ -116,15 +102,12 @@ class AppModel {
     await this.db_helper.initOneTable(this.vaultItem.entity)
     await this.db_helper.initOneTable(this.appInfo.entity)
     this.ali_drive = new AliDrive()
-    this.initLang()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
     crashReporter.start({
       productName: 'MyElectron',
       companyName: 'MyCompany',
       uploadToServer: false
     })
-    this.initWin()
-    initAllApi()
     this.initGlobalShortcut()
     app.on('browser-window-blur', (_, windows: BrowserWindow) => {
       AppEvent.emit(AppEventType.windowBlur, windows)
@@ -143,64 +126,10 @@ class AppModel {
     this.my_tray = new MyTray()
   }
 
-  private _initSet() {
-    this._set_path = path.join(PathHelper.getHomeDir(), 'set.json')
-    if (!fs.existsSync(this._set_path)) {
-      fs.writeFileSync(this._set_path, JSON.stringify(this.set))
-    } else {
-      const saveinfo = JSON.parse(fs.readFileSync(this._set_path).toString())
-      let have_new_property = false
-      Object.keys(this.set).forEach((key) => {
-        const initvalue = saveinfo[key]
-        if (initvalue === undefined || initvalue === null) {
-          saveinfo[key] = this.set[key]
-          have_new_property = true
-        }
-      })
-      this.set = saveinfo
-      if (have_new_property) {
-        this.saveSet()
-      }
-    }
-    // Log.Info('set:', JSON.stringify(this.set))
-  }
-
-  public saveSet() {
-    fs.writeFileSync(this._set_path, JSON.stringify(this.set))
-  }
-
-  public changeLang(lang: string) {
-    this.set.lang = lang
-    this.initLang()
-    this.saveSet()
-  }
-
-  public get aliyunData() {
-    return this.set.aliyun_data
-  }
-
-  public setAliyunData(data: AliyunData) {
-    this.set.aliyun_data = data
-    this.saveSet()
-  }
-
-  public GetLastUserId() {
-    if (this.set.cur_user_uid && this.set.cur_user_uid > 0) return this.set.cur_user_uid
-    return null
-  }
-
   public IsSystemInit() {
-    const lastuserid = this.GetLastUserId()
+    const lastuserid = this.set.GetLastUserId()
     if (lastuserid) return AppModel.getInstance().myencode.hasKey(lastuserid)
     return false
-  }
-
-  public CurLang() {
-    return this.set.lang
-  }
-
-  public initLang() {
-    LangHelper.setLang(this.set.lang)
   }
 
   private performLockCheck() {
@@ -223,12 +152,11 @@ class AppModel {
   }
 
   public Login(uid: number) {
-    this.set.cur_user_uid = uid
     this._logined = true
     this._lock = false
     const setinfo = this.user.userinfo.user_set as UserSetInfo
     this._lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
-    this.saveSet()
+    this.set.SetLastUserId(uid)
     this.initGlobalShortcut()
     AppEvent.emit(AppEventType.LoginOk)
   }

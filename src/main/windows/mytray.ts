@@ -1,7 +1,7 @@
 import { LangHelper } from '@common/lang'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import AppModel from '@main/models/app.model'
-import { app, Menu, Tray } from 'electron'
+import { Menu, Tray } from 'electron'
 import path from 'path'
 
 export class MyTray {

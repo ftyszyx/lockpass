@@ -48,7 +48,7 @@ export class UserService extends BaseService<User> {
       code: ApiRespCode.other_err,
       data: { user: null, has_init_key: false }
     }
-    const last_userid = AppModel.getInstance().GetLastUserId()
+    const last_userid = AppModel.getInstance().set.GetLastUserId()
     if (last_userid) {
       const user = await super.GetOne({ id: last_userid })
       if (user != null) {

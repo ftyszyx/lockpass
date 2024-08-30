@@ -33,7 +33,7 @@ const RootRouter = () => {
   const viewtype = GetCurViewType()
   ConsoleLog.LogInfo('RootRouter render', viewtype)
   return (
-    <BrowerRouter debug={false}>
+    <BrowerRouter debug={true}>
       {viewtype == renderViewType.Mainview ? (
         <Route>
           <Route path={PagePath.register} element={Login} match={{ end: true }} />

@@ -46,7 +46,8 @@ export enum webToManMsg {
   ExputCSV = 'ExputCSV',
   RestartApp = 'RestartApp',
   CloseDb = 'CloseDb',
-  OpenDb = 'OpenDb'
+  OpenDb = 'OpenDb',
+  getLogLevel = 'getLogLevel'
 }
 
 export enum MainToWebMsg {

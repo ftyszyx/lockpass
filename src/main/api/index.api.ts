@@ -5,14 +5,15 @@ import { WhereDef } from '@common/entitys/db.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { VaultImportType, VaultItem } from '@common/entitys/vault_item.entity'
 import { renderViewType } from '@common/entitys/app.entity'
+import { Log } from '@main/libs/log'
 
 export function initAllApi() {
   //system
   ipcMain.handle(webToManMsg.SetLang, (_, lang) => {
-    AppModel.getInstance().changeLang(lang)
+    AppModel.getInstance().set.changeLang(lang)
   })
   ipcMain.handle(webToManMsg.GetLang, () => {
-    return AppModel.getInstance().CurLang()
+    return AppModel.getInstance().set.CurLang()
   })
 
   ipcMain.handle(webToManMsg.isLock, () => {
@@ -108,6 +109,11 @@ export function initAllApi() {
 
   ipcMain.handle(webToManMsg.OpenDb, async () => {
     return await AppModel.getInstance().db_helper.OpenDb()
+  })
+
+  ipcMain.handle(webToManMsg.getLogLevel, () => {
+    // console.log('get log level', Log.log_level)
+    return Log.log_level
   })
 
   //user

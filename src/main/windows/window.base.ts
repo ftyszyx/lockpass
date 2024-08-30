@@ -93,7 +93,7 @@ export class WindowBase {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       this.win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/${this.url}`)
     } else {
-      this.win.loadFile(join(__dirname, `../render/${this.url}`))
+      this.win.loadFile(join(__dirname, `../renderer/${this.url}`))
     }
     this.window.on('close', (event) => {
       if (AppModel.App_quit) return

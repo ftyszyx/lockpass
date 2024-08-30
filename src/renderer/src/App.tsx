@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import RootRouter from './route'
-import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
+import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useEffect } from 'react'
 import { ConsoleLog } from './libs/Console'
 function App(): JSX.Element {
@@ -14,11 +14,16 @@ function App(): JSX.Element {
       if (type == 'error') messageApi.error(msg, duration)
       else if (type == 'info') messageApi.info(msg, duration)
     })
+    window.electron.ipcRenderer.invoke(webToManMsg.getLogLevel).then((level) => {
+      console.log('getLogLevel', level)
+      ConsoleLog.log_level = level
+    })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowMsg)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowMsgMain)
     }
   }, [])
+
   ConsoleLog.LogInfo('develop', import.meta.env.DEV)
   return (
     <div>
