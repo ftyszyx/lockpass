@@ -1,6 +1,6 @@
 import { BrowserWindow, screen } from 'electron'
 import icon from '../../../resources/icon.png?asset'
-import { join } from 'path'
+import path from 'path'
 import { is } from '@electron-toolkit/utils'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
@@ -17,6 +17,7 @@ export class WindowBase {
   protected haveFrame: boolean = true //是否无边框
   protected ontop: boolean = false
   protected wintype: string = 'normal'
+  base_path: string = ''
 
   private window: BrowserWindow | null = null
 
@@ -85,15 +86,19 @@ export class WindowBase {
       autoHideMenuBar: true,
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
-        preload: join(__dirname, '../preload/index.js'),
+        preload: path.join(__dirname, '../preload/index.js'),
         sandbox: false
       }
     })
-    if (is.dev) this.window.webContents.openDevTools({ mode: 'detach' })
+    if (is.dev || AppModel.getInstance().set.set.open_dev)
+      this.window.webContents.openDevTools({ mode: 'detach' })
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      this.win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/${this.url}`)
+      this.base_path = `${process.env['ELECTRON_RENDERER_URL']}/${this.url}`
+      this.win.loadURL(this.base_path)
     } else {
-      this.win.loadFile(join(__dirname, `../renderer/${this.url}`))
+      const urlpath = path.join(__dirname, `../renderer/${this.url}`)
+      this.base_path = path.resolve(urlpath)
+      this.win.loadFile(this.base_path)
     }
     this.window.on('close', (event) => {
       if (AppModel.App_quit) return

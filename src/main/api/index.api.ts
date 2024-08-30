@@ -34,6 +34,12 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.setSize(width, height)
   })
 
+  ipcMain.handle(webToManMsg.GetWinBasePath, (_, viewtype: renderViewType) => {
+    if (viewtype == renderViewType.Mainview) return AppModel.getInstance().mainwin?.base_path
+    else if (viewtype == renderViewType.Quickview) return AppModel.getInstance().quickwin?.base_path
+    return null
+  })
+
   ipcMain.handle(webToManMsg.UpdateTrayMenu, (_, setinfo) => {
     AppModel.getInstance().my_tray?.updateMenu(setinfo)
   })

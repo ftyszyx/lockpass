@@ -43,6 +43,7 @@ export type BrowerRouterProps = {
   children?: React.ReactNode
   relative_path?: boolean //route 节点是否使用相对路径
   debug?: boolean
+  base_path?: string
 }
 
 export type HashRouteProps = {

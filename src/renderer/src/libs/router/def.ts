@@ -1,5 +1,6 @@
 export interface HistoryOptions {
   debug?: boolean
+  basepath?: string
 }
 
 export enum Action {

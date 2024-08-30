@@ -13,6 +13,7 @@ export interface AppSetInfo {
   app_ver: number
   cur_user_uid?: number
   log_level?: LogLevel
+  open_dev?: boolean
   aliyun_data?: AliyunData
 }
 

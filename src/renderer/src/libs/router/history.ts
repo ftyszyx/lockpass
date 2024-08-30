@@ -6,7 +6,8 @@ function createKey() {
 }
 
 function getCurLocation(window: Window, globalHistory: Window['history']): LocationDef {
-  const { pathname, search, hash } = window.location
+  let { pathname, search, hash } = window.location
+  // console.log('windows location', window.location, pathname, search, hash)
   return {
     pathname,
     search,

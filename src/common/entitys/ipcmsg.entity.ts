@@ -25,6 +25,7 @@ export enum webToManMsg {
 
   //other
   ResizeWindow = 'ResizeWindow',
+  GetWinBasePath = 'GetWinBasePath',
   isLock = 'isLock',
   LockApp = 'LockApp',
   UnLockApp = 'UnLockApp',

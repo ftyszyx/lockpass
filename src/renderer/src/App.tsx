@@ -18,6 +18,7 @@ function App(): JSX.Element {
       console.log('getLogLevel', level)
       ConsoleLog.log_level = level
     })
+
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowMsg)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowMsgMain)
