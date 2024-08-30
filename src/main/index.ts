@@ -4,6 +4,7 @@ import AppModel from './models/app.model'
 import { SYS_TEM_NAME } from '@common/gloabl'
 import path from 'path'
 import { AppEvent, AppEventType } from './entitys/appmain.entity'
+import { Log } from './libs/log'
 
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId('com.lockpass.app')
@@ -44,20 +45,22 @@ setDefaultProtocol(SYS_TEM_NAME)
 const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
   app.quit()
+  process.exit(0)
 } else {
   app.on('second-instance', (_, commandLine) => {
     const mainwin = AppModel.getInstance().mainwin
     if (mainwin) {
       if (mainwin.win.isMinimized()) mainwin.win.restore()
+      mainwin.show()
       mainwin.win.focus()
     }
     const url = commandLine.at(-1)
-    console.log('second-instance', url)
+    Log.Info('second-instance', url)
     AppEvent.emit(AppEventType.DeepLink, url)
   })
 
   app.on('open-url', (_, url) => {
-    console.log('open-url', url)
+    Log.Info('open-url', url)
     if (BrowserWindow.getAllWindows().length === 0) {
       AppModel.getInstance().initWin()
     }

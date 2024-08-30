@@ -1,9 +1,9 @@
 {
   "name": "lockpass",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "a password manager",
   "main": "./out/main/index.js",
-  "author": "zyx",
+  "author": "zhang.yuxin",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
@@ -15,7 +15,7 @@
     "dev": "chcp 65001 && electron-vite dev --inspect",
     "build": "npm run typecheck && electron-vite build",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
+    "build:win": "electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
     "get:ver": "electron -v&&electron -a",
