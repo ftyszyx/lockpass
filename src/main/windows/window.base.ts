@@ -59,6 +59,7 @@ export class WindowBase {
       this.win.webContents.send(MainToWebMsg.DataChange, type)
     })
     AppEvent.on(AppEventType.APPQuit, () => {
+      if (is.dev) this.win.webContents.closeDevTools()
       this.close()
     })
     AppEvent.on(AppEventType.LoginOut, () => {
@@ -95,6 +96,7 @@ export class WindowBase {
       this.win.loadFile(join(__dirname, `../render/${this.url}`))
     }
     this.window.on('close', (event) => {
+      if (AppModel.App_quit) return
       event.preventDefault()
       this.hide()
     })

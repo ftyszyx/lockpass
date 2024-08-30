@@ -59,6 +59,7 @@ class AppModel {
   public db_helper: SqliteHelper = new SqliteHelper()
   private _set_path: string = ''
   private checkInterval: NodeJS.Timeout | null = null
+  static App_quit = false
 
   private set: AppSet = {
     lang: Default_Lang,
@@ -80,6 +81,7 @@ class AppModel {
   }
 
   Quit() {
+    AppModel.App_quit = true
     Log.Info('app quit begin')
     AppEvent.emit(AppEventType.APPQuit)
     this.db_helper.CloseDB()

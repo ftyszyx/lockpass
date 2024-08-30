@@ -55,7 +55,7 @@ export class MyTray {
       {
         label: this.getLabelStr('quit', null),
         click: () => {
-          app.quit()
+          AppModel.getInstance().Quit()
         }
       }
     ])
