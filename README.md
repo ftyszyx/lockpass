@@ -1,128 +1,129 @@
-# 一个密码管理器
+# A password manager
 
-## **背景**
+· English · [中文](./README-zh_CN.md)
 
-互联网时代，账号密码太多，之前的方法是保存在一个记事本中。但缺乏安全性，搜索也不方便。
+## **background**
 
-市面上有不少密码管理工具，但都需要服务器。但密码这种敏感信息，存在别人服务器上总感觉不放心。
+In the Internet era, there are too many account passwords. The previous method was to save them in a notepad. But it lacks security and is inconvenient to search.
 
-心想基本功能只是一个加密存储和搜索，实现起来应该不难，于是自己参考1password做了一个。
+There are many password management tools on the market, but they all require servers. But I always feel uneasy if sensitive information like passwords is stored on someone else's server.
 
-目前功能尚不完善，我会在使用过程中不断优化。大家也可以试用一下，有什么建议可以提。
+I thought that the basic function is just encrypted storage and search, which should not be difficult to implement, so I made one by referring to 1password.
 
-我的目标目前很简单：
+At present, the function is not perfect, and I will continue to optimize it during use. You can also give it a try and give me any suggestions.
 
-1、只个人使用，不搞什么分享，协作这些复杂的完意
+My goals are currently simple:
 
-2、不要服务器，只提供网盘备份和恢复功能。自己的数据自己掌握
+1. For personal use only, no sharing or collaboration is required.
 
-## **原理介绍**
+2. No server is required, only network disk backup and recovery functions are provided. Control your own data
 
-1、类似1password的双密码机制：主密码（用户自己记住）+key(软件生成长度为25的随机密码）
+## **Principle Introduction**
 
-2、机密信息使用aes-256-cbc加密算法。密钥是 sha256(主密码+key)
+1. A dual password mechanism similar to 1password: master password (remembered by the user) + key (the software generates a random password with a length of 25)
 
-3、数据存在本地，使用sqlite数据库
+2. Confidential information uses the aes-256-cbc encryption algorithm. The key is sha256 (master password + key)
 
-## **功能介绍**
+3. The data is stored locally and uses sqlite database.
 
-1、 保密项目支持：账号、银行卡、笔记
+## **Function introduction**
 
-2、多个保密项目可以关联到一个保险库中
+1. Confidential project support: account number, bank card, notes
 
-3、多账号支持
+2. Multiple confidential projects can be associated with one vault
 
-4、随机密码生成工具
+3. Multiple account support
 
-5、自动输入密码功能
+4. Random password generation tool
 
-6、本地备份和恢复功能
+5. Automatically enter password function
 
-7、云盘备份和恢复功能（目前只支持阿里云盘）
+6. Local backup and recovery function
 
-8、csv导入（支持chrome和edge)
+7. Cloud disk backup and recovery function (currently only supports Alibaba cloud disk)
 
-## **演示效果**
+8. csv import (supports chrome and edge)
 
-### **保险库**
+## **Demonstration effect**
+
+### **Vault**
+
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/J2JSbjsYpots6zxdObtcLQjNnvg.gif)
 
+### **Add confidential information**
 
-### **增保密信息**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/WIpwbuzdpov0QBx3gfhcv5hmnJd.gif)
 
+### **Confidential Information Preview**
 
-### **保密信息预览**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/PaRDbyqASo5B6rx57X2cfdd0nTe.gif)
 
+### **Confidential Information Edit**
 
-### **保密信息编辑**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/VZtRbLDijoYEqAx02CccGMeMnhd.gif)
 
+### **User setting function**
 
-### **用户设置功能**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/Ud6ibdHu7o4PCSxPeuicyVfXngd.gif)
 
+### **Password generation**
 
-### **密码生成**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/R0yGbj9laoiboRx2fZ8ce9Nmnld.gif)
 
+### **tray tray**
 
-### **tray托盘**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/O9iNbgRj3ok9YbxggjdcwlZynDS.png)
 
-
-### **自动输入**
+### **Automatic input**
 
 ![image]![image](https://ftyszyx.github.io/feishu-vitepress/assets/ARvUbClubozD6txiiN9cneAJnRh.gif)
 
+### **csv import**
 
-### ** csv导入**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/Z7RObWhM0ouHS3xy4vKcvdV1nbg.gif)
 
+### **csv export**
 
-### **csv导出**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/X170bJ7sAoigCQxBD5HcmunnnRg.gif)
 
+### **Multiple accounts**
 
-### **多账号**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/PL7hbSig9oE2dyxlGXzc4Ep2neg.gif)
 
+### **Network disk backup and restore**
 
-### **网盘备份和还原**
 ![image](https://ftyszyx.github.io/feishu-vitepress/assets/EVN3bnF86oCDlExf0WNcnFTdnSg.gif)
 
+## **Development Notes**
 
-## **开发说明**
-
-### **下载代码**
+### **Download Code**
 
 ```text
 git clone https://github.com/ftyszyx/lockpass.git
 ```
 
-### **安装依赖**
+### **Install dependencies**
 
 ```text
 npm install
 ```
 
-### **运行**
+### **Run**
 
 ```text
-npm run dev
+npm rundev
 ```
 
-## **使用的库**
+## **Library used**
 
-### **打包**
+### **Pack**
 
 [electron-vite](https://github.com/alex8088/electron-vite)
 
-<u>electron-builder 打包</u>
+<u>electron-builder packaging</u>
 
 <u>electron-builder github</u>
 
-其实打包流程就是 electron vite先把main render preload下的脚本用vite打包到out目录下 然后electron-build把资源打成asar
+In fact, the packaging process is that electron vite first packages the script under main render preload into the out directory using vite, and then electron-build types the resources into asar.
 
-## **遇到的问题汇总**
+## **Summary of problems encountered**
