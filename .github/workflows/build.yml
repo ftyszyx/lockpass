@@ -33,11 +33,12 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           architecture: ${{ matrix.host }}
-      - name: Install dependencies
+      - name: Install npm dependencies
         run: npm install
-      - name: install snapcraft
+      - name: install linux dependencies
         if: contains(matrix.os, 'ubuntu')
-        run: sudo snap install snapcraft --classic
+        run: |
+          sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils
       - name: Build
         run: npm run build
       - name: release
