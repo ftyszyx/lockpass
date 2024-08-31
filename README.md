@@ -1,8 +1,6 @@
-# lockpass
+# 一个密码管理器
 
-一个密码管理器
-
-## 背景
+## **背景**
 
 互联网时代，账号密码太多，之前的方法是保存在一个记事本中。但缺乏安全性，搜索也不方便。
 
@@ -18,7 +16,7 @@
 
 2、不要服务器，只提供网盘备份和恢复功能。自己的数据自己掌握
 
-## 原理介绍
+## **原理介绍**
 
 1、类似1password的双密码机制：主密码（用户自己记住）+key(软件生成长度为25的随机密码）
 
@@ -26,8 +24,9 @@
 
 3、数据存在本地，使用sqlite数据库
 
-## 功能介绍
-1、 保密项目支持：账号、银行卡、笔记 
+## **功能介绍**
+
+1、 保密项目支持：账号、银行卡、笔记
 
 2、多个保密项目可以关联到一个保险库中
 
@@ -43,82 +42,86 @@
 
 8、csv导入（支持chrome和edge)
 
-## 演示效果
+## **演示效果**
 
-### 保险库
+### **保险库**
 
-![image](https://github.com/user-attachments/assets/5c38fbe4-a6b8-4155-9ace-5ee35f7321e3)
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/J2JSbjsYpots6zxdObtcLQjNnvg.gif" src-width="918" class="markdown-img m-auto" src-height="614" align="center"/>
 
-### 新增保密信息
-![image](https://github.com/user-attachments/assets/b4bd1623-70f5-43b4-a67b-3ce64c1afa00)
+### **增保密信息**
 
-### 保密信息预览
-![image](https://github.com/user-attachments/assets/9436a368-2317-42a5-8f84-38bdfe8041b3)
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/WIpwbuzdpov0QBx3gfhcv5hmnJd.gif" src-width="874" class="markdown-img m-auto" src-height="654" align="center"/>
 
-### 保密信息编辑
-![image](https://github.com/user-attachments/assets/96409b64-9eb1-46c3-8814-d745e53d919d)
+### **保密信息预览**
 
-### 用户设置功能
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/PaRDbyqASo5B6rx57X2cfdd0nTe.gif" src-width="974" class="markdown-img m-auto" src-height="728" align="center"/>
 
-![image](https://github.com/user-attachments/assets/2bd1482e-3a24-438a-8f8d-d60ea5d990a3)
+### **保密信息编辑**
 
-### 密码生成
-![image](https://github.com/user-attachments/assets/1c25532d-60b6-4625-94fd-985b30317269)
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/VZtRbLDijoYEqAx02CccGMeMnhd.gif" src-width="878" class="markdown-img m-auto" src-height="652" align="center"/>
 
-### tray托盘
-![image](https://github.com/user-attachments/assets/779a50da-1113-46f3-bf4f-545af8f332a9)
+### **用户设置功能**
 
-### 自动输入
-![image](https://github.com/user-attachments/assets/638e0ec0-5e9d-4fd1-8d65-12142fe50642)
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/Ud6ibdHu7o4PCSxPeuicyVfXngd.gif" src-width="872" class="markdown-img m-auto" src-height="612" align="center"/>
 
-### 本地备份还原
- 
+### **密码生成**
 
-### csv导入
-![image](https://github.com/user-attachments/assets/26732d81-58b8-48c5-a0ed-b25e357137f8)
-### csv导出
-![image](https://github.com/user-attachments/assets/cf4899a8-7415-42da-82ea-cd25457c0d59)
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/R0yGbj9laoiboRx2fZ8ce9Nmnld.gif" src-width="1028" class="markdown-img m-auto" src-height="656" align="center"/>
 
-### 多账号
-![image](https://github.com/user-attachments/assets/f5cb3cce-0b58-4b36-bc39-1922359a507e)
+### **tray托盘**
 
-### 网盘备份和还原
-![image](https://github.com/user-attachments/assets/db42d5a7-cabc-4ec3-8be1-58072ad60462)
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/O9iNbgRj3ok9YbxggjdcwlZynDS.png" src-width="244" class="markdown-img m-auto" src-height="140" align="center"/>
 
+### **自动输入**
 
-## 开发说明 
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/ARvUbClubozD6txiiN9cneAJnRh.gif" src-width="864" class="markdown-img m-auto" src-height="436" align="center"/>
 
-### 下载代码
+### ** csv导入**
 
-```
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/Z7RObWhM0ouHS3xy4vKcvdV1nbg.gif" src-width="876" class="markdown-img m-auto" src-height="656" align="center"/>
+
+### **csv导出**
+
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/X170bJ7sAoigCQxBD5HcmunnnRg.gif" src-width="874" class="markdown-img m-auto" src-height="644" align="center"/>
+
+### **多账号**
+
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/PL7hbSig9oE2dyxlGXzc4Ep2neg.gif" src-width="860" class="markdown-img m-auto" src-height="642" align="center"/>
+
+### **网盘备份和还原**
+
+<img src="https://ftyszyx.github.io/feishu-vitepress/assets/EVN3bnF86oCDlExf0WNcnFTdnSg.gif" src-width="858" class="markdown-img m-auto" src-height="636" align="center"/>
+
+## **开发说明**
+
+### **下载代码**
+
+```text
 git clone https://github.com/ftyszyx/lockpass.git
 ```
 
-### 安装依赖
+### **安装依赖**
 
-```
+```text
 npm install
 ```
 
-### 运行
-```
+### **运行**
+
+```text
 npm run dev
 ```
 
-## 使用的库
+## **使用的库**
 
+### **打包**
 
-### 打包
-![electron vite](https://github.com/alex8088/electron-vite)
+[electron-vite](https://github.com/alex8088/electron-vite)
 
- 
-[electron-builder 打包](https://www.electron.build/index.html)
+<u>electron-builder 打包</u>
 
-[electron-builder github](https://github.com/electron-userland/electron-builder)
+<u>electron-builder github</u>
 
-其实打包流程就是
-electron vite先把main render preload下的脚本用vite打包到out目录下
-然后electron-build把资源打成asar
+其实打包流程就是 electron vite先把main render preload下的脚本用vite打包到out目录下 然后electron-build把资源打成asar
 
-## 遇到的问题汇总
-
+## **遇到的问题汇总**
