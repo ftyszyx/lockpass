@@ -39,11 +39,9 @@ jobs:
         run: pip install setuptools
 
       - name: Install dependencies
-        run: npm install --build-from-source
-
+        run: npm install
       - name: Build
         run: npm run build
-
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
