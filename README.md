@@ -45,52 +45,53 @@
 ## **演示效果**
 
 ### **保险库**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/J2JSbjsYpots6zxdObtcLQjNnvg.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/J2JSbjsYpots6zxdObtcLQjNnvg.gif" src-width="918" class="markdown-img m-auto" src-height="614" align="center"/>
 
 ### **增保密信息**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/WIpwbuzdpov0QBx3gfhcv5hmnJd.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/WIpwbuzdpov0QBx3gfhcv5hmnJd.gif" src-width="874" class="markdown-img m-auto" src-height="654" align="center"/>
 
 ### **保密信息预览**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/PaRDbyqASo5B6rx57X2cfdd0nTe.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/PaRDbyqASo5B6rx57X2cfdd0nTe.gif" src-width="974" class="markdown-img m-auto" src-height="728" align="center"/>
 
 ### **保密信息编辑**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/VZtRbLDijoYEqAx02CccGMeMnhd.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/VZtRbLDijoYEqAx02CccGMeMnhd.gif" src-width="878" class="markdown-img m-auto" src-height="652" align="center"/>
 
 ### **用户设置功能**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/Ud6ibdHu7o4PCSxPeuicyVfXngd.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/Ud6ibdHu7o4PCSxPeuicyVfXngd.gif" src-width="872" class="markdown-img m-auto" src-height="612" align="center"/>
 
 ### **密码生成**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/R0yGbj9laoiboRx2fZ8ce9Nmnld.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/R0yGbj9laoiboRx2fZ8ce9Nmnld.gif" src-width="1028" class="markdown-img m-auto" src-height="656" align="center"/>
 
 ### **tray托盘**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/O9iNbgRj3ok9YbxggjdcwlZynDS.png)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/O9iNbgRj3ok9YbxggjdcwlZynDS.png" src-width="244" class="markdown-img m-auto" src-height="140" align="center"/>
 
 ### **自动输入**
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/ARvUbClubozD6txiiN9cneAJnRh.gif" src-width="864" class="markdown-img m-auto" src-height="436" align="center"/>
+![image]![image](https://ftyszyx.github.io/feishu-vitepress/assets/ARvUbClubozD6txiiN9cneAJnRh.gif)
+
 
 ### ** csv导入**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/Z7RObWhM0ouHS3xy4vKcvdV1nbg.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/Z7RObWhM0ouHS3xy4vKcvdV1nbg.gif" src-width="876" class="markdown-img m-auto" src-height="656" align="center"/>
 
 ### **csv导出**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/X170bJ7sAoigCQxBD5HcmunnnRg.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/X170bJ7sAoigCQxBD5HcmunnnRg.gif" src-width="874" class="markdown-img m-auto" src-height="644" align="center"/>
 
 ### **多账号**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/PL7hbSig9oE2dyxlGXzc4Ep2neg.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/PL7hbSig9oE2dyxlGXzc4Ep2neg.gif" src-width="860" class="markdown-img m-auto" src-height="642" align="center"/>
 
 ### **网盘备份和还原**
+![image](https://ftyszyx.github.io/feishu-vitepress/assets/EVN3bnF86oCDlExf0WNcnFTdnSg.gif)
 
-<img src="https://ftyszyx.github.io/feishu-vitepress/assets/EVN3bnF86oCDlExf0WNcnFTdnSg.gif" src-width="858" class="markdown-img m-auto" src-height="636" align="center"/>
 
 ## **开发说明**
 
