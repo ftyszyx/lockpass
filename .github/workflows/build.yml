@@ -35,6 +35,9 @@ jobs:
           architecture: ${{ matrix.host }}
       - name: Install dependencies
         run: npm install
+      - name: install snapcraft
+        if: contains(matrix.os, 'ubuntu')
+        run: sudo snap install snapcraft --classic
       - name: Build
         run: npm run build
       - name: release
