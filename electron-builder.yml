@@ -23,7 +23,7 @@ asarUnpack:
 win:
   executableName: lockpass
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-${version}-${platform}-${arch}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -36,7 +36,7 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}-${version}-${platform}-${arch}.${ext}
 linux:
   target:
     - AppImage
@@ -45,7 +45,7 @@ linux:
   maintainer: electronjs.org
   category: Utility
 appImage:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}-${version}-${platform}-${arch}.${ext}
 npmRebuild: false
 publish:
   provider: github
