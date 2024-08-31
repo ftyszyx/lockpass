@@ -373,9 +373,11 @@ class AppModel {
       await this.ali_drive.UploadFile(filename, zip_file)
     } catch (e: any) {
       Log.Exception(e, 'upload file error:', e.message)
+      fs.unlinkSync(zip_file)
       ShowErrToMain(LangHelper.getString('alidrive.uploaderror'))
       return null
     }
+    fs.unlinkSync(zip_file)
     Log.Info('upload file ok')
     return `${this.ali_drive.parent_dir_name}/${filename}`
   }
@@ -390,6 +392,7 @@ class AppModel {
     const backup_file_path = path.join(backup_path_dir, backup_file_name)
     await this.ali_drive.downloadFile(backup_file_name, backup_file_path)
     const res = await this.RecoverSystemFromBackupFile(backup_file_path)
+    fs.unlinkSync(backup_file_path)
     if (res) Log.Info('recover system from aliyun ok')
     return res
   }
