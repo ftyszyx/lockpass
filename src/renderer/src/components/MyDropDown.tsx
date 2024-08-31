@@ -96,7 +96,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                         okText: appset.getText('ok'),
                         cancelText: appset.getText('cancel'),
                         onOk: async () => {
-                          await ipc_call_normal(webToManMsg.QuitAPP)
+                          await ipc_call_normal(webToManMsg.RestartApp)
                         }
                       })
                     }
@@ -212,7 +212,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                       okText: appset.getText('ok'),
                       cancelText: appset.getText('cancel'),
                       onOk: async () => {
-                        await ipc_call_normal(webToManMsg.QuitAPP)
+                        await ipc_call_normal(webToManMsg.RestartApp)
                       }
                     })
                   }

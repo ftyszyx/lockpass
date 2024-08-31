@@ -96,4 +96,8 @@ export class AppSetModel {
   public initLang() {
     LangHelper.setLang(this.set.lang)
   }
+
+  get set_path() {
+    return this._set_path
+  }
 }

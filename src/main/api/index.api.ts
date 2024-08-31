@@ -107,6 +107,7 @@ export function initAllApi() {
 
   ipcMain.handle(webToManMsg.RestartApp, () => {
     app.relaunch()
+    AppModel.getInstance().Quit()
   })
 
   ipcMain.handle(webToManMsg.CloseDb, async () => {

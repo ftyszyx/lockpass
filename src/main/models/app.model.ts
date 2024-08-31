@@ -48,7 +48,6 @@ class AppModel {
   private _logined: boolean = false
   public user: UserService | null = null
   public db_helper: SqliteHelper = new SqliteHelper()
-  private _set_path: string = ''
   private checkInterval: NodeJS.Timeout | null = null
   set: AppSetModel | null = null
   static App_quit = false
@@ -256,7 +255,7 @@ class AppModel {
       await this.db_helper.CloseDB()
       const dbpath = this.db_helper.getDbPath()
       await this.BackupFile(dbpath, backup_path)
-      await this.BackupFile(this._set_path, backup_path)
+      await this.BackupFile(this.set.set_path, backup_path)
       await this.BackupFile(this.myencode.getKeyPath(), backup_path)
       const zip_file = path.join(backup_path_dir, `${back_dir_name}.zip`)
       await zl.archiveFolder(backup_path, zip_file)
@@ -333,7 +332,7 @@ class AppModel {
       const restoreAll = () => {
         const dbpath = this.db_helper.getDbPath()
         if (restoreFile(dbpath) == false) return false
-        if (restoreFile(this._set_path) == false) return false
+        if (restoreFile(this.set.set_path) == false) return false
         if (restoreFile(this.myencode.getKeyPath()) == false) return false
         return true
       }
