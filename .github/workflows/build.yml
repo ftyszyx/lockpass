@@ -33,11 +33,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           architecture: ${{ matrix.host }}
-
-      - name: add setuptools for python 3.12
-        if: matrix.os != 'macos-m1'
-        run: pip install setuptools
-
       - name: Install dependencies
         run: npm install
       - name: Build
