@@ -8,7 +8,7 @@ import {
   GetPasswordRenderDetailList,
   IsVaultItemMatchSearch,
   PasswordRenderDetailKey
-} from '@renderer/entitys/VaultItem.entity'
+} from '@renderer/entitys/Vault_item.entity'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'

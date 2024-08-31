@@ -19,21 +19,22 @@
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
     "get:ver": "electron -v&&electron -a",
+    "release": "electron-builder --publish always",
     "tailwind": "tailwindcss -i ./src/renderer/src/assets/tailwind.css -o ./src/renderer/src/assets/tailwind_out.css --watch"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.4.0",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "electron-updater": "^6.1.7",
-    "antd": "^5.17.4",
-    "path-to-regexp": "^6.2.2",
     "reflect-metadata": "^0.2.2",
     "robotjs_addon": "^0.6.1",
     "sqlite3": "^5.1.7",
     "zip-lib": "^1.0.4"
   },
   "devDependencies": {
+    "antd": "^5.17.4",
+    "path-to-regexp": "^6.2.2",
+    "@ant-design/icons": "^5.4.0",
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",

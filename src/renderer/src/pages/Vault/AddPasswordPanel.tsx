@@ -96,11 +96,13 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
               props.init_info ||
               ({
                 icon: VaultItemTypeIcon[`icon_${select_type}`],
-                name: appset.getText(`password_name_${select_type}`)
+                name: appset.getText(``)
               } as VaultItem)
             }
           >
-            <PaswordDetail passwordType={select_type} modal_type={ModalType.Add}></PaswordDetail>
+            <div className=" overflow-auto " style={{ height: 'calc(60vh)' }}>
+              <PaswordDetail passwordType={select_type} modal_type={ModalType.Add}></PaswordDetail>
+            </div>
           </Form>
         </Modal>
       )}

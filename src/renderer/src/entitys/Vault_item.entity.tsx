@@ -57,7 +57,7 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
       render: (props) => {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       },
-      edit_rules: [{ required: true, message: lang.getText('input.rule.username') }]
+      edit_rules: [{ required: true, message: lang.getText('vaultitem.rule.username') }]
     },
     {
       field_name: 'password',
@@ -71,7 +71,7 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
           />
         )
       },
-      edit_rules: [{ required: true, message: lang.getText('input.rule.password') }]
+      edit_rules: [{ required: true, message: lang.getText('vaultitem.rule.password') }]
     },
     {
       field_name: 'urls',
@@ -97,14 +97,14 @@ export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
       render: (props: FiledProps) => {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       },
-      edit_rules: [{ required: true, message: lang?.getText('input.rule.bank') }]
+      edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.card_company') }]
     },
     {
       field_name: 'card_number',
       render: (props: FiledProps) => {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       },
-      edit_rules: [{ required: true, message: lang?.getText('input.rule.card_number') }]
+      edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.card_number') }]
     },
     {
       field_name: 'card_password',
@@ -113,7 +113,44 @@ export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
           <MyInputWrapper inputElement={Input.Password} show_type={props.show_type} {...props} />
         )
       },
-      edit_rules: [{ required: true, message: lang?.getText('input.rule.password') }]
+      edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.card_password') }]
+    },
+    {
+      field_name: 'card_cvc',
+      render: (props: FiledProps) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      }
+    },
+    {
+      field_name: 'card_holder',
+      render: (props: FiledProps) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      }
+    },
+    {
+      field_name: 'card_pub_site',
+      render: (props: FiledProps) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      }
+    },
+    // {
+    //   field_name: 'card_valid_time',
+    //   render: (props: FiledProps) => {
+    //     return (
+    //       <MyInputWrapper
+    //         is_date
+    //         inputElement={DatePicker}
+    //         show_type={props.show_type}
+    //         {...props}
+    //       />
+    //     )
+    //   }
+    // },
+    {
+      field_name: 'card_zip_code',
+      render: (props: FiledProps) => {
+        return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
+      }
     }
   ]
 }

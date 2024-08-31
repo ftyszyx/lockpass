@@ -52,6 +52,16 @@ export class CardPasswordInfo extends VaultItemInfoBase {
   card_number: string
   @Column({ type: 'VARCHAR' })
   card_password: string
+  @Column({ type: 'VARCHAR' })
+  card_holder: string
+  @Column({ type: 'VARCHAR' })
+  card_pub_site: string
+  @Column({ type: 'VARCHAR' })
+  card_cvc: string
+  @Column({ type: 'VARCHAR' })
+  card_valid_time: string
+  @Column({ type: 'VARCHAR' })
+  card_zip_code: string
 }
 
 export class NoteTextPasswordInfo extends VaultItemInfoBase {

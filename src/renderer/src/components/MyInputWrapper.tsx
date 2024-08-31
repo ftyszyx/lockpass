@@ -15,7 +15,9 @@ interface MyInputProps<InputPropsT> {
   placeholder?: string
   inputElement: React.ElementType
   is_password?: boolean
+  is_date?: boolean
 }
+
 export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPropsT>): JSX.Element {
   const appset = use_appset() as AppsetStore
   const [hoverState, setHoverState] = useState(false)
@@ -85,7 +87,14 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
       <props.inputElement
         ref={inputRef}
         value={props.value}
-        onChange={props.onChange}
+        onChange={(value, value2) => {
+          // console.log('value', value, value2)
+          if (props.is_date) {
+            props.onChange(value2)
+          } else {
+            props.onChange(value)
+          }
+        }}
         {...props.inputProps}
         {...getPasswordVisible()}
         readOnly={props.show_type == ModalType.View}

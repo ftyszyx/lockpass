@@ -2,13 +2,23 @@ appId: com.lockpass.app
 productName: lockpass
 directories:
   buildResources: build
+protocols:
+  name: lockpass
+  schemes:
+    - lockpass
+  # role: Editor
 files:
+  # - '!node_modules/**/*'
   - 'out/**/*'
   - 'resources/**/*'
   - 'package.json'
 
+electronLanguages:
+  - en-US
+  - zh-CN
 asarUnpack:
   - resources/**
+  - '**/*.node'
 
 win:
   executableName: lockpass
@@ -38,7 +48,6 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

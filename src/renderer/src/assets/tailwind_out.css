@@ -706,6 +706,10 @@ video {
   height: 20px !important;
 }
 
+.h-\[25px\] {
+  height: 25px !important;
+}
+
 .h-\[300px\] {
   height: 300px !important;
 }
@@ -728,10 +732,6 @@ video {
 
 .h-screen {
   height: 100vh !important;
-}
-
-.h-\[25px\] {
-  height: 25px !important;
 }
 
 .min-h-\[280px\] {
@@ -1103,10 +1103,6 @@ video {
 .py-2 {
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
-}
-
-.text-center {
-  text-align: center !important;
 }
 
 .font-sans {

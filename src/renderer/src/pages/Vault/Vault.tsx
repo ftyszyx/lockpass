@@ -75,7 +75,10 @@ export default function Vault() {
             }}
           ></VaultSide>
           {/*  right side content*/}
-          <div className="flex flex-grow  overflow-auto bg-">
+          <div
+            className="flex flex-grow  overflow-auto  "
+            style={{ height: 'calc(100vh - 100px)' }}
+          >
             {select_vault_item && (
               <div className=" flex flex-col w-full">
                 <div className="flex flex-row-reverse   p-4 border-b-2 border-solid border-gray-200">
