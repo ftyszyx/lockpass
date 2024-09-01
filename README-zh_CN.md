@@ -127,3 +127,15 @@ npm run dev
 其实打包流程就是 electron vite先把main render preload下的脚本用vite打包到out目录下 然后electron-build把资源打成asar
 
 ## **遇到的问题汇总**
+
+## **todo**
+
+1、程序更新
+
+2、银行卡信息增加过期日期选择
+
+3、Linux 打包异常问题
+
+4、覆盖安装不要把配置文件删除
+
+5、修改主密码
