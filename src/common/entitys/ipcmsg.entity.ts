@@ -62,5 +62,6 @@ export enum MainToWebMsg {
   vaultItemChange = 'vaultItemChange',
   DataChange = 'DataChange',
   ShowVaulteItem = 'ShowVaulteItem',
-  AliyunAuthOk = 'AliyunAuthOk'
+  AliyunAuthOk = 'AliyunAuthOk',
+  LangChange = 'LangChange'
 }

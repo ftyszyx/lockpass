@@ -62,6 +62,7 @@ class AppModel {
 
   constructor() {
     //empty
+    return
   }
 
   Quit() {

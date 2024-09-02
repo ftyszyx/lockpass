@@ -48,7 +48,7 @@ export default function AdminSet() {
       {appstore.cur_user && appstore.cur_user.user_set && (
         <>
           {/* left menu */}
-          <div className=" w-[150px] flex flex-col border-solid border-r-2 border-gray-300">
+          <div className=" w-[250px] flex flex-col border-solid border-r-2 border-gray-300">
             {Object.keys(SetMenuItem).map((item) => {
               return (
                 <div
@@ -74,7 +74,6 @@ export default function AdminSet() {
               form={form}
               initialValues={appstore.cur_user.user_set as UserSetInfo}
               onFieldsChange={async () => {
-                console.log('field change')
                 if (select_item == SetMenuItem.normal) {
                   await onSave()
                 }

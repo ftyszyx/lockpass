@@ -109,6 +109,7 @@ export class UserService extends BaseService<User> {
     if (this.userinfo && this.userinfo.id == item.id) {
       const old_set = this.userinfo.user_set as UserSetInfo
       if (old_set.normal_lang_set != item.user_set.normal_lang_set) {
+        AppModel.getInstance().set.changeLang(item.user_set.normal_lang_set)
         AppEvent.emit(AppEventType.LangChange, item.user_set.normal_lang_set)
       }
       this.userinfo = item
