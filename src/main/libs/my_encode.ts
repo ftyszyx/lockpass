@@ -50,6 +50,14 @@ export class MyEncode {
     this._pass_hash = null
   }
 
+  getCurPassHashStr() {
+    return this._pass_hash
+  }
+
+  setCurPassHashStr(hash: Buffer) {
+    this._pass_hash = hash
+  }
+
   public hasKey(userid: number) {
     return this._set.users.some((item) => item.uid == userid)
   }

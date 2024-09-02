@@ -151,7 +151,7 @@ export class BaseDb {
     return await this._runSql(sql_str)
   }
 
-  public async UpdateOne(entity: BaseEntity, obj_old: any, obj: any): Promise<void> {
+  public async UpdateOne<T extends BaseEntity>(entity: T, obj_old: any, obj: any): Promise<void> {
     const table_name = entity[Table_Name_KEY]
     if (!obj.id) {
       Log.Error('update entity id is null')
@@ -167,6 +167,24 @@ export class BaseDb {
     }
     sql_str += update_sql
     sql_str += ` where id=${obj.id}`
+    return await this._exesql(sql_str)
+  }
+
+  public async UpdateMany(
+    entity: BaseEntity,
+    obj: any,
+    where: WhereDef<BaseEntity>
+  ): Promise<void> {
+    const table_name = entity[Table_Name_KEY]
+    let sql_str = 'update ' + table_name + ' set '
+    const keys = Reflect.ownKeys(entity)
+    const update_sql = this.getupdateOneSql(entity, obj, obj, keys as string[])
+    if (update_sql.trim().length == 0) {
+      Log.Info('no update value')
+      return
+    }
+    sql_str += update_sql
+    sql_str += ` where ${this.getWhreSql(entity, where)}`
     return await this._exesql(sql_str)
   }
 
@@ -215,8 +233,9 @@ export class BaseDb {
     return this._runSql(sql_str)
   }
 
-  private getWhreSql(obj: BaseEntity, where: WhereDef<BaseEntity>): string {
+  private getWhreSql(obj: BaseEntity, where: WhereDef<BaseEntity> | null): string {
     const serach_arr = []
+    if (where == null) return '1=1'
     Object.keys(where.cond).every((key) => {
       let search_val = where.cond[key]
       if (search_val == undefined || search_val == null)
@@ -228,6 +247,7 @@ export class BaseDb {
       }
       return true
     })
+    if (serach_arr.length == 0) return '1=1'
     return serach_arr.join(where.andor || ' AND ')
   }
 
@@ -239,16 +259,20 @@ export class BaseDb {
     return this._runSqlWithResult(obj, sql_str)
   }
 
-  public GetAll<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {
+  public GetMany<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {
     const table_name = obj[Table_Name_KEY]
     let sql_str = `select * from ${table_name}  `
     if (where) {
       sql_str = `${sql_str} where ${this.getWhreSql(obj, where)}`
+      if (where.page_size && where.page) {
+        const offset = where.page_size * (where.page - 1)
+        sql_str += ` limit ${where.page_size} offset ${offset}`
+      }
     }
     return this._runSqlWithResult(obj, sql_str)
   }
 
-  public async GetTotalCount(obj: BaseEntity, where: WhereDef<BaseEntity>): Promise<number> {
+  public async GetTotalCount<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<number> {
     const table_name = obj[Table_Name_KEY]
     const keystr = 'count(*)'
     let sql_str = `select ${keystr} from ${table_name} where `
@@ -256,19 +280,6 @@ export class BaseDb {
     if (this.show_log) Log.Info('runsql:', sql_str)
     const res = await this.all(sql_str)
     return res[0][keystr]
-  }
-
-  public async SearchAll<T extends BaseEntity>(obj: T, where: WhereDef<T>): Promise<T[]> {
-    const total_num = await this.GetTotalCount(obj, where)
-    if (total_num == 0) return []
-    const table_name = obj[Table_Name_KEY]
-    let sql_str = `select count(*) from ${table_name} where `
-    sql_str += this.getWhreSql(obj, where)
-    if (where.page_size && where.page) {
-      const offset = where.page_size * (where.page - 1)
-      sql_str += ` limit ${where.page_size} offset ${offset}`
-    }
-    return this._runSqlWithResult(obj, sql_str)
   }
 
   public async initOneTable(obj: BaseEntity) {

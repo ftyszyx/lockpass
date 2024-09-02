@@ -542,11 +542,36 @@ class AppModel {
       return false
     }
     this.db_helper.beginTransaction()
+    const old_hash = this.myencode.getCurPassHashStr()
     try {
-    } catch (e) {
+      this.myencode.setCurPassHashStr(check_res.hash)
+      const total = await this.db_helper.GetTotalCount(this.vaultItem.entity, {
+        cond: { user_id: userinfo.id }
+      })
+      const pagesize = 100
+      const page = Math.ceil(total / pagesize)
+      for (let i = 0; i < page; i++) {
+        const items = await this.db_helper.GetMany(this.vaultItem.entity, {
+          cond: { user_id: userinfo.id },
+          page_size: pagesize,
+          page: i
+        })
+
+        for (let j = 0; j < items.length; j++) {
+          const item = items[j]
+          if (item.vault_item_type == VaultItemType.Login) {
+            const logininfo = item.info as LoginPasswordInfo
+            logininfo.password = this.myencode.Encode(logininfo.password, new_password)
+            await this.vaultItem.UpdateOne(item)
+          }
+        }
+      }
+    } catch (e: any) {
       Log.Exception(e, 'change main pass error:')
       this.db_helper.rollbackTransaction()
       return false
+    } finally {
+      this.myencode.setCurPassHashStr(old_hash)
     }
     return true
   }

@@ -23,7 +23,7 @@ export class BaseService<Entity extends BaseEntity> {
   public async GetAll(): Promise<ApiResp<Entity[]>> {
     const res: ApiResp<Entity[]> = { code: ApiRespCode.SUCCESS, data: [] }
     try {
-      res.data = await AppModel.getInstance().db_helper.GetAll(this.entity, null)
+      res.data = await AppModel.getInstance().db_helper.GetMany(this.entity, null)
       res.data.forEach((item) => {
         this.fixEntityOut(item)
       })
@@ -35,7 +35,7 @@ export class BaseService<Entity extends BaseEntity> {
   }
 
   public async GetMany(where: WhereDef<Entity>): Promise<Entity[]> {
-    const items = await AppModel.getInstance().db_helper.GetAll(this.entity, where)
+    const items = await AppModel.getInstance().db_helper.GetMany(this.entity, where)
     items.forEach((item) => {
       this.fixEntityOut(item)
     })
