@@ -107,9 +107,14 @@ export class UserService extends BaseService<User> {
     item.user_set = JSON.parse((item.user_set as string) || '{}') as UserSetInfo
     item.user_set = { ...defaultUserSetInfo, ...item.user_set }
     if (this.userinfo && this.userinfo.id == item.id) {
+      const old_set = this.userinfo.user_set as UserSetInfo
+      if (old_set.normal_lang_set != item.user_set.normal_lang_set) {
+        AppEvent.emit(AppEventType.LangChange, item.user_set.normal_lang_set)
+      }
       this.userinfo = item
     }
   }
+
   override fixEntityIn(entity: User): void {
     entity.user_set = JSON.stringify(entity.user_set)
   }

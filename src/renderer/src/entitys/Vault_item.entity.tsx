@@ -133,19 +133,14 @@ export function CardPasswordFieldList(lang: LangItem): FieldInfo[] {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       }
     },
-    // {
-    //   field_name: 'card_valid_time',
-    //   render: (props: FiledProps) => {
-    //     return (
-    //       <MyInputWrapper
-    //         is_date
-    //         inputElement={DatePicker}
-    //         show_type={props.show_type}
-    //         {...props}
-    //       />
-    //     )
-    //   }
-    // },
+    {
+      field_name: 'card_valid_time',
+      render: (props: FiledProps) => {
+        return (
+          <MyInputWrapper is_date inputElement={Input} show_type={props.show_type} {...props} />
+        )
+      }
+    },
     {
       field_name: 'card_zip_code',
       render: (props: FiledProps) => {

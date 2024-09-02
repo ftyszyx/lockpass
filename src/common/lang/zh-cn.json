@@ -71,6 +71,7 @@
   "set.menu.local_shortcut": "软件快捷键",
   "set.menu.normal_autolock_time": "自动锁定需要等待系统闲置时间",
   "set.menu.normal_lock_with_pc": "随电脑锁定",
+  "set.menu.normal_lang_set": "修改系统语言",
   "set.menu.shortcut_global_quick_find": "全局快速查找",
   "set.menu.shortcut_global_quick_lock": "全局快速锁定",
   "set.menu.shortcut_global_open_main": "全局打开主界面",
@@ -210,6 +211,7 @@
   "mydropmenu.importcsv.content": "导入内容在新的保险库:{0}中",
   "mydropmenu.exportcsv.title": "导出csv成功",
   "mydropmenu.exportcsv.content": "文件路径:{0}",
+  "mydropmenu.set": "系统设置",
 
   "filelistselect.name": "文件名",
   "filelistselect.size": "大小",

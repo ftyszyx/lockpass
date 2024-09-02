@@ -13,6 +13,7 @@ export enum AppEventType {
   DataChange = 'DataChange',
   DeepLink = 'DeepLink',
   AliyuAuthOk = 'AliyuAuthOk',
-  APPQuit = 'APPQuit'
+  APPQuit = 'APPQuit',
+  LangChange = 'LangChange'
 }
 export const AppEvent = new EventEmitter()

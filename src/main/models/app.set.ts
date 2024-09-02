@@ -6,6 +6,8 @@ import { PathHelper } from '@main/libs/path'
 import { LogLevel } from '@common/entitys/log.entity'
 import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
+import AppModel from './app.model'
 
 export interface AppSetInfo {
   lang: string

@@ -10,6 +10,8 @@ import { BackupFileItem } from '@common/entitys/backup.entity'
 import ImportCsvSelectType from './ImportCsvSelectType'
 import { GetImportVaultName } from '@common/help'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { useHistory } from '@renderer/libs/router'
+import { PagePath } from '@common/entitys/page.entity'
 const { confirm } = Modal
 interface MyDropDownProps {
   className?: string
@@ -20,6 +22,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [showSelectImportType, setShowSelectImportType] = useState(false)
   const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
   const [messageApi, contextHolder] = message.useMessage()
+  const history = useHistory()
   const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
   return (
@@ -36,6 +39,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               await ipc_call_normal(webToManMsg.QuitAPP)
             } else if (item.key == 'importcsv') {
               setShowSelectImportType(true)
+            } else if (item.key == 'app_set') {
+              history.push(PagePath.Admin_set)
             } else if (item.key == 'exportcsv') {
               const res = await ipc_call_normal<string>(webToManMsg.ExputCSV)
               if (res == null) return
@@ -168,6 +173,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             {
               key: 'change_account',
               label: appset.getText('mydropmenu.change_account')
+            },
+            {
+              key: 'app_set',
+              label: appset.getText('mydropmenu.set')
             }
           ]
         }}

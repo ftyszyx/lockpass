@@ -63,6 +63,9 @@ export class WindowBase {
       if (is.dev) this.win.webContents.closeDevTools()
       this.close()
     })
+    AppEvent.on(AppEventType.LangChange, (lang: string) => {
+      this.win.webContents.send(MainToWebMsg.LangChange, lang)
+    })
     AppEvent.on(AppEventType.LoginOut, () => {
       this.lockapp()
       this.win.webContents.send(MainToWebMsg.LoginOut)

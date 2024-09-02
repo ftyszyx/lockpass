@@ -1,4 +1,4 @@
-import { LangItem } from '@common/lang'
+import { LangHelper, LangItem } from '@common/lang'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { create } from '@renderer/libs/state'
 
@@ -8,12 +8,13 @@ export interface AppsetStore {
   setLang: (lang: LangItem) => void
   SetInitOK: (ok: boolean) => void
   getText: (str: string, ...args: any[]) => string
+  ChangeLang: (lang: string) => void
   //menu
   fold_menu: boolean
   ToggleFoldMenu: () => void
 }
 
-export const use_appset = create<AppsetStore>((set) => {
+export const use_appset = create<AppsetStore>((set, get) => {
   ConsoleLog.LogInfo('use_appset create')
   return {
     fold_menu: false,
@@ -33,6 +34,11 @@ export const use_appset = create<AppsetStore>((set) => {
       set((state) => {
         return { ...state, lang: lang }
       })
+    },
+    ChangeLang(lang: string) {
+      lang = lang.toLowerCase()
+      LangHelper.setLang(lang)
+      get().setLang(LangHelper.lang)
     },
     getText(str, ...args) {
       return this.lang?.getText(str, ...args)

@@ -34,6 +34,7 @@ const Langs: LangItem[] = [
 export class LangHelper {
   private static _lang: LangItem | null
   static setLang(locale: string) {
+    locale = locale.toLowerCase()
     this._lang = Langs.find((item) => item.locale == locale)
   }
   static getString(msg: string, ...args: any[]) {

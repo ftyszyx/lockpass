@@ -74,6 +74,7 @@ export default function AdminSet() {
               form={form}
               initialValues={appstore.cur_user.user_set as UserSetInfo}
               onFieldsChange={async () => {
+                console.log('field change')
                 if (select_item == SetMenuItem.normal) {
                   await onSave()
                 }

@@ -128,16 +128,16 @@ export class BaseService<Entity extends BaseEntity> {
       }
       this.fixEntityIn(chang_values)
       await AppModel.getInstance().db_helper.UpdateOne(this.entity, old[0], chang_values)
-      if (return_new) {
-        const users = await AppModel.getInstance().db_helper.GetOne(this.entity, {
-          cond: { id: chang_values.id }
-        })
-        if (users && users.length > 0) {
-          this.fixEntityOut(users[0])
-          res.data = users[0]
-        } else {
-          res.code = ApiRespCode.data_not_find
+      const newInfos = await AppModel.getInstance().db_helper.GetOne(this.entity, {
+        cond: { id: chang_values.id }
+      })
+      if (newInfos && newInfos.length > 0) {
+        this.fixEntityOut(newInfos[0])
+        if (return_new) {
+          res.data = newInfos[0]
         }
+      } else {
+        res.code = ApiRespCode.data_not_find
       }
       this.AfterChange()
     } catch (e: any) {

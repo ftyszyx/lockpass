@@ -1,6 +1,7 @@
-import { Switch } from 'antd'
+import { Select, Switch } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import TimeSelect from '@renderer/components/TimeSelect'
+import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 export const NormalSetFiledList: FieldInfo[] = [
   {
@@ -15,6 +16,19 @@ export const NormalSetFiledList: FieldInfo[] = [
     render: (props: FiledProps) => {
       return <Switch {...props} />
     }
+  },
+  {
+    field_name: 'normal_lang_set',
+    render: (props: FiledProps) => {
+      // const appset = use_appset() as AppsetStore
+      return (
+        <Select {...props}>
+          <Select.Option value="zh-cn">简体中文</Select.Option>
+          <Select.Option value="en-us">English</Select.Option>
+        </Select>
+      )
+    }
+    // render:
   }
 ]
 export enum SetMenuItem {
