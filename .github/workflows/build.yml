@@ -39,6 +39,7 @@ jobs:
         if: contains(matrix.os, 'ubuntu')
         run: |
           sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils
+          sudo snap install snapcraft --classic
       - name: Build
         run: npm run build
       - name: release
