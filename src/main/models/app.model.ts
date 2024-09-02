@@ -61,6 +61,9 @@ class AppModel {
   }
 
   constructor() {
+    AppEvent.on(AppEventType.SystemLock, () => {
+      this.LockApp()
+    })
     //empty
     return
   }

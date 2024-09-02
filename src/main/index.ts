@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, powerMonitor } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import AppModel from './models/app.model'
 import { APP_NAME } from '@common/gloabl'
@@ -22,6 +22,16 @@ app.whenReady().then(async () => {
       AppModel.getInstance().initWin()
     }
   })
+})
+
+powerMonitor.on('suspend', () => {
+  Log.Info('app suspend')
+  AppEvent.emit(AppEventType.SystemLock)
+})
+
+powerMonitor.on('lock-screen', () => {
+  Log.Info('app lock screen')
+  AppEvent.emit(AppEventType.SystemLock)
 })
 
 app.on('window-all-closed', () => {

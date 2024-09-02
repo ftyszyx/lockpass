@@ -14,6 +14,7 @@ export enum AppEventType {
   DeepLink = 'DeepLink',
   AliyuAuthOk = 'AliyuAuthOk',
   APPQuit = 'APPQuit',
-  LangChange = 'LangChange'
+  LangChange = 'LangChange',
+  SystemLock = 'SystemLock'
 }
 export const AppEvent = new EventEmitter()
