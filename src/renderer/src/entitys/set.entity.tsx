@@ -1,7 +1,6 @@
 import { Select, Switch } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import TimeSelect from '@renderer/components/TimeSelect'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 
 export const NormalSetFiledList: FieldInfo[] = [
   {
