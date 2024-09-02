@@ -59,20 +59,34 @@ export class MyEncode {
     if (this._set.ver != SECRET_VER_CODE) {
       return ApiRespCode.ver_not_match
     }
+    const res = this.CheckMainPass(user, password)
+    if (res.code == ApiRespCode.SUCCESS) {
+      this._pass_hash = res.hash
+    }
+    return res.code
+  }
+
+  public CheckMainPass(user: User, password: string): { code: ApiRespCode; hash: Buffer } {
     const keyinfo = this._set.users.find((item) => item.uid == user.id)
-    if (keyinfo == null) return ApiRespCode.key_not_found
+    const resp = { code: ApiRespCode.SUCCESS, hash: null }
+    if (keyinfo == null) {
+      resp.code = ApiRespCode.key_not_found
+      return resp
+    }
     const hash = this.getPassHash(keyinfo.key, password)
     try {
       const encode_data = this.Decode2(keyinfo.valid_data, hash)
       if (encode_data !== this.getUserValidStr(user)) {
-        return ApiRespCode.password_err
+        resp.code = ApiRespCode.password_err
+        return resp
       }
     } catch (e: any) {
       Log.Exception(e)
-      return ApiRespCode.password_err
+      resp.code = ApiRespCode.password_err
+      return resp
     }
-    this._pass_hash = hash
-    return ApiRespCode.SUCCESS
+    resp.hash = hash
+    return resp
   }
 
   public Register(user: User, password: string) {

@@ -1,3 +1,6 @@
+/*
+app main model
+*/
 import { MyEncode } from '@main/libs/my_encode'
 import { Log } from '@main/libs/log'
 import { app, dialog, crashReporter, globalShortcut, screen, BrowserWindow } from 'electron'
@@ -14,7 +17,7 @@ import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
 import { initAllApi } from '@main/api/index.api'
 import robot from 'robotjs_addon'
-import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
+import { ApiRespCode, defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import {
   Csv2TableCol,
@@ -62,7 +65,12 @@ class AppModel {
 
   constructor() {
     AppEvent.on(AppEventType.SystemLock, () => {
-      this.LockApp()
+      if (this.user.userinfo == null) return
+      const userset = this.user.userinfo.user_set as UserSetInfo
+      if (userset.normal_lock_with_pc) {
+        Log.Info('lock with pc')
+        this.LockApp()
+      }
     })
     //empty
     return
@@ -516,6 +524,31 @@ class AppModel {
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.export.error'))
       return null
     }
+  }
+
+  async ChangeMainPassword(old_password: string, new_password: string) {
+    const userinfo = this.user.userinfo
+    if (userinfo == null) {
+      AppEvent.emit(
+        AppEventType.Message,
+        'error',
+        LangHelper.getString('main.change_pass.notlogin')
+      )
+      return false
+    }
+    const check_res = this.myencode?.CheckMainPass(userinfo, old_password)
+    if (check_res.code != ApiRespCode.SUCCESS) {
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString(`err.${check_res.code}`))
+      return false
+    }
+    this.db_helper.beginTransaction()
+    try {
+    } catch (e) {
+      Log.Exception(e, 'change main pass error:')
+      this.db_helper.rollbackTransaction()
+      return false
+    }
+    return true
   }
 }
 

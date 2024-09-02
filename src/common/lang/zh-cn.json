@@ -235,5 +235,7 @@
 
   "404.title": "404",
   "404.desc": "页面不存在",
-  "404.back": "返回首页"
+  "404.back": "返回首页",
+
+  "main.change_pass.notlogin": "未登陆"
 }
