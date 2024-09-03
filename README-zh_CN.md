@@ -131,13 +131,26 @@ npm run dev
 ## **todo**
 
 1、程序更新机制
+https://www.electron.build/auto-update
 
-3、Linux 打包异常问题
+3、Linux 打包异常问题(完成)
+snap打包好像需要签名文件。
+目前先把snap去掉。
+
+```
+snapcraft internal error: NoKeyringError('No keyring found to store or retrieve credentials from.')
+```
 
 4、覆盖安装不要把配置文件删除(完成)
+之前为了开发方便，把程序生成的用户文件和配置放在应用程序当前目录。
+但目前主流的做法是把这些配置文件放在系统划分的用户目录
+windows下是%appdata%
+这样的话，就不会有上面的问题了，因为配置和程序存储的位置分开了。
+而且也不会有权限的问题。
 
 5、修改主密码(完成)
 
 6、切换语言(完成)
+支持英文和中文
 
 7、跟随系统锁定(完成)
