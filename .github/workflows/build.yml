@@ -7,25 +7,25 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
-        os: [ubuntu-latest]
-        host: [x64]
-        target: [x64]
-        node: [20]
       # matrix:
-      #   os: [windows-latest, macos-latest]
+      #   os: [ubuntu-latest]
       #   host: [x64]
       #   target: [x64]
       #   node: [20]
-      #   include:
-      #     - os: windows-latest
-      #       host: x86
-      #       target: x86
-      #       node: 20
-      #     - os: macos-latest
-      #       host: arm64
-      #       target: arm64
-      #       node: 20
+      matrix:
+        os: [windows-latest, macos-latest]
+        host: [x64]
+        target: [x64]
+        node: [20]
+        include:
+          - os: windows-latest
+            host: x86
+            target: x86
+            node: 20
+          - os: macos-latest
+            host: arm64
+            target: arm64
+            node: 20
     name: os=${{ matrix.os }}  host=${{ matrix.host }}, target=${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
