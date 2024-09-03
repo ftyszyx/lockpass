@@ -43,7 +43,7 @@ linux:
   artifactName: ${name}-${version}-${platform}-${arch}.${ext}
   target:
     - AppImage
-    - snap
+    # - snap
     - deb
   maintainer: zhang.yuxin
   category: Utility
