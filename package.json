@@ -1,6 +1,6 @@
 {
   "name": "lockpass",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "a password manager",
   "main": "./out/main/index.js",
   "author": "zhang.yuxin",
@@ -15,8 +15,8 @@
     "dev": "chcp 65001 && electron-vite dev --inspect",
     "build": "npm run typecheck && electron-vite build",
     "build:win": "electron-builder --win",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux",
+    "build:mac": " electron-builder --mac",
+    "build:linux": " electron-builder --linux",
     "get:ver": "electron -v&&electron -a",
     "release": "electron-builder --publish always",
     "tailwind": "tailwindcss -i ./src/renderer/src/assets/tailwind.css -o ./src/renderer/src/assets/tailwind_out.css --watch"

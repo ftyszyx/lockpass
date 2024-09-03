@@ -44,7 +44,7 @@ linux:
     - AppImage
     - snap
     - deb
-  maintainer: electronjs.org
+  maintainer: zhang.yuxin
   category: Utility
 appImage:
   artifactName: ${name}-${version}-${platform}-${arch}.${ext}
