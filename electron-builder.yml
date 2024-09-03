@@ -23,6 +23,8 @@ asarUnpack:
 win:
   executableName: lockpass
 nsis:
+  oneClick: false # 是否一键安装,让用户选择
+  allowToChangeInstallationDirectory: true # 是否允许用户更改安装目录
   artifactName: ${name}-${version}-${platform}-${arch}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}

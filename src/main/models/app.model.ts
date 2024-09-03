@@ -36,7 +36,7 @@ import { ShowErrToMain } from '@main/libs/other.help'
 import { GetImportVaultName, str2csv } from '@common/help'
 import { ParseCsvFile } from '@main/libs/csv_parser'
 import { AppSetModel } from './app.set'
-import { BaseEntity, SearchField, WhereDef } from '@common/entitys/db.entity'
+import { BaseEntity, SearchField } from '@common/entitys/db.entity'
 
 class AppModel {
   public mainwin: MainWindow | null = null
