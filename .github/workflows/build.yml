@@ -37,8 +37,8 @@ jobs:
         run: npm install
       - name: install linux dependencies
         if: contains(matrix.os, 'ubuntu')
+        # sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils
         run: |
-          sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils
           sudo snap install snapcraft --classic
       - name: Build
         run: npm run build
