@@ -116,6 +116,25 @@ export class MyEncode {
     this.saveSet()
   }
 
+  public GetNewHashbyNewPass(user: User, password: string) {
+    const keyinfo = this._set.users.find((item) => item.uid == user.id)
+    return this.getPassHash(keyinfo.key, password)
+  }
+
+  public ChangeMainPass(user: User, password: string): ApiRespCode {
+    const old_idx = this._set.users.findIndex((item) => item.uid == user.id)
+    if (old_idx < 0) {
+      return ApiRespCode.user_notfind
+    }
+    const keyinfo = this._set.users[old_idx]
+    const new_hash = this.getPassHash(keyinfo.key, password)
+    const valid_data = this.Encode2(this.getUserValidStr(user), new_hash)
+    keyinfo.valid_data = valid_data
+    this._set.users.splice(old_idx, 1, keyinfo)
+    this.saveSet()
+    return ApiRespCode.SUCCESS
+  }
+
   private getUserValidStr(user: User) {
     return JSON.stringify({ username: user.username, id: user.id })
   }

@@ -88,15 +88,35 @@ export class BaseDb {
     return sql_str
   }
 
-  protected getupdateOneSql(entity: BaseEntity, obj_old: any, obj: any, keys: string[]): string {
+  protected getKeyValuePairByCompare(
+    entity: BaseEntity,
+    obj_old: any,
+    obj_new: any,
+    keys: string[]
+  ): string {
     const changelist = []
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      let element = obj[key]
+      let element = obj_new[key]
       const old_value = obj_old[key]
       if (element == undefined || element == null) continue
       element = this.encode_table_str(entity, key, element)
       if (old_value == element) continue
+      const col_value = this.getColumnValue(entity, key, element)
+      if (col_value) {
+        changelist.push(`${key}=${col_value}`)
+      }
+    }
+    return changelist.join(',')
+  }
+
+  protected getKeyvaluePairByMyself(entity: BaseEntity, obj: any, keys: string[]): string {
+    const changelist = []
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      let element = obj[key]
+      if (element == undefined || element == null) continue
+      element = this.encode_table_str(entity, key, element)
       const col_value = this.getColumnValue(entity, key, element)
       if (col_value) {
         changelist.push(`${key}=${col_value}`)
@@ -151,41 +171,55 @@ export class BaseDb {
     return await this._runSql(sql_str)
   }
 
-  public async UpdateOne<T extends BaseEntity>(entity: T, obj_old: any, obj: any): Promise<void> {
-    const table_name = entity[Table_Name_KEY]
+  public async UpdateOneById<T extends BaseEntity>(
+    entity: T,
+    obj_old: any,
+    obj: any
+  ): Promise<void> {
     if (!obj.id) {
       Log.Error('update entity id is null')
       return Promise.reject(new Error('update entity id is null'))
     }
-    let sql_str = 'update ' + table_name + ' set '
     const keys = Reflect.ownKeys(entity)
     keys.splice(keys.indexOf('id'), 1)
-    const update_sql = this.getupdateOneSql(entity, obj_old, obj, keys as string[])
-    if (update_sql.trim().length == 0) {
-      Log.Info('no update value')
-      return
-    }
-    sql_str += update_sql
-    sql_str += ` where id=${obj.id}`
+    let sql_str = this._getupdateOneSql(entity, obj_old, obj, keys as string[])
+    if (sql_str.trim().length == 0) return
     return await this._exesql(sql_str)
   }
 
-  public async UpdateMany(
-    entity: BaseEntity,
+  private _getupdateOneSql<T extends BaseEntity>(
+    entity: T,
+    obj_old: any,
     obj: any,
-    where: WhereDef<BaseEntity>
-  ): Promise<void> {
+    keys: string[]
+  ): string {
     const table_name = entity[Table_Name_KEY]
     let sql_str = 'update ' + table_name + ' set '
-    const keys = Reflect.ownKeys(entity)
-    const update_sql = this.getupdateOneSql(entity, obj, obj, keys as string[])
+    const update_sql = this.getKeyValuePairByCompare(entity, obj_old, obj, keys as string[])
     if (update_sql.trim().length == 0) {
       Log.Info('no update value')
-      return
+      return ''
     }
     sql_str += update_sql
-    sql_str += ` where ${this.getWhreSql(entity, where)}`
-    return await this._exesql(sql_str)
+    sql_str += ` where id=${obj.id}`
+    return sql_str
+  }
+
+  public async UpdateManyById(entity: BaseEntity, objs: any[]): Promise<void> {
+    let sql_str_arr = []
+    const keys = Reflect.ownKeys(entity)
+    const table_name = entity[Table_Name_KEY]
+    keys.splice(keys.indexOf('id'), 1)
+    for (let i = 0; i < objs.length; i++) {
+      const obj = objs[i]
+      let sql_str = 'update ' + table_name + ' set '
+      const update_sql = this.getKeyvaluePairByMyself(entity, obj, keys as string[])
+      if (update_sql.trim().length == 0) continue
+      sql_str += update_sql
+      sql_str += ` where id=${obj.id}`
+      sql_str_arr.push(sql_str)
+    }
+    return await this._exesql(sql_str_arr.join(';'))
   }
 
   public async AddList(objs: BaseEntity[]): Promise<void> {

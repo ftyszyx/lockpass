@@ -127,7 +127,7 @@ export class BaseService<Entity extends BaseEntity> {
         return res
       }
       this.fixEntityIn(chang_values)
-      await AppModel.getInstance().db_helper.UpdateOne(this.entity, old[0], chang_values)
+      await AppModel.getInstance().db_helper.UpdateOneById(this.entity, old[0], chang_values)
       const newInfos = await AppModel.getInstance().db_helper.GetOne(this.entity, {
         cond: { id: chang_values.id }
       })

@@ -48,7 +48,8 @@ export enum webToManMsg {
   RestartApp = 'RestartApp',
   CloseDb = 'CloseDb',
   OpenDb = 'OpenDb',
-  getLogLevel = 'getLogLevel'
+  getLogLevel = 'getLogLevel',
+  ChangeMainPassword = 'ChangeMainPassword'
 }
 
 export enum MainToWebMsg {

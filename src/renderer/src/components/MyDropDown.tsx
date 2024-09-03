@@ -12,6 +12,7 @@ import { GetImportVaultName } from '@common/help'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { useHistory } from '@renderer/libs/router'
 import { PagePath } from '@common/entitys/page.entity'
+import ChangeMainPassword from './ChangeMainPass'
 const { confirm } = Modal
 interface MyDropDownProps {
   className?: string
@@ -20,6 +21,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [showPasswordGen, setShowPasswordGen] = useState(false)
   const [showSelectBackupFile, setShowSelectBackupFile] = useState(false)
   const [showSelectImportType, setShowSelectImportType] = useState(false)
+  const [showChangeMainPass, setShowChangeMainPass] = useState(false)
   const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
   const [messageApi, contextHolder] = message.useMessage()
   const history = useHistory()
@@ -52,6 +54,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                 cancelText: appset.getText('cancel'),
                 onOk: async () => {}
               })
+            } else if (item.key == 'change_mainpass') {
+              setShowChangeMainPass(true)
             } else if (item.key === 'local_backup_do') {
               await ipc_call_normal<string>(webToManMsg.Backup_local).then((filepath) => {
                 if (filepath == null) return
@@ -175,6 +179,13 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               label: appset.getText('mydropmenu.change_account')
             },
             {
+              key: 'change_mainpass',
+              label: appset.getText('mydropmenu.change_mainpass')
+            },
+            {
+              type: 'divider'
+            },
+            {
               key: 'app_set',
               label: appset.getText('mydropmenu.set')
             }
@@ -253,6 +264,17 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             }
           }}
         ></ImportCsvSelectType>
+      )}
+      {showChangeMainPass && (
+        <ChangeMainPassword
+          show={showChangeMainPass}
+          onOk={() => {
+            setShowChangeMainPass(false)
+          }}
+          onClose={() => {
+            setShowChangeMainPass(false)
+          }}
+        ></ChangeMainPassword>
       )}
     </>
   )

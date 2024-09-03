@@ -40,6 +40,10 @@ export function initAllApi() {
     return null
   })
 
+  ipcMain.handle(webToManMsg.ChangeMainPassword, async (_, oldpass, newpass) => {
+    return await AppModel.getInstance().ChangeMainPassword(oldpass, newpass)
+  })
+
   ipcMain.handle(webToManMsg.UpdateTrayMenu, (_, setinfo) => {
     AppModel.getInstance().my_tray?.updateMenu(setinfo)
   })

@@ -36,6 +36,7 @@ import { ShowErrToMain } from '@main/libs/other.help'
 import { GetImportVaultName, str2csv } from '@common/help'
 import { ParseCsvFile } from '@main/libs/csv_parser'
 import { AppSetModel } from './app.set'
+import { BaseEntity, SearchField, WhereDef } from '@common/entitys/db.entity'
 
 class AppModel {
   public mainwin: MainWindow | null = null
@@ -526,6 +527,28 @@ class AppModel {
     }
   }
 
+  async updteTable<T extends BaseEntity>(
+    entity: T,
+    cond: SearchField<T>,
+    oldhash: Buffer,
+    newhash: Buffer
+  ) {
+    this.myencode.setCurPassHashStr(oldhash)
+    const total = await this.db_helper.GetTotalCount(entity, { cond })
+    const pagesize = 100
+    let page = Math.ceil(total / pagesize)
+    for (let i = 0; i < page; i++) {
+      this.myencode.setCurPassHashStr(oldhash)
+      const items = await this.db_helper.GetMany(this.vaultItem.entity, {
+        cond,
+        page_size: pagesize,
+        page: i
+      })
+      this.myencode.setCurPassHashStr(newhash)
+      await this.db_helper.UpdateManyById(this.vaultItem.entity, items)
+    }
+  }
+
   async ChangeMainPassword(old_password: string, new_password: string) {
     const userinfo = this.user.userinfo
     if (userinfo == null) {
@@ -541,37 +564,26 @@ class AppModel {
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString(`err.${check_res.code}`))
       return false
     }
-    this.db_helper.beginTransaction()
+    await this.db_helper.beginTransaction()
     const old_hash = this.myencode.getCurPassHashStr()
     try {
-      this.myencode.setCurPassHashStr(check_res.hash)
-      const total = await this.db_helper.GetTotalCount(this.vaultItem.entity, {
-        cond: { user_id: userinfo.id }
-      })
-      const pagesize = 100
-      const page = Math.ceil(total / pagesize)
-      for (let i = 0; i < page; i++) {
-        const items = await this.db_helper.GetMany(this.vaultItem.entity, {
-          cond: { user_id: userinfo.id },
-          page_size: pagesize,
-          page: i
-        })
-
-        for (let j = 0; j < items.length; j++) {
-          const item = items[j]
-          if (item.vault_item_type == VaultItemType.Login) {
-            const logininfo = item.info as LoginPasswordInfo
-            logininfo.password = this.myencode.Encode(logininfo.password, new_password)
-            await this.vaultItem.UpdateOne(item)
-          }
-        }
-      }
+      const new_hash = this.myencode.GetNewHashbyNewPass(userinfo, new_password)
+      Log.Info('change main pass begin')
+      await this.updteTable(this.vaultItem.entity, { user_id: userinfo.id }, old_hash, new_hash)
+      Log.Info('update vault item ok')
+      await this.updteTable(this.vault.entity, { user_id: userinfo.id }, old_hash, new_hash)
+      Log.Info('update vault ok')
+      await this.db_helper.commitTransaction()
+      Log.Info('table update')
+      this.myencode.ChangeMainPass(userinfo, new_password)
+      Log.Info('update password ok')
+      this.LoginOut()
     } catch (e: any) {
       Log.Exception(e, 'change main pass error:')
-      this.db_helper.rollbackTransaction()
+      await this.db_helper.rollbackTransaction()
+      this.myencode.setCurPassHashStr(old_hash)
       return false
     } finally {
-      this.myencode.setCurPassHashStr(old_hash)
     }
     return true
   }
