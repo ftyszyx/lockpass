@@ -24,7 +24,7 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
-    "electron-updater": "^6.1.7",
+    "electron-updater": "^6.3.4",
     "reflect-metadata": "^0.2.2",
     "robotjs_addon": "^0.6.1",
     "sqlite3": "^5.1.7",

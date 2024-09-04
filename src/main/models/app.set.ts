@@ -48,7 +48,7 @@ export class AppSetModel {
     this.initLang()
     Log.log_level = this.set.log_level || LogLevel.Error
     this.set.log_level = Log.log_level
-    Log.Info('log level:', Log.log_level)
+    Log.info('log level:', Log.log_level)
     // Log.Info('set:', JSON.stringify(this.set))
   }
 

@@ -7,7 +7,7 @@
     "src/common/**/*.ts",
     "src/common/**/*.json",
     "src/preload/*.d.ts"
-  ],
+, "src/main/auto.update.ts"  ],
   "compilerOptions": {
     "composite": true,
     "target": "ES2022",

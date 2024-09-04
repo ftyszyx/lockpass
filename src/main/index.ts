@@ -25,12 +25,12 @@ app.whenReady().then(async () => {
 })
 
 powerMonitor.on('suspend', () => {
-  Log.Info('app suspend')
+  Log.info('app suspend')
   AppEvent.emit(AppEventType.SystemLock)
 })
 
 powerMonitor.on('lock-screen', () => {
-  Log.Info('app lock screen')
+  Log.info('app lock screen')
   AppEvent.emit(AppEventType.SystemLock)
 })
 
@@ -65,12 +65,12 @@ if (!gotTheLock) {
       mainwin.win.focus()
     }
     const url = commandLine.at(-1)
-    Log.Info('second-instance', url)
+    Log.info('second-instance', url)
     AppEvent.emit(AppEventType.DeepLink, url)
   })
 
   app.on('open-url', (_, url) => {
-    Log.Info('open-url', url)
+    Log.info('open-url', url)
     if (BrowserWindow.getAllWindows().length === 0) {
       AppModel.getInstance().initWin()
     }

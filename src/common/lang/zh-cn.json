@@ -212,6 +212,7 @@
   "mydropmenu.exportcsv.title": "导出csv成功",
   "mydropmenu.exportcsv.content": "文件路径:{0}",
   "mydropmenu.change_mainpass": "修改主密码",
+  "mydropmenu.checkupdate": "检查更新",
   "mydropmenu.set": "系统设置",
 
   "changemainpass": "修改主密码",

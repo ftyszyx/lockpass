@@ -96,7 +96,7 @@ export class AliDrive {
     this._authData.refresh_token_expire_time = Math.floor(Date.now() / 1000) + 90 * 24 * 60 * 60
     this._authData.drive_info = await this.getDriveInfo()
     AppModel.getInstance().set.setAliyunData(this._authData)
-    Log.Info('get authData ok', JSON.stringify(this._authData))
+    Log.info('get authData ok', JSON.stringify(this._authData))
     if (code) {
       ShowInfoToMain(LangHelper.getString('mydropmenu.aliyunauthok'))
     }
@@ -163,7 +163,7 @@ export class AliDrive {
       const number = part.part_number
       const pos = this._partsize * (number - 1)
       const size = Math.min(file.length - pos, this._partsize)
-      Log.Info(`upload part ${number} size ${size} pos ${pos} `)
+      Log.info(`upload part ${number} size ${size} pos ${pos} `)
       const res2 = await uploadFileToUrl(
         part.upload_url,
         {
@@ -179,7 +179,7 @@ export class AliDrive {
         pos,
         size
       )
-      Log.Info(`upload part ${number} ok res:${res2}`)
+      Log.info(`upload part ${number} ok res:${res2}`)
     }
     const fileinfo = await SendRequest<AliyunFileInfo>(
       `${this._host}/adrive/v1.0/openFile/complete`,
@@ -191,7 +191,7 @@ export class AliDrive {
         upload_id: res.upload_id
       }
     )
-    Log.Info('upload file ok', JSON.stringify(fileinfo))
+    Log.info('upload file ok', JSON.stringify(fileinfo))
   }
 
   async downloadFile(file_name: string, local_path: string) {

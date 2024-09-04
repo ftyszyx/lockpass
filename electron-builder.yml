@@ -52,5 +52,7 @@ appImage:
 npmRebuild: false
 publish:
   provider: github
+  repo: lockpass
+  owner: ftyszyx
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

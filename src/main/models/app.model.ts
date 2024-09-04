@@ -37,6 +37,7 @@ import { GetImportVaultName, str2csv } from '@common/help'
 import { ParseCsvFile } from '@main/libs/csv_parser'
 import { AppSetModel } from './app.set'
 import { BaseEntity, SearchField } from '@common/entitys/db.entity'
+import { AutoUpdateHelper } from './auto.update'
 
 class AppModel {
   public mainwin: MainWindow | null = null
@@ -53,6 +54,7 @@ class AppModel {
   public user: UserService | null = null
   public db_helper: SqliteHelper = new SqliteHelper()
   private checkInterval: NodeJS.Timeout | null = null
+  autoupdate: AutoUpdateHelper = new AutoUpdateHelper()
   set: AppSetModel | null = null
   static App_quit = false
 
@@ -69,7 +71,7 @@ class AppModel {
       if (this.user.userinfo == null) return
       const userset = this.user.userinfo.user_set as UserSetInfo
       if (userset.normal_lock_with_pc) {
-        Log.Info('lock with pc')
+        Log.info('lock with pc')
         this.LockApp()
       }
     })
@@ -79,12 +81,12 @@ class AppModel {
 
   Quit() {
     AppModel.App_quit = true
-    Log.Info('app quit begin')
+    Log.info('app quit begin')
     AppEvent.emit(AppEventType.APPQuit)
     this.db_helper.CloseDB()
     globalShortcut.unregisterAll()
     if (this.checkInterval) clearInterval(this.checkInterval)
-    Log.Info('app quit')
+    Log.info('app quit')
     app.quit()
   }
 
@@ -95,19 +97,19 @@ class AppModel {
       console.log(err.stack)
     })
     this.set = new AppSetModel()
-    Log.Info('init win')
+    Log.info('init win')
     this.initWin()
     initAllApi()
-    Log.Info('init myencode')
+    Log.info('init myencode')
     this.myencode = new MyEncode()
-    Log.Info('init entity')
+    Log.info('init entity')
     this.vault = new VaultService()
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
     this.appInfo = new AppService()
-    Log.Info('begin open db')
+    Log.info('begin open db')
     await this.db_helper.OpenDb()
-    Log.Info('init tables')
+    Log.info('init tables')
     await this.db_helper.initOneTable(this.user.entity)
     await this.db_helper.initOneTable(this.vault.entity)
     await this.db_helper.initOneTable(this.vaultItem.entity)
@@ -126,6 +128,8 @@ class AppModel {
     this.checkInterval = setInterval(() => {
       this.performLockCheck()
     }, 1000)
+
+    Log.info('check update')
   }
 
   initWin() {
@@ -203,7 +207,7 @@ class AppModel {
             if (key == 'shortcut_global_quick_find') this.quickwin?.show()
             if (key == 'shortcut_global_quick_lock') this.LockApp()
           })
-          Log.Info('register global key:', value, res)
+          Log.info('register global key:', value, res)
         }
       }
     })
@@ -237,16 +241,16 @@ class AppModel {
   }
 
   private async BackupFile(srcpath: string, backup_path: string) {
-    Log.Info(`backup file begin:${srcpath}`)
+    Log.info(`backup file begin:${srcpath}`)
     const filename = path.basename(srcpath)
     const dest = path.join(backup_path, filename)
     return new Promise((resolve, reject) => {
       fs.copyFile(srcpath, dest, (err) => {
         if (err) {
-          Log.Error(`backup file error:${srcpath}->${dest}`, err)
+          Log.error(`backup file error:${srcpath}->${dest}`, err)
           reject(false)
         } else {
-          Log.Info(`backup file ok:${srcpath}->${dest}`)
+          Log.info(`backup file ok:${srcpath}->${dest}`)
           resolve(true)
         }
       })
@@ -274,7 +278,7 @@ class AppModel {
       await zl.archiveFolder(backup_path, zip_file)
       res = zip_file
     } catch (e) {
-      Log.Error('gen backup error:', e)
+      Log.error('gen backup error:', e)
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
     await this.db_helper.OpenDb()
@@ -299,7 +303,7 @@ class AppModel {
       }
       res = await this.RecoverSystemFromBackupFile(filePaths[0])
     } catch (e) {
-      Log.Error('restore backup error:', e)
+      Log.error('restore backup error:', e)
       res = false
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
@@ -313,7 +317,7 @@ class AppModel {
     const backup_path = path.join(PathHelper.getHomeDir(), fiename)
     try {
       if (fs.existsSync(zipfile_path) == false) {
-        Log.Error('zip file not exists:', zipfile_path)
+        Log.error('zip file not exists:', zipfile_path)
         AppEvent.emit(
           AppEventType.Message,
           'error',
@@ -322,14 +326,14 @@ class AppModel {
         return false
       }
       await this.db_helper.CloseDB()
-      Log.Info(`extract backup file:${zipfile_path}->${backup_path}`)
+      Log.info(`extract backup file:${zipfile_path}->${backup_path}`)
       await zl.extract(zipfile_path, backup_path)
 
       const restoreFile = (dest: string) => {
         const destfile = path.basename(dest)
         const srcpath = path.join(backup_path, destfile)
         if (fs.existsSync(srcpath) == false) {
-          Log.Error('restore file not exists:', srcpath)
+          Log.error('restore file not exists:', srcpath)
           AppEvent.emit(
             AppEventType.Message,
             'error',
@@ -338,7 +342,7 @@ class AppModel {
           return false
         }
         fs.copyFileSync(srcpath, dest)
-        Log.Info(`restore file ok:${srcpath}->${dest}`)
+        Log.info(`restore file ok:${srcpath}->${dest}`)
         return true
       }
 
@@ -352,11 +356,11 @@ class AppModel {
       if (restoreAll() === true) this.myencode.LoadSet()
       else res = false
     } catch (e) {
-      Log.Error('restore backup error:', e)
+      Log.error('restore backup error:', e)
       res = false
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
-    Log.Info('recover system from backup:', res)
+    Log.info('recover system from backup:', res)
     fs.rmSync(backup_path, { recursive: true, force: true })
     await this.db_helper.OpenDb()
     return res
@@ -381,7 +385,7 @@ class AppModel {
     const zip_file = await this.BackupSystem()
     if (zip_file == null) return null
     const filename = path.basename(zip_file)
-    Log.Info(`begin upload file ${zip_file} to aliyun:`)
+    Log.info(`begin upload file ${zip_file} to aliyun:`)
     try {
       await this.ali_drive.UploadFile(filename, zip_file)
     } catch (e: any) {
@@ -391,12 +395,12 @@ class AppModel {
       return null
     }
     fs.unlinkSync(zip_file)
-    Log.Info('upload file ok')
+    Log.info('upload file ok')
     return `${this.ali_drive.parent_dir_name}/${filename}`
   }
 
   async RecoverByAliyun(backup_file_name: string) {
-    Log.Info(`begin download file ${backup_file_name} from aliyun:`)
+    Log.info(`begin download file ${backup_file_name} from aliyun:`)
     if ((await this.checkAlidriveAuth()) == false) return null
     const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup_aliyun')
     if (fs.existsSync(backup_path_dir) == false) {
@@ -406,7 +410,7 @@ class AppModel {
     await this.ali_drive.downloadFile(backup_file_name, backup_file_path)
     const res = await this.RecoverSystemFromBackupFile(backup_file_path)
     fs.unlinkSync(backup_file_path)
-    if (res) Log.Info('recover system from aliyun ok')
+    if (res) Log.info('recover system from aliyun ok')
     return res
   }
 
@@ -436,7 +440,7 @@ class AppModel {
         )
         return false
       }
-      Log.Info('import csv file:', filePaths[0])
+      Log.info('import csv file:', filePaths[0])
       const add_vault_name = GetImportVaultName(import_type)
       let vault_old = await this.vault.GetOne({ user_id: cur_user.id, name: add_vault_name })
       if (!vault_old) {
@@ -450,7 +454,7 @@ class AppModel {
           throw new Error('add vault error')
         }
       }
-      Log.Info(`get vault ok:${add_vault_name}`)
+      Log.info(`get vault ok:${add_vault_name}`)
       const filepath = filePaths[0]
       const results = await ParseCsvFile(filepath)
       const importitems = getVaultImportItems(import_type)
@@ -495,7 +499,7 @@ class AppModel {
         return null
       }
       const csv_path = path.join(filePaths[0], 'export_lockpass.csv')
-      Log.Info('export csv file:', csv_path)
+      Log.info('export csv file:', csv_path)
       const userinfo = this.curUserInfo()
       const items = await this.vaultItem.GetMany({ cond: { user_id: userinfo.id } })
       const writestream = fs.createWriteStream(csv_path)
@@ -521,7 +525,7 @@ class AppModel {
       writestream.close()
       return csv_path
     } catch (e) {
-      Log.Error('export csv file error:', e)
+      Log.error('export csv file error:', e)
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.export.error'))
       return null
     }
@@ -568,15 +572,15 @@ class AppModel {
     const old_hash = this.myencode.getCurPassHashStr()
     try {
       const new_hash = this.myencode.GetNewHashbyNewPass(userinfo, new_password)
-      Log.Info('change main pass begin')
+      Log.info('change main pass begin')
       await this.updteTable(this.vaultItem.entity, { user_id: userinfo.id }, old_hash, new_hash)
-      Log.Info('update vault item ok')
+      Log.info('update vault item ok')
       await this.updteTable(this.vault.entity, { user_id: userinfo.id }, old_hash, new_hash)
-      Log.Info('update vault ok')
+      Log.info('update vault ok')
       await this.db_helper.commitTransaction()
-      Log.Info('table update')
+      Log.info('table update')
       this.myencode.ChangeMainPass(userinfo, new_password)
-      Log.Info('update password ok')
+      Log.info('update password ok')
       this.LoginOut()
     } catch (e: any) {
       Log.Exception(e, 'change main pass error:')

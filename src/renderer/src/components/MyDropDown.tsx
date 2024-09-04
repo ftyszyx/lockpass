@@ -43,6 +43,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               setShowSelectImportType(true)
             } else if (item.key == 'app_set') {
               history.push(PagePath.Admin_set)
+            } else if (item.key == 'check_update') {
+              await ipc_call_normal(webToManMsg.checkUpdate)
             } else if (item.key == 'exportcsv') {
               const res = await ipc_call_normal<string>(webToManMsg.ExputCSV)
               if (res == null) return
@@ -188,6 +190,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             {
               key: 'app_set',
               label: appset.getText('mydropmenu.set')
+            },
+            {
+              key: 'check_update',
+              label: appset.getText('mydropmenu.checkupdate')
             }
           ]
         }}

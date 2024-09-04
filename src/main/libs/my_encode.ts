@@ -154,7 +154,7 @@ export class MyEncode {
   Encode2(data: string, key: Buffer): string {
     try {
       if (key == null) {
-        Log.Error('key is null')
+        Log.error('key is null')
         return ''
       }
       const iv = randomBytes(16)
@@ -176,7 +176,7 @@ export class MyEncode {
   Decode2(data: string, key: Buffer): string {
     try {
       if (key == null) {
-        Log.Error('key is null')
+        Log.error('key is null')
         return ''
       }
       const [data_str, iv_str] = data.split('|')

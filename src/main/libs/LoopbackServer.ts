@@ -26,17 +26,17 @@ export default class LoopbackServer {
     this._maybeRedirection = new Promise((resolve, reject) => {
       this._server = http.createServer((req, res) => {
         if (req.url) {
-          Log.Info('url', req.url, req.headers.host)
+          Log.info('url', req.url, req.headers.host)
 
           const url = new URL(req.url)
-          Log.Info('req.url', req, url.pathname)
+          Log.info('req.url', req, url.pathname)
           if (url.pathname === callbackPath) {
             res.writeHead(302, {
               Location: successRedirectURL
             })
             res.end()
             resolve(url)
-            Log.Info('resolve', url)
+            Log.info('resolve', url)
             this._server.close()
             return
           }
@@ -45,17 +45,17 @@ export default class LoopbackServer {
         res.end()
       })
       this._server.on('error', (e) => {
-        Log.Error('server error', e.message)
+        Log.error('server error', e.message)
         reject(e)
       })
       console.log('listen', port)
       this._server.listen(port)
       this._server.on('close', () => {
-        Log.Info('server close')
+        Log.info('server close')
       })
       this._server.on('listening', () => {
         const address = this._server.address() as net.AddressInfo
-        Log.Info(`listen:${address.address}:${address.port}`)
+        Log.info(`listen:${address.address}:${address.port}`)
       })
     })
   }

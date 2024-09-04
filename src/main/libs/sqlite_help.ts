@@ -19,7 +19,7 @@ export class SqliteHelper extends BaseDb {
           console.error('open db err', err.message)
           reject(err)
         } else {
-          Log.Info('open db success')
+          Log.info('open db success')
           resolve(this._db)
         }
       })
@@ -38,7 +38,7 @@ export class SqliteHelper extends BaseDb {
             console.error('close db err', err.message)
             reject(err)
           } else {
-            Log.Info('close db success')
+            Log.info('close db success')
             this._db = null
             resolve(true)
           }

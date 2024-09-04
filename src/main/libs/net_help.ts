@@ -27,7 +27,7 @@ export async function SendRequest<T>(
       response.on('end', () => {
         const res = JSON.parse(data)
         if (res.code) {
-          Log.Error(`req ${url} error ${data} `)
+          Log.error(`req ${url} error ${data} `)
           reject(new Error(res.message))
           return
         }
@@ -36,7 +36,7 @@ export async function SendRequest<T>(
       })
     })
     request.on('error', (error) => {
-      Log.Error(`req ${url} error `, error.message)
+      Log.error(`req ${url} error `, error.message)
       reject(error)
     })
     request.end()
@@ -82,18 +82,18 @@ export async function uploadFileToUrl(
         if (res.statusCode === 200) {
           resolve(data)
         } else {
-          Log.Error(`upload part  error ${data}`)
+          Log.error(`upload part  error ${data}`)
           reject(new Error(`upload part error ${data}`))
         }
       })
     })
     req.on('error', (error) => {
-      Log.Error(`upload  error `, error.message)
+      Log.error(`upload  error `, error.message)
       reject(new Error(`upload error ${error.message}`))
     })
     req.write(Buffer.from(filer_buffer, pos, size), (error) => {
       if (error) {
-        Log.Error(`read file error `, error.message)
+        Log.error(`read file error `, error.message)
         reject(new Error(`upload error  read file error:${error.message}`))
       }
     })

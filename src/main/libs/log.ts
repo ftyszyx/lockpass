@@ -60,7 +60,7 @@ export class Log {
     Log.logWriter = new FileLogWriter(log_path, false)
   }
 
-  static Debug(...args) {
+  static debug(...args) {
     if (Log.log_level > LogLevel.Debug) {
       return
     }
@@ -69,7 +69,7 @@ export class Log {
     console.log(logstr)
   }
 
-  static Info(...args) {
+  static info(...args) {
     if (Log.log_level > LogLevel.Info) {
       return
     }
@@ -88,7 +88,16 @@ export class Log {
     console.log(logstr)
   }
 
-  static Error(...args) {
+  static warn(...args) {
+    if (Log.log_level > LogLevel.Warn) {
+      return
+    }
+    const logstr = `[Warn] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')}`
+    Log.logWriter.writeLine(logstr)
+    console.warn(`${ConsoleColor.FgYellow}${logstr}${ConsoleColor.FgYellow}`)
+  }
+
+  static error(...args) {
     if (Log.log_level > LogLevel.Error) {
       return
     }

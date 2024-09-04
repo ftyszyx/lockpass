@@ -126,12 +126,12 @@ export class BaseDb {
   }
 
   protected async _exesql(sql_str: string): Promise<void> {
-    if (this.show_log) Log.Info('exesql:', sql_str)
+    if (this.show_log) Log.info('exesql:', sql_str)
     await this.run(sql_str)
   }
 
   private async _runSql(sql_str: string): Promise<void> {
-    if (this.show_log) Log.Info('runsql:', sql_str)
+    if (this.show_log) Log.info('runsql:', sql_str)
     await this.run(sql_str)
   }
 
@@ -145,7 +145,7 @@ export class BaseDb {
     sql_str: string
   ): Promise<T[]> {
     const keys = Reflect.ownKeys(obj) as string[]
-    if (this.show_log) Log.Info('runsql:', sql_str)
+    if (this.show_log) Log.info('runsql:', sql_str)
     const rows = await this.all(sql_str)
     const res: T[] = []
     for (let i = 0; i < rows.length; i++) {
@@ -177,7 +177,7 @@ export class BaseDb {
     obj: any
   ): Promise<void> {
     if (!obj.id) {
-      Log.Error('update entity id is null')
+      Log.error('update entity id is null')
       return Promise.reject(new Error('update entity id is null'))
     }
     const keys = Reflect.ownKeys(entity)
@@ -197,7 +197,7 @@ export class BaseDb {
     let sql_str = 'update ' + table_name + ' set '
     const update_sql = this.getKeyValuePairByCompare(entity, obj_old, obj, keys as string[])
     if (update_sql.trim().length == 0) {
-      Log.Info('no update value')
+      Log.info('no update value')
       return ''
     }
     sql_str += update_sql
@@ -311,14 +311,14 @@ export class BaseDb {
     const keystr = 'count(*)'
     let sql_str = `select ${keystr} from ${table_name} where `
     sql_str += this.getWhreSql(obj, where)
-    if (this.show_log) Log.Info('runsql:', sql_str)
+    if (this.show_log) Log.info('runsql:', sql_str)
     const res = await this.all(sql_str)
     return res[0][keystr]
   }
 
   public async initOneTable(obj: BaseEntity) {
     const table_name = obj[Table_Name_KEY]
-    Log.Info('init table:', table_name)
+    Log.info('init table:', table_name)
     let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
     let index_desc = ''
     const keys = Reflect.ownKeys(obj)
@@ -354,7 +354,7 @@ export class BaseDb {
     }
     table_desc += ');'
     const sql_str = table_desc + '\n' + index_desc
-    if (this.show_log) Log.Info('runsql:', sql_str)
+    if (this.show_log) Log.info('runsql:', sql_str)
     await this.run(sql_str)
   }
 }
