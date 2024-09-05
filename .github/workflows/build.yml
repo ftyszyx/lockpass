@@ -13,7 +13,7 @@ jobs:
       #   target: [x64]
       #   node: [20]
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         host: [x64]
         target: [x64]
         node: [20]
