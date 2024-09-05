@@ -48,6 +48,10 @@ export function initAllApi() {
     return AppModel.getInstance().autoupdate?.checkForUpdates()
   })
 
+  ipcMain.handle(webToManMsg.getAppVersion, () => {
+    return app.getVersion()
+  })
+
   ipcMain.handle(webToManMsg.UpdateTrayMenu, (_, setinfo) => {
     AppModel.getInstance().my_tray?.updateMenu(setinfo)
   })
@@ -110,12 +114,22 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.QuitAPP, () => {
-    AppModel.getInstance().Quit()
+    // AppModel.getInstance().Quit()
+    app.quit()
   })
 
   ipcMain.handle(webToManMsg.RestartApp, () => {
     app.relaunch()
-    AppModel.getInstance().Quit()
+    app.quit()
+    // AppModel.getInstance().Quit()
+  })
+
+  ipcMain.handle(webToManMsg.Downloadupdate, async () => {
+    return await AppModel.getInstance().autoupdate?.downloadUpdate()
+  })
+
+  ipcMain.handle(webToManMsg.InstallUpdate, async () => {
+    return await AppModel.getInstance().autoupdate.QuitAndInstall()
   })
 
   ipcMain.handle(webToManMsg.CloseDb, async () => {

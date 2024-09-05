@@ -35,10 +35,14 @@ powerMonitor.on('lock-screen', () => {
 })
 
 app.on('window-all-closed', () => {
-  AppModel.getInstance().Quit()
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+app.on('before-quit', () => {
+  Log.info('app before-quit')
+  AppModel.getInstance().Quit()
 })
 
 function setDefaultProtocol(scheme) {

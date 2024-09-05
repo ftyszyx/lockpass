@@ -11,5 +11,9 @@ export class MainWindow extends WindowBase {
     AppEvent.on(AppEventType.MainMessage, (msagetype, msg, duration) => {
       this.win.webContents.send(MainToWebMsg.ShowMsgMain, msagetype, msg, duration)
     })
+
+    AppEvent.on(AppEventType.UpdateEvent, (type, data) => {
+      this.win.webContents.send(MainToWebMsg.UpdateEvent, type, data)
+    })
   }
 }

@@ -35,6 +35,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           onClick: async (item) => {
             if (item.key === 'password_gen') {
               setShowPasswordGen(true)
+            } else if (item.key === 'app_restart') {
+              await ipc_call_normal(webToManMsg.RestartApp)
             } else if (item.key == 'change_account') {
               await ipc_call_normal(webToManMsg.Logout)
             } else if (item.key == 'exit') {
@@ -190,6 +192,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             {
               key: 'app_set',
               label: appset.getText('mydropmenu.set')
+            },
+            {
+              key: 'app_restart',
+              label: 'app_restart'
             },
             {
               key: 'check_update',

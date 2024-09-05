@@ -42,6 +42,7 @@ export interface UserSetInfo {
   normal_autolock_time: number //自动锁定时间,单位分钟
   normal_lock_with_pc: boolean //电脑锁定，软件也锁定
   normal_lang_set: string //语言设置,
+  normal_autoupdate: boolean //自动更新
   shortcut_global_quick_find: string //全局快捷键，快速查找
   shortcut_global_quick_lock: string //全局快捷键，快速锁定
   shortcut_global_open_main: string //全局快捷键，快速锁定
@@ -55,6 +56,7 @@ export const defaultUserSetInfo: UserSetInfo = {
   normal_autolock_time: 5,
   normal_lock_with_pc: true,
   normal_lang_set: 'zh-CN',
+  normal_autoupdate: false,
   shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.Shift}+A`,
   shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.Shift}+L`,
   shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Up`,

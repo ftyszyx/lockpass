@@ -5,10 +5,11 @@ import { useEffect } from 'react'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { message } from 'antd'
+import { message, Modal } from 'antd'
 import { GetAllVaultData, ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { User } from '@common/entitys/user.entity'
+import { UpdateEventType, UpdateInfo } from '@common/entitys/update.entity'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
@@ -27,6 +28,49 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
         PagePath.Vault_full.replace(':vault_id', vaultid).replace(':vault_item_id', vault_item_id)
       )
     })
+    window.electron.ipcRenderer.on(
+      MainToWebMsg.UpdateEvent,
+      (_, type: UpdateEventType, info: any) => {
+        ConsoleLog.LogInfo('UpdateEvent', type, info)
+        if (type == UpdateEventType.updateAvaliable) {
+          var updateinfo = info as UpdateInfo
+          Modal.confirm({
+            title: appset.getText('update.title'),
+            okText: appset.getText('update.download'),
+            content: (
+              <div>
+                <p>{appset.getText('update.content.version', updateinfo.version)}</p>
+                <p>{appset.getText('update.content.releaseData', updateinfo.releaseDate)}</p>
+                <p>{appset.getText('update.content.releaseName', updateinfo.releaseName)}</p>
+                <div dangerouslySetInnerHTML={{ __html: updateinfo.releaseNotes }}></div>
+              </div>
+            ),
+            onOk: async () => {
+              await ipc_call_normal(webToManMsg.Downloadupdate)
+            },
+            onCancel: () => {
+              ConsoleLog.LogInfo('update cancel')
+            }
+          })
+        } else if (type == UpdateEventType.UpdateDownOk) {
+          Modal.confirm({
+            title: appset.getText('update.downloadok.title'),
+            okText: appset.getText('update.downloadok.ok'),
+            content: appset.getText('update.downloadok.content', info as string),
+            onOk: async () => {
+              await ipc_call_normal(webToManMsg.InstallUpdate)
+            },
+            onCancel: () => {
+              ConsoleLog.LogInfo('update cancel')
+            }
+          })
+        } else if (type == UpdateEventType.UpdateError) {
+          message.error(appset.getText('update.error', info as string))
+        } else if (type == UpdateEventType.UpdateEmpty) {
+          message.info(appset.getText('update.noupdate'))
+        }
+      }
+    )
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOut, () => {
       ConsoleLog.LogInfo('LoginOut event')
       appstore.LoginOut()
@@ -36,6 +80,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LockApp)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowVaulteItem)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LoginOut)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.UpdateEvent)
     }
   }, [])
 

@@ -35,6 +35,8 @@ const RootRouter = () => {
     const lang = (await window.electron.ipcRenderer.invoke(webToManMsg.GetLang)) as string
     appset.ChangeLang(lang)
     appset.SetInitOK(true)
+    const version = (await window.electron.ipcRenderer.invoke(webToManMsg.getAppVersion)) as string
+    appset.SetVersion(version)
   }
   ConsoleLog.LogInfo('RootRouter render', viewtype)
   return (

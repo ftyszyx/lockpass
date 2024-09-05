@@ -253,5 +253,16 @@
   "404.desc": "页面不存在",
   "404.back": "返回首页",
 
-  "main.change_pass.notlogin": "未登陆"
+  "main.change_pass.notlogin": "未登陆",
+
+  "update.title": "发现新版本",
+  "update.content.releaseName": "发布标题:{0}",
+  "update.content.version": "版本号:{0}",
+  "update.content.releaseDate": "发布日期:{0}",
+  "update.download": "下载更新",
+  "update.downloadok.title": "下载成功",
+  "update.downloadok.ok": "安装",
+  "update.downloadok.content": "文件路径:{0},是否现在安装?",
+  "update.error": "下载失败:{0}",
+  "update.noupdate": "当前已经是最新版本"
 }

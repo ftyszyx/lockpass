@@ -15,6 +15,7 @@ export enum AppEventType {
   AliyuAuthOk = 'AliyuAuthOk',
   APPQuit = 'APPQuit',
   LangChange = 'LangChange',
+  UpdateEvent = 'UpdateEvent',
   SystemLock = 'SystemLock'
 }
 export const AppEvent = new EventEmitter()

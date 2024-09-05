@@ -50,7 +50,10 @@ export enum webToManMsg {
   OpenDb = 'OpenDb',
   getLogLevel = 'getLogLevel',
   ChangeMainPassword = 'ChangeMainPassword',
-  checkUpdate = 'checkUpdate'
+  getAppVersion = 'getAppVersion',
+  checkUpdate = 'checkUpdate',
+  Downloadupdate = 'Downloadupdate',
+  InstallUpdate = 'InstallUpdate'
 }
 
 export enum MainToWebMsg {
@@ -65,5 +68,6 @@ export enum MainToWebMsg {
   DataChange = 'DataChange',
   ShowVaulteItem = 'ShowVaulteItem',
   AliyunAuthOk = 'AliyunAuthOk',
-  LangChange = 'LangChange'
+  LangChange = 'LangChange',
+  UpdateEvent = 'UpdateEvent'
 }

@@ -87,7 +87,7 @@ class AppModel {
     globalShortcut.unregisterAll()
     if (this.checkInterval) clearInterval(this.checkInterval)
     Log.info('app quit')
-    app.quit()
+    // app.quit()
   }
 
   async init() {

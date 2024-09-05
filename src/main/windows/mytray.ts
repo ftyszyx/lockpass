@@ -1,7 +1,7 @@
 import { LangHelper } from '@common/lang'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import AppModel from '@main/models/app.model'
-import { Menu, Tray } from 'electron'
+import { app, Menu, Tray } from 'electron'
 import path from 'path'
 
 export class MyTray {
@@ -55,7 +55,8 @@ export class MyTray {
       {
         label: this.getLabelStr('quit', null),
         click: () => {
-          AppModel.getInstance().Quit()
+          // AppModel.getInstance().Quit()
+          app.quit()
         }
       }
     ])
