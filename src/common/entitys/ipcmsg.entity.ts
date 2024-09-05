@@ -52,6 +52,7 @@ export enum webToManMsg {
   ChangeMainPassword = 'ChangeMainPassword',
   getAppVersion = 'getAppVersion',
   checkUpdate = 'checkUpdate',
+  checkUpdateAuto = 'checkUpdateAuto',
   Downloadupdate = 'Downloadupdate',
   InstallUpdate = 'InstallUpdate'
 }

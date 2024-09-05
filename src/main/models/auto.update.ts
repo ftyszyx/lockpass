@@ -38,6 +38,11 @@ export class AutoUpdateHelper {
   //   autoUpdater.autoDownload = true
   //   autoUpdater.checkForUpdatesAndNotify()
   // }
+  checkUpdateAuto() {
+    Log.info('checkUpdateAuto')
+    autoUpdater.autoDownload = true
+    autoUpdater.checkForUpdatesAndNotify()
+  }
 
   checkForUpdates() {
     autoUpdater.checkForUpdates()

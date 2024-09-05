@@ -1,3 +1,4 @@
+import { UserSetInfo } from '@common/entitys/app.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { LastUserInfo, RegisterInfo, User } from '@common/entitys/user.entity'
@@ -80,6 +81,10 @@ export default function Register(): JSX.Element {
           history.go(-1)
         } else {
           history.replace(PagePath.Home)
+          const setinfo = user.user_set as UserSetInfo
+          if (setinfo.normal_autoupdate) {
+            await ipc_call(webToManMsg.checkUpdateAuto)
+          }
         }
       }
     })

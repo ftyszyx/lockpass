@@ -118,6 +118,10 @@ export function initAllApi() {
     app.quit()
   })
 
+  ipcMain.handle(webToManMsg.checkUpdateAuto, () => {
+    AppModel.getInstance().autoupdate?.checkUpdateAuto()
+  })
+
   ipcMain.handle(webToManMsg.RestartApp, () => {
     app.relaunch()
     app.quit()
