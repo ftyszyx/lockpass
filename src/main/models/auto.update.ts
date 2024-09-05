@@ -45,6 +45,7 @@ export class AutoUpdateHelper {
   }
 
   checkForUpdates() {
+    autoUpdater.autoDownload = false
     autoUpdater.checkForUpdates()
   }
 

@@ -45,7 +45,7 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.checkUpdate, () => {
-    return AppModel.getInstance().autoupdate?.checkForUpdates()
+    return AppModel.getInstance().auto_update?.checkForUpdates()
   })
 
   ipcMain.handle(webToManMsg.getAppVersion, () => {
@@ -119,7 +119,7 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.checkUpdateAuto, () => {
-    AppModel.getInstance().autoupdate?.checkUpdateAuto()
+    AppModel.getInstance().auto_update?.checkUpdateAuto()
   })
 
   ipcMain.handle(webToManMsg.RestartApp, () => {
@@ -129,11 +129,11 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.Downloadupdate, async () => {
-    return await AppModel.getInstance().autoupdate?.downloadUpdate()
+    return await AppModel.getInstance().auto_update?.downloadUpdate()
   })
 
   ipcMain.handle(webToManMsg.InstallUpdate, async () => {
-    return await AppModel.getInstance().autoupdate.QuitAndInstall()
+    return await AppModel.getInstance().auto_update.QuitAndInstall()
   })
 
   ipcMain.handle(webToManMsg.CloseDb, async () => {

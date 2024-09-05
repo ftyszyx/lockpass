@@ -265,5 +265,7 @@
   "update.downloadok.ok": "安装",
   "update.downloadok.content": "文件路径:{0},是否现在安装?",
   "update.error": "下载失败:{0}",
-  "update.noupdate": "当前已经是最新版本"
+  "update.noupdate": "当前已经是最新版本",
+
+  "admin_about.checkupdate": "检查软件更新"
 }

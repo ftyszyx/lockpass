@@ -112,6 +112,11 @@ export class UserService extends BaseService<User> {
         AppModel.getInstance().set.changeLang(item.user_set.normal_lang_set)
         AppEvent.emit(AppEventType.LangChange, item.user_set.normal_lang_set)
       }
+      if (old_set.normal_autoupdate != item.user_set.normal_autoupdate) {
+        if (item.user_set.normal_autoupdate === true) {
+          AppModel.getInstance().auto_update.checkUpdateAuto()
+        }
+      }
       this.userinfo = item
     }
   }

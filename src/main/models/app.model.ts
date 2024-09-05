@@ -54,7 +54,7 @@ class AppModel {
   public user: UserService | null = null
   public db_helper: SqliteHelper = new SqliteHelper()
   private checkInterval: NodeJS.Timeout | null = null
-  autoupdate: AutoUpdateHelper = new AutoUpdateHelper()
+  auto_update: AutoUpdateHelper = new AutoUpdateHelper()
   set: AppSetModel | null = null
   static App_quit = false
 
