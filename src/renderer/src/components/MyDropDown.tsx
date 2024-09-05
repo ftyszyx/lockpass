@@ -193,10 +193,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               key: 'app_set',
               label: appset.getText('mydropmenu.set')
             },
-            {
-              key: 'app_restart',
-              label: 'app_restart'
-            },
+            // {
+            //   key: 'app_restart',
+            //   label: 'app_restart'
+            // },
             {
               key: 'check_update',
               label: appset.getText('mydropmenu.checkupdate')
