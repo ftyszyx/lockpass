@@ -1,6 +1,7 @@
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { WindowBase } from './window.base'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
+import { Log } from '@main/libs/log'
 
 export class MainWindow extends WindowBase {
   constructor() {
@@ -13,6 +14,7 @@ export class MainWindow extends WindowBase {
     })
 
     AppEvent.on(AppEventType.UpdateEvent, (type, data) => {
+      Log.info('send UpdateEvent to windows', type)
       this.win.webContents.send(MainToWebMsg.UpdateEvent, type, data)
     })
   }

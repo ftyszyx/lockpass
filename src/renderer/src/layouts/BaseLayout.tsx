@@ -36,12 +36,20 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
           var updateinfo = info as UpdateInfo
           Modal.confirm({
             title: appset.getText('update.title'),
+            cancelText: appset.getText('cancel'),
             okText: appset.getText('update.download'),
             content: (
               <div>
-                <p>{appset.getText('update.content.version', updateinfo.version)}</p>
-                <p>{appset.getText('update.content.releaseData', updateinfo.releaseDate)}</p>
-                <p>{appset.getText('update.content.releaseName', updateinfo.releaseName)}</p>
+                <p className=" font-bold font-sans ">
+                  {appset.getText('update.content.releaseName', updateinfo.releaseName)}
+                </p>
+                <p className=" font-bold font-sans ">
+                  {appset.getText('update.content.version', updateinfo.version)}
+                </p>
+                <p className=" font-bold font-sans ">
+                  {appset.getText('update.content.releaseDate', updateinfo.releaseDate)}
+                </p>
+                <hr></hr>
                 <div dangerouslySetInnerHTML={{ __html: updateinfo.releaseNotes }}></div>
               </div>
             ),

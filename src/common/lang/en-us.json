@@ -211,7 +211,23 @@
   "mydropmenu.importcsv.content": "Import content is in new vault: {0}",
   "mydropmenu.exportcsv.title": "Export csv successfully",
   "mydropmenu.exportcsv.content": "File path:{0}",
+  "mydropmenu.change_mainpass": "Change master password",
+  "mydropmenu.checkupdate": "Check for updates",
   "mydropmenu.set": "System Settings",
+
+  "changemainpass": "Change master password",
+  "changemainpass.passnotmatch": "The new passwords entered twice are inconsistent",
+  "changemainpass.label.oldpass": "Old Password",
+  "changemainpass.label.newpass": "New Password",
+  "changemainpass.label.newpass_repeat": "Enter the new password again",
+  "changemainpass.placeholder.oldpass": "Please enter the old password",
+  "changemainpass.placeholder.newpass": "Please enter a new password",
+  "changemainpass.placeholder.newpass_repeat": "Please re-enter the new password",
+  "changemainpass.title": "Change master password",
+  "changemainpass.content": "Please back up your current data\nChanging the master password will re-encrypt all data\nAre you sure you want to change it?",
+  "changemainpass.ok.title": "Change master password successfully",
+  "changemainpass.ok.content": "Please log in again",
+  "changemainpass.pss_issame": "The new password cannot be the same as the old password",
 
   "filelistselect.name": "filename",
   "filelistselect.size": "size",
@@ -235,5 +251,18 @@
 
   "404.title": "404",
   "404.desc": "Page does not exist",
-  "404.back": "Return to home page"
+  "404.back": "Return to home page",
+
+  "main.change_pass.notlogin": "Not logged in",
+
+  "update.title": "New version found",
+  "update.content.releaseName": "Title:{0}",
+  "update.content.version": "Version number: {0}",
+  "update.content.releaseDate": "Release date: {0}",
+  "update.download": "Download updates",
+  "update.downloadok.title": "Download successful",
+  "update.downloadok.ok": "Install",
+  "update.downloadok.content": "File path: {0}, do you want to install it now?",
+  "update.error": "Download failed: {0}",
+  "update.noupdate": "This is already the latest version"
 }
