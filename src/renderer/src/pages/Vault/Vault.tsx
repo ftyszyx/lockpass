@@ -181,7 +181,6 @@ export default function Vault() {
           title="新增项目"
           onOk={async () => {
             set_show_add_vault(false)
-            await getAllVaultItem(appstore, appset.lang, messageApi)
           }}
           onClose={() => {
             set_show_add_vault(false)

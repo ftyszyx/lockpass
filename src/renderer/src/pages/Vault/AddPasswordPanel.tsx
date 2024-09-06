@@ -7,7 +7,7 @@ import SelectPasswordTypePanel from './SelectPasswordTypePanel'
 import { LeftOutlined } from '@ant-design/icons'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { ipc_call } from '@renderer/libs/tools/other'
+import { getAllVaultItem, ipc_call } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useRouterStore } from '@renderer/libs/router'
 import PaswordDetail from './PasswordDetail'
@@ -30,7 +30,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
   const appstore = use_appstore() as AppStore
   const route_data = useRouterStore()
   const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
-  ConsoleLog.LogInfo(`AddPasswordPanel render:${cur_vault_id}`)
+  ConsoleLog.LogInfo(`AddPasswordPanel render`)
   return (
     <div className=" relative">
       {show_password_type && (
@@ -74,8 +74,9 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
             values.vault_id = cur_vault_id
             values.vault_item_type = select_type
             await ipc_call(webToManMsg.AddValutItem, values)
-              .then(() => {
+              .then(async () => {
                 set_show_info(false)
+                await getAllVaultItem(appstore, appset.lang, messageApi)
                 props.onOk?.()
               })
               .catch((err) => {
@@ -96,7 +97,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
               props.init_info ||
               ({
                 icon: VaultItemTypeIcon[`icon_${select_type}`],
-                name: appset.getText(``)
+                name: appset.getText(`vaultitem.title`)
               } as VaultItem)
             }
           >

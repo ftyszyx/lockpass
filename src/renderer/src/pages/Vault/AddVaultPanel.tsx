@@ -4,7 +4,7 @@ import { Button, Form, Input, message, Modal, Popconfirm, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import TextArea from 'antd/es/input/TextArea'
 import Icon from '@renderer/components/Icon'
-import { ipc_call } from '@renderer/libs/tools/other'
+import { GetAllVaultData, getAllVaultItem, ipc_call } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
@@ -48,6 +48,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
               values.user_id = appstore.cur_user?.id
               await ipc_call(webToManMsg.AddValut, values)
                 .then(async () => {
+                  await GetAllVaultData(appstore, appset.lang, messageApi)
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
