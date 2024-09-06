@@ -16,7 +16,9 @@ import {
 export function GetPasswordInfoString(item: VaultItem): string {
   if (item.vault_item_type == VaultItemType.Login) {
     const info = item.info as LoginPasswordInfo
-    return `${info.username}${info.urls ? '-' + info.urls.join('-') : ''}`
+    const res = `${info.username} ${info.urls ? '-' + info.urls.join('-') : ''}`
+    console.log('res', res, info, item)
+    return res
   } else if (item.vault_item_type == VaultItemType.Card) {
     const info = item.info as CardPasswordInfo
     return `${info.card_company}:${info.card_number}`

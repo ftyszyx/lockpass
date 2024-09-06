@@ -457,6 +457,7 @@ class AppModel {
       Log.info(`get vault ok:${add_vault_name}`)
       const filepath = filePaths[0]
       const results = await ParseCsvFile(filepath)
+      // console.log('get results:', results)
       const importitems = getVaultImportItems(import_type)
       const vaultitems = []
       for (let i = 0; i < results.rows.length; i++) {

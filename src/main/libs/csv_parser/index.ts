@@ -19,67 +19,18 @@ const defaults = {
 }
 
 interface Options {
-  /**
-   * A single-character string used to specify the character used to escape strings in a CSV row.
-   *
-   * @default '"'
-   */
-  escape?: string | number
+  escape?: string | number | Buffer
   headers?: string[]
-  readonly mapHeaders?: (args: { header: string; index: number }) => string | null
-  readonly mapValues?: (args: { header: string; index: number; value: any }) => any
-  /**
-   * Specifies a single-character string to denote the end of a line in a CSV file.
-   *
-   * @default '\n'
-   */
+  mapHeaders?: (args: { header: string; index: number }) => string | null
+  mapValues?: (args: { header: string; index: number; value: any }) => any
   newline?: string | number
-
-  /**
-   * Specifies a single-character string to denote a quoted string.
-   *
-   * @default '"'
-   */
-  readonly quote?: string
-
-  /**
-   * If `true`, instructs the parser not to decode UTF-8 strings.
-   */
-  readonly raw?: boolean
-
-  /**
-   * Specifies a single-character string to use as the column separator for each row.
-   *
-   * @default ','
-   */
-  readonly separator?: string
-
-  /**
-   * Instructs the parser to ignore lines which represent comments in a CSV file. Since there is no specification that dictates what a CSV comment looks like, comments should be considered non-standard. The "most common" character used to signify a comment in a CSV file is `"#"`. If this option is set to `true`, lines which begin with `#` will be skipped. If a custom character is needed to denote a commented line, this option may be set to a string which represents the leading character(s) signifying a comment line.
-   *
-   * @default false
-   */
-  readonly skipComments?: boolean | string
-
-  /**
-   * Specifies the number of lines at the beginning of a data file that the parser should skip over, prior to parsing headers.
-   *
-   * @default 0
-   */
-  readonly skipLines?: number
-
-  /**
-   * Maximum number of bytes per row. An error is thrown if a line exeeds this value. The default value is on 8 peta byte.
-   *
-   * @default Number.MAX_SAFE_INTEGER
-   */
-  readonly maxRowBytes?: number
-
-  /**
-   * If `true`, instructs the parser that the number of columns in each row must match the number of `headers` specified.
-   */
-  readonly strict?: boolean
-
+  quote?: string | Buffer
+  raw?: boolean
+  separator?: string
+  skipComments?: boolean | string
+  skipLines?: number
+  maxRowBytes?: number
+  strict?: boolean
   customNewline?: boolean
 }
 
@@ -92,13 +43,11 @@ class CsvParser extends Transform {
     super({ objectMode: true, highWaterMark: 16 })
     const options = Object.assign({}, defaults, opts)
     options.customNewline = options.newline !== defaults.newline
-    for (const key of ['newline', 'quote', 'separator']) {
+    for (const key of ['newline', 'quote', 'separator', 'escape']) {
       if (typeof options[key] !== 'undefined') {
-        ;[options[key]] = Buffer.from(options[key])
+        options[key] = Buffer.from(options[key])[0]
       }
     }
-    // if escape is not defined on the passed options, use the end value of quote
-    this.options.escape = (opts || {}).escape ? Buffer.from(options.escape)[0] : options.quote
     this.state = {
       empty: options.raw ? Buffer.alloc(0) : '',
       escaped: false,

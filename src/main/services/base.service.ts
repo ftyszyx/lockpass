@@ -72,6 +72,7 @@ export class BaseService<Entity extends BaseEntity> {
       for (let i = 0; i < list.length; i++) {
         const entity = this.objToEntity(list[i])
         this.fixEntityIn(entity)
+        // Log.info('add one', JSON.stringify(entity))
         await AppModel.getInstance().db_helper.AddOne(entity)
       }
       dbhelpr.commitTransaction()

@@ -59,7 +59,7 @@ export const defaultUserSetInfo: UserSetInfo = {
   normal_lang_set: 'zh-cn',
   normal_autoupdate: false,
   normal_poweron_open: false,
-  shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.Shift}+A`,
+  shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Q`,
   shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.Shift}+L`,
   shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Up`,
   shortcut_local_find: `${ControlKey.ctrl}+F`,

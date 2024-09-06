@@ -55,6 +55,9 @@ export default function Home() {
                 <div
                   key={valut.id}
                   className="flex flex-col bg-white shadow-md rounded-lg p-4 w-64 border-t-4 h-[150px] border-purple-200 mr-4 mb-4"
+                  onClick={() => {
+                    history.push(`${PagePath.vault}/${valut.id}/${MenuParamNull}`)
+                  }}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <h2 className="text-lg font-semibold">{valut.name}</h2>
@@ -66,8 +69,9 @@ export default function Home() {
                   <div className="flex justify-between items-center ">
                     <Icon
                       type="icon-set"
-                      className=" text-gray-400"
-                      onClick={() => {
+                      className=" text-gray-400 "
+                      onClick={(e) => {
+                        e.stopPropagation()
                         setEditPanelTitle('编辑密码库')
                         setCurInfo(valut)
                         setShowType(ModalType.Edit)

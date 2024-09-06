@@ -78,6 +78,7 @@ export class BaseDb {
       const key = keys[i]
       let element = obj[key]
       element = this.encode_table_str(obj, key, element)
+      // Log.info(`key:${key} value:${obj[key]}->${element}`)
       const col_value = this.getColumnValue(obj, key, element)
       if (col_value !== null && col_value !== undefined) {
         key_arr.push(key)
@@ -157,6 +158,7 @@ export class BaseDb {
           const col_value = rows[i][col_name]
           if (col_value == undefined || col_value == null) continue
           item[key] = this.decode_table_str(obj, key, col_value)
+          // Log.info(`key:${key} value:${col_value}->${item[key]}`)
         }
       }
       res.push(item)

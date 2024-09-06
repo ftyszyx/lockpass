@@ -51,8 +51,10 @@ export default function Vault() {
             placeholder={appset.getText('vault.global_search', appstore.cur_user?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
-              if (newvalue.target.value) {
-                set_gloal_search_keyword(newvalue.target.value.trim())
+              // console.log('newvalue', newvalue.target.value)
+              const value = newvalue.target.value
+              if (value !== null && value !== undefined) {
+                set_gloal_search_keyword(value.trim())
               }
             }}
           />

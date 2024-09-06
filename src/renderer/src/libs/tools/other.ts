@@ -53,6 +53,7 @@ export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi
 }
 
 export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
+  ConsoleLog.LogInfo(`getAllVault:${appstore.cur_user == null}`)
   if (appstore.cur_user) {
     const where: WhereDef<Vault> = { cond: { user_id: appstore.cur_user.id } }
     await ipc_call<Vault[]>(webToManMsg.GetAllValuts, where)

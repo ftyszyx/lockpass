@@ -166,7 +166,7 @@ export class MyEncode {
     } catch (e: any) {
       Log.Exception(e)
     }
-    return data
+    return ''
   }
 
   public Decode(data: string): string {
@@ -188,6 +188,6 @@ export class MyEncode {
     } catch (e: any) {
       Log.Exception(e, data)
     }
-    return data
+    return ''
   }
 }
