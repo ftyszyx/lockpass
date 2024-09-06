@@ -1,43 +1,76 @@
-import { autoUpdater } from 'electron-updater'
+import { autoUpdater, ProgressInfo, UpdateInfo } from 'electron-updater'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
-import { UpdateEventType } from '@common/entitys/update.entity'
+import {
+  UpdateEventType,
+  MyUpdateInfo,
+  MyUpdateProgress,
+  UpdateStatus
+} from '@common/entitys/update.entity'
+import { LangHelper } from '@common/lang'
+
+const getUpdateInfo = (info: UpdateInfo): MyUpdateInfo => {
+  return {
+    version: info.version,
+    releaseDate: info.releaseDate,
+    releaseName: info.releaseName,
+    releaseNotes: info.releaseNotes
+  }
+}
+
+const getUpdateProgress = (progressObj: ProgressInfo): MyUpdateProgress => {
+  return {
+    total: progressObj.total,
+    delta: progressObj.delta,
+    transferred: progressObj.transferred,
+    percent: progressObj.percent,
+    bytesPerSecond: progressObj.bytesPerSecond
+  }
+}
 export class AutoUpdateHelper {
+  status: UpdateStatus = UpdateStatus.idle
   constructor() {
     autoUpdater.logger = Log
     autoUpdater.autoDownload = false
     autoUpdater.on('checking-for-update', () => {
       Log.info('Checking for update...')
+      this.status = UpdateStatus.Checking
+      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.Checking)
     })
     autoUpdater.on('update-available', (info) => {
+      this.status = UpdateStatus.idle
       Log.info('Update available.', JSON.stringify(info))
-      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.updateAvaliable, info)
+      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.updateAvaliable, getUpdateInfo(info))
     })
 
     autoUpdater.on('update-not-available', (info) => {
+      this.status = UpdateStatus.idle
       Log.info('Update not available.', JSON.stringify(info))
-      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.UpdateEmpty, info)
+      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.UpdateEmpty, getUpdateInfo(info))
     })
     autoUpdater.on('error', (err) => {
+      this.status = UpdateStatus.idle
       Log.info(`error in update name:${err.name} msg:${err.message} stack: ${err.stack}`)
       AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.UpdateError, err.message)
     })
     autoUpdater.on('download-progress', (progressObj) => {
-      console.log(`download progress percent:${progressObj.percent} total:${progressObj.total}`)
-      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.UpdateProgress, progressObj)
+      this.status = UpdateStatus.Downloading
+      Log.info(`download progress percent:${progressObj.percent} total:${progressObj.total}`)
+      AppEvent.emit(
+        AppEventType.UpdateEvent,
+        UpdateEventType.UpdateProgress,
+        getUpdateProgress(progressObj)
+      )
     })
     autoUpdater.on('update-downloaded', (info) => {
-      console.log(
+      this.status = UpdateStatus.DownloadOk
+      Log.info(
         `update downloaded file:${info.downloadedFile}  note:${info.releaseNotes} desc:${JSON.stringify(info)} `
       )
       AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.UpdateDownOk, info.downloadedFile)
     })
   }
 
-  // checkForUpdates() {
-  //   autoUpdater.autoDownload = true
-  //   autoUpdater.checkForUpdatesAndNotify()
-  // }
   checkUpdateAuto() {
     Log.info('checkUpdateAuto')
     autoUpdater.autoDownload = true
@@ -45,6 +78,10 @@ export class AutoUpdateHelper {
   }
 
   checkForUpdates() {
+    if (this.status !== UpdateStatus.idle) {
+      AppEvent.emit(AppEventType.MainMessage, LangHelper.getString('update.checking'))
+      return
+    }
     autoUpdater.autoDownload = false
     autoUpdater.checkForUpdates()
   }

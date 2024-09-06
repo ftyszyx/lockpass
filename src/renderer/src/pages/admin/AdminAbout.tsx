@@ -15,9 +15,7 @@ export default function AdminAbout() {
         <Button
           type="primary"
           onClick={async () => {
-            await ipc_call_normal(webToManMsg.checkUpdate, () => {
-              console.log('check update')
-            })
+            await ipc_call_normal(webToManMsg.checkUpdate)
           }}
         >
           {appset.getText('admin_about.checkupdate')}

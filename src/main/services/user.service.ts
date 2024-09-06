@@ -108,17 +108,21 @@ export class UserService extends BaseService<User> {
     item.user_set = { ...defaultUserSetInfo, ...item.user_set }
     if (this.userinfo && this.userinfo.id == item.id) {
       const old_set = this.userinfo.user_set as UserSetInfo
-      if (old_set.normal_lang_set != item.user_set.normal_lang_set) {
-        AppModel.getInstance().set.changeLang(item.user_set.normal_lang_set)
-        AppEvent.emit(AppEventType.LangChange, item.user_set.normal_lang_set)
+      const now_set = item.user_set
+      // console.log('old_set:', old_set, 'nowset', now_set)
+      if (old_set.normal_lang_set != now_set.normal_lang_set) {
+        AppModel.getInstance().set.changeLang(now_set.normal_lang_set)
+        AppEvent.emit(AppEventType.LangChange, now_set.normal_lang_set)
       }
-      if (old_set.normal_autoupdate != item.user_set.normal_autoupdate) {
-        if (item.user_set.normal_autoupdate === true) {
+      // console.log('autoupdate:', now_set.normal_autoupdate, old_set.normal_autoupdate)
+      if (old_set.normal_autoupdate != now_set.normal_autoupdate) {
+        if (now_set.normal_autoupdate === true) {
           AppModel.getInstance().auto_update.checkUpdateAuto()
         }
       }
-      if (old_set.norml_poweron_open != item.user_set.norml_poweron_open) {
-        AppModel.getInstance().powerOnOpen(item.user_set.norml_poweron_open)
+      // console.log('poweron open:', now_set.normal_poweron_open, old_set.normal_poweron_open)
+      if (old_set.normal_poweron_open != now_set.normal_poweron_open) {
+        AppModel.getInstance().powerOnOpen(now_set.normal_poweron_open)
       }
       this.userinfo = item
     }

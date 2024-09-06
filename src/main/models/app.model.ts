@@ -593,8 +593,10 @@ class AppModel {
   }
 
   powerOnOpen(open: boolean) {
+    Log.info('poweronopen', open)
     if (app.isPackaged) {
       const ex = process.execPath
+      Log.info('poweronopen1', open)
       app.setLoginItemSettings({
         openAtLogin: open,
         path: ex,

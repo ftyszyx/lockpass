@@ -268,5 +268,6 @@
   "menu.about": "about",
   "404.title": "404",
 
-  "404.desc": "Page does not exist"
+  "404.desc": "Page does not exist",
+  "update.checking": "checking for updates, please wait"
 }

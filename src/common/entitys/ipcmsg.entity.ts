@@ -55,7 +55,8 @@ export enum webToManMsg {
   checkUpdateAuto = 'checkUpdateAuto',
   Downloadupdate = 'Downloadupdate',
   PowerOnOpen = 'PowerOnOpen',
-  InstallUpdate = 'InstallUpdate'
+  InstallUpdate = 'InstallUpdate',
+  CheckUpdateStatus = 'CheckUpdateStatus'
 }
 
 export enum MainToWebMsg {

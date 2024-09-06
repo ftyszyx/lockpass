@@ -6,10 +6,10 @@ import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { message, Modal } from 'antd'
-import { GetAllVaultData, ipc_call_normal } from '@renderer/libs/tools/other'
+import { GetAllVaultData, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { User } from '@common/entitys/user.entity'
-import { UpdateEventType, UpdateInfo } from '@common/entitys/update.entity'
+import { UpdateEventType, MyUpdateInfo, MyReleaseNoteInfo } from '@common/entitys/update.entity'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
@@ -17,6 +17,11 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
   ConsoleLog.LogInfo('baselayout render')
+  useEffect(() => {
+    if (appset.lang != null) {
+      UpdateMenu(appstore, appset.lang)
+    }
+  }, [appset.lang])
   useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.LockApp, () => {
       ConsoleLog.LogInfo('LockApp event')
@@ -33,7 +38,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       (_, type: UpdateEventType, info: any) => {
         ConsoleLog.LogInfo('UpdateEvent', type, info)
         if (type == UpdateEventType.updateAvaliable) {
-          var updateinfo = info as UpdateInfo
+          var updateinfo = info as MyUpdateInfo
           Modal.confirm({
             title: appset.getText('update.title'),
             cancelText: appset.getText('cancel'),
@@ -50,7 +55,23 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
                   {appset.getText('update.content.releaseDate', updateinfo.releaseDate)}
                 </p>
                 <hr></hr>
-                <div dangerouslySetInnerHTML={{ __html: updateinfo.releaseNotes }}></div>
+                <div>
+                  {typeof updateinfo.releaseNotes === 'string' && (
+                    <div dangerouslySetInnerHTML={{ __html: updateinfo.releaseNotes }}></div>
+                  )}
+                  {typeof updateinfo.releaseNotes !== 'string' &&
+                    updateinfo.releaseNotes.map((note: MyReleaseNoteInfo, index: number) => {
+                      return (
+                        <div key={index}>
+                          <p className=" font-bold font-sans ">
+                            {appset.getText('update.content.version', note.version)}
+                          </p>
+                          <div dangerouslySetInnerHTML={{ __html: note.note }}></div>
+                        </div>
+                      )
+                    })}
+                </div>
+                <div></div>
               </div>
             ),
             onOk: async () => {
@@ -60,6 +81,8 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
               ConsoleLog.LogInfo('update cancel')
             }
           })
+        } else if (type == UpdateEventType.Checking) {
+          message.info(appset.getText('update.checking'))
         } else if (type == UpdateEventType.UpdateDownOk) {
           Modal.confirm({
             title: appset.getText('update.downloadok.title'),

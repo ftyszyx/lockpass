@@ -56,6 +56,10 @@ export function initAllApi() {
     AppModel.getInstance().my_tray?.updateMenu(setinfo)
   })
 
+  ipcMain.handle(webToManMsg.CheckUpdateStatus, (_) => {
+    return AppModel.getInstance().auto_update?.status
+  })
+
   ipcMain.handle(webToManMsg.showWindows, (_, viewtype: renderViewType, showorHide: boolean) => {
     if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.showOrHide(showorHide)
     else if (viewtype == renderViewType.Quickview)
