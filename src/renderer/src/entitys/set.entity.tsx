@@ -23,6 +23,12 @@ export const NormalSetFiledList: FieldInfo[] = [
     }
   },
   {
+    field_name: 'normal_poweron_open',
+    render: (props: FiledProps) => {
+      return <Switch {...props} />
+    }
+  },
+  {
     field_name: 'normal_lang_set',
     render: (props: FiledProps) => {
       // const appset = use_appset() as AppsetStore

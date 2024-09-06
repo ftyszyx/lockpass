@@ -71,6 +71,7 @@
   "set.menu.local_shortcut": "软件快捷键",
   "set.menu.normal_autolock_time": "自动锁定需要等待系统闲置时间",
   "set.menu.normal_autoupdate": "自动更新",
+  "set.menu.normal_poweron_open": "开机自启动",
   "set.menu.normal_lock_with_pc": "随电脑锁定",
   "set.menu.normal_lang_set": "修改系统语言",
   "set.menu.shortcut_global_quick_find": "全局快速查找",

@@ -591,6 +591,17 @@ class AppModel {
     }
     return true
   }
+
+  powerOnOpen(open: boolean) {
+    if (app.isPackaged) {
+      const ex = process.execPath
+      app.setLoginItemSettings({
+        openAtLogin: open,
+        path: ex,
+        args: []
+      })
+    }
+  }
 }
 
 export default AppModel

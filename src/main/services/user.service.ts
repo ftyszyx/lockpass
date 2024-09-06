@@ -117,6 +117,9 @@ export class UserService extends BaseService<User> {
           AppModel.getInstance().auto_update.checkUpdateAuto()
         }
       }
+      if (old_set.norml_poweron_open != item.user_set.norml_poweron_open) {
+        AppModel.getInstance().powerOnOpen(item.user_set.norml_poweron_open)
+      }
       this.userinfo = item
     }
   }

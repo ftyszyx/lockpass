@@ -54,6 +54,7 @@ export enum webToManMsg {
   checkUpdate = 'checkUpdate',
   checkUpdateAuto = 'checkUpdateAuto',
   Downloadupdate = 'Downloadupdate',
+  PowerOnOpen = 'PowerOnOpen',
   InstallUpdate = 'InstallUpdate'
 }
 

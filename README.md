@@ -120,18 +120,18 @@ npm run dev
 
 [electron-vite](https://github.com/alex8088/electron-vite)
 
-<u>electron-builder 打包</u>
+[electron-builder打包](https://www.electron.build/index.html)
 
-<u>electron-builder github</u>
-
+[electron-builder github](https://github.com/electron-userland/electron-builder)
 其实打包流程就是 electron vite先把main render preload下的脚本用vite打包到out目录下 然后electron-build把资源打成asar
 
 ## **遇到的问题汇总**
 
 ## **todo**
 
-1、程序更新机制
+1、程序更新机制(完成)
 https://www.electron.build/auto-update
+electron-builder的功能的确强大，做的很好，点赞
 
 3、Linux 打包异常问题(完成)
 snap打包好像需要签名文件。
@@ -154,3 +154,5 @@ windows下是%appdata%
 支持英文和中文
 
 7、跟随系统锁定(完成)
+
+8、开机自启动(完成)
