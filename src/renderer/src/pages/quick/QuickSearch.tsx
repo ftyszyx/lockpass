@@ -26,6 +26,7 @@ export default function QuickSearch() {
   const selectDetailItemRef = useRef(select_detail_item)
   const inputref = useRef<InputRef>(null)
   const showitems = useMemo(() => {
+    console.log('search', search, appstore.vault_items)
     if (search && search.trim().length > 0) {
       return appstore.vault_items.filter((item) => {
         if (IsVaultItemMatchSearch(item, search)) return true
@@ -142,7 +143,7 @@ export default function QuickSearch() {
       const selectItem = selectItemRef.current
       const show_detail = showDetailRef.current
       const selectItemDetail = selectDetailItemRef.current
-      console.log('handlekeydown', event.key, selectItem)
+      // console.log('handlekeydown', event.key, selectItem)
       if (event.ctrlKey && event.key == 'c') {
         handlerCopy(PasswordRenderDetailKey.ctrl_C)
         return

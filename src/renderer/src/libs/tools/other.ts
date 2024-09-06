@@ -71,6 +71,7 @@ export async function GetAllVaultData(
   lang: LangItem,
   messageApi: MessageInstance
 ) {
+  ConsoleLog.LogInfo(`GetAllVaultData:${appstore.cur_user == null}`)
   await getAllVault(appstore, lang, messageApi)
   await getAllVaultItem(appstore, lang, messageApi)
 }
@@ -80,6 +81,7 @@ export async function getAllVaultItem(
   lang: LangItem,
   messageApi: MessageInstance
 ) {
+  ConsoleLog.LogInfo(`getAllVaultItem:${appstore.cur_user == null}`)
   if (appstore.cur_user) {
     const where2: WhereDef<VaultItem> = { cond: { user_id: appstore.cur_user.id } }
     await ipc_call<VaultItem[]>(webToManMsg.GetAllValutItems, where2)

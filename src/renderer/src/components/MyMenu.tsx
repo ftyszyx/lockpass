@@ -98,7 +98,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
         <div className="flex flex-row justify-between p-1 items-center">
           <div className="flex flex-row items-center text-white">
             <Link to={PagePath.Home}>
-              <Icon type={Icon_type.icon_user} className="text-[30px] mr-2 " />
+              <Icon type={Icon_type.icon_home} className=" mr-2  text-[25px]  " />
             </Link>
             {appstore.cur_user?.username}
           </div>

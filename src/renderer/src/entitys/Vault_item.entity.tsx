@@ -17,7 +17,7 @@ export function GetPasswordInfoString(item: VaultItem): string {
   if (item.vault_item_type == VaultItemType.Login) {
     const info = item.info as LoginPasswordInfo
     const res = `${info.username} ${info.urls ? '-' + info.urls.join('-') : ''}`
-    console.log('res', res, info, item)
+    // console.log('res', res, info, item)
     return res
   } else if (item.vault_item_type == VaultItemType.Card) {
     const info = item.info as CardPasswordInfo
@@ -38,6 +38,7 @@ export function IsKeyForSearch(key: string): boolean {
 //search fun
 export function IsVaultItemMatchSearch(item: VaultItem, search_word: string): boolean {
   if (item.name.includes(search_word)) return true
+  if (item.remarks.includes(search_word)) return true
   if (item.info) {
     const keys = Object.keys(item.info)
     const ok = keys.some((key) => {

@@ -544,13 +544,13 @@ class AppModel {
     let page = Math.ceil(total / pagesize)
     for (let i = 0; i < page; i++) {
       this.myencode.setCurPassHashStr(oldhash)
-      const items = await this.db_helper.GetMany(this.vaultItem.entity, {
+      const items = await this.db_helper.GetMany(entity, {
         cond,
         page_size: pagesize,
         page: i
       })
       this.myencode.setCurPassHashStr(newhash)
-      await this.db_helper.UpdateManyById(this.vaultItem.entity, items)
+      await this.db_helper.UpdateManyById(entity, items)
     }
   }
 
