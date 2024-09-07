@@ -18,7 +18,8 @@ interface props {
 
 export default function PaswordDetail(props: props) {
   ConsoleLog.LogInfo('PaswordDetail render', props)
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   return (
     <>
       <div className="flex flex-row items-center space-x-2 ">
@@ -36,30 +37,30 @@ export default function PaswordDetail(props: props) {
         <Form.Item name="name" className="flex-grow">
           <MyInputWrapper
             inputElement={Input}
-            inputProps={{ placeholder: appset.getText('name') }}
+            inputProps={{ placeholder: getText('name') }}
             show_type={props.modal_type}
           />
         </Form.Item>
       </div>
       <div>
-        {GetPasswordFilelist(props.passwordType, appset.lang).map((item: FieldInfo) => {
+        {GetPasswordFilelist(props.passwordType, lang).map((item: FieldInfo) => {
           return (
             <Form.Item
               className=" mb-2  "
               name={['info', item.field_name]}
-              label={item.hide_label ? '' : appset.getText(`vaultitem.label.${item.field_name}`)}
+              label={item.hide_label ? '' : getText(`vaultitem.label.${item.field_name}`)}
               rules={item.edit_rules}
               key={item.field_name}
             >
               <item.render
                 show_type={props.modal_type}
-                placeholder={appset.getText(`vaultitem.placeholder.${item.field_name}`)}
+                placeholder={getText(`vaultitem.placeholder.${item.field_name}`)}
               ></item.render>
             </Form.Item>
           )
         })}
       </div>
-      <Form.Item className="mb-0" name="remarks" label={appset.getText('vaultadd.remarks')}>
+      <Form.Item className="mb-0" name="remarks" label={getText('vaultadd.remarks')}>
         <MyInputWrapper<TextAreaProps>
           inputProps={{ autoSize: { minRows: 4 } }}
           inputElement={TextArea}

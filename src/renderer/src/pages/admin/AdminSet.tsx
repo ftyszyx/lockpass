@@ -15,7 +15,8 @@ import { useState } from 'react'
 export default function AdminSet() {
   const [form] = useForm<UserSetInfo>(null)
   const appstore = use_appstore() as AppStore
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const [messageApi, messageContext] = message.useMessage()
   const [select_item, set_select_item] = useState<string>(SetMenuItem.normal)
   const onSave = () => {
@@ -27,7 +28,7 @@ export default function AdminSet() {
           if (setinfo[key] != values[key]) {
             const res = await ipc_call_normal(webToManMsg.CheckShortKey, values[key])
             if (res) {
-              messageApi.error(appset.getText(`set.key_conflict`, values[key]))
+              messageApi.error(getText(`set.key_conflict`, values[key]))
               return
             }
           }
@@ -37,7 +38,7 @@ export default function AdminSet() {
       if (select_item == SetMenuItem.shortcut_global) {
         await ipc_call_normal(webToManMsg.ShortCutKeyChange)
       }
-      await UpdateMenu(appstore, appset.lang)
+      await UpdateMenu(appstore, lang)
     })
   }
   ConsoleLog.LogInfo('AdminSet render', appstore.cur_user?.user_set)
@@ -63,7 +64,7 @@ export default function AdminSet() {
                     type={Icon_type[`${item}_set`]}
                     svg
                   ></Icon>
-                  <span> {appset.getText(`set.menu.${item}`)}</span>
+                  <span> {getText(`set.menu.${item}`)}</span>
                 </div>
               )
             })}
@@ -84,7 +85,7 @@ export default function AdminSet() {
                   return (
                     <Form.Item
                       key={item.field_name}
-                      label={appset.getText(`set.menu.${item.field_name}`)}
+                      label={getText(`set.menu.${item.field_name}`)}
                       name={item.field_name}
                     >
                       <item.render></item.render>
@@ -97,7 +98,7 @@ export default function AdminSet() {
                   if (key.startsWith(select_item)) {
                     console.log('key', key)
                     return (
-                      <Form.Item key={key} label={appset.getText(`set.menu.${key}`)} name={key}>
+                      <Form.Item key={key} label={getText(`set.menu.${key}`)} name={key}>
                         <ShortKeyInput></ShortKeyInput>
                       </Form.Item>
                     )
@@ -110,7 +111,7 @@ export default function AdminSet() {
                 <Form.Item>
                   <div className=" flex flex-row-reverse">
                     <Button onClick={onSave} type="primary" htmlType="submit" className="">
-                      {appset.getText('save')}
+                      {getText('save')}
                     </Button>
                     <Button
                       className="mr-3"
@@ -124,7 +125,7 @@ export default function AdminSet() {
                         })
                       }}
                     >
-                      {appset.getText('recover_default')}
+                      {getText('recover_default')}
                     </Button>
                   </div>
                 </Form.Item>

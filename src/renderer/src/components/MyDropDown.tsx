@@ -25,7 +25,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
   const [messageApi, contextHolder] = message.useMessage()
   const history = useHistory()
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
   return (
     <>
@@ -51,11 +52,11 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               const res = await ipc_call_normal<string>(webToManMsg.ExputCSV)
               if (res == null) return
               confirm({
-                title: appset.getText('mydropmenu.exportcsv.title'),
+                title: getText('mydropmenu.exportcsv.title'),
                 icon: <ExclamationCircleOutlined />,
-                content: appset.getText('mydropmenu.exportcsv.content', res),
-                okText: appset.getText('ok'),
-                cancelText: appset.getText('cancel'),
+                content: getText('mydropmenu.exportcsv.content', res),
+                okText: getText('ok'),
+                cancelText: getText('cancel'),
                 onOk: async () => {}
               })
             } else if (item.key == 'change_mainpass') {
@@ -64,22 +65,22 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               await ipc_call_normal<string>(webToManMsg.Backup_local).then((filepath) => {
                 if (filepath == null) return
                 confirm({
-                  title: appset.getText('menu.backup.ok.title'),
+                  title: getText('menu.backup.ok.title'),
                   icon: <ExclamationCircleOutlined />,
-                  content: appset.getText('menu.backup.ok.content', filepath),
-                  okText: appset.getText('ok'),
-                  cancelText: appset.getText('cancel')
+                  content: getText('menu.backup.ok.content', filepath),
+                  okText: getText('ok'),
+                  cancelText: getText('cancel')
                 })
               })
             } else if (item.key === 'backup_drive_alidrive_do') {
               await ipc_call_normal<boolean>(webToManMsg.Backup_alidrive).then((res) => {
                 if (res) {
                   confirm({
-                    title: appset.getText('menu.backup.ok.title'),
+                    title: getText('menu.backup.ok.title'),
                     icon: <ExclamationCircleOutlined />,
-                    content: appset.getText('menu.backup.ok.content', res),
-                    okText: appset.getText('ok'),
-                    cancelText: appset.getText('cancel')
+                    content: getText('menu.backup.ok.content', res),
+                    okText: getText('ok'),
+                    cancelText: getText('cancel')
                   })
                 }
               })
@@ -94,20 +95,20 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               return
             } else if (item.key === 'local_recover_do') {
               confirm({
-                title: appset.getText('menu.recover.sure.title'),
+                title: getText('menu.recover.sure.title'),
                 icon: <ExclamationCircleOutlined />,
-                content: appset.getText('menu.recover.sure.content'),
-                okText: appset.getText('ok'),
-                cancelText: appset.getText('cancel'),
+                content: getText('menu.recover.sure.content'),
+                okText: getText('ok'),
+                cancelText: getText('cancel'),
                 onOk: async () => {
                   await ipc_call_normal<boolean>(webToManMsg.Recover_local).then((res) => {
                     if (res) {
                       confirm({
-                        title: appset.getText('menu.recover.ok.title'),
+                        title: getText('menu.recover.ok.title'),
                         icon: <ExclamationCircleOutlined />,
-                        content: appset.getText('menu.recover.ok.content'),
-                        okText: appset.getText('ok'),
-                        cancelText: appset.getText('cancel'),
+                        content: getText('menu.recover.ok.content'),
+                        okText: getText('ok'),
+                        cancelText: getText('cancel'),
                         onOk: async () => {
                           await ipc_call_normal(webToManMsg.RestartApp)
                         }
@@ -121,40 +122,40 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           items: [
             {
               key: 'password_gen',
-              label: appset.getText('menu.password_gen')
+              label: getText('menu.password_gen')
             },
             {
               type: 'divider'
             },
             {
               key: 'backup_local',
-              label: appset.getText('menu.backup_local'),
+              label: getText('menu.backup_local'),
               children: [
                 {
                   key: 'local_backup_do',
-                  label: appset.getText('menu.systembackup')
+                  label: getText('menu.systembackup')
                 },
                 {
                   key: 'local_recover_do',
-                  label: appset.getText('menu.systemRecover')
+                  label: getText('menu.systemRecover')
                 }
               ]
             },
             {
               key: 'backup_drive',
-              label: appset.getText('menu.backup_drive'),
+              label: getText('menu.backup_drive'),
               children: [
                 {
                   key: 'backup_drive_alidrive',
-                  label: appset.getText('menu.backup_drive_alidrive'),
+                  label: getText('menu.backup_drive_alidrive'),
                   children: [
                     {
                       key: 'backup_drive_alidrive_do',
-                      label: appset.getText('menu.backup_drive_alidrive_do')
+                      label: getText('menu.backup_drive_alidrive_do')
                     },
                     {
                       key: 'recover_drive_alidrive_do',
-                      label: appset.getText('menu.backup_drive_alidrive_recover')
+                      label: getText('menu.backup_drive_alidrive_recover')
                     }
                   ]
                 }
@@ -165,33 +166,33 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             },
             {
               key: 'importcsv',
-              label: appset.getText('mydropmenu.importcsv')
+              label: getText('mydropmenu.importcsv')
             },
             {
               key: 'exportcsv',
-              label: appset.getText('mydropmenu.exportcsv')
+              label: getText('mydropmenu.exportcsv')
             },
             {
               type: 'divider'
             },
             {
               key: 'app_exit',
-              label: appset.getText('app_exit')
+              label: getText('app_exit')
             },
             {
               key: 'change_account',
-              label: appset.getText('mydropmenu.change_account')
+              label: getText('mydropmenu.change_account')
             },
             {
               key: 'change_mainpass',
-              label: appset.getText('mydropmenu.change_mainpass')
+              label: getText('mydropmenu.change_mainpass')
             },
             {
               type: 'divider'
             },
             {
               key: 'app_set',
-              label: appset.getText('mydropmenu.set')
+              label: getText('mydropmenu.set')
             },
             // {
             //   key: 'app_restart',
@@ -199,7 +200,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             // },
             {
               key: 'check_update',
-              label: appset.getText('mydropmenu.checkupdate')
+              label: getText('mydropmenu.checkupdate')
             }
           ]
         }}
@@ -229,20 +230,20 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           onOk={(item) => {
             setShowSelectBackupFile(false)
             confirm({
-              title: appset.getText('menu.recover.sure.title'),
+              title: getText('menu.recover.sure.title'),
               icon: <ExclamationCircleOutlined />,
-              content: appset.getText('menu.recover.sure.content_alidrive', item.name),
-              okText: appset.getText('ok'),
-              cancelText: appset.getText('cancel'),
+              content: getText('menu.recover.sure.content_alidrive', item.name),
+              okText: getText('ok'),
+              cancelText: getText('cancel'),
               onOk: () => {
                 ipc_call_normal<boolean>(webToManMsg.Recover_alidrive, item.name).then((res) => {
                   if (res) {
                     confirm({
-                      title: appset.getText('menu.recover.ok.title'),
+                      title: getText('menu.recover.ok.title'),
                       icon: <ExclamationCircleOutlined />,
-                      content: appset.getText('menu.recover.ok.content'),
-                      okText: appset.getText('ok'),
-                      cancelText: appset.getText('cancel'),
+                      content: getText('menu.recover.ok.content'),
+                      okText: getText('ok'),
+                      cancelText: getText('cancel'),
                       onOk: async () => {
                         await ipc_call_normal(webToManMsg.RestartApp)
                       }
@@ -264,13 +265,13 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             setShowSelectImportType(false)
             const res = await ipc_call_normal<boolean>(webToManMsg.ImportCSV, type)
             if (res) {
-              await GetAllVaultData(appstore, appset.lang, messageApi)
+              await GetAllVaultData(appstore, lang, messageApi)
               confirm({
-                title: appset.getText('mydropmenu.importcsv.title'),
+                title: getText('mydropmenu.importcsv.title'),
                 icon: <ExclamationCircleOutlined />,
-                content: appset.getText('mydropmenu.importcsv.content', GetImportVaultName(type)),
-                okText: appset.getText('ok'),
-                cancelText: appset.getText('cancel'),
+                content: getText('mydropmenu.importcsv.content', GetImportVaultName(type)),
+                okText: getText('ok'),
+                cancelText: getText('cancel'),
                 onOk: async () => {}
               })
             }

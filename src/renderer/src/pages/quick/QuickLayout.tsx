@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 
 export default function QucickLayout(props: ChildProps): JSX.Element {
   const appstore = use_appstore() as AppStore
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
     const timer = setInterval(() => {
@@ -26,7 +26,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
     initUserData()
     window.electron.ipcRenderer.on(MainToWebMsg.DataChange, (_, changetype: EntityType) => {
       ConsoleLog.LogInfo('data change', changetype)
-      if (changetype == EntityType.vault) getAllVault(appstore, appset.lang, messageApi)
+      if (changetype == EntityType.vault) getAllVault(appstore, lang, messageApi)
       else if (changetype == EntityType.vault_item) initvaultData()
     })
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOK, () => {
@@ -46,10 +46,10 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   }
 
   async function initvaultData() {
-    ConsoleLog.LogInfo(`initvaultData:${appstore.HaveLogin()}`)
+    ConsoleLog.LogInfo(`initVaultData:${appstore.HaveLogin()}`)
     if (appstore.HaveLogin() == false) return
-    await getAllVault(appstore, appset.lang, messageApi)
-    await getAllVaultItem(appstore, appset.lang, messageApi)
+    await getAllVault(appstore, lang, messageApi)
+    await getAllVaultItem(appstore, lang, messageApi)
   }
 
   useEffect(() => {

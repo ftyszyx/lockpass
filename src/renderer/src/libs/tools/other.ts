@@ -53,9 +53,10 @@ export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi
 }
 
 export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
-  ConsoleLog.LogInfo(`getAllVault:${appstore.cur_user == null}`)
-  if (appstore.cur_user) {
-    const where: WhereDef<Vault> = { cond: { user_id: appstore.cur_user.id } }
+  const curuser = appstore.GetCurUser()
+  ConsoleLog.LogInfo(`getAllVault:${curuser !== null}`)
+  if (curuser) {
+    const where: WhereDef<Vault> = { cond: { user_id: curuser.id } }
     await ipc_call<Vault[]>(webToManMsg.GetAllValuts, where)
       .then((res) => {
         appstore.setValuts(res)
@@ -71,7 +72,6 @@ export async function GetAllVaultData(
   lang: LangItem,
   messageApi: MessageInstance
 ) {
-  ConsoleLog.LogInfo(`GetAllVaultData:${appstore.cur_user == null}`)
   await getAllVault(appstore, lang, messageApi)
   await getAllVaultItem(appstore, lang, messageApi)
 }
@@ -81,9 +81,10 @@ export async function getAllVaultItem(
   lang: LangItem,
   messageApi: MessageInstance
 ) {
-  ConsoleLog.LogInfo(`getAllVaultItem:${appstore.cur_user == null}`)
+  const curuser = appstore.GetCurUser()
+  ConsoleLog.LogInfo(`getAllVaultItem:${curuser !== null}`)
   if (appstore.cur_user) {
-    const where2: WhereDef<VaultItem> = { cond: { user_id: appstore.cur_user.id } }
+    const where2: WhereDef<VaultItem> = { cond: { user_id: curuser.id } }
     await ipc_call<VaultItem[]>(webToManMsg.GetAllValutItems, where2)
       .then((res) => {
         appstore.setValutItems(res)
@@ -96,7 +97,7 @@ export async function getAllVaultItem(
 
 export async function ChangeAppset(
   appstore: AppStore,
-  appset: AppsetStore,
+  getText: AppsetStore['getText'],
   setinfo: UserSetInfo,
   messageApi: MessageInstance
 ) {
@@ -104,10 +105,10 @@ export async function ChangeAppset(
   await ipc_call<User>(webToManMsg.UpdateUser, newuserinfo)
     .then((res) => {
       appstore.SetUser(res)
-      messageApi.success(appset.lang.getText('save_success'))
+      messageApi.success(getText('save_success'))
     })
     .catch((e) => {
-      messageApi.error(appset.lang.getText(`err.${e.code}`))
+      messageApi.error(getText(`err.${e.code}`))
     })
 }
 

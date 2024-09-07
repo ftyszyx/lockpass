@@ -20,6 +20,7 @@ export interface AppStore {
   user_list: User[]
   setUserList: (users: User[]) => void
   GetUserSet: () => UserSetInfo
+  GetCurUser: () => User
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
@@ -31,6 +32,9 @@ export const use_appstore = create<AppStore>((set, get) => {
       set((state) => {
         return { ...state, lang: lang }
       })
+    },
+    GetCurUser() {
+      return get().cur_user
     },
     vaults: [],
     vault_items: [],
@@ -59,7 +63,8 @@ export const use_appstore = create<AppStore>((set, get) => {
       })
     },
     HaveLogin() {
-      if (get().cur_user && get().login_flag) {
+      // console.log('have login', get().cur_user, get().login_flag)
+      if (get().cur_user !== null && get().login_flag) {
         return true
       }
       return false

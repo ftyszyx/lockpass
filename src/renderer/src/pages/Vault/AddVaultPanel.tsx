@@ -25,7 +25,9 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm()
   const appstore = use_appstore() as AppStore
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+
   return (
     <div>
       {contextHolder}
@@ -42,17 +44,17 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
-                  messageApi.error(appset.getText(`err.${err.code}`), 5)
+                  messageApi.error(getText(`err.${err.code}`), 5)
                 })
             } else if (pros.show_type === ModalType.Add) {
               values.user_id = appstore.cur_user?.id
               await ipc_call(webToManMsg.AddValut, values)
                 .then(async () => {
-                  await GetAllVaultData(appstore, appset.lang, messageApi)
+                  await GetAllVaultData(appstore, lang, messageApi)
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
-                  messageApi.error(appset.getText(`err.${err.code}`), 5)
+                  messageApi.error(getText(`err.${err.code}`), 5)
                 })
             }
           })
@@ -65,17 +67,15 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
           <>
             {pros.show_del && (
               <Popconfirm
-                title={appset.getText('addvaultpanel.del.title')}
-                description={GetStrComp(
-                  appset.getText('addvaultpanel.del.content', pros.edit_info?.name)
-                )}
+                title={getText('addvaultpanel.del.title')}
+                description={GetStrComp(getText('addvaultpanel.del.content', pros.edit_info?.name))}
                 onConfirm={async () => {
                   await ipc_call(webToManMsg.DeleteValut, pros.edit_info.id)
                     .then(() => {
                       pros.onDelOk?.()
                     })
                     .catch((err) => {
-                      messageApi.error(appset.lang.getText(`err.${err.code}`), 5)
+                      messageApi.error(getText(`err.${err.code}`), 5)
                     })
                 }}
               >
@@ -89,16 +89,16 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
       >
         <Form {...formItemLayout} form={form} initialValues={pros.edit_info}>
           <Form.Item
-            label={appset.getText('name')}
+            label={getText('name')}
             name="name"
-            rules={[{ required: true, message: appset.getText('addvault.input.name') }]}
+            rules={[{ required: true, message: getText('addvault.input.name') }]}
           >
             <Input></Input>
           </Form.Item>
           <Form.Item
-            label={appset.getText('icon')}
+            label={getText('icon')}
             name="icon"
-            rules={[{ required: true, message: appset.getText('addvault.input.icon') }]}
+            rules={[{ required: true, message: getText('addvault.input.icon') }]}
           >
             <Select>
               {Object.keys(VaultItemTypeIcon).map((key) => {

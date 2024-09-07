@@ -25,13 +25,15 @@ export default function Register(): JSX.Element {
   const isLogin = history.PathName == PagePath.Login
   const isLock = history.PathName == PagePath.Lock
   ConsoleLog.LogInfo('register render', history.PathName, isLogin, isLock)
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+
   useEffect(() => {
     initData()
   }, [])
 
   async function initData() {
-    await GetAllUsers(appstore, appset.lang, messageApi)
+    await GetAllUsers(appstore, lang, messageApi)
     await ipc_call<LastUserInfo>(webToManMsg.GetLastUserInfo)
       .then((res) => {
         setLastUser(res.user)
@@ -52,7 +54,7 @@ export default function Register(): JSX.Element {
     form.validateFields().then(async (values) => {
       console.log(values)
       if (values.password_repeat !== values.password) {
-        message.error(appset.getText('auth.login.password_not_match'))
+        message.error(getText('auth.login.password_not_match'))
         return
       }
       await ipc_call<null>(webToManMsg.Register, values)
@@ -60,7 +62,7 @@ export default function Register(): JSX.Element {
           history.replace(PagePath.Login)
         })
         .catch((err) => {
-          messageApi.error(appset.getText(`err.${err.code}`))
+          messageApi.error(getText(`err.${err.code}`))
         })
     })
   }
@@ -71,12 +73,12 @@ export default function Register(): JSX.Element {
         values.username = lastUser?.username
       }
       const user = await ipc_call<User>(webToManMsg.Login, values).catch((error) => {
-        messageApi.error(appset.getText(`err.${error.code}`))
+        messageApi.error(getText(`err.${error.code}`))
       })
       if (user) {
-        message.success(appset.getText('auth.login.success'))
+        message.success(getText('auth.login.success'))
         appstore.Login(user)
-        await UpdateMenu(appstore, appset.lang)
+        await UpdateMenu(appstore, lang)
         if (isLock) {
           history.go(-1)
         } else {
@@ -96,34 +98,34 @@ export default function Register(): JSX.Element {
         <div className="flex flex-col items-center">
           <div className=" text-4xl text-black mb-3 font-bold font-sans">
             {isReigster
-              ? appset.getText('register.title')
+              ? getText('register.title')
               : isLogin
-                ? appset.getText('auth.login.title')
-                : appset.getText('auth.lock.title')}
+                ? getText('auth.login.title')
+                : getText('auth.lock.title')}
           </div>
           <Form form={form} layout="vertical" onFinish={() => {}}>
             {(isReigster || isLogin) && (
-              <Form.Item label={appset.getText('auth.login.account')} required name="username">
+              <Form.Item label={getText('auth.login.account')} required name="username">
                 <AutoComplete
                   options={options}
-                  placeholder={appset.getText('auth.login.placeholder.account')}
+                  placeholder={getText('auth.login.placeholder.account')}
                 />
               </Form.Item>
             )}
-            <Form.Item label={appset.getText('auth.login.main_password')} name="password" required>
+            <Form.Item label={getText('auth.login.main_password')} name="password" required>
               <Input.Password
-                placeholder={appset.getText('auth.login.placeholder.main_password')}
+                placeholder={getText('auth.login.placeholder.main_password')}
                 size="large"
               />
             </Form.Item>
             {isReigster && (
               <Form.Item
-                label={appset.getText('auth.login.main_password_repeat')}
+                label={getText('auth.login.main_password_repeat')}
                 name="password_repeat"
                 required
               >
                 <Input.Password
-                  placeholder={appset.getText('auth.login.placeholder.main_password_repeat')}
+                  placeholder={getText('auth.login.placeholder.main_password_repeat')}
                   size="large"
                 />
               </Form.Item>
@@ -141,7 +143,7 @@ export default function Register(): JSX.Element {
                   }
                 }}
               >
-                {appset.getText('ok')}
+                {getText('ok')}
               </Button>
             </Form.Item>
             {isLogin && (
@@ -151,7 +153,7 @@ export default function Register(): JSX.Element {
                   history.replace(PagePath.register)
                 }}
               >
-                {appset.getText('auth.login.gotoRegister')}
+                {getText('auth.login.gotoRegister')}
               </Button>
             )}
             {isReigster && (
@@ -161,7 +163,7 @@ export default function Register(): JSX.Element {
                   history.push(PagePath.Login)
                 }}
               >
-                {appset.getText('register.skiptoLogin')}
+                {getText('register.skiptoLogin')}
               </Button>
             )}
           </Form>

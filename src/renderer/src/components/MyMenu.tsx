@@ -28,14 +28,14 @@ interface MenuProps {
 export default function MyMenu(props: MenuProps): JSX.Element {
   const location = useHistory()
   const appstore = use_appstore() as AppStore
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 当前需要被展开的项
   const [show_addvalut, setShowAddValut] = useState(false)
 
   const menutree_info = useMemo(() => {
     const menulist = getAllMenus({
-      lang: appset.lang,
+      lang,
       CallEvent: async (event: string) => {
         if (event === ValutAddEvent) {
           setShowAddValut(true)
@@ -59,7 +59,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
     })
     const res = GetCommonTree<MyMenuType>(menulist)
     return res
-  }, [appstore.vaults, appset.lang])
+  }, [appstore.vaults, lang])
   ConsoleLog.LogInfo('render mymenu')
   /** 处理原始数据，将原始数据处理为层级关系 **/
   const treeDom = useMemo(() => {

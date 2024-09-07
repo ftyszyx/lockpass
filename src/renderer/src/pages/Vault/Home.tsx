@@ -15,7 +15,7 @@ import { MenuParamNull } from '@renderer/entitys/menu.entity'
 export default function Home() {
   ConsoleLog.LogInfo('home render')
   const history = useHistory()
-  const appset = use_appset() as AppsetStore
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const [messageApi, contextHolder] = message.useMessage()
   const [show_edit, setShowEdit] = useState(false)
   const [show_del, setShowDel] = useState(false)
@@ -114,14 +114,14 @@ export default function Home() {
           edit_info={cur_info}
           show_del={show_del}
           onAddOk={async () => {
-            await getAllVault(appstore, appset.lang, messageApi)
+            await getAllVault(appstore, lang, messageApi)
             setShowEdit(false)
           }}
           onClose={() => {
             setShowEdit(false)
           }}
           onDelOk={async () => {
-            await getAllVault(appstore, appset.lang, messageApi)
+            await getAllVault(appstore, lang, messageApi)
             setShowEdit(false)
           }}
         />

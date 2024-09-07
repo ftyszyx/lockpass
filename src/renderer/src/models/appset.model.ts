@@ -1,5 +1,4 @@
 import { LangHelper, LangItem } from '@common/lang'
-import { ConsoleLog } from '@renderer/libs/Console'
 import { create } from '@renderer/libs/state'
 
 export interface AppsetStore {
@@ -17,7 +16,7 @@ export interface AppsetStore {
 }
 
 export const use_appset = create<AppsetStore>((set, get) => {
-  ConsoleLog.LogInfo('use_appset create')
+  // ConsoleLog.LogInfo('use_appset create')
   return {
     fold_menu: false,
     lang: null,
@@ -40,7 +39,7 @@ export const use_appset = create<AppsetStore>((set, get) => {
     },
     setLang(lang: LangItem) {
       set((state) => {
-        return { ...state, lang: lang }
+        return { ...state, lang }
       })
     },
     ChangeLang(lang: string) {
@@ -49,7 +48,7 @@ export const use_appset = create<AppsetStore>((set, get) => {
       get().setLang(LangHelper.lang)
     },
     getText(str, ...args) {
-      return this.lang?.getText(str, ...args)
+      return get().lang?.getText(str, ...args)
     }
   }
 })

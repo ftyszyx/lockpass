@@ -31,7 +31,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
   const RAND_SYMBOLS = '!@#$%^&*()_+'
   const RAND_CAP_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const [value, setValue] = useState<string>('')
-  const appset = use_appset() as AppsetStore
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
   const [messageApi, contextHolder] = message.useMessage()
   const inputref = useRef<InputRef>(null)
@@ -56,7 +56,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
     const appsetinfo = appstore.GetUserSet()
     appsetinfo.password_type_conf = { ...appsetinfo.password_type_conf, ...setinfo }
     appsetinfo.password_type = password_type as GenPasswordType
-    await ChangeAppset(appstore, appset, appsetinfo, messageApi)
+    await ChangeAppset(appstore, getText, appsetinfo, messageApi)
   }
 
   async function genPassword() {
@@ -135,7 +135,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
           ></Input>
         </div>
         <div className=" flex flex-row justify-between">
-          <div> {appset.getText('passwordGenPanel.password_type')}</div>
+          <div> {getText('passwordGenPanel.password_type')}</div>
           <div className="">
             <Select
               className="w-[100px]"
@@ -145,7 +145,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
               {Object.keys(GenPasswordType).map((key) => {
                 return (
                   <Select.Option value={GenPasswordType[key]} key={key}>
-                    {appset.getText(`passwordType.${GenPasswordType[key]}`)}
+                    {getText(`passwordType.${GenPasswordType[key]}`)}
                   </Select.Option>
                 )
               })}
@@ -169,7 +169,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
                     name={item.field_name}
                     className="mb-1"
                     key={item.field_name}
-                    label={appset.getText(`passwordGenPanel.${item.field_name}`)}
+                    label={getText(`passwordGenPanel.${item.field_name}`)}
                   >
                     <item.render></item.render>
                   </Form.Item>

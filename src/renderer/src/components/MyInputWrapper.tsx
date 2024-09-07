@@ -142,7 +142,7 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
             }}
             className={` flex-grow  font-bold h-full ${hoverState ? ' visible' : 'hidden'}`}
           >
-            {appset.lang.getText('copy')}
+            {appset.getText('copy')}
           </Button>
           {
             <Icon

@@ -20,8 +20,12 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 
 export default function Vault() {
   ConsoleLog.LogInfo('Vault render')
-  const appset = use_appset() as AppsetStore
   const appstore = use_appstore() as AppStore
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
+  const ToggleFoldMenu = use_appset(
+    (state) => state.ToggleFoldMenu
+  ) as AppsetStore['ToggleFoldMenu']
   const [form] = useForm<VaultItem>()
   const [messageApi, contextHolder] = message.useMessage()
   const [global_search_keyword, set_gloal_search_keyword] = useState('')
@@ -42,13 +46,13 @@ export default function Vault() {
         <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
           <Icon
             type={Icon_type.icon_fold}
-            className={`cursor-pointer ${appset.fold_menu ? ' rotate-180' : 'rotate-0'} font-[40px]`}
+            className={`cursor-pointer ${fold_menu ? ' rotate-180' : 'rotate-0'} font-[40px]`}
             onClick={() => {
-              appset.ToggleFoldMenu()
+              ToggleFoldMenu()
             }}
           ></Icon>
           <Input
-            placeholder={appset.getText('vault.global_search', appstore.cur_user?.username)}
+            placeholder={getText('vault.global_search', appstore.cur_user?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
               // console.log('newvalue', newvalue.target.value)
@@ -90,7 +94,7 @@ export default function Vault() {
                       set_show_edit(!show_edit)
                     }}
                   >
-                    {show_edit ? appset.getText('cancel') : appset.getText('edit')}
+                    {show_edit ? getText('cancel') : getText('edit')}
                   </Button>
                 </div>
                 <div className="p-2">
@@ -108,10 +112,10 @@ export default function Vault() {
                       {show_edit && (
                         <Form.Item>
                           <Popconfirm
-                            title={appset.getText('vault.edit_title')}
-                            description={appset.getText('vault.sure_edit', select_vault_item.name)}
-                            okText={appset.getText('ok')}
-                            cancelText={appset.getText('cancel')}
+                            title={getText('vault.edit_title')}
+                            description={getText('vault.sure_edit', select_vault_item.name)}
+                            okText={getText('ok')}
+                            cancelText={getText('cancel')}
                             onConfirm={async () => {
                               const values = await form.validateFields()
                               values.id = select_vault_item.id
@@ -121,12 +125,12 @@ export default function Vault() {
                                   await getAllVaultItem(appstore, appset.lang, messageApi)
                                 })
                                 .catch((err) => {
-                                  messageApi.error(appset.getText(`err.${err.code}`), 5)
+                                  messageApi.error(getText(`err.${err.code}`), 5)
                                 })
                             }}
                           >
                             <Button type="primary" htmlType="submit">
-                              {appset.getText('save')}
+                              {getText('save')}
                             </Button>
                           </Popconfirm>
                         </Form.Item>
@@ -134,11 +138,8 @@ export default function Vault() {
                       {show_edit && (
                         <Form.Item className=" mr-3">
                           <Popconfirm
-                            title={appset.getText('vault.delete_title')}
-                            description={appset.getText(
-                              'vault.sure_delete',
-                              select_vault_item.name
-                            )}
+                            title={getText('vault.delete_title')}
+                            description={getText('vault.sure_delete', select_vault_item.name)}
                             onConfirm={async () => {
                               await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
                                 .then(async () => {
@@ -146,13 +147,13 @@ export default function Vault() {
                                   await getAllVaultItem(appstore, appset.lang, messageApi)
                                 })
                                 .catch((err) => {
-                                  messageApi.error(appset.getText(`err.${err.code}`), 5)
+                                  messageApi.error(getText(`err.${err.code}`), 5)
                                 })
                             }}
-                            okText={appset.getText('ok')}
-                            cancelText={appset.getText('cancel')}
+                            okText={getText('ok')}
+                            cancelText={getText('cancel')}
                           >
-                            <Button type="dashed">{appset.getText('delete')}</Button>
+                            <Button type="dashed">{getText('delete')}</Button>
                           </Popconfirm>
                         </Form.Item>
                       )}
@@ -170,7 +171,7 @@ export default function Vault() {
                     set_show_add_vault(true)
                   }}
                 >
-                  {appset.lang.getText('vault.empty_add')}
+                  {getText('vault.empty_add')}
                 </Button>
               </div>
             )}

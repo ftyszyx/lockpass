@@ -14,14 +14,15 @@ import { UpdateEventType, MyUpdateInfo, MyReleaseNoteInfo } from '@common/entity
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
   const history = useHistory()
-  const appset = use_appset() as AppsetStore
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const appstore = use_appstore() as AppStore
   ConsoleLog.LogInfo('baselayout render')
   useEffect(() => {
-    if (appset.lang != null) {
-      UpdateMenu(appstore, appset.lang)
+    if (lang != null) {
+      UpdateMenu(appstore, lang)
     }
-  }, [appset.lang])
+  }, [lang])
   useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.LockApp, () => {
       ConsoleLog.LogInfo('LockApp event')
@@ -40,19 +41,19 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
         if (type == UpdateEventType.updateAvaliable) {
           var updateinfo = info as MyUpdateInfo
           Modal.confirm({
-            title: appset.getText('update.title'),
-            cancelText: appset.getText('cancel'),
-            okText: appset.getText('update.download'),
+            title: getText('update.title'),
+            cancelText: getText('cancel'),
+            okText: getText('update.download'),
             content: (
               <div>
                 <p className=" font-bold font-sans ">
-                  {appset.getText('update.content.releaseName', updateinfo.releaseName)}
+                  {getText('update.content.releaseName', updateinfo.releaseName)}
                 </p>
                 <p className=" font-bold font-sans ">
-                  {appset.getText('update.content.version', updateinfo.version)}
+                  {getText('update.content.version', updateinfo.version)}
                 </p>
                 <p className=" font-bold font-sans ">
-                  {appset.getText('update.content.releaseDate', updateinfo.releaseDate)}
+                  {getText('update.content.releaseDate', updateinfo.releaseDate)}
                 </p>
                 <hr></hr>
                 <div>
@@ -64,7 +65,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
                       return (
                         <div key={index}>
                           <p className=" font-bold font-sans ">
-                            {appset.getText('update.content.version', note.version)}
+                            {getText('update.content.version', note.version)}
                           </p>
                           <div dangerouslySetInnerHTML={{ __html: note.note }}></div>
                         </div>
@@ -82,12 +83,12 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
             }
           })
         } else if (type == UpdateEventType.Checking) {
-          message.info(appset.getText('update.checking'))
+          message.info(getText('update.checking'))
         } else if (type == UpdateEventType.UpdateDownOk) {
           Modal.confirm({
-            title: appset.getText('update.downloadok.title'),
-            okText: appset.getText('update.downloadok.ok'),
-            content: appset.getText('update.downloadok.content', info as string),
+            title: getText('update.downloadok.title'),
+            okText: getText('update.downloadok.ok'),
+            content: getText('update.downloadok.content', info as string),
             onOk: async () => {
               await ipc_call_normal(webToManMsg.InstallUpdate)
             },
@@ -96,9 +97,9 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
             }
           })
         } else if (type == UpdateEventType.UpdateError) {
-          message.error(appset.getText('update.error', info as string))
+          message.error(getText('update.error', info as string))
         } else if (type == UpdateEventType.UpdateEmpty) {
-          message.info(appset.getText('update.noupdate'))
+          message.info(getText('update.noupdate'))
         }
       }
     )
@@ -159,7 +160,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   async function initAllData() {
     ConsoleLog.LogInfo(`initAllData havelogin:${appstore.HaveLogin()} `, appstore.cur_user)
     if (appstore.HaveLogin()) {
-      await GetAllVaultData(appstore, appset.lang, messageApi)
+      await GetAllVaultData(appstore, lang, messageApi)
     }
   }
 
