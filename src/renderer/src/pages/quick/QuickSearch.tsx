@@ -257,7 +257,6 @@ export default function QuickSearch() {
                         <div>{appset.getText('quicksearch.viewDetail')}</div>
                       </>
                     )}
-                    k
                   </>
                 )}
                 <Icon
