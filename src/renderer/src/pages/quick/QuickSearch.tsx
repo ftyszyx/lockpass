@@ -9,6 +9,7 @@ import {
   IsVaultItemMatchSearch,
   PasswordRenderDetailKey
 } from '@renderer/entitys/Vault_item.entity'
+import { ConsoleLog } from '@renderer/libs/Console'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
@@ -16,7 +17,7 @@ import { Button, Input, InputRef, message } from 'antd'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 export default function QuickSearch() {
-  const appset = use_appset() as AppsetStore
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
   const [search, setSearch] = useState('')
   const [selectItem, setSelectItem] = useState<VaultItem>(null)
@@ -26,7 +27,6 @@ export default function QuickSearch() {
   const selectDetailItemRef = useRef(select_detail_item)
   const inputref = useRef<InputRef>(null)
   const showitems = useMemo(() => {
-    console.log('search', search, appstore.vault_items)
     if (search && search.trim().length > 0) {
       return appstore.vault_items.filter((item) => {
         if (IsVaultItemMatchSearch(item, search)) return true
@@ -54,6 +54,7 @@ export default function QuickSearch() {
   }, [show_detail])
 
   const selectItemRef = useRef(selectItem)
+  ConsoleLog.LogInfo(`QuickSearch render:selenctItem:${selectItem?.name}`)
   const showitemsRef = useRef(showitems)
   selectItemRef.current = selectItem
   showitemsRef.current = showitems
@@ -73,7 +74,7 @@ export default function QuickSearch() {
 
   async function autoInput(info: VaultItem) {
     await ipc_call_normal(webToManMsg.AutoFill, info).catch((err) => {
-      messageApi.error(appset.getText(`err.${err.code}`))
+      messageApi.error(getText(`err.${err.code}`))
     })
   }
 
@@ -90,7 +91,6 @@ export default function QuickSearch() {
     const selectItem = selectItemRef.current
     const show_detail = showDetailRef.current
     const selectDetail = selectDetailItemRef.current
-    console.log('moveSelectPos', dir)
     if (show_detail) {
       const new_list = [SELECT_ITEM_STR]
       if (selectItem == null) return
@@ -98,7 +98,6 @@ export default function QuickSearch() {
         new_list.push(item.key)
       })
       new_list.push(GOTO_STR)
-      console.log('new list', new_list, selectDetail)
       let curindex2 = new_list.findIndex((item) => item == selectDetail)
       if (dir == 'up') {
         curindex2 = getIndex(curindex2 - 1, new_list.length)
@@ -107,7 +106,6 @@ export default function QuickSearch() {
       }
       setSelectDetailItem(new_list[curindex2])
       selectDetailItemRef.current = new_list[curindex2]
-      console.log('selectdetail', new_list[curindex2], curindex2)
       return
     }
     if (showitems.length == 0) return
@@ -124,12 +122,17 @@ export default function QuickSearch() {
   }
 
   async function CopyAndClose(key: string) {
-    navigator.clipboard.writeText(selectItem[key])
-    messageApi.success(appset.getText('copy_success_arg', appset.getText(`vaultitem.label.${key}`)))
-    await HideWin()
+    const value = selectItem.info[key]
+    ConsoleLog.LogInfo(`copy and close ${key} ${value}`)
+    navigator.clipboard.writeText(value)
+    messageApi.success(getText('copy_success_arg', getText(`vaultitem.label.${key}`)))
+    setTimeout(async () => {
+      await HideWin()
+    }, 1000)
   }
 
   function handlerCopy(keytype: PasswordRenderDetailKey) {
+    ConsoleLog.LogInfo(`handlerCopy ${keytype}`)
     const selectItem = selectItemRef.current
     if (selectItem == null) return
     const keyinfo = GetPasswordRenderDetailList(selectItem).find((item) => item.shortCut == keytype)
@@ -173,6 +176,9 @@ export default function QuickSearch() {
           setSelectItem(null)
           break
         case 'Enter':
+          ConsoleLog.LogInfo(
+            `enter show_detail:${show_detail} selectItemDetail:${selectItemDetail}`
+          )
           if (show_detail) {
             if (selectItemDetail == SELECT_ITEM_STR) {
               setShowDetail(false)
@@ -181,7 +187,6 @@ export default function QuickSearch() {
               GotoMain(selectItem)
               HideWin()
             } else {
-              console.log('copy and close', selectItemDetail)
               CopyAndClose(selectItemDetail)
             }
           }
@@ -221,7 +226,7 @@ export default function QuickSearch() {
         onChange={(event: any) => {
           setSearch(event.target.value)
         }}
-        placeholder={appset.getText('quicksearch.input.placeholder')}
+        placeholder={getText('quicksearch.input.placeholder')}
       ></Input>
       <div className="flex flex-col">
         {!show_detail &&
@@ -250,11 +255,11 @@ export default function QuickSearch() {
                   <>
                     {item.vault_item_type == VaultItemType.Login ? (
                       <>
-                        <div>{appset.getText('quicksearch.autoinput')}</div>
+                        <div>{getText('quicksearch.autoinput')}</div>
                       </>
                     ) : (
                       <>
-                        <div>{appset.getText('quicksearch.viewDetail')}</div>
+                        <div>{getText('quicksearch.viewDetail')}</div>
                       </>
                     )}
                   </>
@@ -299,15 +304,11 @@ export default function QuickSearch() {
                     key={item.key}
                     className={`rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2 ${select_detail_item == item.key ? ' bg-green-400' : ''}`}
                     onClick={() => {
+                      ConsoleLog.LogInfo(`click ${item.key}`)
                       CopyAndClose(item.key)
                     }}
                   >
-                    <div>
-                      {appset.getText(
-                        'quicksearch.copy',
-                        appset.getText(`vaultitem.label.${item.key}`)
-                      )}
-                    </div>
+                    <div>{getText('quicksearch.copy', getText(`vaultitem.label.${item.key}`))}</div>
                     <div>{item.shortCut}</div>
                   </div>
                 )
@@ -322,7 +323,7 @@ export default function QuickSearch() {
                   await HideWin()
                 }}
               >
-                {appset.getText('quicksearch.gotoView')}
+                {getText('quicksearch.gotoView')}
               </Button>
             </div>
           </div>
@@ -332,13 +333,13 @@ export default function QuickSearch() {
             {!show_detail && (
               <div className=" flex flex-row items-center space-x-2 font-sans font-bold">
                 <div className=" bg-gray-200 py-1 px-2 rounded-md">{'→'}</div>
-                <div>{appset.getText('quicksearch.rightclick')}</div>
+                <div>{getText('quicksearch.rightclick')}</div>
               </div>
             )}
             {show_detail && (
               <div className=" flex flex-row items-center space-x-2 font-sans font-bold">
                 <div className=" bg-gray-200 py-1 px-2 rounded-md">{'←'}</div>
-                <div>{appset.getText('quicksearch.leftclick')}</div>
+                <div>{getText('quicksearch.leftclick')}</div>
               </div>
             )}
           </div>
