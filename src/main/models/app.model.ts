@@ -171,7 +171,6 @@ class AppModel {
   }
 
   extendLockTime() {
-    console.log('extend lock time')
     const setinfo = this.user.userinfo.user_set as UserSetInfo
     this._lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
   }
