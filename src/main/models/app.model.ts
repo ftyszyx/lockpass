@@ -149,6 +149,10 @@ class AppModel {
 
   private performLockCheck() {
     if (this.IsLock()) return
+    if (this.mainwin?.isFocused() || this.quickwin?.isFocused()) {
+      this.extendLockTime()
+      return
+    }
     const setinfo = this.user.userinfo.user_set as UserSetInfo
     if (setinfo.normal_autolock_time == 0) return
     const cuttime = new Date().getTime() / 1000
@@ -166,12 +170,17 @@ class AppModel {
     return this._lock || !this._logined
   }
 
+  extendLockTime() {
+    console.log('extend lock time')
+    const setinfo = this.user.userinfo.user_set as UserSetInfo
+    this._lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
+  }
+
   public Login(uid: number) {
     this._logined = true
     this._lock = false
-    const setinfo = this.user.userinfo.user_set as UserSetInfo
-    this._lock_timeout = new Date().getTime() / 1000 + setinfo.normal_autolock_time * 60
     this.set.SetLastUserId(uid)
+    this.extendLockTime()
     this.initGlobalShortcut()
     AppEvent.emit(AppEventType.LoginOk)
   }

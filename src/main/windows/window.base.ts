@@ -132,6 +132,10 @@ export class WindowBase {
     else this.hide()
   }
 
+  isFocused() {
+    return this.window.isFocused()
+  }
+
   setSize(width: number, height: number) {
     const oldsize = this.win.getSize()
     if (width <= 0) width = oldsize[0]
