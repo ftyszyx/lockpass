@@ -34,7 +34,7 @@ export default function AdminSet() {
           }
         })
       }
-      await ChangeAppset(appstore, appset, newset, messageApi)
+      await ChangeAppset(appstore, getText, newset, messageApi)
       if (select_item == SetMenuItem.shortcut_global) {
         await ipc_call_normal(webToManMsg.ShortCutKeyChange)
       }
@@ -73,7 +73,7 @@ export default function AdminSet() {
           <div className="flex-grow flex flex-col p-4">
             <Form
               form={form}
-              initialValues={appstore.cur_user.user_set as UserSetInfo}
+              initialValues={appstore.cur_user?.user_set as UserSetInfo}
               onFieldsChange={async () => {
                 if (select_item == SetMenuItem.normal) {
                   await onSave()

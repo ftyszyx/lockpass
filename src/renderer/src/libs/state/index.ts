@@ -1,5 +1,4 @@
 import { useReducer, useRef, useLayoutEffect } from 'react'
-import { shallow } from './shallow'
 //set func
 //lister func
 export type ListenerDef<TState> = (state: TState, prevState: TState) => void
@@ -121,16 +120,16 @@ export const create = <StateT>(stateFunc: UserStateCreatFun<StateT>) => {
   return useStore
 }
 
-const sliceCache = new WeakMap<object, unknown>()
-export function useShallow<S, U>(selector: (state: S) => U): (state: S) => U {
-  const key = useRef({}).current
-  return (state) => {
-    const prev = sliceCache.get(key) as U | undefined
-    const next = selector(state)
-    if ((prev, next)) {
-      return prev as U
-    }
-    sliceCache.set(key, next)
-    return next
-  }
-}
+// const sliceCache = new WeakMap<object, unknown>()
+// export function useShallow<S, U>(selector: (state: S) => U): (state: S) => U {
+//   const key = useRef({}).current
+//   return (state) => {
+//     const prev = sliceCache.get(key) as U | undefined
+//     const next = selector(state)
+//     if ((prev, next)) {
+//       return prev as U
+//     }
+//     sliceCache.set(key, next)
+//     return next
+//   }
+// }

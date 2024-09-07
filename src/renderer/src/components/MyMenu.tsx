@@ -29,6 +29,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   const location = useHistory()
   const appstore = use_appstore() as AppStore
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 当前需要被展开的项
   const [show_addvalut, setShowAddValut] = useState(false)
@@ -94,13 +95,13 @@ export default function MyMenu(props: MenuProps): JSX.Element {
 
   return (
     <>
-      <div className={`${props.className} bg-slate-800 ${appset.fold_menu ? 'hidden' : 'w-60'}`}>
+      <div className={`${props.className} bg-slate-800 ${fold_menu ? 'hidden' : 'w-60'}`}>
         <div className="flex flex-row justify-between p-1 items-center">
           <div className="flex flex-row items-center text-white">
             <Link to={PagePath.Home}>
               <Icon type={Icon_type.icon_home} className=" mr-2  text-[25px]  " />
             </Link>
-            {appstore.cur_user?.username}
+            {appstore.GetCurUser()?.username}
           </div>
           <MyDropDown className=" text-white" />
         </div>
@@ -109,7 +110,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
           mode="inline"
           items={treeDom}
           selectedKeys={chosedKey}
-          {...(appset.fold_menu ? {} : { openKeys })}
+          {...(fold_menu ? {} : { openKeys })}
           onOpenChange={(keys: string[]) => setOpenKeys(keys)}
           onSelect={(e) => {
             const menuinfo = menutree_info.datamap.get(e.key)

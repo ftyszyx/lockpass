@@ -12,7 +12,6 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { useRouterStore } from '@renderer/libs/router'
 import PaswordDetail from './PasswordDetail'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { LangItem } from '@common/lang'
 
 interface AdminAddPasswordProps {
   show: boolean
@@ -27,7 +26,6 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
   const [show_password_type, set_show_password_type] = useState(true)
   const [select_type, set_select_type] = useState(VaultItemType.Login)
   const [show_info, set_show_info] = useState(false)
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
   const route_data = useRouterStore()
@@ -72,13 +70,13 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
           }}
           onOk={async () => {
             const values = await form.validateFields()
-            values.user_id = appstore.cur_user?.id
+            values.user_id = appstore.GetCurUser().id
             values.vault_id = cur_vault_id
             values.vault_item_type = select_type
             await ipc_call(webToManMsg.AddValutItem, values)
               .then(async () => {
                 set_show_info(false)
-                await getAllVaultItem(appstore, lang, messageApi)
+                await getAllVaultItem(appstore, getText, messageApi)
                 props.onOk?.()
               })
               .catch((err) => {
@@ -99,7 +97,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
               props.init_info ||
               ({
                 icon: VaultItemTypeIcon[`icon_${select_type}`],
-                name: appset.getText(`vaultitem.title`)
+                name: getText(`vaultitem.title`)
               } as VaultItem)
             }
           >

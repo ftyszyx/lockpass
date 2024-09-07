@@ -52,7 +52,7 @@ export default function Vault() {
             }}
           ></Icon>
           <Input
-            placeholder={getText('vault.global_search', appstore.cur_user?.username)}
+            placeholder={getText('vault.global_search', appstore.GetCurUser()?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
               // console.log('newvalue', newvalue.target.value)
@@ -122,7 +122,7 @@ export default function Vault() {
                               await ipc_call(webToManMsg.updateValutItem, values)
                                 .then(async () => {
                                   set_show_edit(false)
-                                  await getAllVaultItem(appstore, appset.lang, messageApi)
+                                  await getAllVaultItem(appstore, getText, messageApi)
                                 })
                                 .catch((err) => {
                                   messageApi.error(getText(`err.${err.code}`), 5)
@@ -144,7 +144,7 @@ export default function Vault() {
                               await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
                                 .then(async () => {
                                   set_show_edit(false)
-                                  await getAllVaultItem(appstore, appset.lang, messageApi)
+                                  await getAllVaultItem(appstore, getText, messageApi)
                                 })
                                 .catch((err) => {
                                   messageApi.error(getText(`err.${err.code}`), 5)

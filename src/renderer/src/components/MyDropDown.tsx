@@ -25,7 +25,6 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
   const [messageApi, contextHolder] = message.useMessage()
   const history = useHistory()
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
   return (
@@ -265,7 +264,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             setShowSelectImportType(false)
             const res = await ipc_call_normal<boolean>(webToManMsg.ImportCSV, type)
             if (res) {
-              await GetAllVaultData(appstore, lang, messageApi)
+              await GetAllVaultData(appstore, getText, messageApi)
               confirm({
                 title: getText('mydropmenu.importcsv.title'),
                 icon: <ExclamationCircleOutlined />,

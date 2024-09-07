@@ -158,9 +158,9 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   async function initAllData() {
-    ConsoleLog.LogInfo(`initAllData havelogin:${appstore.HaveLogin()} `, appstore.cur_user)
+    ConsoleLog.LogInfo(`initAllData havelogin:${appstore.HaveLogin()} `)
     if (appstore.HaveLogin()) {
-      await GetAllVaultData(appstore, lang, messageApi)
+      await GetAllVaultData(appstore, getText, messageApi)
     }
   }
 

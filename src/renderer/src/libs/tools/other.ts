@@ -52,7 +52,11 @@ export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi
     })
 }
 
-export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
+export async function getAllVault(
+  appstore: AppStore,
+  getText: AppsetStore['getText'],
+  messageApi: MessageInstance
+) {
   const curuser = appstore.GetCurUser()
   ConsoleLog.LogInfo(`getAllVault:${curuser !== null}`)
   if (curuser) {
@@ -62,35 +66,35 @@ export async function getAllVault(appstore: AppStore, lang: LangItem, messageApi
         appstore.setValuts(res)
       })
       .catch((e) => {
-        messageApi.error(lang?.getText(`err.${e.code}`))
+        messageApi.error(getText(`err.${e.code}`))
       })
   }
 }
 
 export async function GetAllVaultData(
   appstore: AppStore,
-  lang: LangItem,
+  getText: AppsetStore['getText'],
   messageApi: MessageInstance
 ) {
-  await getAllVault(appstore, lang, messageApi)
-  await getAllVaultItem(appstore, lang, messageApi)
+  await getAllVault(appstore, getText, messageApi)
+  await getAllVaultItem(appstore, getText, messageApi)
 }
 
 export async function getAllVaultItem(
   appstore: AppStore,
-  lang: LangItem,
+  getText: AppsetStore['getText'],
   messageApi: MessageInstance
 ) {
   const curuser = appstore.GetCurUser()
   ConsoleLog.LogInfo(`getAllVaultItem:${curuser !== null}`)
-  if (appstore.cur_user) {
+  if (curuser) {
     const where2: WhereDef<VaultItem> = { cond: { user_id: curuser.id } }
     await ipc_call<VaultItem[]>(webToManMsg.GetAllValutItems, where2)
       .then((res) => {
         appstore.setValutItems(res)
       })
       .catch((e) => {
-        messageApi.error(lang?.getText(`err.${e.code}`))
+        messageApi.error(getText(`err.${e.code}`))
       })
   }
 }
@@ -101,7 +105,7 @@ export async function ChangeAppset(
   setinfo: UserSetInfo,
   messageApi: MessageInstance
 ) {
-  const newuserinfo = { ...appstore.cur_user, user_set: setinfo }
+  const newuserinfo = { ...appstore.GetCurUser(), user_set: setinfo }
   await ipc_call<User>(webToManMsg.UpdateUser, newuserinfo)
     .then((res) => {
       appstore.SetUser(res)

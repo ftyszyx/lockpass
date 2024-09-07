@@ -25,7 +25,6 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = useForm()
   const appstore = use_appstore() as AppStore
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
 
   return (
@@ -47,10 +46,10 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
                   messageApi.error(getText(`err.${err.code}`), 5)
                 })
             } else if (pros.show_type === ModalType.Add) {
-              values.user_id = appstore.cur_user?.id
+              values.user_id = appstore.GetCurUser()?.id
               await ipc_call(webToManMsg.AddValut, values)
                 .then(async () => {
-                  await GetAllVaultData(appstore, lang, messageApi)
+                  await GetAllVaultData(appstore, getText, messageApi)
                   pros.onAddOk?.()
                 })
                 .catch((err) => {
