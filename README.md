@@ -129,36 +129,36 @@ npm run dev
 
 ## **todo**
 
-1、程序更新机制(完成)
-https://www.electron.build/auto-update
-electron-builder的功能的确强大，做的很好，点赞
+1. 程序更新机制(完成)
+   https://www.electron.build/auto-update
+   electron-builder的功能的确强大，做的很好，点赞
 
-3、Linux 打包异常问题(完成)
-snap打包好像需要签名文件。
-目前先把snap去掉。
+1. Linux 打包异常问题(完成)
+   snap打包好像需要签名文件。
+   目前先把snap去掉。
 
-```
-snapcraft internal error: NoKeyringError('No keyring found to store or retrieve credentials from.')
-```
+   ```
+   snapcraft internal error: NoKeyringError('No keyring found to store or retrieve credentials from.')
+   ```
 
-4、覆盖安装不要把配置文件删除(完成)
-之前为了开发方便，把程序生成的用户文件和配置放在应用程序当前目录。
-但目前主流的做法是把这些配置文件放在系统划分的用户目录
-windows下是%appdata%
-这样的话，就不会有上面的问题了，因为配置和程序存储的位置分开了。
-而且也不会有权限的问题。
+1. 覆盖安装不要把配置文件删除(完成)
+   之前为了开发方便，把程序生成的用户文件和配置放在应用程序当前目录。
+   但目前主流的做法是把这些配置文件放在系统划分的用户目录
+   windows下是%appdata%
+   这样的话，就不会有上面的问题了，因为配置和程序存储的位置分开了。
+   而且也不会有权限的问题。
 
-5、修改主密码(完成)
+1. 修改主密码(完成)
+1. 切换语言(完成)
+1. 跟随系统锁定(完成)
+1. 开机自启动(完成)
+1. 新加入的账号信息，快捷搜索不到
+1. 快捷搜索的快捷键改成 ctrl+shift+q
 
-6、切换语言(完成)
-支持英文和中文
+# bug及优化记录
 
-7、跟随系统锁定(完成)
-
-8、开机自启动(完成)
-
-# bug记录
-
-1、新加入的账号信息，快捷搜索不到
-
-2、快捷搜索的快捷键改成 ctrl+shift+q
+1. 新增的一个密码后，页面要能选中该密码
+1. 新增密码的弹窗，在点Outsize区域不要关掉
+1. 锁定页面打开时应该定位到密码输入框
+1. 增加软件窗口隐藏的快捷键
+1. 
