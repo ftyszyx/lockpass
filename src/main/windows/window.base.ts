@@ -4,9 +4,10 @@ import path from 'path'
 import { is } from '@electron-toolkit/utils'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
-import { EntityType } from '@common/entitys/app.entity'
+import { EntityType, renderViewType } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import AppModel from '@main/models/app.model'
+import { APP_NAME } from '@common/gloabl'
 export class WindowBase {
   protected witdth: number = 900
   protected height: number = 670
@@ -18,6 +19,7 @@ export class WindowBase {
   protected ontop: boolean = false
   protected wintype: string = 'normal'
   base_path: string = ''
+  protected title: string = APP_NAME.toUpperCase()
 
   private window: BrowserWindow | null = null
 
@@ -33,7 +35,7 @@ export class WindowBase {
     return this.window.isVisible()
   }
 
-  constructor() {
+  constructor(public windowType: renderViewType) {
     AppEvent.on(AppEventType.windowBlur, (windows: BrowserWindow) => {
       this.CheckBlurClick(windows)
     })
@@ -70,6 +72,12 @@ export class WindowBase {
       this.lockapp()
       this.win.webContents.send(MainToWebMsg.LoginOut)
     })
+    AppEvent.on(
+      AppEventType.ResizeWindow,
+      (viewtype: renderViewType, width: number, height: number) => {
+        if (viewtype == this.windowType) this.setSize(width, height)
+      }
+    )
   }
 
   lockapp() {
@@ -82,6 +90,7 @@ export class WindowBase {
       alwaysOnTop: this.ontop,
       type: this.wintype,
       show: false,
+      title: this.title,
       icon,
       resizable: this.resizeable,
       closable: this.closeable,

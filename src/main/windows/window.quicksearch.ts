@@ -1,9 +1,10 @@
 import AppModel from '@main/models/app.model'
 import { WindowBase } from './window.base'
+import { renderViewType } from '@common/entitys/app.entity'
 
 export class QuickSearchWindow extends WindowBase {
   constructor() {
-    super()
+    super(renderViewType.Quickview)
     this.url = 'quick.html'
     this.haveFrame = false
     this.wintype = 'toolbar'

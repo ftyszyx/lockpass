@@ -47,8 +47,8 @@ export interface UserSetInfo {
   shortcut_global_quick_find: string //全局快捷键，快速查找
   shortcut_global_quick_lock: string //全局快捷键，快速锁定
   shortcut_global_open_main: string //全局快捷键，快速锁定
-  shortcut_local_view_shortcut: string //本地快捷键，查看快捷键
   shortcut_global_hide_main: string //全局快捷键，隐藏主窗口
+  shortcut_global_show_password: string //全局快捷键，显示密码窗口
   shortcut_local_find: string //本地快捷键，查找
   password_type: GenPasswordType //密码生成类型
   password_type_conf: PasswordTypeInfo //密码生成配置
@@ -64,15 +64,16 @@ export const defaultUserSetInfo: UserSetInfo = {
   shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.Shift}+L`,
   shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Up`,
   shortcut_global_hide_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Down`,
+  shortcut_global_show_password: `${ControlKey.ctrl}+ ${ControlKey.Shift}+P`,
   shortcut_local_find: `${ControlKey.ctrl}+F`,
-  shortcut_local_view_shortcut: `${ControlKey.ctrl}+/`,
   password_type: GenPasswordType.random,
   password_type_conf: DefaultPasswordTypeConf
 }
 
 export enum renderViewType {
   Mainview = 'mainview',
-  Quickview = 'quickview'
+  Quickview = 'quickview',
+  Password = 'password'
 }
 
 let gloabl_curViewType: renderViewType = renderViewType.Mainview

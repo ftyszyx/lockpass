@@ -97,10 +97,7 @@ export default function VaultSide(props: VaultSideProps) {
   }, [props.default_select_item])
 
   return (
-    <div
-      style={{ height: 'calc(100vh - 50px)' }}
-      className="flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative"
-    >
+    <div className="h-[calc(100vh-50px)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative">
       {/* first line */}
       <div className="flex flex-row justify-between items-center p-2">
         <Select

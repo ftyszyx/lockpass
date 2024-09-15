@@ -220,10 +220,12 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           onDelete={async (item) => {
             await ipc_call_normal(webToManMsg.Delete_alidrive_file, item.file_id)
             await getAllBackups()
+            message.success(getText('success'))
           }}
           onTrash={async (item) => {
             await ipc_call_normal(webToManMsg.Trash_alidrive_file, item.file_id)
             await getAllBackups()
+            message.success(getText('success'))
           }}
           onClose={() => {
             setShowSelectBackupFile(false)

@@ -14,3 +14,4 @@ backup_aliyun
 .vite
 third_lib/robotjs/bin
 package-lock.json
+temp_set.json

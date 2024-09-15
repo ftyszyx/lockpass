@@ -2,6 +2,7 @@ import { VaultItem } from '@common/entitys/vault_item.entity'
 import { BaseService } from './base.service'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { EntityType } from '@common/entitys/app.entity'
+import AppModel from '@main/models/app.model'
 
 export class VaultItemService extends BaseService<VaultItem> {
   constructor() {
@@ -24,5 +25,6 @@ export class VaultItemService extends BaseService<VaultItem> {
   AfterChange(): void {
     AppEvent.emit(AppEventType.VaultItemChange)
     AppEvent.emit(AppEventType.DataChange, EntityType.vault_item)
+    AppModel.getInstance().set.set_vault_change_not_backup(true)
   }
 }

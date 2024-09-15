@@ -28,5 +28,6 @@ export class ValutService extends BaseService<Vault> {
   AfterChange(): void {
     AppEvent.emit(AppEventType.VaultChange)
     AppEvent.emit(AppEventType.DataChange, EntityType.vault)
+    AppModel.getInstance().set.set_vault_change_not_backup(true)
   }
 }

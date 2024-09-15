@@ -1,6 +1,7 @@
 import { EventEmitter } from 'stream'
 
 export enum AppEventType {
+  ResizeWindow = 'ResizeWindow',
   LockApp = 'LockApp',
   windowBlur = 'windowBlur',
   LoginOk = 'LoginOk',
@@ -16,6 +17,7 @@ export enum AppEventType {
   APPQuit = 'APPQuit',
   LangChange = 'LangChange',
   UpdateEvent = 'UpdateEvent',
-  SystemLock = 'SystemLock'
+  SystemLock = 'SystemLock',
+  VaultChangeNotBackup = 'VaultChangeNotBackup'
 }
 export const AppEvent = new EventEmitter()

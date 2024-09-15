@@ -6,6 +6,7 @@ import { Vault } from '@common/entitys/vault.entity'
 import { VaultImportType, VaultItem } from '@common/entitys/vault_item.entity'
 import { renderViewType } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export function initAllApi() {
   //system
@@ -29,9 +30,7 @@ export function initAllApi() {
   })
 
   ipcMain.handle(webToManMsg.ResizeWindow, (_, viewtype: renderViewType, width, height) => {
-    if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.setSize(width, height)
-    else if (viewtype == renderViewType.Quickview)
-      AppModel.getInstance().quickwin?.setSize(width, height)
+    AppEvent.emit(AppEventType.ResizeWindow, viewtype, width, height)
   })
 
   ipcMain.handle(webToManMsg.GetWinBasePath, (_, viewtype: renderViewType) => {
@@ -76,6 +75,10 @@ export function initAllApi() {
 
   ipcMain.handle(webToManMsg.GetAllBackups_alidrive, async () => {
     return await AppModel.getInstance().GetAliyunBackupList()
+  })
+
+  ipcMain.handle(webToManMsg.IsVaultChangeNotBackup, () => {
+    return AppModel.getInstance().set.vault_change_not_backup
   })
 
   ipcMain.handle(webToManMsg.ImportCSV, (_, type: VaultImportType) => {

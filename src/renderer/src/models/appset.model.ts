@@ -3,6 +3,7 @@ import { create } from '@renderer/libs/state'
 
 export interface AppsetStore {
   initOK: boolean
+  vault_change_not_backup: boolean
   lang: LangItem | null
   setLang: (lang: LangItem) => void
   SetInitOK: (ok: boolean) => void
@@ -13,6 +14,8 @@ export interface AppsetStore {
   //menu
   fold_menu: boolean
   ToggleFoldMenu: () => void
+  SetVaultChangeNotBackup: (flag: boolean) => void
+  IsVaultChangeNotBackup: () => boolean
 }
 
 export const use_appset = create<AppsetStore>((set, get) => {
@@ -20,8 +23,17 @@ export const use_appset = create<AppsetStore>((set, get) => {
   return {
     fold_menu: false,
     lang: null,
+    vault_change_not_backup: false,
     initOK: false,
     version: '',
+    SetVaultChangeNotBackup(flag: boolean) {
+      set((state) => {
+        return { ...state, vault_change_not_backup: flag }
+      })
+    },
+    IsVaultChangeNotBackup() {
+      return get().vault_change_not_backup
+    },
     SetVersion(version: string) {
       set((state) => {
         return { ...state, version: version }

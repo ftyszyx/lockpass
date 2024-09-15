@@ -19,8 +19,8 @@ export default function InputDialog(props: InputDialogProps): JSX.Element {
       onCancel={() => {
         props.onClose()
       }}
-      onOk={() => {
-        props.onOk(inputstr)
+      onOk={async () => {
+        await props.onOk(inputstr)
       }}
       className={props.className || ''}
       style={props.style}

@@ -41,7 +41,7 @@ export default function Vault() {
 
   return (
     <>
-      <div className="flex flex-col bg-gray-100 h-screen">
+      <div className="flex flex-col bg-gray-100">
         {contextHolder}
         {/* header */}
         <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
@@ -83,10 +83,7 @@ export default function Vault() {
             }}
           ></VaultSide>
           {/*  right side content*/}
-          <div
-            className="flex flex-grow  overflow-auto  "
-            style={{ height: 'calc(100vh - 100px)' }}
-          >
+          <div className="flex flex-grow  overflow-auto h-[calc(100vh-100px)] ">
             {select_vault_item && (
               <div className=" flex flex-col w-full">
                 <div className="flex flex-row-reverse   p-4 border-b-2 border-solid border-gray-200">

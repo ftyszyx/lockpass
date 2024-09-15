@@ -38,10 +38,12 @@ import { ParseCsvFile } from '@main/libs/csv_parser'
 import { AppSetModel } from './app.set'
 import { BaseEntity, SearchField } from '@common/entitys/db.entity'
 import { AutoUpdateHelper } from './auto.update'
+import { PasswordWindow } from '@main/windows/window.password'
 
 class AppModel {
   public mainwin: MainWindow | null = null
   public quickwin: QuickSearchWindow | null = null
+  public passwordwin: PasswordWindow | null = null
   public my_tray: MyTray | null = null
   public myencode: MyEncode | null = null
   public vault: VaultService | null = null
@@ -148,6 +150,7 @@ class AppModel {
       this.mainwin.show()
     })
     this.quickwin = new QuickSearchWindow()
+    this.passwordwin = new PasswordWindow()
     this.my_tray = new MyTray()
   }
 
@@ -229,6 +232,7 @@ class AppModel {
             if (key == 'shortcut_global_open_main') this.mainwin?.show()
             if (key == 'shortcut_global_quick_find') this.quickwin?.show()
             if (key == 'shortcut_global_quick_lock') this.LockApp()
+            if (key == 'shortcut_global_show_password') this.passwordwin?.show()
             if (key == 'shortcut_global_hide_main') this.hideAllWindow()
           })
           Log.info('register global key:', value, res)
@@ -420,6 +424,7 @@ class AppModel {
     }
     fs.unlinkSync(zip_file)
     Log.info('upload file ok')
+    this.set.set_vault_change_not_backup(false)
     return `${this.ali_drive.parent_dir_name}/${filename}`
   }
 

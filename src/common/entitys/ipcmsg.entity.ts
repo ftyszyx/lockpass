@@ -58,7 +58,8 @@ export enum webToManMsg {
   Downloadupdate = 'Downloadupdate',
   PowerOnOpen = 'PowerOnOpen',
   InstallUpdate = 'InstallUpdate',
-  CheckUpdateStatus = 'CheckUpdateStatus'
+  CheckUpdateStatus = 'CheckUpdateStatus',
+  IsVaultChangeNotBackup = 'IsVaultChangeNotBackup'
 }
 
 export enum MainToWebMsg {
@@ -74,5 +75,6 @@ export enum MainToWebMsg {
   ShowVaulteItem = 'ShowVaulteItem',
   AliyunAuthOk = 'AliyunAuthOk',
   LangChange = 'LangChange',
-  UpdateEvent = 'UpdateEvent'
+  AppUpdateEvent = 'UpdateEvent',
+  VaultChangeNotBackup = 'VaultChangeNotBackup'
 }

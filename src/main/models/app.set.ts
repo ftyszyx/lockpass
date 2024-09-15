@@ -6,6 +6,7 @@ import { PathHelper } from '@main/libs/path'
 import { LogLevel } from '@common/entitys/log.entity'
 import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export interface AppSetInfo {
   lang: string
@@ -17,6 +18,10 @@ export interface AppSetInfo {
   aliyun_data?: AliyunData
 }
 
+export interface TempSetInfo {
+  vault_change_not_backup?: boolean
+}
+
 export class AppSetModel {
   private _set: AppSetInfo = {
     lang: Default_Lang,
@@ -24,26 +29,27 @@ export class AppSetModel {
     sql_ver: SQL_VER_CODE,
     cur_user_uid: 0
   }
+  private _temp_set: TempSetInfo = {
+    vault_change_not_backup: false
+  }
   private _set_path: string
+  private _temp_set_path: string
 
   constructor() {
     this._set_path = path.join(PathHelper.getHomeDir(), 'set.json')
-    if (!fs.existsSync(this._set_path)) {
-      fs.writeFileSync(this._set_path, JSON.stringify(this.set))
-    } else {
-      const saveinfo = JSON.parse(fs.readFileSync(this._set_path).toString())
-      let have_new_property = false
-      Object.keys(this.set).forEach((key) => {
-        const initvalue = saveinfo[key]
-        if (initvalue === undefined || initvalue === null) {
-          saveinfo[key] = this.set[key]
-          have_new_property = true
-        }
-      })
-      this._set = saveinfo
-      if (have_new_property) {
-        this.saveSet()
-      }
+    this._temp_set_path = path.join(PathHelper.getHomeDir(), 'temp_set.json')
+    const { info, change } = this.initSet(this._set_path, this.set)
+    this._set = info
+    if (change) {
+      this.saveSet()
+    }
+    const { info: temp_info, change: temp_change } = this.initSet(
+      this._temp_set_path,
+      this._temp_set
+    )
+    this._temp_set = temp_info
+    if (temp_change) {
+      this.saveTempSet()
     }
     this.initLang()
     Log.log_level = this.set.log_level || LogLevel.Error
@@ -52,12 +58,44 @@ export class AppSetModel {
     // Log.Info('set:', JSON.stringify(this.set))
   }
 
+  initSet(setpath: string, info: any): { info: any; change: boolean } {
+    if (!fs.existsSync(setpath)) {
+      fs.writeFileSync(setpath, JSON.stringify(info))
+      return { info, change: false }
+    } else {
+      const saveinfo = JSON.parse(fs.readFileSync(setpath).toString())
+      let have_new_property = false
+      Object.keys(info).forEach((key) => {
+        const initvalue = saveinfo[key]
+        if (initvalue === undefined || initvalue === null) {
+          saveinfo[key] = info[key]
+          have_new_property = true
+        }
+      })
+      return { info: saveinfo, change: have_new_property }
+    }
+  }
+
   get set() {
     return this._set
   }
 
   public saveSet() {
     fs.writeFileSync(this._set_path, JSON.stringify(this.set))
+  }
+
+  public saveTempSet() {
+    fs.writeFileSync(this._temp_set_path, JSON.stringify(this._temp_set))
+  }
+
+  public set_vault_change_not_backup(flag: boolean) {
+    this._temp_set.vault_change_not_backup = flag
+    AppEvent.emit(AppEventType.VaultChangeNotBackup, flag)
+    this.saveTempSet()
+  }
+
+  public get vault_change_not_backup() {
+    return this._temp_set.vault_change_not_backup
   }
 
   public changeSqlVer(ver: number) {

@@ -15,6 +15,12 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
   const history = useHistory()
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const isVaultChangeNotBackup = use_appset(
+    (state) => state.IsVaultChangeNotBackup
+  ) as AppsetStore['IsVaultChangeNotBackup']
+  const setVaultChangeNotBackup = use_appset(
+    (state) => state.SetVaultChangeNotBackup
+  ) as AppsetStore['SetVaultChangeNotBackup']
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const appstore = use_appstore() as AppStore
   ConsoleLog.LogInfo('baselayout render')
@@ -35,7 +41,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       )
     })
     window.electron.ipcRenderer.on(
-      MainToWebMsg.UpdateEvent,
+      MainToWebMsg.AppUpdateEvent,
       (_, type: UpdateEventType, info: any) => {
         ConsoleLog.LogInfo('UpdateEvent', type, info)
         if (type == UpdateEventType.updateAvaliable) {
@@ -108,17 +114,33 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       appstore.LoginOut()
       history.push(PagePath.Login)
     })
+
+    window.electron.ipcRenderer.on(MainToWebMsg.VaultChangeNotBackup, (_, flag: boolean) => {
+      ConsoleLog.LogInfo('VaultChangeNotBackup event', flag)
+      setVaultChangeNotBackup(flag)
+    })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LockApp)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowVaulteItem)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LoginOut)
-      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.UpdateEvent)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.AppUpdateEvent)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.VaultChangeNotBackup)
     }
   }, [])
 
   useEffect(() => {
     checkStatus()
+    checkVaultChangeNotBackup()
   }, [])
+
+  async function checkVaultChangeNotBackup() {
+    const isVaultChangeNotBackup = await ipc_call_normal<boolean>(
+      webToManMsg.IsVaultChangeNotBackup
+    )
+    if (isVaultChangeNotBackup === true) {
+      setVaultChangeNotBackup(true)
+    }
+  }
 
   async function checkStatus() {
     ConsoleLog.LogInfo('checkStatus')
@@ -166,10 +188,11 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
 
   return (
     <div>
-      {messageContex}
-      {
-        <div>
-          {/* <Button
+      <div>
+        {messageContex}
+        {
+          <div>
+            {/* <Button
             type="primary"
             onClick={async () => {
               await ipc_call_normal(webToManMsg.OpenDb)
@@ -185,9 +208,15 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
           >
             close db
           </Button> */}
+          </div>
+        }
+        {props.children}
+      </div>
+      {isVaultChangeNotBackup() && (
+        <div className="bg-black fixed bottom-0 left-0 right-0 z-50 text-center text-red-500 font-sans font-bold text-[16px]">
+          <p>{getText('admin_about.vault_change_not_backup')}</p>
         </div>
-      }
-      {props.children}
+      )}
     </div>
   )
 }

@@ -1,10 +1,15 @@
-import { ApiResp, ApiRespCode } from '@common/entitys/app.entity'
+import { ApiResp, ApiRespCode, EntityType } from '@common/entitys/app.entity'
 import { BaseEntity, SearchField, WhereDef } from '@common/entitys/db.entity'
+import { Table_Name_KEY } from '@common/gloabl'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { Log } from '@main/libs/log'
 import AppModel from '@main/models/app.model'
 
 export class BaseService<Entity extends BaseEntity> {
-  constructor(public entity: Entity) {}
+  private entity_name: EntityType
+  constructor(public entity: Entity) {
+    this.entity_name = entity[Table_Name_KEY] as EntityType
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fixEntityOut(_: Entity): void {

@@ -16,6 +16,8 @@ import QucickLayout from './pages/quick/QuickLayout'
 import QuickSearch from './pages/quick/QuickSearch'
 import BaseLayout from './layouts/BaseLayout'
 import AdminAbout from './pages/admin/AdminAbout'
+import PasswordGenPanel from './pages/Vault/PasswordGenPanel'
+import PasswordLayout from './pages/password/PasswordLayout'
 
 const RootRouter = () => {
   const appset = use_appset() as AppsetStore
@@ -41,7 +43,7 @@ const RootRouter = () => {
   ConsoleLog.LogInfo('RootRouter render', viewtype)
   return (
     <HashRouter debug={false}>
-      {viewtype == renderViewType.Mainview ? (
+      {viewtype == renderViewType.Mainview && (
         <Route>
           <Route path={PagePath.register} element={Login} match={{ end: true }} />
           <Route path={PagePath.Login} element={Login} match={{ end: true }} />
@@ -52,10 +54,10 @@ const RootRouter = () => {
             <Route path={PagePath.Adminbase} element={AdminLayout} errorElement={NotFound}>
               {/*  prettier-ignore */}
               <Route
-              path={PagePath.Adminbase}
-              redirect={PagePath.vault}
-              match={{ end: true }}
-            />
+                path={PagePath.Adminbase}
+                redirect={PagePath.vault}
+                match={{ end: true }}
+              />
               <Route path={PagePath.Admin_set} element={AdminSet} />
               <Route path={PagePath.Vault_full} element={Vault} />
               <Route path={PagePath.Admin_log} element={AdminLog} />
@@ -63,13 +65,18 @@ const RootRouter = () => {
             </Route>
           </Route>
         </Route>
-      ) : (
+      )}
+      {viewtype == renderViewType.Quickview && (
         <Route>
           <Route path="/" element={QucickLayout} errorElement={NotFound}>
             <Route path="/" redirect={PagePath.Home} match={{ end: true }} />
-            <Route path="/quick.html" redirect={PagePath.Home} match={{ end: true }} />
             <Route path={PagePath.Home} element={QuickSearch} />
           </Route>
+        </Route>
+      )}
+      {viewtype == renderViewType.Password && (
+        <Route>
+          <Route path="/" element={PasswordLayout} errorElement={NotFound}></Route>
         </Route>
       )}
     </HashRouter>

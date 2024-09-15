@@ -78,8 +78,8 @@
   "set.menu.shortcut_global_quick_lock": "全局快速锁定",
   "set.menu.shortcut_global_open_main": "全局打开主界面",
   "set.menu.shortcut_global_hide_main": "全局隐藏主界面",
-  "set.menu.shortcut_local_find": "快速锁定",
-  "set.menu.shortcut_local_view_shortcut": "打开快捷列表页面",
+  "set.menu.shortcut_global_show_password": "全局显示密码窗口",
+  "set.menu.shortcut_local_find": "快速查找",
   "set.key_conflict": "快捷键冲突:{0}",
   "set.placeholder.shortcut": "请输入快捷键",
 
@@ -178,6 +178,7 @@
 
   "tray.menu.openlockpass": "打开lockpass",
   "tray.menu.openquick": "打开快速访问",
+  "tray.menu.openpassword": "打开密码窗口",
   "tray.menu.lock": "锁定",
   "tray.menu.quit": "退出",
 
@@ -197,6 +198,7 @@
   "use": "使用",
   "refresh": "刷新",
   "app_exit": "程序退出",
+  "success": "成功",
   "recover": "恢复",
   "recover_default": "恢复默认",
   "save_success": "修改成功",
@@ -273,5 +275,7 @@
   "update.noupdate": "当前已经是最新版本",
   "update.checking": "正在检查更新,请稍等",
 
-  "admin_about.checkupdate": "检查软件更新"
+  "admin_about.checkupdate": "检查软件更新",
+  "mydropmenu.delete_ok": "删除成功",
+  "admin_about.vault_change_not_backup": "保险库已改变,请及时备份"
 }

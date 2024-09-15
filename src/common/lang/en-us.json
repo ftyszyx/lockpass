@@ -87,8 +87,8 @@
   "set.menu.shortcut_global_quick_lock": "Global quick lock",
   "set.menu.shortcut_global_open_main": "Global open main window",
   "set.menu.shortcut_global_hide_main": "Global hide main window",
-  "set.menu.shortcut_local_find": "Quick Lock",
-  "set.menu.shortcut_local_view_shortcut": "Open the shortcut list page",
+  "set.menu.shortcut_global_show_password": "Global show password window",
+  "set.menu.shortcut_local_find": "Quick find",
   "set.key_conflict": "Shortcut key conflict: {0}",
   "set.placeholder.shortcut": "Please enter the shortcut key",
   "changemainpass.placeholder.newpass": "Please enter a new password",
@@ -200,7 +200,7 @@
   "update.content.version": "Version number: {0}",
   "tray.menu.openlockpass": "Open lockpass",
   "tray.menu.openquick": "Open quick access",
-
+  "tray.menu.openpassword": "Open password window",
   "tray.menu.lock": "Lock",
   "tray.menu.quit": "Exit",
   "update.content.releaseDate": "Release date: {0}",
@@ -218,7 +218,7 @@
   "copy": "copy",
   "save": "save",
   "cancel": "cancel",
-
+  "success": "success",
   "use": "use",
   "refresh": "refresh",
   "app_exit": "Program exit",
@@ -273,5 +273,7 @@
 
   "404.desc": "Page does not exist",
   "update.checking": "checking for updates, please wait",
-  "mydropmenu.inputbackup_name.title": "Please enter the backup file name"
+  "mydropmenu.inputbackup_name.title": "Please enter the backup file name",
+  "mydropmenu.delete_ok": "Delete successfully",
+  "admin_about.vault_change_not_backup": "Vault has changed, please backup"
 }

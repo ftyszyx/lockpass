@@ -1,4 +1,4 @@
-import { ApiResp, ApiRespCode, UserSetInfo } from '@common/entitys/app.entity'
+import { ApiResp, ApiRespCode, renderViewType, UserSetInfo } from '@common/entitys/app.entity'
 import { ConsoleLog } from '../Console'
 import { AppStore } from '@renderer/models/app.model'
 import { MessageInstance } from 'antd/es/message/interface'
@@ -119,6 +119,10 @@ export async function ChangeAppset(
 export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
   const userset = appsotre.GetUserSet()
   await ipc_call_normal(webToManMsg.UpdateTrayMenu, {
+    openpassword: getLabelStr(
+      lang?.getText('tray.menu.openpassword'),
+      userset.shortcut_global_show_password
+    ),
     openlockpass: getLabelStr(
       lang?.getText('tray.menu.openlockpass'),
       userset.shortcut_global_open_main
@@ -126,4 +130,11 @@ export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
     lock: getLabelStr(lang?.getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
     openquick: getLabelStr(lang?.getText('tray.menu.openquick'), userset.shortcut_global_quick_find)
   })
+}
+
+export async function FixWindowSize(viewtype: renderViewType) {
+  const rect = document.body.getBoundingClientRect()
+  if (rect.height == window.innerHeight) return
+  console.log('checkSize', rect, window.innerHeight)
+  await window.electron.ipcRenderer.invoke(webToManMsg.ResizeWindow, viewtype, 0, rect.height)
 }
