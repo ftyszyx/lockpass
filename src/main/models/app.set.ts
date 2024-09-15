@@ -60,8 +60,17 @@ export class AppSetModel {
     fs.writeFileSync(this._set_path, JSON.stringify(this.set))
   }
 
+  public changeSqlVer(ver: number) {
+    this.set.sql_ver = ver
+    this.saveSet()
+  }
+
   get log_level() {
     return this.set.log_level || LogLevel.Info
+  }
+
+  get sql_ver() {
+    return this.set.sql_ver
   }
 
   public get aliyunData() {

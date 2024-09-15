@@ -14,11 +14,12 @@ import { useHistory, useRouterStore } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Select } from 'antd'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface VaultSideProps {
   onSelect: (item: VaultItem) => void
   global_search_keyword: string
+  default_select_item?: VaultItem
 }
 
 export default function VaultSide(props: VaultSideProps) {
@@ -30,6 +31,7 @@ export default function VaultSide(props: VaultSideProps) {
   const route_data = useRouterStore()
   const history = useHistory()
   const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
+  const selectedItemRef = useRef<HTMLDivElement>(null)
   const cur_vault_item_id = parseInt(route_data.match?.params['vault_item_id'])
   const show_items = useMemo(() => {
     if (props.global_search_keyword && props.global_search_keyword.length > 0) {
@@ -79,6 +81,21 @@ export default function VaultSide(props: VaultSideProps) {
     set_select_vault_item(vault_item)
     props.onSelect(vault_item)
   }
+
+  useEffect(() => {
+    if (selectedItemRef.current) {
+      selectedItemRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [select_vault_item])
+
+  useEffect(() => {
+    if (props.default_select_item) {
+      if (show_items.some((item) => item.id == props.default_select_item.id)) {
+        DoSelectItem(props.default_select_item)
+      }
+    }
+  }, [props.default_select_item])
+
   return (
     <div
       style={{ height: 'calc(100vh - 50px)' }}
@@ -122,6 +139,7 @@ export default function VaultSide(props: VaultSideProps) {
             onClick={() => {
               DoSelectItem(vault_item)
             }}
+            ref={select_vault_item?.id == vault_item.id ? selectedItemRef : null}
             className={`flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
             key={vault_item.id}
           >

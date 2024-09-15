@@ -11,7 +11,7 @@ import { PathHelper } from '@main/libs/path'
 import path from 'path'
 import fs from 'fs'
 import { LangHelper } from '@common/lang'
-import { Icon_type, VaultItemType } from '@common/gloabl'
+import { Icon_type, SQL_VER_CODE, VaultItemType } from '@common/gloabl'
 import { MainWindow } from '@main/windows/window.main'
 import { QuickSearchWindow } from '@main/windows/window.quicksearch'
 import { MyTray } from '@main/windows/mytray'
@@ -110,10 +110,20 @@ class AppModel {
     Log.info('begin open db')
     await this.db_helper.OpenDb()
     Log.info('init tables')
-    await this.db_helper.initOneTable(this.user.entity)
-    await this.db_helper.initOneTable(this.vault.entity)
-    await this.db_helper.initOneTable(this.vaultItem.entity)
-    await this.db_helper.initOneTable(this.appInfo.entity)
+    try {
+      await this.db_helper.checkUpdate(this.set.sql_ver)
+      await this.db_helper.initOneTable(this.user.entity)
+      await this.db_helper.initOneTable(this.vault.entity)
+      await this.db_helper.initOneTable(this.vaultItem.entity)
+      await this.db_helper.initOneTable(this.appInfo.entity)
+    } catch (e: any) {
+      Log.error('init tables error:', e)
+      app.quit()
+      return
+    }
+    if (this.set.sql_ver != SQL_VER_CODE) {
+      this.set.changeSqlVer(SQL_VER_CODE)
+    }
     this.ali_drive = new AliDrive()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
     crashReporter.start({
@@ -199,6 +209,11 @@ class AppModel {
     return this.user.userinfo
   }
 
+  public hideAllWindow() {
+    this.mainwin?.hide()
+    this.quickwin?.hide()
+  }
+
   public initGlobalShortcut() {
     let setinfo = defaultUserSetInfo
     const curuserinfo = this.curUserInfo()
@@ -214,6 +229,7 @@ class AppModel {
             if (key == 'shortcut_global_open_main') this.mainwin?.show()
             if (key == 'shortcut_global_quick_find') this.quickwin?.show()
             if (key == 'shortcut_global_quick_lock') this.LockApp()
+            if (key == 'shortcut_global_hide_main') this.hideAllWindow()
           })
           Log.info('register global key:', value, res)
         }
@@ -388,12 +404,12 @@ class AppModel {
     return true
   }
 
-  async BackupByAliyun(): Promise<string | null> {
+  async BackupByAliyun(custom_name: string): Promise<string | null> {
     if ((await this.checkAlidriveAuth()) == false) return null
     const zip_file = await this.BackupSystem()
     if (zip_file == null) return null
-    const filename = path.basename(zip_file)
-    Log.info(`begin upload file ${zip_file} to aliyun:`)
+    const filename = custom_name || path.basename(zip_file)
+    Log.info(`begin upload file ${zip_file} to aliyun:${filename}`)
     try {
       await this.ali_drive.UploadFile(filename, zip_file)
     } catch (e: any) {

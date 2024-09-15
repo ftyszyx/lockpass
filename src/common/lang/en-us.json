@@ -85,7 +85,8 @@
   "set.menu.normal_lang_set": "Modify system language",
   "set.menu.shortcut_global_quick_find": "Global Quick Find",
   "set.menu.shortcut_global_quick_lock": "Global quick lock",
-  "set.menu.shortcut_global_open_main": "Open the main interface globally",
+  "set.menu.shortcut_global_open_main": "Global open main window",
+  "set.menu.shortcut_global_hide_main": "Global hide main window",
   "set.menu.shortcut_local_find": "Quick Lock",
   "set.menu.shortcut_local_view_shortcut": "Open the shortcut list page",
   "set.key_conflict": "Shortcut key conflict: {0}",
@@ -213,6 +214,7 @@
   "ok": "OK",
   "edit": "edit",
   "delete": "delete",
+  "trash": "trash",
   "copy": "copy",
   "save": "save",
   "cancel": "cancel",
@@ -250,6 +252,7 @@
   "admin_about.checkupdate": "Check for software updates",
   "filelistselect.name": "filename",
   "filelistselect.size": "size",
+  "filelistselect.oper": "operation",
 
   "filelistselect.updatetime": "Modification time",
   "importcsvtype.title": "Select import type",
@@ -269,5 +272,6 @@
   "404.title": "404",
 
   "404.desc": "Page does not exist",
-  "update.checking": "checking for updates, please wait"
+  "update.checking": "checking for updates, please wait",
+  "mydropmenu.inputbackup_name.title": "Please enter the backup file name"
 }

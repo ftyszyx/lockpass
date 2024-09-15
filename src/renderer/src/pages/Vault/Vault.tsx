@@ -23,6 +23,7 @@ export default function Vault() {
   const appstore = use_appstore() as AppStore
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
+  const [defulat_select_item, set_defulat_select_item] = useState<VaultItem>(null)
   const ToggleFoldMenu = use_appset(
     (state) => state.ToggleFoldMenu
   ) as AppsetStore['ToggleFoldMenu']
@@ -75,6 +76,7 @@ export default function Vault() {
         {/* content */}
         <div className=" flex flex-row flex-grow">
           <VaultSide
+            default_select_item={defulat_select_item}
             global_search_keyword={global_search_keyword}
             onSelect={(item) => {
               set_select_vault_item(item)
@@ -182,11 +184,13 @@ export default function Vault() {
         <AddPasswordPanel
           show={show_add_vault}
           title="新增项目"
-          onOk={async () => {
+          onOk={async (res) => {
             set_show_add_vault(false)
+            set_defulat_select_item(res)
           }}
           onClose={() => {
             set_show_add_vault(false)
+            set_defulat_select_item(null)
           }}
         ></AddPasswordPanel>
       )}

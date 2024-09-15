@@ -60,7 +60,7 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
       render: (props) => {
         return <MyInputWrapper inputElement={Input} show_type={props.show_type} {...props} />
       },
-      edit_rules: [{ required: true, message: lang.getText('vaultitem.rule.username') }]
+      edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.username') }]
     },
     {
       field_name: 'password',
@@ -74,7 +74,7 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
           />
         )
       },
-      edit_rules: [{ required: true, message: lang.getText('vaultitem.rule.password') }]
+      edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.password') }]
     },
     {
       field_name: 'urls',
@@ -83,7 +83,7 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
         return (
           <InputArr
             readonly={props.show_type == ModalType.View}
-            label={lang.getText('vaultitem.label.url')}
+            label={lang?.getText('vaultitem.label.url')}
             show_type={props.show_type}
             {...props}
           ></InputArr>

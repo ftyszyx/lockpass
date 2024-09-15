@@ -1,7 +1,14 @@
 import { Log } from './log'
-import { COlumn_Encode_key, Column_Name_KEY, Column_Type_KEY, Table_Name_KEY } from '@common/gloabl'
+import {
+  COlumn_Encode_key,
+  Column_Name_KEY,
+  Column_Type_KEY,
+  SQL_VER_CODE,
+  Table_Name_KEY
+} from '@common/gloabl'
 import { BaseEntity, WhereDef } from '@common/entitys/db.entity'
 import { ColumnType, getColumTypeCategory } from '@common/decorator/db.decorator'
+import SqlChange from '@main/sqls/change.json'
 import AppModel from '@main/models/app.model'
 
 export class BaseDb {
@@ -136,7 +143,7 @@ export class BaseDb {
     await this.run(sql_str)
   }
 
-  private _runSqlWithResult<T>(obj: BaseEntity, sql_str: string): Promise<T[]> {
+  private async _runSqlWithResult<T>(obj: BaseEntity, sql_str: string): Promise<T[]> {
     return this._runSqlWithResult2(obj.constructor as new (...args: any[]) => T, obj, sql_str)
   }
 
@@ -259,14 +266,15 @@ export class BaseDb {
     await this._runSql('ABORT;')
   }
 
-  public AddOne(obj: BaseEntity): Promise<void> {
+  public async AddOne<T extends BaseEntity>(obj: T): Promise<T> {
     const table_name = obj[Table_Name_KEY]
     let sql_str = ''
     sql_str += 'Insert into ' + table_name
     const keys = Reflect.ownKeys(obj)
     sql_str += this.getAddOneSql(obj, keys as string[])
-    sql_str += ';'
-    return this._runSql(sql_str)
+    sql_str += ' RETURNING *;'
+    const res = await this._runSqlWithResult<T>(obj, sql_str)
+    return res[0]
   }
 
   private getWhreSql(obj: BaseEntity, where: WhereDef<BaseEntity> | null): string {
@@ -318,45 +326,81 @@ export class BaseDb {
     return res[0][keystr]
   }
 
-  public async initOneTable(obj: BaseEntity) {
-    const table_name = obj[Table_Name_KEY]
-    Log.info('init table:', table_name)
-    let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
-    let index_desc = ''
-    const keys = Reflect.ownKeys(obj)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)
-      const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
-      const isprimary = Reflect.getMetadata('primary', obj, key)
-      if (!col_type) continue
-      table_desc += `${col_name} ${col_type}`
-      if (isprimary) {
-        table_desc += ' PRIMARY KEY autoincrement'
-      }
-      const default_value = Reflect.getMetadata('default', obj, key)
-      if (default_value != undefined || default_value != null) {
-        table_desc += ` DEFAULT '${default_value}' `
-      }
-      if (Reflect.getMetadata('unique', obj, key)) {
-        table_desc += ' UNIQUE'
-      }
-      if (Reflect.getMetadata('notNull', obj, key)) {
-        table_desc += ' NOT NULL'
-      }
-      if (i < keys.length - 1) {
-        table_desc += ','
-      }
-      table_desc += '\n'
-      const index_name = Reflect.getMetadata('index_name', obj, key)
-      if (index_name) {
-        const unique_index = Reflect.getMetadata('unique_index', obj, key)
-        index_desc += `CREATE ${unique_index ? 'UNIQUE' : ''} INDEX IF NOT EXISTS ${index_name} ON ${table_name} (${col_name});\n`
-      }
+  public async checkUpdate(sql_ver: number): Promise<void> {
+    const tableExistsQuery = `SELECT name FROM sqlite_master ;`
+    const tableExistsResult = await this.all(tableExistsQuery)
+    if (tableExistsResult.length == 0) {
+      return
     }
-    table_desc += ');'
-    const sql_str = table_desc + '\n' + index_desc
-    if (this.show_log) Log.info('runsql:', sql_str)
-    await this.run(sql_str)
+    if (sql_ver == SQL_VER_CODE) return
+    Log.info(`table update:${sql_ver}->${SQL_VER_CODE}`)
+    const changekey = `${sql_ver}-${SQL_VER_CODE}`
+    const change_sql_arr = SqlChange[changekey]
+    if (change_sql_arr && change_sql_arr.length > 0) {
+      await this.beginTransaction()
+      try {
+        for (let i = 0; i < change_sql_arr.length; i++) {
+          const sql_str = change_sql_arr[i]
+          Log.info('runsql:', sql_str)
+          await this._runSql(sql_str)
+        }
+        await this.commitTransaction()
+        return
+      } catch (e: any) {
+        await this.rollbackTransaction()
+        throw e
+      }
+    } else {
+      throw new Error(`no change sql:${changekey}`)
+    }
+  }
+
+  public async initOneTable(obj: BaseEntity): Promise<boolean> {
+    const table_name = obj[Table_Name_KEY]
+    const tableExistsQuery = `SELECT name FROM sqlite_master WHERE type='table' AND name='${table_name}';`
+    const tableExistsResult = await this.all(tableExistsQuery)
+    if (tableExistsResult.length == 0) {
+      Log.info('init table:', table_name)
+      let table_desc = `CREATE TABLE IF NOT EXISTS ${table_name} (\n`
+      let index_desc = ''
+      const keys = Reflect.ownKeys(obj)
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const col_type = Reflect.getMetadata(Column_Type_KEY, obj, key)
+        const col_name = Reflect.getMetadata(Column_Name_KEY, obj, key)
+        const isprimary = Reflect.getMetadata('primary', obj, key)
+        if (!col_type) continue
+        table_desc += `${col_name} ${col_type}`
+        if (isprimary) {
+          table_desc += ' PRIMARY KEY autoincrement'
+        }
+        const default_value = Reflect.getMetadata('default', obj, key)
+        if (default_value != undefined || default_value != null) {
+          table_desc += ` DEFAULT '${default_value}' `
+        }
+        if (Reflect.getMetadata('unique', obj, key)) {
+          table_desc += ' UNIQUE'
+        }
+        if (Reflect.getMetadata('notNull', obj, key)) {
+          table_desc += ' NOT NULL'
+        }
+        if (i < keys.length - 1) {
+          table_desc += ','
+        }
+        table_desc += '\n'
+        const index_name = Reflect.getMetadata('index_name', obj, key)
+        if (index_name) {
+          const unique_index = Reflect.getMetadata('unique_index', obj, key)
+          index_desc += `CREATE ${unique_index ? 'UNIQUE' : ''} INDEX IF NOT EXISTS ${index_name} ON ${table_name} (${col_name});\n`
+        }
+      }
+      table_desc += ');'
+      const sql_str = table_desc + '\n' + index_desc
+      if (this.show_log) Log.info('runsql:', sql_str)
+      await this.run(sql_str)
+      return true
+    } else {
+      return false
+    }
   }
 }

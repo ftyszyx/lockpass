@@ -34,6 +34,7 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
         width={400}
         title={pros.title}
         open={pros.show}
+        maskClosable={false} // Add this line to prevent closing on outside click
         onOk={() => {
           form.validateFields().then(async (values) => {
             if (pros.show_type === ModalType.Edit) {

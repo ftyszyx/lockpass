@@ -13,6 +13,7 @@ import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { useHistory } from '@renderer/libs/router'
 import { PagePath } from '@common/entitys/page.entity'
 import ChangeMainPassword from './ChangeMainPass'
+import InputDialog from './InputDialog'
 const { confirm } = Modal
 interface MyDropDownProps {
   className?: string
@@ -22,11 +23,18 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [showSelectBackupFile, setShowSelectBackupFile] = useState(false)
   const [showSelectImportType, setShowSelectImportType] = useState(false)
   const [showChangeMainPass, setShowChangeMainPass] = useState(false)
+  const [showInputDialog, setShowInputDialog] = useState(false)
   const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
   const [messageApi, contextHolder] = message.useMessage()
   const history = useHistory()
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
+  const getAllBackups = async () => {
+    await ipc_call_normal<BackupFileItem[]>(webToManMsg.GetAllBackups_alidrive).then((res) => {
+      if (res == null || res.length <= 0) return
+      SetBackupList(res)
+    })
+  }
   return (
     <>
       {contextHolder}
@@ -72,25 +80,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
                 })
               })
             } else if (item.key === 'backup_drive_alidrive_do') {
-              await ipc_call_normal<boolean>(webToManMsg.Backup_alidrive).then((res) => {
-                if (res) {
-                  confirm({
-                    title: getText('menu.backup.ok.title'),
-                    icon: <ExclamationCircleOutlined />,
-                    content: getText('menu.backup.ok.content', res),
-                    okText: getText('ok'),
-                    cancelText: getText('cancel')
-                  })
-                }
-              })
+              setShowInputDialog(true)
             } else if (item.key === 'recover_drive_alidrive_do') {
-              await ipc_call_normal<BackupFileItem[]>(webToManMsg.GetAllBackups_alidrive).then(
-                (res) => {
-                  if (res == null || res.length <= 0) return
-                  SetBackupList(res)
-                  setShowSelectBackupFile(true)
-                }
-              )
+              await getAllBackups()
+              setShowSelectBackupFile(true)
               return
             } else if (item.key === 'local_recover_do') {
               confirm({
@@ -223,6 +216,15 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
         <FileListSelectDialog
           show={showSelectBackupFile}
           filelist={BackupList}
+          className="w-[80%]"
+          onDelete={async (item) => {
+            await ipc_call_normal(webToManMsg.Delete_alidrive_file, item.file_id)
+            await getAllBackups()
+          }}
+          onTrash={async (item) => {
+            await ipc_call_normal(webToManMsg.Trash_alidrive_file, item.file_id)
+            await getAllBackups()
+          }}
           onClose={() => {
             setShowSelectBackupFile(false)
           }}
@@ -287,6 +289,30 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
             setShowChangeMainPass(false)
           }}
         ></ChangeMainPassword>
+      )}
+      {showInputDialog && (
+        <InputDialog
+          show={showInputDialog}
+          title={getText('mydropmenu.inputbackup_name.title')}
+          input_text={`backup_${Math.ceil(new Date().getTime() / 1000)}`}
+          onOk={async (value) => {
+            setShowInputDialog(false)
+            await ipc_call_normal<boolean>(webToManMsg.Backup_alidrive, value).then((res) => {
+              if (res) {
+                confirm({
+                  title: getText('menu.backup.ok.title'),
+                  icon: <ExclamationCircleOutlined />,
+                  content: getText('menu.backup.ok.content', res),
+                  okText: getText('ok'),
+                  cancelText: getText('cancel')
+                })
+              }
+            })
+          }}
+          onClose={() => {
+            setShowInputDialog(false)
+          }}
+        ></InputDialog>
       )}
     </>
   )

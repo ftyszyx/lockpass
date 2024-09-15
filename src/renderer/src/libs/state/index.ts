@@ -59,7 +59,6 @@ const createStore = <StateT>(createUserState: UserStateCreatFun<StateT>) => {
 }
 
 export const create = <StateT>(stateFunc: UserStateCreatFun<StateT>) => {
-  console.log('createStore', stateFunc)
   const api = createStore(stateFunc)
   const useStore = (selector: StateSelectFun<StateT> = api.getState, equalityFn = Object.is) => {
     type SelectSliceType = ReturnType<typeof selector>

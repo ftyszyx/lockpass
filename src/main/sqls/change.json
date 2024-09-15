@@ -1,0 +1,6 @@
+{
+  "1-2": [
+    "alter table valut_item rename to vault_item;",
+    "alter table vault_item add column create_time INTEGER default 0;"
+  ]
+}

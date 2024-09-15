@@ -66,8 +66,8 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.showOrHide(showorHide)
   })
 
-  ipcMain.handle(webToManMsg.Backup_alidrive, () => {
-    return AppModel.getInstance().BackupByAliyun()
+  ipcMain.handle(webToManMsg.Backup_alidrive, (_, custom_name: string) => {
+    return AppModel.getInstance().BackupByAliyun(custom_name)
   })
 
   ipcMain.handle(webToManMsg.Recover_alidrive, (_, filename) => {
@@ -80,6 +80,14 @@ export function initAllApi() {
 
   ipcMain.handle(webToManMsg.ImportCSV, (_, type: VaultImportType) => {
     return AppModel.getInstance().ImportCsv(type)
+  })
+
+  ipcMain.handle(webToManMsg.Delete_alidrive_file, async (_, file_id) => {
+    return await AppModel.getInstance().ali_drive.DeleteFile(file_id)
+  })
+
+  ipcMain.handle(webToManMsg.Trash_alidrive_file, async (_, file_id) => {
+    return await AppModel.getInstance().ali_drive.TrashFile(file_id)
   })
 
   ipcMain.handle(webToManMsg.ExputCSV, () => {

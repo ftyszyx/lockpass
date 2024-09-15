@@ -96,17 +96,18 @@ export class BaseService<Entity extends BaseEntity> {
     return entity
   }
 
-  public async AddOne(obj: Record<string, any>) {
+  public async AddOne(obj: Record<string, any>): Promise<Entity> {
     const entity = this.objToEntity(obj)
     this.fixEntityIn(entity)
-    await AppModel.getInstance().db_helper.AddOne(entity)
+    const res = await AppModel.getInstance().db_helper.AddOne(entity)
     this.AfterChange()
+    return res
   }
 
-  public async AddOneApi(obj: Record<string, any>): Promise<ApiResp<null>> {
-    const res: ApiResp<null> = { code: ApiRespCode.SUCCESS }
+  public async AddOneApi(obj: Record<string, any>): Promise<ApiResp<Entity>> {
+    const res: ApiResp<Entity> = { code: ApiRespCode.SUCCESS }
     try {
-      await this.AddOne(obj)
+      res.data = await this.AddOne(obj)
     } catch (e: any) {
       Log.Exception(e)
       res.code = ApiRespCode.db_err

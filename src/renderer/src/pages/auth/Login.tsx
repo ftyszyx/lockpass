@@ -7,9 +7,9 @@ import { useHistory } from '@renderer/libs/router'
 import { GetAllUsers, ipc_call, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { AutoComplete, AutoCompleteProps, Button, Form, Input, message } from 'antd'
+import { AutoComplete, AutoCompleteProps, Button, Form, Input, InputRef, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 interface RegisterInfo2 extends RegisterInfo {
   password_repeat: string
 }
@@ -27,9 +27,13 @@ export default function Register(): JSX.Element {
   ConsoleLog.LogInfo('register render', history.PathName, isLogin, isLock)
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const firstInputRef = useRef<InputRef>(null)
 
   useEffect(() => {
     initData()
+    if (firstInputRef.current && isLock) {
+      firstInputRef.current.focus()
+    }
   }, [])
 
   async function initData() {
@@ -107,6 +111,7 @@ export default function Register(): JSX.Element {
             {(isReigster || isLogin) && (
               <Form.Item label={getText('auth.login.account')} required name="username">
                 <AutoComplete
+                  autoFocus
                   options={options}
                   placeholder={getText('auth.login.placeholder.account')}
                 />
@@ -114,6 +119,7 @@ export default function Register(): JSX.Element {
             )}
             <Form.Item label={getText('auth.login.main_password')} name="password" required>
               <Input.Password
+                ref={firstInputRef}
                 placeholder={getText('auth.login.placeholder.main_password')}
                 size="large"
               />

@@ -66,7 +66,7 @@ export class Log {
     }
     const logstr = `[Debug] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')}`
     Log.logWriter.writeLine(logstr)
-    console.log(logstr)
+    console.log(`${ConsoleColor.FgWhite}${logstr}${ConsoleColor.FgWhite}`)
   }
 
   static info(...args) {
@@ -75,7 +75,7 @@ export class Log {
     }
     const logstr = `[INFO] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')}`
     Log.logWriter.writeLine(logstr)
-    console.log(logstr)
+    console.log(`${ConsoleColor.FgWhite}${logstr}${ConsoleColor.FgWhite}`)
     // console.log(`${ConsoleColor.FgGreen}${logstr}${ConsoleColor.FgGreen}`)
   }
 
@@ -85,7 +85,7 @@ export class Log {
     }
     const logstr = `[Device] ${new Date().toLocaleString(this.locale, { timeZone: this.time_zone })} ${args.join(' ')}`
     Log.logWriter.writeLine(logstr)
-    console.log(logstr)
+    console.log(`${ConsoleColor.FgWhite}${logstr}${ConsoleColor.FgWhite}`)
   }
 
   static warn(...args) {

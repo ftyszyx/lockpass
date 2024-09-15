@@ -7,7 +7,7 @@ import {
 import { BaseEntity } from './db.entity'
 import { Column_Type_KEY, VaultItemType } from '@common/gloabl'
 
-@Entity({ name: 'valut_item' })
+@Entity({ name: 'vault_item' })
 export class VaultItem extends BaseEntity {
   @Column({ type: 'INTEGER', notNull: true })
   user_id: number
@@ -32,6 +32,9 @@ export class VaultItem extends BaseEntity {
 
   @Column({ type: 'INTEGER', default: 0 })
   last_use_time: number
+
+  @Column({ type: 'INTEGER', default: 0 })
+  create_time: number
 }
 
 export class VaultItemInfoBase {}

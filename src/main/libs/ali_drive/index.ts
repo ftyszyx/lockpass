@@ -1,3 +1,8 @@
+/*
+ * @Author: zhangyuxin
+ * @Date: 2024-09-15 15:46:26
+ * @Description: aliyun drive
+ */
 import { shell } from 'electron'
 import LoopbackServer from '../LoopbackServer'
 import { Log } from '../log'
@@ -149,6 +154,22 @@ export class AliDrive {
       check_name_mode: 'refuse'
     })
     return res
+  }
+
+  async TrashFile(file_id: string) {
+    const url = `${this._host}/adrive/v1.0/openFile/recyclebin/trash`
+    await SendRequest<any>(url, 'POST', this.getHeaders(), {
+      drive_id: this._authData.drive_info.default_drive_id,
+      file_id: file_id
+    })
+  }
+
+  async DeleteFile(file_id: string) {
+    const url = `${this._host}/adrive/v1.0/openFile/delete`
+    await SendRequest<any>(url, 'POST', this.getHeaders(), {
+      drive_id: this._authData.drive_info.default_drive_id,
+      file_id: file_id
+    })
   }
 
   async UploadFile(file_name: string, local_path: string) {

@@ -17,7 +17,7 @@ interface AdminAddPasswordProps {
   show: boolean
   title: string
   init_info?: VaultItem
-  onOk?: () => Promise<void>
+  onOk?: (res: VaultItem) => Promise<void>
   onClose?: () => void
 }
 export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Element {
@@ -63,6 +63,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
             </div>
           }
           open={props.show}
+          maskClosable={false} // Add this line to prevent closing on outside click
           okText="确定"
           onCancel={() => {
             set_show_info(false)
@@ -73,11 +74,11 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
             values.user_id = appstore.GetCurUser().id
             values.vault_id = cur_vault_id
             values.vault_item_type = select_type
-            await ipc_call(webToManMsg.AddValutItem, values)
-              .then(async () => {
+            await ipc_call<VaultItem>(webToManMsg.AddValutItem, values)
+              .then(async (res) => {
                 set_show_info(false)
                 await getAllVaultItem(appstore, getText, messageApi)
-                props.onOk?.()
+                props.onOk?.(res)
               })
               .catch((err) => {
                 messageApi.error(getText(`err.${err.code}`), 5)

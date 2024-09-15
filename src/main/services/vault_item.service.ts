@@ -11,6 +11,9 @@ export class VaultItemService extends BaseService<VaultItem> {
   fixEntityIn(info: VaultItem): void {
     if (info.info) {
       info.info = JSON.stringify(info.info)
+      if (!info.create_time) {
+        info.create_time = Math.floor(Date.now() / 1000)
+      }
     }
   }
 
