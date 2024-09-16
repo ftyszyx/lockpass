@@ -49,6 +49,7 @@ export default function Home() {
       if (select_item) {
         history.push(`${PagePath.vault}/${select_item.id}/${MenuParamNull}`)
       }
+      return false
     })
     return () => {
       shortKeys.unbindShortKey(KEY_MAP.enter)

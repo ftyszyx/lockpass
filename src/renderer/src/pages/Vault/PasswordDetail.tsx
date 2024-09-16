@@ -48,7 +48,11 @@ export default function PaswordDetail(props: props) {
       <Form.Item name="vault_id" label="所属保险库">
         <Select>
           {vaults.map((item) => {
-            return <Select.Option value={item.id}>{item.name}</Select.Option>
+            return (
+              <Select.Option value={item.id} key={item.id}>
+                {item.name}
+              </Select.Option>
+            )
           })}
         </Select>
       </Form.Item>

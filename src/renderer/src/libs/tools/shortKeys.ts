@@ -1,7 +1,7 @@
 import { GetTrueKey } from '@common/keycode'
 import { ConsoleLog } from '../Console'
 
-type ShortKeyCallback = (key: string) => void
+type ShortKeyCallback = (key: string) => boolean
 
 class ShortKeyItems {
   callbacks: ShortKeyCallback[] = []
@@ -18,7 +18,9 @@ class ShortKeyItems {
 }
 
 class ShortKeyHelp {
-  constructor() {}
+  constructor() {
+    ConsoleLog.info('ShortKeyHelp constructor')
+  }
 
   private listeners: { [key: string]: ShortKeyItems } = {}
   private pressedKeys: Set<string> = new Set()
@@ -41,8 +43,14 @@ class ShortKeyHelp {
     if (Object.keys(this.listeners).length === 1) {
       window.addEventListener('keydown', this.handleKeyDown)
       window.addEventListener('keyup', this.handleKeyUp)
+      window.addEventListener('blur', this.handleBlur)
     }
     return this.listeners[keyCombo]
+  }
+
+  private handleBlur = () => {
+    ConsoleLog.info('Window lost focus, clearing pressed keys')
+    this.pressedKeys.clear()
   }
 
   public unbindShortKey(keyCombo: string, callback?: ShortKeyCallback) {
@@ -55,8 +63,7 @@ class ShortKeyHelp {
       delete this.listeners[keyCombo]
     }
     if (Object.keys(this.listeners).length === 0) {
-      window.removeEventListener('keydown', this.handleKeyDown)
-      window.removeEventListener('keyup', this.handleKeyUp)
+      this.clean()
     }
   }
 
@@ -66,10 +73,17 @@ class ShortKeyHelp {
     }
   }
 
-  public unbindAllShortKeys() {
+  clean() {
     this.listeners = {}
+    this.pressedKeys.clear()
     window.removeEventListener('keydown', this.handleKeyDown)
     window.removeEventListener('keyup', this.handleKeyUp)
+    window.removeEventListener('blur', this.handleBlur)
+  }
+
+  public unbindAllShortKeys() {
+    ConsoleLog.info('unbindAllShortKeys')
+    this.clean()
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
@@ -78,8 +92,16 @@ class ShortKeyHelp {
     const combo = this.getKeyCombo()
     // ConsoleLog.info('handlecombo', combo)
     if (this.listeners[combo]) {
-      //   e.preventDefault()
-      this.listeners[combo].callbacks.forEach((callback) => callback(combo))
+      // e.preventDefault()
+      const callbacks = this.listeners[combo].callbacks
+      if (callbacks.length > 0) {
+        for (let i = 0; i < callbacks.length; i++) {
+          const callback = callbacks[i]
+          if (callback(combo) == true) {
+            break
+          }
+        }
+      }
     }
   }
 

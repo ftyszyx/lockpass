@@ -28,6 +28,7 @@ export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps):
   useEffect(() => {
     shortKeys.bindShortKey(KEY_MAP.enter, () => {
       props.onOk?.(select_type_ref.current)
+      return true
     })
     return () => {
       shortKeys.unbindShortKey(KEY_MAP.enter)

@@ -44,6 +44,7 @@ export default function Vault() {
   useEffect(() => {
     const quickfind_Func = () => {
       quickFindRef.current?.focus()
+      return true
     }
     const quickfindkey = appstore.GetUserSet().shortcut_local_find
     if (quickfindkey) {
@@ -58,6 +59,7 @@ export default function Vault() {
   useEffect(() => {
     const quickadd_Func = () => {
       set_show_add_vault(true)
+      return true
     }
     const quickaddkey = appstore.GetUserSet().shortcut_local_add
     if (quickaddkey) {
@@ -213,7 +215,7 @@ export default function Vault() {
       {show_add_vault && (
         <AddPasswordPanel
           show={show_add_vault}
-          title="新增项目"
+          title={getText('vaultitem.label.add_vault_item')}
           onOk={async (res) => {
             set_show_add_vault(false)
             set_defulat_select_item(res)

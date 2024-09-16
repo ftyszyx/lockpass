@@ -16,7 +16,10 @@ export function useKeyboardNavigation(itemsCount: number) {
         case KEY_MAP.up:
           setSelectedIndex((prev) => (prev - 1 + itemsCount) % itemsCount)
           break
+        default:
+          return false
       }
+      return true
     }
 
     shortKeys.bindShortKey(KEY_MAP.right, handleKeyDown)

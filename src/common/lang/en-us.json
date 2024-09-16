@@ -202,6 +202,7 @@
   "tray.menu.openlockpass": "Open lockpass",
   "tray.menu.openquick": "Open quick access",
   "tray.menu.openpassword": "Open password window",
+  "tray.menu.closemain": "Minimize to tray",
   "tray.menu.lock": "Lock",
   "tray.menu.quit": "Exit",
   "update.content.releaseDate": "Release date: {0}",

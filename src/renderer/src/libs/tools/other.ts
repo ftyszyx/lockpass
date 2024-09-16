@@ -124,7 +124,11 @@ export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
       userset.shortcut_global_open_main
     ),
     lock: getLabelStr(lang?.getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
-    openquick: getLabelStr(lang?.getText('tray.menu.openquick'), userset.shortcut_global_quick_find)
+    openquick: getLabelStr(
+      lang?.getText('tray.menu.openquick'),
+      userset.shortcut_global_quick_find
+    ),
+    closemain: getLabelStr(lang?.getText('tray.menu.closemain'), userset.shortcut_global_hide_main)
   })
 }
 

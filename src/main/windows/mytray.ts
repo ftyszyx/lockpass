@@ -44,6 +44,12 @@ export class MyTray {
         }
       },
       {
+        label: this.getLabelStr('closemain', tryinfo),
+        click: () => {
+          AppModel.getInstance().mainwin.hide()
+        }
+      },
+      {
         type: 'separator'
       },
       {

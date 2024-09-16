@@ -179,6 +179,7 @@
 
   "tray.menu.openlockpass": "打开lockpass",
   "tray.menu.openquick": "打开快速访问",
+  "tray.menu.closemain": "最小化到托盘",
   "tray.menu.openpassword": "打开密码窗口",
   "tray.menu.lock": "锁定",
   "tray.menu.quit": "退出",
@@ -279,5 +280,6 @@
   "admin_about.checkupdate": "检查软件更新",
   "mydropmenu.delete_ok": "删除成功",
   "admin_about.vault_change_not_backup": "保险库已改变,请及时备份",
-  "vaultitem.label.vault_id": "所属保险库"
+  "vaultitem.label.vault_id": "所属保险库",
+  "vaultitem.label.add_vault_item": "新增保密项目"
 }
