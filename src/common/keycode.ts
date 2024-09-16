@@ -1,5 +1,3 @@
-import { ElectronHttpExecutor } from 'electron-updater/out/electronHttpExecutor'
-
 export enum KEY_MAP {
   commandorcontrol = 'ctrl',
   ctrl = 'ctrl',

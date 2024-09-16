@@ -1,16 +1,18 @@
 import { GetTrueKey } from '@common/keycode'
 import { ConsoleLog } from '../Console'
 
+type ShortKeyCallback = (key: string) => void
+
 class ShortKeyItems {
-  callbacks: (() => void)[] = []
+  callbacks: ShortKeyCallback[] = []
   constructor() {
     return
   }
-  Add(callback: () => void) {
+  Add(callback: ShortKeyCallback) {
     this.callbacks.push(callback)
   }
 
-  Remove(callback: () => void) {
+  Remove(callback: ShortKeyCallback) {
     this.callbacks = this.callbacks.filter((cb) => cb !== callback)
   }
 }
@@ -28,7 +30,7 @@ class ShortKeyHelp {
     return str.toLowerCase().split('+').sort().join('+')
   }
 
-  public bindShortKey(keyCombo: string, callback: () => void) {
+  public bindShortKey(keyCombo: string, callback: ShortKeyCallback) {
     keyCombo = this.getKeyComboFromStr(keyCombo)
     ConsoleLog.info('bind key', keyCombo)
     if (!this.listeners[keyCombo]) {
@@ -43,7 +45,7 @@ class ShortKeyHelp {
     return this.listeners[keyCombo]
   }
 
-  public unbindShortKey(keyCombo: string, callback?: () => void) {
+  public unbindShortKey(keyCombo: string, callback?: ShortKeyCallback) {
     keyCombo = this.getKeyComboFromStr(keyCombo)
     ConsoleLog.info('unbindShortKey', keyCombo)
     if (!this.listeners[keyCombo]) return
@@ -58,7 +60,7 @@ class ShortKeyHelp {
     }
   }
 
-  public unbindCallback(callback: () => void) {
+  public unbindCallback(callback: ShortKeyCallback) {
     for (const keyCombo in this.listeners) {
       this.listeners[keyCombo].Remove(callback)
     }
@@ -72,19 +74,18 @@ class ShortKeyHelp {
 
   private handleKeyDown = (e: KeyboardEvent) => {
     const key = GetTrueKey(e)
-    ConsoleLog.info('handleKeyDown', key)
     this.pressedKeys.add(key)
     const combo = this.getKeyCombo()
-    ConsoleLog.info('handlecombo', combo)
+    // ConsoleLog.info('handlecombo', combo)
     if (this.listeners[combo]) {
       //   e.preventDefault()
-      this.listeners[combo].callbacks.forEach((callback) => callback())
+      this.listeners[combo].callbacks.forEach((callback) => callback(combo))
     }
   }
 
   private handleKeyUp = (e: KeyboardEvent) => {
     const key = GetTrueKey(e)
-    ConsoleLog.info('handleKeyUp', key)
+    // ConsoleLog.info('handleKeyUp', key)
     this.pressedKeys.delete(key)
   }
 }

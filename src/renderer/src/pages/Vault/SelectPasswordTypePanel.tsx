@@ -1,6 +1,10 @@
 import { Icon_type, VaultItemType } from '@common/gloabl'
+import { KEY_MAP } from '@common/keycode'
 import Icon from '@renderer/components/Icon'
+import { useKeyboardNavigation } from '@renderer/libs/tools/keyboardNavigation'
+import { shortKeys } from '@renderer/libs/tools/shortKeys'
 import { Modal, Space } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 
 interface SelectPasswordTypeProps {
   show: boolean
@@ -8,6 +12,27 @@ interface SelectPasswordTypeProps {
   onClose: () => void
 }
 export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps): JSX.Element {
+  const { selectedIndex } = useKeyboardNavigation(Object.keys(VaultItemType).length)
+  const [select_type, setSelectType] = useState(VaultItemType.Login)
+  const select_type_ref = useRef(VaultItemType.Login)
+  useEffect(() => {
+    const key = Object.keys(VaultItemType)[selectedIndex]
+    const value = VaultItemType[key]
+    setSelectType(value)
+  }, [selectedIndex])
+
+  useEffect(() => {
+    select_type_ref.current = select_type
+  }, [select_type])
+
+  useEffect(() => {
+    shortKeys.bindShortKey(KEY_MAP.enter, () => {
+      props.onOk?.(select_type_ref.current)
+    })
+    return () => {
+      shortKeys.unbindShortKey(KEY_MAP.enter)
+    }
+  }, [])
   return (
     <div>
       <Modal
@@ -21,7 +46,11 @@ export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps):
           {Object.keys(VaultItemType).map((key) => {
             return (
               <div
-                className="bg-gray-200 hover:bg-blue-300 hover:cursor-pointer m-2 p-2 rounded-lg w-[210px] h-[40px] flex flex-row justify-between items-center"
+                className={` hover:cursor-pointer m-2 p-2 rounded-lg w-[210px] h-[40px] flex flex-row justify-between items-center ${
+                  select_type == VaultItemType[key]
+                    ? 'bg-blue-300 !important'
+                    : 'bg-gray-200 hover:bg-blue-300'
+                }`}
                 key={key}
                 onClick={() => {
                   props.onOk?.(VaultItemType[key])

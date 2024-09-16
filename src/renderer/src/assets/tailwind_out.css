@@ -1057,6 +1057,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
 }
 
+.bg-blue-300 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(147 197 253 / var(--tw-bg-opacity)) !important;
+}
+
 .fill-green-300 {
   fill: #86efac !important;
 }

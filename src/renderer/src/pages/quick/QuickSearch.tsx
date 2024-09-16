@@ -54,14 +54,9 @@ export default function QuickSearch() {
   }, [show_detail])
 
   const selectItemRef = useRef(selectItem)
-  ConsoleLog.info(`QuickSearch render:selenctItem:${selectItem?.name}`)
+  // ConsoleLog.info(`QuickSearch render:selenctItem:${selectItem ? JSON.stringify(selectItem) : ''}`)
   const showitemsRef = useRef(showitems)
-  selectItemRef.current = selectItem
-  showitemsRef.current = showitems
   const showDetailRef = useRef(show_detail)
-  useEffect(() => {
-    showDetailRef.current = show_detail
-  }, [show_detail])
   useEffect(() => {
     if (selectItem == null && showitems.length > 0) {
       setSelectItem(showitems[0])
@@ -70,6 +65,18 @@ export default function QuickSearch() {
       setShowDetail(false)
       setSelectItem(null)
     }
+  }, [showitems])
+
+  useEffect(() => {
+    showDetailRef.current = show_detail
+  }, [show_detail])
+
+  useEffect(() => {
+    selectItemRef.current = selectItem
+  }, [selectItem])
+
+  useEffect(() => {
+    showitemsRef.current = showitems
   }, [showitems])
 
   async function autoInput(info: VaultItem) {
@@ -202,7 +209,7 @@ export default function QuickSearch() {
           if (selectItem.vault_item_type != VaultItemType.Login) {
             setShowDetail(true)
           } else {
-            console.log('autoInput', selectItem.info)
+            // console.log('autoInput', selectItem.info)
             await autoInput(selectItem)
           }
         }

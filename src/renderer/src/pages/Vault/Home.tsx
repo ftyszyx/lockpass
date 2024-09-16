@@ -14,6 +14,7 @@ import MyDropDown from '@renderer/components/MyDropDown'
 import { MenuParamNull } from '@renderer/entitys/menu.entity'
 import { shortKeys } from '@renderer/libs/tools/shortKeys'
 import { KEY_MAP } from '@common/keycode'
+import { useKeyboardNavigation } from '@renderer/libs/tools/keyboardNavigation'
 export default function Home() {
   ConsoleLog.info('home render')
   const history = useHistory()
@@ -36,31 +37,13 @@ export default function Home() {
     showItemsRef.current = items
     return items
   }, [appstore.vaults, cur_page, page_size])
+  const { selectedIndex } = useKeyboardNavigation(showitems.length)
   useEffect(() => {
-    shortKeys.bindShortKey(KEY_MAP.right, () => {
-      const select_item = select_vault_ref.current
-      const items = showItemsRef.current
-      if (items.length > 0) {
-        const index = items.findIndex((valut) => valut.id == select_item.id)
-        if (index < items.length - 1) {
-          setSelectVault(items[index + 1])
-        } else {
-          setSelectVault(items[0])
-        }
-      }
-    })
-    shortKeys.bindShortKey(KEY_MAP.left, () => {
-      const items = showItemsRef.current
-      const select_item = select_vault_ref.current
-      if (items.length > 0) {
-        const index = items.findIndex((valut) => valut.id == select_item.id)
-        if (index > 0) {
-          setSelectVault(items[index - 1])
-        } else {
-          setSelectVault(items[items.length - 1])
-        }
-      }
-    })
+    if (showitems.length > 0) {
+      setSelectVault(showitems[selectedIndex])
+    }
+  }, [selectedIndex, showitems])
+  useEffect(() => {
     shortKeys.bindShortKey(KEY_MAP.enter, () => {
       const select_item = select_vault_ref.current
       if (select_item) {
@@ -68,8 +51,6 @@ export default function Home() {
       }
     })
     return () => {
-      shortKeys.unbindShortKey(KEY_MAP.right)
-      shortKeys.unbindShortKey(KEY_MAP.left)
       shortKeys.unbindShortKey(KEY_MAP.enter)
     }
   }, [])
