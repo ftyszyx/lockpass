@@ -16,8 +16,6 @@ import QucickLayout from './pages/quick/QuickLayout'
 import QuickSearch from './pages/quick/QuickSearch'
 import BaseLayout from './layouts/BaseLayout'
 import AdminAbout from './pages/admin/AdminAbout'
-import PasswordGenPanel from './pages/Vault/PasswordGenPanel'
-import PasswordLayout from './pages/password/PasswordLayout'
 
 const RootRouter = () => {
   const appset = use_appset() as AppsetStore
@@ -40,7 +38,7 @@ const RootRouter = () => {
     const version = (await window.electron.ipcRenderer.invoke(webToManMsg.getAppVersion)) as string
     appset.SetVersion(version)
   }
-  ConsoleLog.LogInfo('RootRouter render', viewtype)
+  ConsoleLog.info('RootRouter render', viewtype)
   return (
     <HashRouter debug={false}>
       {viewtype == renderViewType.Mainview && (
@@ -72,11 +70,6 @@ const RootRouter = () => {
             <Route path="/" redirect={PagePath.Home} match={{ end: true }} />
             <Route path={PagePath.Home} element={QuickSearch} />
           </Route>
-        </Route>
-      )}
-      {viewtype == renderViewType.Password && (
-        <Route>
-          <Route path="/" element={PasswordLayout} errorElement={NotFound}></Route>
         </Route>
       )}
     </HashRouter>

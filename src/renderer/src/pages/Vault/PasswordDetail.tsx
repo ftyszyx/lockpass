@@ -5,8 +5,9 @@ import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { FieldInfo } from '@renderer/entitys/form.entity'
 import { GetPasswordFilelist } from '@renderer/entitys/Vault_item.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
+import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
-import { Form, Input } from 'antd'
+import { Form, Input, Select } from 'antd'
 import TextArea, { TextAreaProps } from 'antd/es/input/TextArea'
 
 interface props {
@@ -17,8 +18,10 @@ interface props {
 }
 
 export default function PaswordDetail(props: props) {
-  ConsoleLog.LogInfo('PaswordDetail render', props)
+  ConsoleLog.info('PaswordDetail render', props)
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const vaults = use_appstore((state) => state.vaults) as AppStore['vaults']
+
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   return (
     <>
@@ -42,6 +45,13 @@ export default function PaswordDetail(props: props) {
           />
         </Form.Item>
       </div>
+      <Form.Item name="vault_id" label="所属保险库">
+        <Select>
+          {vaults.map((item) => {
+            return <Select.Option value={item.id}>{item.name}</Select.Option>
+          })}
+        </Select>
+      </Form.Item>
       <div>
         {GetPasswordFilelist(props.passwordType, lang).map((item: FieldInfo) => {
           return (

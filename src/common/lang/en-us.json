@@ -89,6 +89,7 @@
   "set.menu.shortcut_global_hide_main": "Global hide main window",
   "set.menu.shortcut_global_show_password": "Global show password window",
   "set.menu.shortcut_local_find": "Quick find",
+  "set.menu.shortcut_local_add": "Quick add",
   "set.key_conflict": "Shortcut key conflict: {0}",
   "set.placeholder.shortcut": "Please enter the shortcut key",
   "changemainpass.placeholder.newpass": "Please enter a new password",
@@ -275,5 +276,6 @@
   "update.checking": "checking for updates, please wait",
   "mydropmenu.inputbackup_name.title": "Please enter the backup file name",
   "mydropmenu.delete_ok": "Delete successfully",
-  "admin_about.vault_change_not_backup": "Vault has changed, please backup"
+  "admin_about.vault_change_not_backup": "Vault has changed, please backup",
+  "vaultitem.label.vault_id": "Vault"
 }

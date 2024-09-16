@@ -25,7 +25,7 @@ function App(): JSX.Element {
     }
   }, [])
 
-  ConsoleLog.LogInfo('develop', import.meta.env.DEV)
+  ConsoleLog.info('develop', import.meta.env.DEV)
   return (
     <div>
       {contextHolder}

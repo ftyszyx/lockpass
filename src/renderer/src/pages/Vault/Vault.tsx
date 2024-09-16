@@ -4,8 +4,8 @@ desc: 密码管理页面
 date:2024/07/23 11:45:04
 */
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Form, Input, message, Popconfirm } from 'antd'
-import { useEffect, useState } from 'react'
+import { Button, Form, Input, InputRef, message, Popconfirm } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 import Icon from '@renderer/components/Icon'
 import { Icon_type, ModalType, VaultItemType } from '@common/gloabl'
 import AddPasswordPanel from './AddPasswordPanel'
@@ -17,9 +17,10 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { useForm } from 'antd/es/form/Form'
 import VaultSide from './VaultSide'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { shortKeys } from '@renderer/libs/tools/shortKeys'
 
 export default function Vault() {
-  ConsoleLog.LogInfo('Vault render')
+  ConsoleLog.info('Vault render')
   const appstore = use_appstore() as AppStore
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
@@ -33,11 +34,40 @@ export default function Vault() {
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
   const [show_add_vault, set_show_add_vault] = useState(false)
   const [show_edit, set_show_edit] = useState(false)
+  const quickFindRef = useRef<InputRef>(null)
   useEffect(() => {
     if (select_vault_item) {
       form.resetFields()
     }
   }, [select_vault_item])
+
+  useEffect(() => {
+    const quickfind_Func = () => {
+      quickFindRef.current?.focus()
+    }
+    const quickfindkey = appstore.GetUserSet().shortcut_local_find
+    if (quickfindkey) {
+      shortKeys.unbindCallback(quickfind_Func)
+      shortKeys.bindShortKey(quickfindkey, quickfind_Func)
+    }
+    return () => {
+      shortKeys.unbindCallback(quickfind_Func)
+    }
+  }, [appstore.GetUserSet().shortcut_local_find])
+
+  useEffect(() => {
+    const quickadd_Func = () => {
+      set_show_add_vault(true)
+    }
+    const quickaddkey = appstore.GetUserSet().shortcut_local_add
+    if (quickaddkey) {
+      shortKeys.unbindCallback(quickadd_Func)
+      shortKeys.bindShortKey(quickaddkey, quickadd_Func)
+    }
+    return () => {
+      shortKeys.unbindCallback(quickadd_Func)
+    }
+  }, [appstore.GetUserSet().shortcut_local_add])
 
   return (
     <>
@@ -53,6 +83,7 @@ export default function Vault() {
             }}
           ></Icon>
           <Input
+            ref={quickFindRef}
             placeholder={getText('vault.global_search', appstore.GetCurUser()?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
@@ -122,6 +153,7 @@ export default function Vault() {
                                 .then(async () => {
                                   set_show_edit(false)
                                   await getAllVaultItem(appstore, getText, messageApi)
+                                  messageApi.success(getText('success'))
                                 })
                                 .catch((err) => {
                                   messageApi.error(getText(`err.${err.code}`), 5)
@@ -143,6 +175,7 @@ export default function Vault() {
                               await ipc_call(webToManMsg.DeleteValutItem, select_vault_item.id)
                                 .then(async () => {
                                   set_show_edit(false)
+                                  messageApi.success(getText('success'))
                                   await getAllVaultItem(appstore, getText, messageApi)
                                 })
                                 .catch((err) => {

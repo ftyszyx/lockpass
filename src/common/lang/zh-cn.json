@@ -80,6 +80,7 @@
   "set.menu.shortcut_global_hide_main": "全局隐藏主界面",
   "set.menu.shortcut_global_show_password": "全局显示密码窗口",
   "set.menu.shortcut_local_find": "快速查找",
+  "set.menu.shortcut_local_add": "快速添加",
   "set.key_conflict": "快捷键冲突:{0}",
   "set.placeholder.shortcut": "请输入快捷键",
 
@@ -277,5 +278,6 @@
 
   "admin_about.checkupdate": "检查软件更新",
   "mydropmenu.delete_ok": "删除成功",
-  "admin_about.vault_change_not_backup": "保险库已改变,请及时备份"
+  "admin_about.vault_change_not_backup": "保险库已改变,请及时备份",
+  "vaultitem.label.vault_id": "所属保险库"
 }

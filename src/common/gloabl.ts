@@ -124,12 +124,3 @@ export enum ConsoleColor {
   BgWhite = '\x1b[47m',
   BgGray = '\x1b[100m'
 }
-
-export enum ControlKey {
-  Control = 'CommandOrControl',
-  ctrl = 'Ctrl',
-  Shift = 'Shift',
-  Alt = 'Alt',
-  Meta = 'Meta',
-  Space = 'Space'
-}

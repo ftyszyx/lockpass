@@ -4,7 +4,7 @@ import Icon from '@renderer/components/Icon'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { Button, message, Pagination } from 'antd'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import AddValutPanel from './AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { getAllVault } from '@renderer/libs/tools/other'
@@ -12,8 +12,10 @@ import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Vault } from '@common/entitys/vault.entity'
 import MyDropDown from '@renderer/components/MyDropDown'
 import { MenuParamNull } from '@renderer/entitys/menu.entity'
+import { shortKeys } from '@renderer/libs/tools/shortKeys'
+import { KEY_MAP } from '@common/keycode'
 export default function Home() {
-  ConsoleLog.LogInfo('home render')
+  ConsoleLog.info('home render')
   const history = useHistory()
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
 
@@ -26,13 +28,69 @@ export default function Home() {
   const [cur_page, setCurPage] = useState(1)
   const [cur_info, setCurInfo] = useState<Vault>({} as Vault)
   const appstore = use_appstore() as AppStore
+  const [select_vault, setSelectVault] = useState<Vault>(null)
+  const select_vault_ref = useRef<Vault>(null)
+  const showItemsRef = useRef<Vault[]>(null)
   const showitems = useMemo(() => {
-    return appstore.vaults.slice((cur_page - 1) * page_size, cur_page * page_size)
+    const items = appstore.vaults.slice((cur_page - 1) * page_size, cur_page * page_size)
+    showItemsRef.current = items
+    return items
   }, [appstore.vaults, cur_page, page_size])
+  useEffect(() => {
+    shortKeys.bindShortKey(KEY_MAP.right, () => {
+      const select_item = select_vault_ref.current
+      const items = showItemsRef.current
+      if (items.length > 0) {
+        const index = items.findIndex((valut) => valut.id == select_item.id)
+        if (index < items.length - 1) {
+          setSelectVault(items[index + 1])
+        } else {
+          setSelectVault(items[0])
+        }
+      }
+    })
+    shortKeys.bindShortKey(KEY_MAP.left, () => {
+      const items = showItemsRef.current
+      const select_item = select_vault_ref.current
+      if (items.length > 0) {
+        const index = items.findIndex((valut) => valut.id == select_item.id)
+        if (index > 0) {
+          setSelectVault(items[index - 1])
+        } else {
+          setSelectVault(items[items.length - 1])
+        }
+      }
+    })
+    shortKeys.bindShortKey(KEY_MAP.enter, () => {
+      const select_item = select_vault_ref.current
+      if (select_item) {
+        history.push(`${PagePath.vault}/${select_item.id}/${MenuParamNull}`)
+      }
+    })
+    return () => {
+      shortKeys.unbindShortKey(KEY_MAP.right)
+      shortKeys.unbindShortKey(KEY_MAP.left)
+      shortKeys.unbindShortKey(KEY_MAP.enter)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (showitems && showitems.length > 0) {
+      if (select_vault == null || showitems.some((valut) => valut.id == select_vault.id) == false) {
+        setSelectVault(showitems[0])
+      }
+    }
+  }, [showitems])
+  useEffect(() => {
+    if (select_vault_ref.current != select_vault) {
+      select_vault_ref.current = select_vault
+    }
+  }, [select_vault])
+  console.log('select_vault', select_vault)
 
   return (
-    <div>
-      <div className=" bg-gray-100 p-8">
+    <div className="  bg-gray-100 p-8 h-screen">
+      <div className="">
         <div className="">
           <div className=" flex flex-row space-x-1 items-center mb-4">
             <h1 className="text-2xl font-semibold ">密码库</h1>
@@ -55,7 +113,7 @@ export default function Home() {
               return (
                 <div
                   key={valut.id}
-                  className="flex flex-col bg-white shadow-md rounded-lg p-4 w-64 border-t-4 h-[150px] border-purple-200 mr-4 mb-4"
+                  className={`${select_vault && select_vault.id == valut.id ? 'border-solid  border-purple-400' : ''} flex flex-col bg-white shadow-md rounded-lg p-4 w-64 border-t-4 h-[150px] mr-4 mb-4`}
                   onClick={() => {
                     history.push(`${PagePath.vault}/${valut.id}/${MenuParamNull}`)
                   }}

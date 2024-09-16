@@ -23,7 +23,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   ) as AppsetStore['SetVaultChangeNotBackup']
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const appstore = use_appstore() as AppStore
-  ConsoleLog.LogInfo('baselayout render')
+  ConsoleLog.info('baselayout render')
   useEffect(() => {
     if (lang != null) {
       UpdateMenu(appstore, lang)
@@ -31,11 +31,11 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [lang])
   useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.LockApp, () => {
-      ConsoleLog.LogInfo('LockApp event')
+      ConsoleLog.info('LockApp event')
       history.push(PagePath.Lock)
     })
     window.electron.ipcRenderer.on(MainToWebMsg.ShowVaulteItem, (_, vaultid, vault_item_id) => {
-      ConsoleLog.LogInfo('ShowVaulteItem', vaultid, vault_item_id)
+      ConsoleLog.info('ShowVaulteItem', vaultid, vault_item_id)
       history.push(
         PagePath.Vault_full.replace(':vault_id', vaultid).replace(':vault_item_id', vault_item_id)
       )
@@ -43,7 +43,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
     window.electron.ipcRenderer.on(
       MainToWebMsg.AppUpdateEvent,
       (_, type: UpdateEventType, info: any) => {
-        ConsoleLog.LogInfo('UpdateEvent', type, info)
+        ConsoleLog.info('UpdateEvent', type, info)
         if (type == UpdateEventType.updateAvaliable) {
           var updateinfo = info as MyUpdateInfo
           Modal.confirm({
@@ -85,7 +85,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
               await ipc_call_normal(webToManMsg.Downloadupdate)
             },
             onCancel: () => {
-              ConsoleLog.LogInfo('update cancel')
+              ConsoleLog.info('update cancel')
             }
           })
         } else if (type == UpdateEventType.Checking) {
@@ -99,7 +99,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
               await ipc_call_normal(webToManMsg.InstallUpdate)
             },
             onCancel: () => {
-              ConsoleLog.LogInfo('update cancel')
+              ConsoleLog.info('update cancel')
             }
           })
         } else if (type == UpdateEventType.UpdateError) {
@@ -110,13 +110,13 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       }
     )
     window.electron.ipcRenderer.on(MainToWebMsg.LoginOut, () => {
-      ConsoleLog.LogInfo('LoginOut event')
+      ConsoleLog.info('LoginOut event')
       appstore.LoginOut()
       history.push(PagePath.Login)
     })
 
     window.electron.ipcRenderer.on(MainToWebMsg.VaultChangeNotBackup, (_, flag: boolean) => {
-      ConsoleLog.LogInfo('VaultChangeNotBackup event', flag)
+      ConsoleLog.info('VaultChangeNotBackup event', flag)
       setVaultChangeNotBackup(flag)
     })
     return () => {
@@ -143,23 +143,23 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }
 
   async function checkStatus() {
-    ConsoleLog.LogInfo('checkStatus')
+    ConsoleLog.info('checkStatus')
     const hasinit = await ipc_call_normal<boolean>(webToManMsg.IsSystemInit)
     if (hasinit === false) {
-      ConsoleLog.LogInfo('checkStatus no init')
+      ConsoleLog.info('checkStatus no init')
       history.replace(PagePath.register)
       return
     }
     const islogin = await ipc_call_normal<boolean>(webToManMsg.isLogin)
     if (islogin === false) {
-      ConsoleLog.LogInfo('checkStatus no login')
+      ConsoleLog.info('checkStatus no login')
       history.replace(PagePath.Login)
       return
     }
 
     const isLock = await ipc_call_normal<boolean>(webToManMsg.isLock)
     if (isLock === true) {
-      ConsoleLog.LogInfo('check status is lock')
+      ConsoleLog.info('check status is lock')
       history.push(PagePath.Lock)
       return
     }
@@ -170,7 +170,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }
 
   async function initUserData() {
-    ConsoleLog.LogInfo('initUserData')
+    ConsoleLog.info('initUserData')
     const curuser = await ipc_call_normal<User>(webToManMsg.getCurUserInfo)
     appstore.Login(curuser)
   }
@@ -180,7 +180,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   async function initAllData() {
-    ConsoleLog.LogInfo(`initAllData havelogin:${appstore.HaveLogin()} `)
+    ConsoleLog.info(`initAllData havelogin:${appstore.HaveLogin()} `)
     if (appstore.HaveLogin()) {
       await GetAllVaultData(appstore, getText, messageApi)
     }
@@ -213,7 +213,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
         {props.children}
       </div>
       {isVaultChangeNotBackup() && (
-        <div className="bg-black fixed bottom-0 left-0 right-0 z-50 text-center text-red-500 font-sans font-bold text-[16px]">
+        <div className="bg-black fixed bottom-0 w-full  text-center text-red-500 font-sans font-bold text-[16px]">
           <p>{getText('admin_about.vault_change_not_backup')}</p>
         </div>
       )}

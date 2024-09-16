@@ -2,7 +2,7 @@ import { VaultItem } from '@common/entitys/vault_item.entity'
 import { ModalType, VaultItemTypeIcon, VaultItemType } from '@common/gloabl'
 import { Form, message, Modal } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SelectPasswordTypePanel from './SelectPasswordTypePanel'
 import { LeftOutlined } from '@ant-design/icons'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
@@ -29,8 +29,13 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const appstore = use_appstore() as AppStore
   const route_data = useRouterStore()
-  const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
-  ConsoleLog.LogInfo(`AddPasswordPanel render`)
+  useEffect(() => {
+    const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
+    if (cur_vault_id) {
+      form.setFieldValue('vault_id', cur_vault_id)
+    }
+  }, [route_data])
+  ConsoleLog.info(`AddPasswordPanel render`)
   return (
     <div className=" relative">
       {show_password_type && (
@@ -72,7 +77,6 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
           onOk={async () => {
             const values = await form.validateFields()
             values.user_id = appstore.GetCurUser().id
-            values.vault_id = cur_vault_id
             values.vault_item_type = select_type
             await ipc_call<VaultItem>(webToManMsg.AddValutItem, values)
               .then(async (res) => {

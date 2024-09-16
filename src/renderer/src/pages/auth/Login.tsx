@@ -24,7 +24,7 @@ export default function Register(): JSX.Element {
   const isReigster = history.PathName == PagePath.register
   const isLogin = history.PathName == PagePath.Login
   const isLock = history.PathName == PagePath.Lock
-  ConsoleLog.LogInfo('register render', history.PathName, isLogin, isLock)
+  ConsoleLog.info('register render', history.PathName, isLogin, isLock)
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const firstInputRef = useRef<InputRef>(null)
@@ -43,7 +43,7 @@ export default function Register(): JSX.Element {
         setLastUser(res.user)
       })
       .catch((e) => {
-        ConsoleLog.LogError('GetLastUserInfo', e)
+        ConsoleLog.error('GetLastUserInfo', e)
       })
   }
   useEffect(() => {

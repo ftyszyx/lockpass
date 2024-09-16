@@ -44,12 +44,6 @@ export class MyTray {
         }
       },
       {
-        label: this.getLabelStr('openpassword', tryinfo),
-        click: () => {
-          AppModel.getInstance().passwordwin.show()
-        }
-      },
-      {
         type: 'separator'
       },
       {

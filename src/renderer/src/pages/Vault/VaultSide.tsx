@@ -26,6 +26,9 @@ export default function VaultSide(props: VaultSideProps) {
   const SelectAll = 'ALL'
   const [search_Password_type, set_Search_password_type] = useState(SelectAll)
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
+  const isVaultChangeNotBackup = use_appset(
+    (state) => state.IsVaultChangeNotBackup
+  ) as AppsetStore['IsVaultChangeNotBackup']
   const appstore = use_appstore() as AppStore
   const appset = use_appset() as AppsetStore
   const route_data = useRouterStore()
@@ -54,7 +57,7 @@ export default function VaultSide(props: VaultSideProps) {
     cur_vault_id,
     props.global_search_keyword
   ])
-  ConsoleLog.LogInfo(`render VaultSide `)
+  ConsoleLog.info(`render VaultSide `)
   useEffect(() => {
     if (show_items.length > 0) {
       if (
@@ -97,7 +100,9 @@ export default function VaultSide(props: VaultSideProps) {
   }, [props.default_select_item])
 
   return (
-    <div className="h-[calc(100vh-50px)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative">
+    <div
+      className={`${isVaultChangeNotBackup() ? ' pb-[20px]' : ''} h-[calc(100vh-50px)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative `}
+    >
       {/* first line */}
       <div className="flex flex-row justify-between items-center p-2">
         <Select

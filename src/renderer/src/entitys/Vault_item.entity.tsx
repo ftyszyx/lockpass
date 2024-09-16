@@ -1,7 +1,7 @@
 import { Input } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
-import { ControlKey, ModalType, VaultItemType } from '@common/gloabl'
+import { ModalType, VaultItemType } from '@common/gloabl'
 import { LangItem } from '@common/lang'
 import MyInputWrapper from '@renderer/components/MyInputWrapper'
 import { TextAreaProps } from 'antd/es/input'
@@ -11,6 +11,7 @@ import {
   NoteTextPasswordInfo,
   VaultItem
 } from '@common/entitys/vault_item.entity'
+import { KEY_MAP } from '@common/keycode'
 
 //get string for show
 export function GetPasswordInfoString(item: VaultItem): string {
@@ -190,9 +191,9 @@ export interface PasswordRenderDetail {
 }
 
 export enum PasswordRenderDetailKey {
-  ctrl_C = `${ControlKey.ctrl}+C`,
-  ctrl_shift_C = `${ControlKey.ctrl}+${ControlKey.Shift}+C`,
-  ctrl_alt_c = `${ControlKey.ctrl}+${ControlKey.Alt}+C`
+  ctrl_C = `${KEY_MAP.ctrl}+C`,
+  ctrl_shift_C = `${KEY_MAP.ctrl}+${KEY_MAP.shift}+C`,
+  ctrl_alt_c = `${KEY_MAP.ctrl}+${KEY_MAP.alt}+C`
 }
 
 export const GetPasswordRenderDetailList = (vaule: VaultItem): PasswordRenderDetail[] => {

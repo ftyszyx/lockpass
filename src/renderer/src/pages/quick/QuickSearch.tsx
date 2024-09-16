@@ -54,7 +54,7 @@ export default function QuickSearch() {
   }, [show_detail])
 
   const selectItemRef = useRef(selectItem)
-  ConsoleLog.LogInfo(`QuickSearch render:selenctItem:${selectItem?.name}`)
+  ConsoleLog.info(`QuickSearch render:selenctItem:${selectItem?.name}`)
   const showitemsRef = useRef(showitems)
   selectItemRef.current = selectItem
   showitemsRef.current = showitems
@@ -123,7 +123,7 @@ export default function QuickSearch() {
 
   async function CopyAndClose(key: string) {
     const value = selectItem.info[key]
-    ConsoleLog.LogInfo(`copy and close ${key} ${value}`)
+    ConsoleLog.info(`copy and close ${key} ${value}`)
     navigator.clipboard.writeText(value)
     messageApi.success(getText('copy_success_arg', getText(`vaultitem.label.${key}`)))
     setTimeout(async () => {
@@ -132,7 +132,7 @@ export default function QuickSearch() {
   }
 
   function handlerCopy(keytype: PasswordRenderDetailKey) {
-    ConsoleLog.LogInfo(`handlerCopy ${keytype}`)
+    ConsoleLog.info(`handlerCopy ${keytype}`)
     const selectItem = selectItemRef.current
     if (selectItem == null) return
     const keyinfo = GetPasswordRenderDetailList(selectItem).find((item) => item.shortCut == keytype)
@@ -176,9 +176,7 @@ export default function QuickSearch() {
           setSelectItem(null)
           break
         case 'Enter':
-          ConsoleLog.LogInfo(
-            `enter show_detail:${show_detail} selectItemDetail:${selectItemDetail}`
-          )
+          ConsoleLog.info(`enter show_detail:${show_detail} selectItemDetail:${selectItemDetail}`)
           if (show_detail) {
             if (selectItemDetail == SELECT_ITEM_STR) {
               setShowDetail(false)
@@ -197,12 +195,15 @@ export default function QuickSearch() {
       }
     }
     const handleKeyUP = async (event: KeyboardEvent) => {
+      const show_detail = showDetailRef.current
+      const selectItem = selectItemRef.current
       if (event.key == 'Enter') {
-        if (selectItemRef.current && !show_detail) {
-          if (selectItemRef.current.vault_item_type != VaultItemType.Login) {
+        if (selectItem && !show_detail) {
+          if (selectItem.vault_item_type != VaultItemType.Login) {
             setShowDetail(true)
           } else {
-            await autoInput(selectItemRef.current)
+            console.log('autoInput', selectItem.info)
+            await autoInput(selectItem)
           }
         }
       }
@@ -304,7 +305,7 @@ export default function QuickSearch() {
                     key={item.key}
                     className={`rounded-sm flex flex-row items-center justify-between hover:bg-green-300 nodrag cursor-pointer p-2 ${select_detail_item == item.key ? ' bg-green-400' : ''}`}
                     onClick={() => {
-                      ConsoleLog.LogInfo(`click ${item.key}`)
+                      ConsoleLog.info(`click ${item.key}`)
                       CopyAndClose(item.key)
                     }}
                   >

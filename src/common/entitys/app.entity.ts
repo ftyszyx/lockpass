@@ -1,7 +1,7 @@
-import { ControlKey } from '@common/gloabl'
 import { DefaultPasswordTypeConf, GenPasswordType, PasswordTypeInfo } from './password.entity'
 import { Column, Entity } from '@common/decorator/db.decorator'
 import { BaseEntity } from './db.entity'
+import { ControlKey, KEY_MAP } from '@common/keycode'
 
 @Entity({ name: 'app' })
 export class AppEntity extends BaseEntity {
@@ -48,8 +48,8 @@ export interface UserSetInfo {
   shortcut_global_quick_lock: string //全局快捷键，快速锁定
   shortcut_global_open_main: string //全局快捷键，快速锁定
   shortcut_global_hide_main: string //全局快捷键，隐藏主窗口
-  shortcut_global_show_password: string //全局快捷键，显示密码窗口
   shortcut_local_find: string //本地快捷键，查找
+  shortcut_local_add: string //本地快捷键，添加
   password_type: GenPasswordType //密码生成类型
   password_type_conf: PasswordTypeInfo //密码生成配置
 }
@@ -60,20 +60,19 @@ export const defaultUserSetInfo: UserSetInfo = {
   normal_lang_set: 'zh-cn',
   normal_autoupdate: true,
   normal_poweron_open: true,
-  shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Q`,
-  shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.Shift}+L`,
-  shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Up`,
-  shortcut_global_hide_main: `${ControlKey.ctrl}+ ${ControlKey.Shift}+Down`,
-  shortcut_global_show_password: `${ControlKey.ctrl}+ ${ControlKey.Shift}+P`,
+  shortcut_global_quick_find: `${ControlKey.ctrl}+ ${ControlKey.shift}+Q`,
+  shortcut_global_quick_lock: `${ControlKey.ctrl}+ ${ControlKey.shift}+L`,
+  shortcut_global_open_main: `${ControlKey.ctrl}+ ${ControlKey.shift}+${KEY_MAP.up}`,
+  shortcut_global_hide_main: `${ControlKey.ctrl}+ ${ControlKey.shift}+${KEY_MAP.down}`,
   shortcut_local_find: `${ControlKey.ctrl}+F`,
+  shortcut_local_add: `${ControlKey.ctrl}+J`,
   password_type: GenPasswordType.random,
   password_type_conf: DefaultPasswordTypeConf
 }
 
 export enum renderViewType {
   Mainview = 'mainview',
-  Quickview = 'quickview',
-  Password = 'password'
+  Quickview = 'quickview'
 }
 
 let gloabl_curViewType: renderViewType = renderViewType.Mainview

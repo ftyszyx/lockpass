@@ -10,19 +10,13 @@ import { ConsoleLog } from './libs/Console'
 
 const main_element = document.getElementById('root') as HTMLElement
 const quick_element = document.getElementById('root_quick') as HTMLElement
-const password_element = document.getElementById('password') as HTMLElement
 if (main_element) {
-  ConsoleLog.LogInfo('main_element')
+  ConsoleLog.info('main_element')
   InitCurViewType(renderViewType.Mainview)
   ReactDOM.createRoot(main_element).render(<App />)
 }
 if (quick_element) {
-  ConsoleLog.LogInfo('quick_element')
+  ConsoleLog.info('quick_element')
   InitCurViewType(renderViewType.Quickview)
   ReactDOM.createRoot(quick_element).render(<App />)
-}
-if (password_element) {
-  ConsoleLog.LogInfo('password_element')
-  InitCurViewType(renderViewType.Password)
-  ReactDOM.createRoot(password_element).render(<App />)
 }

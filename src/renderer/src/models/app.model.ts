@@ -44,21 +44,21 @@ export const use_appstore = create<AppStore>((set, get) => {
     },
     LoginOut() {
       set((state) => {
-        ConsoleLog.LogInfo('login out')
+        ConsoleLog.info('login out')
         return { ...state, cur_user: null, login_flag: false }
       })
     },
     Login(info: User) {
       set((state) => {
         const res = { ...state, cur_user: info, login_flag: true }
-        ConsoleLog.LogInfo('login', res)
+        ConsoleLog.info('login', res)
         return res
       })
     },
     SetUser(user: User) {
       set((state) => {
         const res = { ...state, cur_user: user }
-        ConsoleLog.LogInfo('set user', res)
+        ConsoleLog.info('set user', res)
         return res
       })
     },

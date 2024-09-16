@@ -13,31 +13,31 @@ import { getLabelStr } from './string'
 
 export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
   try {
-    ConsoleLog.LogInfo('ipc_call req', api, args)
+    ConsoleLog.info('ipc_call req', api, args)
     const res = (await window.electron.ipcRenderer.invoke(api, ...args)) as ApiResp<T>
     if (res.code == ApiRespCode.SUCCESS) {
-      ConsoleLog.LogInfo('ipc_call res', api, res.data)
+      ConsoleLog.info('ipc_call res', api, res.data)
       return res.data as T
     } else {
-      ConsoleLog.LogInfo('ipc_call res err', api, res.code)
+      ConsoleLog.info('ipc_call res err', api, res.code)
       return Promise.reject(res)
     }
   } catch (e: any) {
-    ConsoleLog.LogError(e)
-    ConsoleLog.LogError('ipc_call res err', api, e.message)
+    ConsoleLog.error(e)
+    ConsoleLog.error('ipc_call res err', api, e.message)
     return Promise.reject({ code: ApiRespCode.unkonw })
   }
 }
 
 export async function ipc_call_normal<T>(api: string, ...args: any[]): Promise<T> {
   try {
-    ConsoleLog.LogInfo('ipc_call_noraml req', api, args)
+    ConsoleLog.info('ipc_call_noraml req', api, args)
     const res = (await window.electron.ipcRenderer.invoke(api, ...args)) as T
-    ConsoleLog.LogInfo('ipc_call_normal res', api, res)
+    ConsoleLog.info('ipc_call_normal res', api, res)
     return res
   } catch (e: any) {
-    ConsoleLog.LogError(e)
-    ConsoleLog.LogError('ipc_call_noraml res err', api, e.message)
+    ConsoleLog.error(e)
+    ConsoleLog.error('ipc_call_noraml res err', api, e.message)
     return Promise.reject(e)
   }
 }
@@ -58,7 +58,7 @@ export async function getAllVault(
   messageApi: MessageInstance
 ) {
   const curuser = appstore.GetCurUser()
-  ConsoleLog.LogInfo(`getAllVault:${curuser !== null}`)
+  ConsoleLog.info(`getAllVault:${curuser !== null}`)
   if (curuser) {
     const where: WhereDef<Vault> = { cond: { user_id: curuser.id } }
     await ipc_call<Vault[]>(webToManMsg.GetAllValuts, where)
@@ -86,7 +86,7 @@ export async function getAllVaultItem(
   messageApi: MessageInstance
 ) {
   const curuser = appstore.GetCurUser()
-  ConsoleLog.LogInfo(`getAllVaultItem:${curuser !== null}`)
+  ConsoleLog.info(`getAllVaultItem:${curuser !== null}`)
   if (curuser) {
     const where2: WhereDef<VaultItem> = { cond: { user_id: curuser.id } }
     await ipc_call<VaultItem[]>(webToManMsg.GetAllValutItems, where2)
@@ -119,10 +119,6 @@ export async function ChangeAppset(
 export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
   const userset = appsotre.GetUserSet()
   await ipc_call_normal(webToManMsg.UpdateTrayMenu, {
-    openpassword: getLabelStr(
-      lang?.getText('tray.menu.openpassword'),
-      userset.shortcut_global_show_password
-    ),
     openlockpass: getLabelStr(
       lang?.getText('tray.menu.openlockpass'),
       userset.shortcut_global_open_main

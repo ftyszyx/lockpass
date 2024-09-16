@@ -46,7 +46,7 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
 
   const [form] = useForm()
   const [password_type, set_password_type] = useState<string>(appstore.GetUserSet().password_type)
-  ConsoleLog.LogInfo('PasswordGenPanel render', appstore.GetUserSet().password_type_conf)
+  ConsoleLog.info('PasswordGenPanel render', appstore.GetUserSet().password_type_conf)
   useEffect(() => {
     genPassword()
   }, [password_type])

@@ -41,7 +41,7 @@ export default function AdminSet() {
       await UpdateMenu(appstore, lang)
     })
   }
-  ConsoleLog.LogInfo('AdminSet render', appstore.cur_user?.user_set)
+  ConsoleLog.info('AdminSet render', appstore.cur_user?.user_set)
 
   return (
     <div className=" flex flex-row h-full">

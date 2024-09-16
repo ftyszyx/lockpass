@@ -5,9 +5,10 @@ date:2024/08/02 17:42:05
 */
 import { useEffect, useRef } from 'react'
 import Icon from './Icon'
-import { ControlKey as CONTROL_KEY_MAP, Icon_type } from '@common/gloabl'
+import { Icon_type } from '@common/gloabl'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Input, InputRef } from 'antd'
+import { GetTrueKey, IsControlKey } from '@common/keycode'
 
 interface ShortKeyInputProps {
   value?: any
@@ -22,20 +23,20 @@ export default function ShortKeyInput(props: ShortKeyInputProps) {
     const press_controls = new Set<string>()
     let press_key = ''
     const handleKeyDown = (event: KeyboardEvent) => {
-      let eventKey = event.key
-      if (event.code == 'Space') eventKey = 'Space'
-      if (CONTROL_KEY_MAP[eventKey]) {
-        const key = CONTROL_KEY_MAP[eventKey]
+      const key = GetTrueKey(event)
+      console.log('handleKeyDown', key)
+      if (IsControlKey(key)) {
         press_key = ''
         press_controls.add(key)
       } else {
-        press_key = eventKey.toUpperCase()
+        press_key = key
       }
       let shortcutString = Array.from(press_controls).join('+')
       if (press_key) {
         if (press_controls.size > 0) shortcutString += '+'
         shortcutString += press_key
       }
+      console.log('get str', shortcutString)
       if (shortcutString != props.value) props.onChange(shortcutString)
       event.preventDefault() // 阻止默认行为
       event.stopPropagation()

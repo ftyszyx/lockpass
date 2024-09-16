@@ -11,6 +11,7 @@ export class MainWindow extends WindowBase {
     super(renderViewType.Mainview)
     this.url = 'index.html'
     this.title = `${APP_NAME}-${app.getVersion()}-${is.dev ? 'dev' : 'release'}`
+    console.log('MainWindow', this.title)
     this.initWin()
     AppEvent.on(AppEventType.MainMessage, (msagetype, msg, duration) => {
       this.win.webContents.send(MainToWebMsg.ShowMsgMain, msagetype, msg, duration)
