@@ -110,7 +110,11 @@ export default function AddValutPanel(pros: AmdinAddvalutProps): JSX.Element {
               })}
             </Select>
           </Form.Item>
-          <Form.Item label="信息" name="info" rules={[{ required: true, message: '请输入信息' }]}>
+          <Form.Item
+            label={getText('vault.item.info')}
+            name="info"
+            rules={[{ required: true, message: getText('vault.item.info.placeholder') }]}
+          >
             <TextArea showCount style={{ height: 120 }}></TextArea>
           </Form.Item>
         </Form>

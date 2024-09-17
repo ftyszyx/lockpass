@@ -117,7 +117,7 @@ export default function VaultSide(props: VaultSideProps) {
           <Select.Option value={SelectAll} key={SelectAll}>
             <div className="flex flex-row items-center space-x-1 w-[80px]">
               <Icon type={Icon_type.icon_type} svg className="" />
-              <div>所有类别</div>
+              <div>{appset.getText('vault.sider.all')}</div>
             </div>
           </Select.Option>
           {Object.keys(VaultItemType).map((key) => {

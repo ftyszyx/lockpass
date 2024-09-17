@@ -281,5 +281,10 @@
   "mydropmenu.delete_ok": "删除成功",
   "admin_about.vault_change_not_backup": "保险库已改变,请及时备份",
   "vaultitem.label.vault_id": "所属保险库",
-  "vaultitem.label.add_vault_item": "新增保密项目"
+  "vaultitem.label.add_vault_item": "新增保密项目",
+  "vault.sider.all": "所有类别",
+  "vault.sider.add": "新增保密项目",
+  "vault.add.title": "新增密码库",
+  "vault.item.info": "信息",
+  "vault.item.info.placeholder": "请输入信息"
 }

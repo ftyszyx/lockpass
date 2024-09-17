@@ -102,7 +102,7 @@ export default function Vault() {
               set_show_add_vault(true)
             }}
           >
-            新增项目
+            {getText('vault.sider.add')}
           </Button>
         </div>
 

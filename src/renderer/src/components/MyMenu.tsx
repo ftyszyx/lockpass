@@ -30,6 +30,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
   const appstore = use_appstore() as AppStore
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
   const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
+  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 当前需要被展开的项
   const [show_addvalut, setShowAddValut] = useState(false)
@@ -124,7 +125,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
       {show_addvalut && (
         <AddValutPanel
           show={show_addvalut}
-          title={'新增密码库'}
+          title={getText('vault.add.title')}
           show_type={ModalType.Add}
           show_del={false}
           onAddOk={async () => {

@@ -278,5 +278,10 @@
   "mydropmenu.inputbackup_name.title": "Please enter the backup file name",
   "mydropmenu.delete_ok": "Delete successfully",
   "admin_about.vault_change_not_backup": "Vault has changed, please backup",
-  "vaultitem.label.vault_id": "Vault"
+  "vaultitem.label.vault_id": "Vault",
+  "vault.sider.all": "All",
+  "vault.sider.add": "Add vault item",
+  "vault.add.title": "Add vault",
+  "vault.item.info": "Info",
+  "vault.item.info.placeholder": "Please enter info"
 }
