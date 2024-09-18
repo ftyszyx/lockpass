@@ -287,4 +287,10 @@
   "vault.add.title": "新增密码库",
   "vault.item.info": "信息",
   "vault.item.info.placeholder": "请输入信息"
+  "update.modal.title": "更新进度",
+  "update.modal.cancel": "后台下载",
+  "update.modal.content": "更新进度:{0}%",
+  "update.modal.total": "总大小:{0}",
+  "update.modal.transferred": "已传输:{0}",
+  "update.modal.speed": "速度:{0}"
 }

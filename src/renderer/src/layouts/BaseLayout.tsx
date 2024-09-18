@@ -1,15 +1,20 @@
 import { ChildProps } from '@renderer/entitys/other.entity'
 import { useHistory } from '@renderer/libs/router'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { message, Modal } from 'antd'
+import { message, Modal, Progress } from 'antd'
 import { GetAllVaultData, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { User } from '@common/entitys/user.entity'
-import { UpdateEventType, MyUpdateInfo, MyReleaseNoteInfo } from '@common/entitys/update.entity'
+import {
+  UpdateEventType,
+  MyUpdateInfo,
+  MyReleaseNoteInfo,
+  MyUpdateProgress
+} from '@common/entitys/update.entity'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
@@ -22,6 +27,8 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
     (state) => state.SetVaultChangeNotBackup
   ) as AppsetStore['SetVaultChangeNotBackup']
   const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const [showProgress, setShowProgress] = useState(false)
+  const [progressInfo, setProgress_info] = useState<MyUpdateProgress>(null)
   const appstore = use_appstore() as AppStore
   ConsoleLog.info('baselayout render')
   useEffect(() => {
@@ -91,6 +98,7 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
         } else if (type == UpdateEventType.Checking) {
           message.info(getText('update.checking'))
         } else if (type == UpdateEventType.UpdateDownOk) {
+          setShowProgress(false)
           Modal.confirm({
             title: getText('update.downloadok.title'),
             okText: getText('update.downloadok.ok'),
@@ -102,7 +110,13 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
               ConsoleLog.info('update cancel')
             }
           })
+        } else if (type == UpdateEventType.UpdateProgress) {
+          if (showProgress == false) {
+            setShowProgress(true)
+          }
+          setProgress_info(info as MyUpdateProgress)
         } else if (type == UpdateEventType.UpdateError) {
+          setShowProgress(false)
           message.error(getText('update.error', info as string))
         } else if (type == UpdateEventType.UpdateEmpty) {
           message.info(getText('update.noupdate'))
@@ -216,6 +230,23 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
         <div className="bg-black fixed bottom-0 w-full  text-center text-red-500 font-sans font-bold text-[16px]">
           <p>{getText('admin_about.vault_change_not_backup')}</p>
         </div>
+      }
+      {props.children}
+      {showProgress && (
+        <Modal
+          title={getText('update.title')}
+          open={showProgress}
+          onCancel={() => setShowProgress(false)}
+          footer={null}
+        >
+          <div className="flex flex-col">
+            <Progress percent={progressInfo.percent} />
+            <p>{getText('update.modal.content', progressInfo.percent)}</p>
+            <p>{getText('update.modal.total', progressInfo.total)}</p>
+            <p>{getText('update.modal.transferred', progressInfo.transferred)}</p>
+            <p>{getText('update.modal.speed', progressInfo.bytesPerSecond)}</p>
+          </div>
+        </Modal>
       )}
     </div>
   )
