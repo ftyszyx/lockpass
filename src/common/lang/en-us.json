@@ -283,11 +283,11 @@
   "vault.sider.add": "Add vault item",
   "vault.add.title": "Add vault",
   "vault.item.info": "Info",
-  "vault.item.info.placeholder": "Please enter info"
+  "vault.item.info.placeholder": "Please enter info",
   "update.modal.title": "Update progress",
   "update.modal.cancel": "Background download",
   "update.modal.content": "Update progress:{0}%",
-  "update.modal.total": "Total size:{0}",
-  "update.modal.transferred": "Transferred:{0}",
-  "update.modal.speed": "Speed:{0}"
+  "update.modal.total": "Total size:{0}MB",
+  "update.modal.transferred": "Transferred:{0}MB",
+  "update.modal.speed": "Speed:{0}MB/s"
 }

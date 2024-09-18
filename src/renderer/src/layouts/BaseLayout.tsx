@@ -204,34 +204,13 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
     <div>
       <div>
         {messageContex}
-        {
-          <div>
-            {/* <Button
-            type="primary"
-            onClick={async () => {
-              await ipc_call_normal(webToManMsg.OpenDb)
-            }}
-          >
-            open db
-          </Button>
-          <Button
-            type="primary"
-            onClick={async () => {
-              await ipc_call_normal(webToManMsg.CloseDb)
-            }}
-          >
-            close db
-          </Button> */}
-          </div>
-        }
         {props.children}
       </div>
       {isVaultChangeNotBackup() && (
         <div className="bg-black fixed bottom-0 w-full  text-center text-red-500 font-sans font-bold text-[16px]">
           <p>{getText('admin_about.vault_change_not_backup')}</p>
         </div>
-      }
-      {props.children}
+      )}
       {showProgress && (
         <Modal
           title={getText('update.title')}
@@ -240,11 +219,18 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
           footer={null}
         >
           <div className="flex flex-col">
-            <Progress percent={progressInfo.percent} />
-            <p>{getText('update.modal.content', progressInfo.percent)}</p>
-            <p>{getText('update.modal.total', progressInfo.total)}</p>
-            <p>{getText('update.modal.transferred', progressInfo.transferred)}</p>
-            <p>{getText('update.modal.speed', progressInfo.bytesPerSecond)}</p>
+            <Progress percent={Math.floor(progressInfo.percent)} />
+            <p>{getText('update.modal.content', progressInfo.percent.toFixed(2))}</p>
+            <p>{getText('update.modal.total', Math.floor(progressInfo.total / 1024 / 1024))}</p>
+            <p>
+              {getText(
+                'update.modal.transferred',
+                Math.ceil(progressInfo.transferred / 1024 / 1024)
+              )}
+            </p>
+            <p>
+              {getText('update.modal.speed', Math.floor(progressInfo.bytesPerSecond / 1024 / 1024))}
+            </p>
           </div>
         </Modal>
       )}
