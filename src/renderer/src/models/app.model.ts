@@ -2,12 +2,19 @@ import { User } from '@common/entitys/user.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { LangItem } from '@common/lang'
-import { create } from '@renderer/libs/state'
+import { create } from 'zustand'
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
+export interface QuickKeyInfo {
+  quick_search?: boolean
+  quick_add?: boolean
+}
+
 export interface AppStore {
+  quick_input: QuickKeyInfo
   vaults: Vault[]
   setValuts: (valuts: Vault[]) => void
+  getVaults: () => Vault[]
   vault_items: VaultItem[]
   setValutItems: (valutItems: VaultItem[]) => void
   //user
@@ -21,10 +28,18 @@ export interface AppStore {
   setUserList: (users: User[]) => void
   GetUserSet: () => UserSetInfo
   GetCurUser: () => User
+  setQuickInput: (quick: QuickKeyInfo) => void
 }
 export const use_appstore = create<AppStore>((set, get) => {
   return {
+    quick_input: {
+      quick_search: false,
+      quick_add: false
+    },
     user_list: [],
+    getVaults() {
+      return get().vaults
+    },
     cur_user: null,
     lock_timeout: 0,
     login_flag: false,
@@ -38,6 +53,11 @@ export const use_appstore = create<AppStore>((set, get) => {
     },
     vaults: [],
     vault_items: [],
+    setQuickInput(quick: QuickKeyInfo) {
+      set((state) => {
+        return { ...state, quick_input: { ...state.quick_input, ...quick } }
+      })
+    },
     GetUserSet() {
       if (!get().cur_user) return defaultUserSetInfo
       return get().cur_user.user_set as UserSetInfo

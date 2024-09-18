@@ -53,6 +53,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               setShowSelectImportType(true)
             } else if (item.key == 'app_set') {
               history.push(PagePath.Admin_set)
+            } else if (item.key == 'app_restart') {
+              await ipc_call_normal(webToManMsg.RestartApp)
             } else if (item.key == 'check_update') {
               await ipc_call_normal(webToManMsg.checkUpdate)
             } else if (item.key == 'exportcsv') {
@@ -186,10 +188,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               key: 'app_set',
               label: getText('mydropmenu.set')
             },
-            // {
-            //   key: 'app_restart',
-            //   label: 'app_restart'
-            // },
+            {
+              key: 'app_restart',
+              label: 'app_restart'
+            },
             {
               key: 'check_update',
               label: getText('mydropmenu.checkupdate')

@@ -7,7 +7,6 @@ function createKey() {
 
 function getCurLocation(window: Window, globalHistory: Window['history']): LocationDef {
   let { pathname, search, hash } = window.location
-  // console.log('windows location', window.location, pathname, search, hash)
   return {
     pathname,
     search,
@@ -75,10 +74,24 @@ function gethashPathname(hash: string): string {
   return '/'
 }
 
+function parseSearch(search: string): { [key: string]: string } {
+  const res: { [key: string]: string } = {}
+  if (search) {
+    const searcharr = search.slice(1).split('&')
+    searcharr.forEach((item) => {
+      const [key, value] = item.split('=')
+      res[key] = value
+    })
+  }
+  return res
+}
+
 export function createHashHistory(options: HistoryOptions): History {
   function createHashLocation(window: Window, globalHistory: Window['history']): LocationDef {
     const res = getCurLocation(window, globalHistory)
     res.pathname = gethashPathname(res.hash)
+    res.search = parsePath(res.pathname).search
+    res.searchParams = parseSearch(res.search)
     return res
   }
   function createUrl(window: Window, to: LocationDef): string {

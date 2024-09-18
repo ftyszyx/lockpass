@@ -80,7 +80,6 @@ export function useMatch() {
 
 export function url_join(...args: string[]): string {
   const parts = Array.from(Array.isArray(args[0]) ? (args[0] as string[]) : args)
-  // console.log("parts:", parts);
   if (parts.length === 0) return ''
   const resArray: string[] = []
   for (let i = 0; i < parts.length; i++) {
@@ -103,7 +102,6 @@ export function url_join(...args: string[]): string {
     resArray.push(text)
   }
   const res_str = resArray.join('/')
-  // console.log("res:", res_str);
   return res_str
 }
 

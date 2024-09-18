@@ -16,7 +16,6 @@ interface ShortKeyInputProps {
 }
 
 export default function ShortKeyInput(props: ShortKeyInputProps) {
-  // console.log('short key input', props.value)
   const appset = use_appset() as AppsetStore
   const inputRef = useRef<InputRef>(null)
   useEffect(() => {
@@ -24,7 +23,6 @@ export default function ShortKeyInput(props: ShortKeyInputProps) {
     let press_key = ''
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = GetTrueKey(event)
-      console.log('handleKeyDown', key)
       if (IsControlKey(key)) {
         press_key = ''
         press_controls.add(key)
@@ -36,7 +34,6 @@ export default function ShortKeyInput(props: ShortKeyInputProps) {
         if (press_controls.size > 0) shortcutString += '+'
         shortcutString += press_key
       }
-      console.log('get str', shortcutString)
       if (shortcutString != props.value) props.onChange(shortcutString)
       event.preventDefault() // 阻止默认行为
       event.stopPropagation()

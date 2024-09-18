@@ -1,5 +1,5 @@
 import { LangHelper, LangItem } from '@common/lang'
-import { create } from '@renderer/libs/state'
+import { create } from 'zustand'
 
 export interface AppsetStore {
   initOK: boolean

@@ -153,7 +153,6 @@ export default function QuickSearch() {
       const selectItem = selectItemRef.current
       const show_detail = showDetailRef.current
       const selectItemDetail = selectDetailItemRef.current
-      // console.log('handlekeydown', event.key, selectItem)
       if (event.ctrlKey && event.key == 'c') {
         handlerCopy(PasswordRenderDetailKey.ctrl_C)
         return
@@ -209,7 +208,6 @@ export default function QuickSearch() {
           if (selectItem.vault_item_type != VaultItemType.Login) {
             setShowDetail(true)
           } else {
-            // console.log('autoInput', selectItem.info)
             await autoInput(selectItem)
           }
         }
@@ -244,7 +242,6 @@ export default function QuickSearch() {
                 key={item.id}
                 className={`flex flex-row items-center p-2 font-sans  text-sm text-nowrap overflow-hidden  space-x-2 ${selectItem?.id == item.id ? 'text-white bg-blue-500' : ''}`}
                 onClick={() => {
-                  console.log('click')
                   if (selectItem?.id == item.id) {
                     if (item.vault_item_type != VaultItemType.Login) {
                       setShowDetail(true)

@@ -117,6 +117,9 @@ export class WindowBase {
       event.preventDefault()
       this.hide()
     })
+    this.window.on('page-title-updated', (event) => {
+      event.preventDefault()
+    })
   }
 
   show() {

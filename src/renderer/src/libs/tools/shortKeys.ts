@@ -87,10 +87,11 @@ class ShortKeyHelp {
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
+    ConsoleLog.info('handleKeyDown', e.key)
     const key = GetTrueKey(e)
     this.pressedKeys.add(key)
     const combo = this.getKeyCombo()
-    // ConsoleLog.info('handlecombo', combo)
+    ConsoleLog.info('handlecombo', combo)
     if (this.listeners[combo]) {
       // e.preventDefault()
       const callbacks = this.listeners[combo].callbacks
@@ -107,7 +108,7 @@ class ShortKeyHelp {
 
   private handleKeyUp = (e: KeyboardEvent) => {
     const key = GetTrueKey(e)
-    // ConsoleLog.info('handleKeyUp', key)
+    ConsoleLog.info('handleKeyUp', key)
     this.pressedKeys.delete(key)
   }
 }

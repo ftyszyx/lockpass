@@ -39,9 +39,7 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
       const inputElement = inputRef.current.input
       if (inputElement) {
         const rect = inputElement.getBoundingClientRect()
-        console.log('rect', rect)
         setModalPosition({ top: rect.y + rect.height + 10, left: rect.x })
-        console.log('setModalPosition', modalPosition)
       }
     }
   }, [showPasswordGen])
@@ -53,7 +51,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
     }
     function handleBlur(event) {
       if (isedit && props.is_password) {
-        console.log('handleBlur', event)
         if (event.relatedTarget && event.relatedTarget.id == 'randomPasswordBtn') {
           return
         }
@@ -88,7 +85,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
         ref={inputRef}
         value={props.value}
         onChange={(value, value2) => {
-          // console.log('value', value, value2)
           if (props.is_date) {
             props.onChange(value2)
           } else {
@@ -107,7 +103,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
             icon={<Icon type={Icon_type.icon_lock2} svg></Icon>}
             className=" text-blue-500 font-sans font-bold"
             onClick={() => {
-              console.log('show panel')
               setShowRandomPasswordBtn(false)
               setShowPasswordGen(true)
             }}
@@ -137,7 +132,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
             type="text"
             onClick={() => {
               navigator.clipboard.writeText(props.value)
-              console.log('get text', props.value)
               messageApi.success(appset.getText('copy_success'))
             }}
             className={` flex-grow  font-bold h-full ${hoverState ? ' visible' : 'hidden'}`}
@@ -148,7 +142,6 @@ export default function MyInputWrapper<InputPropsT>(props: MyInputProps<InputPro
             <Icon
               type={showPassword ? Icon_type.icon_eye_fill : Icon_type.icon_eyeclose_fill}
               onClick={() => {
-                console.log('show password', !showPassword)
                 setShowPassword(!showPassword)
               }}
               className={`w-[40px] cursor-pointer ${hoverState && props.is_password ? ' visible' : 'hidden'}`}

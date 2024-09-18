@@ -26,6 +26,7 @@ export interface HashHistory extends History {}
 export interface LocationDef {
   pathname: string
   search: string
+  searchParams?: { [key: string]: string }
   hash: string
   state: any
   key?: string

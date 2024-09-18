@@ -96,7 +96,6 @@ export default function AdminSet() {
                 select_item == SetMenuItem.shortcut_local) &&
                 Object.keys(defaultUserSetInfo).map((key) => {
                   if (key.startsWith(select_item)) {
-                    console.log('key', key)
                     return (
                       <Form.Item key={key} label={getText(`set.menu.${key}`)} name={key}>
                         <ShortKeyInput></ShortKeyInput>
@@ -119,7 +118,6 @@ export default function AdminSet() {
                         Object.keys(defaultUserSetInfo).map((key) => {
                           if (key.startsWith(select_item)) {
                             const setvalue = { [key]: defaultUserSetInfo[key] }
-                            console.log('set ', setvalue)
                             form.setFieldsValue(setvalue)
                           }
                         })

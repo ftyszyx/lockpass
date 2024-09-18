@@ -93,7 +93,6 @@ export const PasswordGenContent = forwardRef(function PasswordGenContent(
     for (let i = 0; i < setinfo.random_characters_len - used_len; i++) {
       password_arr.push(randomchars[Math.floor(Math.random() * randomchars.length)])
     }
-    // console.log('passwordarr', password_arr, setinfo.random_characters_len, password_arr.length)
     password_arr.sort(() => Math.random() - 0.5)
     return password_arr.join('')
   }

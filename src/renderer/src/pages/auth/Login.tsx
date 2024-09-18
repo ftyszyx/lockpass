@@ -56,7 +56,6 @@ export default function Register(): JSX.Element {
 
   async function OnRegister() {
     form.validateFields().then(async (values) => {
-      console.log(values)
       if (values.password_repeat !== values.password) {
         message.error(getText('auth.login.password_not_match'))
         return

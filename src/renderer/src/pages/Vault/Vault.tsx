@@ -17,7 +17,6 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { useForm } from 'antd/es/form/Form'
 import VaultSide from './VaultSide'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { shortKeys } from '@renderer/libs/tools/shortKeys'
 
 export default function Vault() {
   ConsoleLog.info('Vault render')
@@ -42,34 +41,15 @@ export default function Vault() {
   }, [select_vault_item])
 
   useEffect(() => {
-    const quickfind_Func = () => {
-      quickFindRef.current?.focus()
-      return true
+    if (appstore.quick_input.quick_search) {
+      quickFindRef.current.focus()
+      appstore.setQuickInput({ quick_search: false })
     }
-    const quickfindkey = appstore.GetUserSet().shortcut_local_find
-    if (quickfindkey) {
-      shortKeys.unbindCallback(quickfind_Func)
-      shortKeys.bindShortKey(quickfindkey, quickfind_Func)
-    }
-    return () => {
-      shortKeys.unbindCallback(quickfind_Func)
-    }
-  }, [appstore.GetUserSet().shortcut_local_find])
-
-  useEffect(() => {
-    const quickadd_Func = () => {
+    if (appstore.quick_input.quick_add) {
       set_show_add_vault(true)
-      return true
+      appstore.setQuickInput({ quick_add: false })
     }
-    const quickaddkey = appstore.GetUserSet().shortcut_local_add
-    if (quickaddkey) {
-      shortKeys.unbindCallback(quickadd_Func)
-      shortKeys.bindShortKey(quickaddkey, quickadd_Func)
-    }
-    return () => {
-      shortKeys.unbindCallback(quickadd_Func)
-    }
-  }, [appstore.GetUserSet().shortcut_local_add])
+  }, [appstore.quick_input])
 
   return (
     <>
@@ -89,7 +69,6 @@ export default function Vault() {
             placeholder={getText('vault.global_search', appstore.GetCurUser()?.username)}
             className="flex-grow"
             onChange={(newvalue) => {
-              // console.log('newvalue', newvalue.target.value)
               const value = newvalue.target.value
               if (value !== null && value !== undefined) {
                 set_gloal_search_keyword(value.trim())

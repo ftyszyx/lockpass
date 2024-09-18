@@ -2,11 +2,11 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { Icon_type } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appset } from '@renderer/models/appset.model'
 import { Button } from 'antd'
 
 export default function AdminAbout() {
-  const appset = use_appset() as AppsetStore
+  const appset = use_appset()
   return (
     <div className=" p-4 font-sans text-lg">
       <div className="font-bold flex flex-row space-x-2 mb-2">

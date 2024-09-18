@@ -2,7 +2,7 @@ import { PagePath } from '@common/entitys/page.entity'
 import { ModalType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import { useHistory } from '@renderer/libs/router'
-import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { use_appstore } from '@renderer/models/app.model'
 import { Button, message, Pagination } from 'antd'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import AddValutPanel from './AddVaultPanel'
@@ -28,7 +28,7 @@ export default function Home() {
   const [page_size, setPageNum] = useState(10)
   const [cur_page, setCurPage] = useState(1)
   const [cur_info, setCurInfo] = useState<Vault>({} as Vault)
-  const appstore = use_appstore() as AppStore
+  const appstore = use_appstore()
   const [select_vault, setSelectVault] = useState<Vault>(null)
   const select_vault_ref = useRef<Vault>(null)
   const showItemsRef = useRef<Vault[]>(null)
@@ -68,7 +68,20 @@ export default function Home() {
       select_vault_ref.current = select_vault
     }
   }, [select_vault])
-  console.log('select_vault', select_vault)
+
+  function handleShowAdd() {
+    setEditPanelTitle('新增密码库')
+    setShowType(ModalType.Add)
+    setShowDel(false)
+    setShowEdit(true)
+  }
+
+  useEffect(() => {
+    if (appstore.quick_input.quick_add || appstore.quick_input.quick_search) {
+      handleShowAdd()
+      appstore.setQuickInput({ quick_add: false, quick_search: false })
+    }
+  }, [appstore.quick_input])
 
   return (
     <div className="  bg-gray-100 p-8 h-screen">
@@ -82,10 +95,7 @@ export default function Home() {
             className="mb-4"
             type="primary"
             onClick={() => {
-              setEditPanelTitle('新增密码库')
-              setShowType(ModalType.Add)
-              setShowDel(false)
-              setShowEdit(true)
+              handleShowAdd()
             }}
           >
             新增

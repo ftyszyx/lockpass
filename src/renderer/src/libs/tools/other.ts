@@ -135,6 +135,5 @@ export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
 export async function FixWindowSize(viewtype: renderViewType) {
   const rect = document.body.getBoundingClientRect()
   if (rect.height == window.innerHeight) return
-  console.log('checkSize', rect, window.innerHeight)
   await window.electron.ipcRenderer.invoke(webToManMsg.ResizeWindow, viewtype, 0, rect.height)
 }

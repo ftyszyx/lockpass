@@ -1,6 +1,6 @@
 {
   "name": "lockpass",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "a password manager",
   "main": "./out/main/index.js",
   "author": "zhang.yuxin",
@@ -31,6 +31,7 @@
     "zip-lib": "^1.0.4"
   },
   "devDependencies": {
+    "zustand": "^5.0.0-rc.2",
     "@ant-design/icons": "^5.4.0",
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",

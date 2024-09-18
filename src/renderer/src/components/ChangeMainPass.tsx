@@ -38,7 +38,6 @@ export default function ChangeMainPassword(props: ChangeMainPasswordProps): JSX.
         }}
         onOk={async () => {
           const values = (await form.validateFields()) as ChangePassInfo
-          console.log('get values', values)
           if (values.newpass.trim() !== values.newpass_repeat.trim()) {
             messageApi.error(appset.getText('changemainpass.passnotmatch'), 5)
             return
