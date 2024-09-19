@@ -134,9 +134,7 @@ npm run dev
 其实打包流程就是 electron vite先把main render preload下的脚本用vite打包到out目录下 然后electron-build把资源打成asar
 
 ## **遇到的问题汇总**
-
-## **todo**
-
+### 2024/8月
 1. 程序更新机制(完成)
    https://www.electron.build/auto-update
    electron-builder的功能的确强大，做的很好，点赞
@@ -147,9 +145,6 @@ npm run dev
    ```
    snapcraft internal error: NoKeyringError('No keyring found to store or retrieve credentials from.')
    ```
-
-### 2024/8月
-
 1. 覆盖安装不要把配置文件删除(完成)
    之前为了开发方便，把程序生成的用户文件和配置放在应用程序当前目录。
    但目前主流的做法是把这些配置文件放在系统划分的用户目录
