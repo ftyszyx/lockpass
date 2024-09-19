@@ -4,7 +4,7 @@ desc: 密码管理页面
 date:2024/07/23 11:45:04
 */
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { Button, Form, Input, InputRef, message, Popconfirm } from 'antd'
+import { Button, Form, Input, InputRef, message, Popconfirm, Popover } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import Icon from '@renderer/components/Icon'
 import { Icon_type, ModalType, VaultItemType } from '@common/gloabl'
@@ -24,6 +24,7 @@ export default function Vault() {
   const getText = use_appset((state) => state.getText) as AppsetStore['getText']
   const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
   const [defulat_select_item, set_defulat_select_item] = useState<VaultItem>(null)
+  const appsetinfo = appstore.GetUserSet()
   const ToggleFoldMenu = use_appset(
     (state) => state.ToggleFoldMenu
   ) as AppsetStore['ToggleFoldMenu']
@@ -66,7 +67,11 @@ export default function Vault() {
           ></Icon>
           <Input
             ref={quickFindRef}
-            placeholder={getText('vault.global_search', appstore.GetCurUser()?.username)}
+            placeholder={getText(
+              'vault.global_search',
+              appstore.GetCurUser()?.username,
+              appsetinfo?.shortcut_local_find
+            )}
             className="flex-grow"
             onChange={(newvalue) => {
               const value = newvalue.target.value
@@ -81,7 +86,9 @@ export default function Vault() {
               set_show_add_vault(true)
             }}
           >
-            {getText('vault.sider.add')}
+            <Popover content={getText('shortcut.title', appsetinfo?.shortcut_local_add)} title="">
+              {getText('vault.sider.add')}
+            </Popover>
           </Button>
         </div>
 

@@ -1,4 +1,4 @@
-import { APP_VER_CODE, Default_Lang, SQL_VER_CODE } from '@common/gloabl'
+import { APP_VER_CODE, SQL_VER_CODE } from '@common/gloabl'
 import { AliyunData } from '@main/libs/ali_drive/def'
 import fs from 'fs'
 import path from 'path'
@@ -7,9 +7,10 @@ import { LogLevel } from '@common/entitys/log.entity'
 import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
+import { app } from 'electron'
 
 export interface AppSetInfo {
-  lang: string
+  lang?: string
   sql_ver: number
   app_ver: number
   cur_user_uid?: number
@@ -24,7 +25,6 @@ export interface TempSetInfo {
 
 export class AppSetModel {
   private _set: AppSetInfo = {
-    lang: Default_Lang,
     app_ver: APP_VER_CODE,
     sql_ver: SQL_VER_CODE,
     cur_user_uid: 0
@@ -38,8 +38,18 @@ export class AppSetModel {
   constructor() {
     this._set_path = path.join(PathHelper.getHomeDir(), 'set.json')
     this._temp_set_path = path.join(PathHelper.getHomeDir(), 'temp_set.json')
-    const { info, change } = this.initSet(this._set_path, this.set)
+    let { info, change } = this.initSet(this._set_path, this.set)
     this._set = info
+    if (this._set.lang === undefined) {
+      const systemlan = app.getSystemLocale().toLowerCase()
+      console.log('systemlan', systemlan)
+      if (systemlan.indexOf('zh') >= 0) {
+        this._set.lang = 'zh-cn'
+      } else {
+        this._set.lang = 'en-us'
+      }
+      change = true
+    }
     if (change) {
       this.saveSet()
     }

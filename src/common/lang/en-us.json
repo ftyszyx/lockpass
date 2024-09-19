@@ -289,5 +289,6 @@
   "update.modal.content": "Update progress:{0}%",
   "update.modal.total": "Total size:{0}MB",
   "update.modal.transferred": "Transferred:{0}MB",
-  "update.modal.speed": "Speed:{0}MB/s"
+  "update.modal.speed": "Speed:{0}MB/s",
+  "shortcut.title": "shortcut:{0}"
 }

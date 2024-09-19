@@ -35,7 +35,7 @@ export function GetTrueKey(event: KeyboardEvent) {
   if (KEY_MAP[key]) {
     return KEY_MAP[key]
   }
-  return event.key
+  return key
 }
 
 export function IsControlKey(key_src: string) {

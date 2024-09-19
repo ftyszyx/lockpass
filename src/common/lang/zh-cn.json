@@ -11,7 +11,7 @@
   "inputarr.addmore": "添加更多",
   "valut.search.placeholder": "搜索全部密码",
   "vault.empty_add": "添加一个新的密码",
-  "vault.global_search": "在\"{0}\"中全局搜索",
+  "vault.global_search": "在\"{0}\"中全局搜索,快捷键:{1}",
   "vault.sure_delete": "确定删除\"{0}\"吗?",
   "vault.delete_title": "删除密码",
   "vault.sure_edit": "确定修改\"{0}\"吗?",
@@ -292,5 +292,6 @@
   "update.modal.content": "更新进度:{0}%",
   "update.modal.total": "总大小:{0}MB",
   "update.modal.transferred": "已传输:{0}MB",
-  "update.modal.speed": "速度:{0}MB/s"
+  "update.modal.speed": "速度:{0}MB/s",
+  "shortcut.title": "快捷键:{0}"
 }
