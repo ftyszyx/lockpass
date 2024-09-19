@@ -190,8 +190,15 @@ npm run dev
 ### 2024/9/19
 
 1. 第一次打开软件时，本地快捷键没有生效（终于重现了，原来是快捷键读取时没有转小写，已处理）
-2. 第一次启动默认语言读取系统语言(完成)
-3. ctrl+f和ctrl+J这种快捷键在ui中显示出来
+   ![image](https://github.com/user-attachments/assets/6444c69d-6cb7-4b32-8936-50dd1bc86c01)
+
+3. 第一次启动默认语言读取系统语言(完成)
+   ![image](https://github.com/user-attachments/assets/9e4e62a2-b921-45c1-9a28-289dd1447a0a)
+
+5. ctrl+f和ctrl+J这种快捷键在ui中显示出来
+
+   ![image](https://github.com/user-attachments/assets/f3bfc21a-22b0-43a5-9c8e-91ee55d4e761)
+
 
 # 需要修复的bug及功能优化
 
