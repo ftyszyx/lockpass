@@ -14,7 +14,7 @@
   "inputarr.addmore": "Add more",
   "valut.search.placeholder": "Search all passwords",
   "vault.empty_add": "Add a new password",
-  "vault.global_search": "Search globally in \"{0}\"",
+  "vault.global_search": "Search globally in \"{0}\" shortcut: {1}",
   "vault.sure_delete": "Are you sure you want to delete \"{0}\"?",
   "vault.delete_title": "Delete password",
 
