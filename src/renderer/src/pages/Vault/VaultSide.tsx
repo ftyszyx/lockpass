@@ -149,10 +149,12 @@ export default function VaultSide(props: VaultSideProps) {
             key={vault_item.id}
           >
             <Icon type={`${vault_item.icon}`} svg className=" w-[40px] h-[40px]" />
-            <div className=" font-sans font-bold"> {vault_item.name}</div>
-            <div className="flex flex-col absolute right-0">
-              <div className="text-gray-500 ">
-                {new Date(vault_item.create_time * 1000).toLocaleDateString()}
+            <div className="flex flex-col">
+              <div className=" font-sans font-bold truncate w-[170px]">{vault_item.name}</div>
+              <div className="flex flex-row justify-between">
+                <div className="text-gray-500 ">
+                  {new Date(vault_item.create_time * 1000).toLocaleDateString()}
+                </div>
               </div>
             </div>
           </div>
