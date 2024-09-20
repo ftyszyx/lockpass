@@ -130,7 +130,7 @@ export default function QuickSearch() {
   }
 
   async function CopyAndClose(key: string) {
-    const value = selectItem.info[key]
+    const value = selectItemRef.current.info[key]
     ConsoleLog.info(`copy and close ${key} ${value}`)
     navigator.clipboard.writeText(value)
     messageApi.success(getText('copy_success_arg', getText(`vaultitem.label.${key}`)))
