@@ -55,12 +55,9 @@ export class AutoUpdateHelper {
     })
     autoUpdater.on('download-progress', (progressObj) => {
       this.status = UpdateStatus.Downloading
-      Log.info(`download progress percent:${progressObj.percent} total:${progressObj.total}`)
-      AppEvent.emit(
-        AppEventType.UpdateEvent,
-        UpdateEventType.UpdateProgress,
-        getUpdateProgress(progressObj)
-      )
+      const info = getUpdateProgress(progressObj)
+      Log.info(`download progress percent:${JSON.stringify(info)}`)
+      AppEvent.emit(AppEventType.UpdateEvent, UpdateEventType.UpdateProgress, info)
     })
     autoUpdater.on('update-downloaded', (info) => {
       this.status = UpdateStatus.DownloadOk
@@ -78,8 +75,9 @@ export class AutoUpdateHelper {
   }
 
   checkForUpdates() {
+    Log.info('check for update')
     if (this.status !== UpdateStatus.idle) {
-      AppEvent.emit(AppEventType.MainMessage, LangHelper.getString('update.checking'))
+      AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('update.checking'))
       return
     }
     autoUpdater.autoDownload = false
@@ -87,10 +85,16 @@ export class AutoUpdateHelper {
   }
 
   downloadUpdate() {
+    Log.info('download update')
     autoUpdater.downloadUpdate()
   }
 
+  cancelUpdate() {
+    this.status = UpdateStatus.idle
+  }
+
   QuitAndInstall() {
+    Log.info('install update')
     autoUpdater.quitAndInstall(true, true)
   }
 }

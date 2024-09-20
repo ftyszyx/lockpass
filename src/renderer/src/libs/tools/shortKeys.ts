@@ -86,9 +86,22 @@ class ShortKeyHelp {
     this.clean()
   }
 
+  isEventValid(e: KeyboardEvent): boolean {
+    const ele = e.target as HTMLElement
+    const tagname = ele.tagName
+    ConsoleLog.info('handleKey', e.key, tagname, ele.className)
+    if ((' ' + ele.className + ' ').indexOf(' mousetrap ') > -1) {
+      return false
+    }
+    if (tagname == 'INPUT' || tagname == 'SELECT' || tagname == 'TEXTAREA' || ele.isContentEditable)
+      return false
+    return true
+  }
+
   private handleKeyDown = (e: KeyboardEvent) => {
-    ConsoleLog.info('handleKeyDown', e.key)
+    if (!this.isEventValid(e)) return
     const key = GetTrueKey(e)
+    ConsoleLog.info('handleKeyDown', key)
     this.pressedKeys.add(key)
     const combo = this.getKeyCombo()
     ConsoleLog.info('handlecombo', combo)
@@ -107,6 +120,7 @@ class ShortKeyHelp {
   }
 
   private handleKeyUp = (e: KeyboardEvent) => {
+    if (!this.isEventValid(e)) return
     const key = GetTrueKey(e)
     ConsoleLog.info('handleKeyUp', key)
     this.pressedKeys.delete(key)

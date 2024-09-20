@@ -71,7 +71,10 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
                 <hr></hr>
                 <div>
                   {typeof updateinfo.releaseNotes === 'string' && (
-                    <div dangerouslySetInnerHTML={{ __html: updateinfo.releaseNotes }}></div>
+                    <div
+                      className="update_content"
+                      dangerouslySetInnerHTML={{ __html: updateinfo.releaseNotes }}
+                    ></div>
                   )}
                   {typeof updateinfo.releaseNotes !== 'string' &&
                     updateinfo.releaseNotes.map((note: MyReleaseNoteInfo, index: number) => {
@@ -80,7 +83,10 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
                           <p className=" font-bold font-sans ">
                             {getText('update.content.version', note.version)}
                           </p>
-                          <div dangerouslySetInnerHTML={{ __html: note.note }}></div>
+                          <div
+                            className="update_content"
+                            dangerouslySetInnerHTML={{ __html: note.note }}
+                          ></div>
                         </div>
                       )
                     })}
@@ -91,8 +97,9 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
             onOk: async () => {
               await ipc_call_normal(webToManMsg.Downloadupdate)
             },
-            onCancel: () => {
+            onCancel: async () => {
               ConsoleLog.info('update cancel')
+              await ipc_call_normal(webToManMsg.CancelUpdate)
             }
           })
         } else if (type == UpdateEventType.Checking) {
@@ -106,8 +113,9 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
             onOk: async () => {
               await ipc_call_normal(webToManMsg.InstallUpdate)
             },
-            onCancel: () => {
+            onCancel: async () => {
               ConsoleLog.info('update cancel')
+              await ipc_call_normal(webToManMsg.CancelUpdate)
             }
           })
         } else if (type == UpdateEventType.UpdateProgress) {
@@ -202,6 +210,13 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
 
   return (
     <div>
+      {/* <div className=" update_content">
+        <ol>
+          <li>test1</li>
+          <li>test2</li>
+          <li>test3</li>
+        </ol>
+      </div> */}
       <div>
         {messageContex}
         {props.children}
@@ -221,15 +236,18 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
           <div className="flex flex-col">
             <Progress percent={Math.floor(progressInfo.percent)} />
             <p>{getText('update.modal.content', progressInfo.percent.toFixed(2))}</p>
-            <p>{getText('update.modal.total', Math.floor(progressInfo.total / 1024 / 1024))}</p>
+            <p>{getText('update.modal.total', (progressInfo.total / 1024 / 1024).toFixed(2))}</p>
             <p>
               {getText(
                 'update.modal.transferred',
-                Math.ceil(progressInfo.transferred / 1024 / 1024)
+                (progressInfo.transferred / 1024 / 1024).toFixed(2)
               )}
             </p>
             <p>
-              {getText('update.modal.speed', Math.floor(progressInfo.bytesPerSecond / 1024 / 1024))}
+              {getText(
+                'update.modal.speed',
+                (progressInfo.bytesPerSecond / 1024 / 1024).toFixed(2)
+              )}
             </p>
           </div>
         </Modal>

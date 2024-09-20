@@ -58,6 +58,9 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.CheckUpdateStatus, (_) => {
     return AppModel.getInstance().auto_update?.status
   })
+  ipcMain.handle(webToManMsg.CancelUpdate, () => {
+    return AppModel.getInstance().auto_update?.cancelUpdate()
+  })
 
   ipcMain.handle(webToManMsg.showWindows, (_, viewtype: renderViewType, showorHide: boolean) => {
     if (viewtype == renderViewType.Mainview) AppModel.getInstance().mainwin?.showOrHide(showorHide)

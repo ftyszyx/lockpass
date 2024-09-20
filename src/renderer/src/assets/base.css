@@ -146,3 +146,11 @@ em {
 .vault-conent {
   height: calc(100vh - 90px);
 }
+
+.update_content ol {
+  list-style-type: decimal !important;
+  margin-left: 20px;
+}
+.update_content ol li {
+  margin-bottom: 5px;
+}

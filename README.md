@@ -134,7 +134,9 @@ npm run dev
 其实打包流程就是 electron vite先把main render preload下的脚本用vite打包到out目录下 然后electron-build把资源打成asar
 
 ## **遇到的问题汇总**
+
 ### 2024/8月
+
 1. 程序更新机制(完成)
    https://www.electron.build/auto-update
    electron-builder的功能的确强大，做的很好，点赞
@@ -145,6 +147,7 @@ npm run dev
    ```
    snapcraft internal error: NoKeyringError('No keyring found to store or retrieve credentials from.')
    ```
+
 1. 覆盖安装不要把配置文件删除(完成)
    之前为了开发方便，把程序生成的用户文件和配置放在应用程序当前目录。
    但目前主流的做法是把这些配置文件放在系统划分的用户目录
@@ -187,13 +190,12 @@ npm run dev
 1. 第一次打开软件时，本地快捷键没有生效（终于重现了，原来是快捷键读取时没有转小写，已处理）
    ![image](https://github.com/user-attachments/assets/6444c69d-6cb7-4b32-8936-50dd1bc86c01)
 
-3. 第一次启动默认语言读取系统语言(完成)
+2. 第一次启动默认语言读取系统语言(完成)
    ![image](https://github.com/user-attachments/assets/9e4e62a2-b921-45c1-9a28-289dd1447a0a)
 
-5. ctrl+f和ctrl+J这种快捷键在ui中显示出来
+3. ctrl+f和ctrl+J这种快捷键在ui中显示出来
 
    ![image](https://github.com/user-attachments/assets/f3bfc21a-22b0-43a5-9c8e-91ee55d4e761)
-
 
 # 需要修复的bug及功能优化
 
