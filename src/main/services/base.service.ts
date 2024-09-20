@@ -105,6 +105,7 @@ export class BaseService<Entity extends BaseEntity> {
     const entity = this.objToEntity(obj)
     this.fixEntityIn(entity)
     const res = await AppModel.getInstance().db_helper.AddOne(entity)
+    this.fixEntityOut(res)
     this.AfterChange()
     return res
   }

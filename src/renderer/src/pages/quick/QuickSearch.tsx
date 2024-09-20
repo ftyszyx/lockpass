@@ -27,13 +27,14 @@ export default function QuickSearch() {
   const selectDetailItemRef = useRef(select_detail_item)
   const inputref = useRef<InputRef>(null)
   const showitems = useMemo(() => {
+    let items = []
     if (search && search.trim().length > 0) {
-      return appstore.vault_items.filter((item) => {
+      items = appstore.vault_items.filter((item) => {
         if (IsVaultItemMatchSearch(item, search)) return true
         return false
       })
     }
-    return []
+    return items
   }, [appstore, search])
 
   async function HideWin() {
@@ -154,14 +155,17 @@ export default function QuickSearch() {
       const show_detail = showDetailRef.current
       const selectItemDetail = selectDetailItemRef.current
       if (event.ctrlKey && event.key == 'c') {
+        ConsoleLog.info('ctrl c')
         handlerCopy(PasswordRenderDetailKey.ctrl_C)
         return
       }
       if (event.ctrlKey && event.altKey && event.key == 'c') {
+        ConsoleLog.info('ctrl alt c')
         handlerCopy(PasswordRenderDetailKey.ctrl_alt_c)
         return
       }
       if (event.ctrlKey && event.shiftKey && event.key == 'c') {
+        ConsoleLog.info('ctrl shift c')
         handlerCopy(PasswordRenderDetailKey.ctrl_shift_C)
         return
       }

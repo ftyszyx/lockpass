@@ -3,7 +3,7 @@ desc: 密码管理页面
 © 2024 zyx
 date:2024/07/23 11:45:04
 */
-import { AppStore, use_appstore } from '@renderer/models/app.model'
+import { use_appstore } from '@renderer/models/app.model'
 import { Button, Form, Input, InputRef, message, Popconfirm, Popover } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import Icon from '@renderer/components/Icon'
@@ -20,9 +20,9 @@ import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 
 export default function Vault() {
   ConsoleLog.info('Vault render')
-  const appstore = use_appstore() as AppStore
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
-  const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
+  const appstore = use_appstore()
+  const getText = use_appset((state) => state.getText)
+  const fold_menu = use_appset((state) => state.fold_menu)
   const [defulat_select_item, set_defulat_select_item] = useState<VaultItem>(null)
   const appsetinfo = appstore.GetUserSet()
   const ToggleFoldMenu = use_appset(

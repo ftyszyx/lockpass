@@ -850,10 +850,6 @@ video {
   cursor: pointer !important;
 }
 
-.list-decimal {
-  list-style-type: decimal !important;
-}
-
 .flex-row {
   flex-direction: row !important;
 }
@@ -1190,6 +1186,11 @@ video {
   color: rgb(156 163 175 / var(--tw-text-opacity)) !important;
 }
 
+.text-gray-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(107 114 128 / var(--tw-text-opacity)) !important;
+}
+
 .text-gray-600 {
   --tw-text-opacity: 1 !important;
   color: rgb(75 85 99 / var(--tw-text-opacity)) !important;
@@ -1208,6 +1209,11 @@ video {
 .text-white {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+}
+
+.text-blue-50 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(239 246 255 / var(--tw-text-opacity)) !important;
 }
 
 .shadow-md {

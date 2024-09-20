@@ -37,19 +37,22 @@ export default function VaultSide(props: VaultSideProps) {
   const selectedItemRef = useRef<HTMLDivElement>(null)
   const cur_vault_item_id = parseInt(route_data.match?.params['vault_item_id'])
   const show_items = useMemo(() => {
+    let items = []
     if (props.global_search_keyword && props.global_search_keyword.length > 0) {
-      return appstore.vault_items.filter((item) => {
+      items = appstore.vault_items.filter((item) => {
         if (IsVaultItemMatchSearch(item, props.global_search_keyword)) return true
         return false
       })
-    }
-    if (search_Password_type === SelectAll) {
-      return appstore.vault_items.filter((item) => item.vault_id == cur_vault_id)
     } else {
-      return appstore.vault_items.filter(
-        (item) => item.vault_item_type === search_Password_type && item.vault_id == cur_vault_id
-      )
+      if (search_Password_type === SelectAll) {
+        items = appstore.vault_items.filter((item) => item.vault_id == cur_vault_id)
+      } else {
+        items = appstore.vault_items.filter(
+          (item) => item.vault_item_type === search_Password_type && item.vault_id == cur_vault_id
+        )
+      }
     }
+    return items.sort((a, b) => b.create_time - a.create_time)
   }, [
     appstore.vaults,
     search_Password_type,
@@ -142,11 +145,16 @@ export default function VaultSide(props: VaultSideProps) {
               DoSelectItem(vault_item)
             }}
             ref={select_vault_item?.id == vault_item.id ? selectedItemRef : null}
-            className={`flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
+            className={`relative flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
             key={vault_item.id}
           >
             <Icon type={`${vault_item.icon}`} svg className=" w-[40px] h-[40px]" />
-            <div> {vault_item.name}</div>
+            <div className=" font-sans font-bold"> {vault_item.name}</div>
+            <div className="flex flex-col absolute right-0">
+              <div className="text-gray-500 ">
+                {new Date(vault_item.create_time * 1000).toLocaleDateString()}
+              </div>
+            </div>
           </div>
         ))}
       </div>

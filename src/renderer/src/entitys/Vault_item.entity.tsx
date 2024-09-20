@@ -190,9 +190,9 @@ export interface PasswordRenderDetail {
 }
 
 export enum PasswordRenderDetailKey {
-  ctrl_C = `${KEY_MAP.ctrl}+C`,
-  ctrl_shift_C = `${KEY_MAP.ctrl}+${KEY_MAP.shift}+C`,
-  ctrl_alt_c = `${KEY_MAP.ctrl}+${KEY_MAP.alt}+C`
+  ctrl_C = `${KEY_MAP.ctrl}+c`,
+  ctrl_shift_C = `${KEY_MAP.ctrl}+${KEY_MAP.shift}+c`,
+  ctrl_alt_c = `${KEY_MAP.ctrl}+${KEY_MAP.alt}+c`
 }
 
 export const GetPasswordRenderDetailList = (vaule: VaultItem): PasswordRenderDetail[] => {
