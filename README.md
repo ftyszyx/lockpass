@@ -207,8 +207,17 @@ npm run dev
    ![image](https://github.com/user-attachments/assets/dda7a7bd-39c0-4461-bde0-af33870432f6)
 
 3. 新增一项后，显示的是空的(解决)
-4. 快捷查看页面的快捷键失灵了
-5. 密码项显示创建时间，并按照时间排序
+   
+   ![img_v3_02et_fb2fdfe2-098e-4ca5-ab05-286b7355bb1g](https://github.com/user-attachments/assets/51383bdd-6e89-4648-9d89-2595d823469f)
+
+5. 快捷查看页面的快捷键失灵了(解决)
+   
+   ![img_v3_02et_3bbc09f0-ac38-4447-9cc6-1de13497c04g](https://github.com/user-attachments/assets/513346ce-6ff3-4ff2-90af-78a7217838f1)
+
+7. 密码项显示创建时间，并按照时间排序(解决)
+   
+   ![img_v3_02et_c913d49f-7e82-4de8-83cc-7845321440eg](https://github.com/user-attachments/assets/c62f2367-aa06-485d-b7d5-7803b8431a5a)
+
 
 # 需要修复的bug及功能优化
 
