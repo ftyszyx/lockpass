@@ -197,6 +197,13 @@ npm run dev
 
    ![image](https://github.com/user-attachments/assets/f3bfc21a-22b0-43a5-9c8e-91ee55d4e761)
 
+### 2024/9/19
+1. 更新软件的描述显示优化
+   
+   ![image](https://github.com/user-attachments/assets/87692f33-8e6a-4a88-b2bd-73d89099b69a)
+3. 参考mousetrap快捷键排除input输入，避免错误的快捷键检测
+   ![image](https://github.com/user-attachments/assets/dda7a7bd-39c0-4461-bde0-af33870432f6)
+
 # 需要修复的bug及功能优化
 
 3. 密码项显示创建时间，并按照时间排序
