@@ -19,23 +19,24 @@ import {
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
   const history = useHistory()
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const getText = use_appset((state) => state.getText)
   const isVaultChangeNotBackup = use_appset(
     (state) => state.IsVaultChangeNotBackup
   ) as AppsetStore['IsVaultChangeNotBackup']
   const setVaultChangeNotBackup = use_appset(
     (state) => state.SetVaultChangeNotBackup
   ) as AppsetStore['SetVaultChangeNotBackup']
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
+  const getLang = use_appset((state) => state.getLang)
   const [showProgress, setShowProgress] = useState(false)
   const [progressInfo, setProgress_info] = useState<MyUpdateProgress>(null)
   const appstore = use_appstore() as AppStore
   ConsoleLog.info('baselayout render')
   useEffect(() => {
+    const lang = getLang()
     if (lang != null) {
-      UpdateMenu(appstore, lang)
+      UpdateMenu(appstore, getText)
     }
-  }, [lang])
+  }, [getLang()])
   useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.LockApp, () => {
       ConsoleLog.info('LockApp event')

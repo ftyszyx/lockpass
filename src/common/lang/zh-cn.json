@@ -293,5 +293,9 @@
   "update.modal.total": "总大小:{0}MB",
   "update.modal.transferred": "已传输:{0}MB",
   "update.modal.speed": "速度:{0}MB/s",
-  "shortcut.title": "快捷键:{0}"
+  "shortcut.title": "快捷键:{0}",
+
+  "home.add.title": "新增密码库",
+  "home.add.button": "新增",
+  "home.title": "密码库"
 }

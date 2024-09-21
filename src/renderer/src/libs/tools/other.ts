@@ -5,7 +5,6 @@ import { MessageInstance } from 'antd/es/message/interface'
 import { WhereDef } from '@common/entitys/db.entity'
 import { Vault } from '@common/entitys/vault.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { LangItem } from '@common/lang'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { User } from '@common/entitys/user.entity'
 import { AppsetStore } from '@renderer/models/appset.model'
@@ -42,13 +41,17 @@ export async function ipc_call_normal<T>(api: string, ...args: any[]): Promise<T
   }
 }
 
-export async function GetAllUsers(appstore: AppStore, lang: LangItem, messageApi: MessageInstance) {
+export async function GetAllUsers(
+  appstore: AppStore,
+  getText: AppsetStore['getText'],
+  messageApi: MessageInstance
+) {
   await ipc_call<User[]>(webToManMsg.getAllUser)
     .then((res) => {
       appstore.setUserList(res)
     })
     .catch((e) => {
-      messageApi.error(lang?.getText(`err.${e.code}`))
+      messageApi.error(getText(`err.${e.code}`))
     })
 }
 
@@ -116,19 +119,13 @@ export async function ChangeAppset(
     })
 }
 
-export async function UpdateMenu(appsotre: AppStore, lang: LangItem) {
+export async function UpdateMenu(appsotre: AppStore, getText: AppsetStore['getText']) {
   const userset = appsotre.GetUserSet()
   await ipc_call_normal(webToManMsg.UpdateTrayMenu, {
-    openlockpass: getLabelStr(
-      lang?.getText('tray.menu.openlockpass'),
-      userset.shortcut_global_open_main
-    ),
-    lock: getLabelStr(lang?.getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
-    openquick: getLabelStr(
-      lang?.getText('tray.menu.openquick'),
-      userset.shortcut_global_quick_find
-    ),
-    closemain: getLabelStr(lang?.getText('tray.menu.closemain'), userset.shortcut_global_hide_main)
+    openlockpass: getLabelStr(getText('tray.menu.openlockpass'), userset.shortcut_global_open_main),
+    lock: getLabelStr(getText('tray.menu.lock'), userset.shortcut_global_quick_lock),
+    openquick: getLabelStr(getText('tray.menu.openquick'), userset.shortcut_global_quick_find),
+    closemain: getLabelStr(getText('tray.menu.closemain'), userset.shortcut_global_hide_main)
   })
 }
 

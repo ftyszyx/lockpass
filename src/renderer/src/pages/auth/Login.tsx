@@ -6,7 +6,7 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory } from '@renderer/libs/router'
 import { GetAllUsers, ipc_call, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appset } from '@renderer/models/appset.model'
 import { AutoComplete, AutoCompleteProps, Button, Form, Input, InputRef, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useRef, useState } from 'react'
@@ -25,8 +25,7 @@ export default function Register(): JSX.Element {
   const isLogin = history.PathName == PagePath.Login
   const isLock = history.PathName == PagePath.Lock
   ConsoleLog.info('register render', history.PathName, isLogin, isLock)
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const getText = use_appset((state) => state.getText)
   const firstInputRef = useRef<InputRef>(null)
 
   useEffect(() => {
@@ -37,7 +36,7 @@ export default function Register(): JSX.Element {
   }, [])
 
   async function initData() {
-    await GetAllUsers(appstore, lang, messageApi)
+    await GetAllUsers(appstore, getText, messageApi)
     await ipc_call<LastUserInfo>(webToManMsg.GetLastUserInfo)
       .then((res) => {
         setLastUser(res.user)
@@ -81,7 +80,7 @@ export default function Register(): JSX.Element {
       if (user) {
         message.success(getText('auth.login.success'))
         appstore.Login(user)
-        await UpdateMenu(appstore, lang)
+        await UpdateMenu(appstore, getText)
         if (isLock) {
           history.go(-1)
         } else {

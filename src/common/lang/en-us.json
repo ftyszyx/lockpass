@@ -290,5 +290,8 @@
   "update.modal.total": "Total size:{0}MB",
   "update.modal.transferred": "Transferred:{0}MB",
   "update.modal.speed": "Speed:{0}MB/s",
-  "shortcut.title": "shortcut:{0}"
+  "shortcut.title": "shortcut:{0}",
+  "home.title": "Vault",
+  "home.add.title": "Add vault",
+  "home.add.button": "Add"
 }

@@ -7,7 +7,7 @@ import { NormalSetFiledList, SetMenuItem } from '@renderer/entitys/set.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { ChangeAppset, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appset } from '@renderer/models/appset.model'
 import { Form, Button, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useState } from 'react'
@@ -15,8 +15,7 @@ import { useState } from 'react'
 export default function AdminSet() {
   const [form] = useForm<UserSetInfo>(null)
   const appstore = use_appstore() as AppStore
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const getText = use_appset((state) => state.getText)
   const [messageApi, messageContext] = message.useMessage()
   const [select_item, set_select_item] = useState<string>(SetMenuItem.normal)
   const onSave = () => {
@@ -38,7 +37,7 @@ export default function AdminSet() {
       if (select_item == SetMenuItem.shortcut_global) {
         await ipc_call_normal(webToManMsg.ShortCutKeyChange)
       }
-      await UpdateMenu(appstore, lang)
+      await UpdateMenu(appstore, getText)
     })
   }
   ConsoleLog.info('AdminSet render', appstore.cur_user?.user_set)

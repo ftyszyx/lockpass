@@ -16,6 +16,7 @@ export interface AppsetStore {
   ToggleFoldMenu: () => void
   SetVaultChangeNotBackup: (flag: boolean) => void
   IsVaultChangeNotBackup: () => boolean
+  getLang: () => LangItem | null
 }
 
 export const use_appset = create<AppsetStore>((set, get) => {
@@ -30,6 +31,9 @@ export const use_appset = create<AppsetStore>((set, get) => {
       set((state) => {
         return { ...state, vault_change_not_backup: flag }
       })
+    },
+    getLang() {
+      return get().lang
     },
     IsVaultChangeNotBackup() {
       return get().vault_change_not_backup

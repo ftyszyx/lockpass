@@ -70,7 +70,7 @@ export default function Home() {
   }, [select_vault])
 
   function handleShowAdd() {
-    setEditPanelTitle('新增密码库')
+    setEditPanelTitle(getText('home.add.title'))
     setShowType(ModalType.Add)
     setShowDel(false)
     setShowEdit(true)
@@ -88,7 +88,7 @@ export default function Home() {
       <div className="">
         <div className="">
           <div className=" flex flex-row space-x-1 items-center mb-4">
-            <h1 className="text-2xl font-semibold ">密码库</h1>
+            <h1 className="text-2xl font-semibold ">{getText('home.title')}</h1>
             <MyDropDown />
           </div>
           <Button
@@ -98,7 +98,7 @@ export default function Home() {
               handleShowAdd()
             }}
           >
-            新增
+            {getText('home.add.button')}
           </Button>
           <div className="flex  flex-wrap items-center justify-start">
             {showitems.map((valut) => {
