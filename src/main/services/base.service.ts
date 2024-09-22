@@ -11,12 +11,10 @@ export class BaseService<Entity extends BaseEntity> {
     Log.info('entity_name', this.entity_name)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fixEntityOut(_: Entity): void {
     return
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fixEntityIn(_: Entity): void {
     return
   }

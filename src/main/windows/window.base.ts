@@ -120,7 +120,13 @@ export class WindowBase {
     this.window.on('page-title-updated', (event) => {
       event.preventDefault()
     })
+    this.window.on('resize', () => {
+      const oldsize = this.win.getSize()
+      this.winResize(oldsize[0], oldsize[1])
+    })
   }
+
+  winResize(_width: number, _height: number): void {}
 
   show() {
     Log.info('show window', this.url)

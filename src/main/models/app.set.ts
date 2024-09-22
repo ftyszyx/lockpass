@@ -15,6 +15,8 @@ export interface AppSetInfo {
   app_ver: number
   cur_user_uid?: number
   log_level?: LogLevel
+  window_width: number
+  window_height: number
   open_dev?: boolean
   aliyun_data?: AliyunData
 }
@@ -27,6 +29,8 @@ export class AppSetModel {
   private _set: AppSetInfo = {
     app_ver: APP_VER_CODE,
     sql_ver: SQL_VER_CODE,
+    window_width: 900,
+    window_height: 670,
     cur_user_uid: 0
   }
   private _temp_set: TempSetInfo = {
@@ -156,5 +160,11 @@ export class AppSetModel {
 
   get set_path() {
     return this._set_path
+  }
+
+  public setWindowSize(width: number, height: number) {
+    this.set.window_width = width
+    this.set.window_height = height
+    this.saveSet()
   }
 }
