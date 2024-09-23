@@ -1,5 +1,5 @@
 import { renderViewType } from '@common/entitys/app.entity'
-import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Icon_type, VaultItemType } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
@@ -50,6 +50,15 @@ export default function QuickSearch() {
       cursor: 'start'
     })
   }
+
+  useEffect(() => {
+    window.electron.ipcRenderer.on(MainToWebMsg.WindowsHide, () => {
+      setSearch('')
+    })
+    return () => {
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.WindowsHide)
+    }
+  }, [])
   useEffect(() => {
     if (show_detail == false) foucsInput()
   }, [show_detail])

@@ -138,6 +138,7 @@ export class WindowBase {
     Log.info('hide window', this.url)
     this.window.hide()
     this.window.setSkipTaskbar(true)
+    this.win.webContents.send(MainToWebMsg.WindowsHide)
   }
 
   close() {

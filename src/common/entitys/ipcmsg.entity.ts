@@ -77,5 +77,6 @@ export enum MainToWebMsg {
   AliyunAuthOk = 'AliyunAuthOk',
   LangChange = 'LangChange',
   AppUpdateEvent = 'UpdateEvent',
-  VaultChangeNotBackup = 'VaultChangeNotBackup'
+  VaultChangeNotBackup = 'VaultChangeNotBackup',
+  WindowsHide = 'windosHide'
 }
