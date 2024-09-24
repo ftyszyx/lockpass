@@ -229,7 +229,7 @@ npm run dev
 
 ### 2024/9/24
 4. 窗口的大小缩放后可以记住(已完成)
-5. 
+
    ![20240924211923_rec_](https://github.com/user-attachments/assets/6eca1c22-9f06-4e96-a0ca-4c61a915acd7)
 
 6. 快捷窗口每次打开要清除之前输入的内容(完成)
