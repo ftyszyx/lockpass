@@ -228,12 +228,12 @@ npm run dev
    ![img_v3_02et_c913d49f-7e82-4de8-83cc-7845321440eg](https://github.com/user-attachments/assets/c62f2367-aa06-485d-b7d5-7803b8431a5a)
 
 ### 2024/9/24
-4. 窗口的大小缩放后可以记住(已完成)
+1. 窗口的大小缩放后可以记住(已完成)
 
    ![20240924211923_rec_](https://github.com/user-attachments/assets/6eca1c22-9f06-4e96-a0ca-4c61a915acd7)
 
-6. 快捷窗口每次打开要清除之前输入的内容(完成)
-7. qq密码无法输入问题（完成）
+2. 快捷窗口每次打开要清除之前输入的内容(完成)
+3. qq密码无法输入问题（完成）
    原因是: 之前输入密码是使用unicode的方式，qq密码框有限制。
    现在改成虚拟键盘的方式，改了一点robotjs的代码，只支持windows
    
