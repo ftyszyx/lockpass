@@ -26,7 +26,7 @@
     "@electron-toolkit/utils": "^3.0.0",
     "electron-updater": "^6.3.4",
     "reflect-metadata": "^0.2.2",
-    "robotjs_addon": "^0.6.1",
+    "robotjs_addon": "^0.6.2",
     "sqlite3": "^5.1.7",
     "zip-lib": "^1.0.4"
   },

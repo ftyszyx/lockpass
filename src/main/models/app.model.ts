@@ -66,6 +66,18 @@ class AppModel {
     return AppModel.instance
   }
 
+  get isWin() {
+    return process.platform === 'win32'
+  }
+
+  get isMac() {
+    return process.platform === 'darwin'
+  }
+
+  get isLinux() {
+    return process.platform === 'linux'
+  }
+
   constructor() {
     AppEvent.on(AppEventType.SystemLock, () => {
       if (this.user.userinfo == null) return
@@ -256,7 +268,8 @@ class AppModel {
       robot.mouseClick()
       robot.typeString(logininfo.username)
       robot.keyTap('tab')
-      robot.typeString(logininfo.password)
+      if (this.isWin) robot.typeKeyCodeStringInWin(logininfo.password)
+      else robot.typeString(logininfo.password)
       robot.keyTap('enter')
     }
   }
