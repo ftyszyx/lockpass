@@ -145,7 +145,7 @@ export default function QuickSearch() {
     messageApi.success(getText('copy_success_arg', getText(`vaultitem.label.${key}`)))
     setTimeout(async () => {
       await HideWin()
-    }, 1000)
+    }, 300)
   }
 
   function handlerCopy(keytype: PasswordRenderDetailKey) {
