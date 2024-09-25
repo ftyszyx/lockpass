@@ -60,7 +60,8 @@ export enum webToManMsg {
   PowerOnOpen = 'PowerOnOpen',
   InstallUpdate = 'InstallUpdate',
   CheckUpdateStatus = 'CheckUpdateStatus',
-  IsVaultChangeNotBackup = 'IsVaultChangeNotBackup'
+  IsVaultChangeNotBackup = 'IsVaultChangeNotBackup',
+  OpenShell = 'OpenShell'
 }
 
 export enum MainToWebMsg {

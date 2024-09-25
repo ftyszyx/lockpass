@@ -1,4 +1,4 @@
-import { ipcMain, app } from 'electron'
+import { ipcMain, app, shell } from 'electron'
 import AppModel from '../models/app.model'
 import { MainToWebMsg, webToManMsg } from '../../common/entitys/ipcmsg.entity'
 import { WhereDef } from '@common/entitys/db.entity'
@@ -218,5 +218,9 @@ export function initAllApi() {
   })
   ipcMain.handle(webToManMsg.updateValutItem, async (_, valutItem) => {
     return await AppModel.getInstance().vaultItem?.UpdateOne(valutItem)
+  })
+
+  ipcMain.handle(webToManMsg.OpenShell, (_, url) => {
+    shell.openExternal(url)
   })
 }

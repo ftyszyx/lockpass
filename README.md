@@ -173,21 +173,21 @@ npm run dev
 8. 可以删除阿里云盘的备份(完成)
 9. 有修改没有备份时在窗口下方加个日志，或者项目右上角加个红点，表示有修改(完成)
 
-    ![image](https://github.com/user-attachments/assets/2c49ac5d-dbb3-4b31-82e6-011d8d6521bd)
+   ![image](https://github.com/user-attachments/assets/2c49ac5d-dbb3-4b31-82e6-011d8d6521bd)
 
-11. 密码库页面增加方向键控制和选中效果(完成)
-12. 增加本地快捷键的映射ctrl+f ctrl+j(完成)
-13. 自动输入时需要将输入法切成英文(完成)
-14. 可以修改密码所属的保险库(完成)
+10. 密码库页面增加方向键控制和选中效果(完成)
+11. 增加本地快捷键的映射ctrl+f ctrl+j(完成)
+12. 自动输入时需要将输入法切成英文(完成)
+13. 可以修改密码所属的保险库(完成)
 
     ![image](https://github.com/user-attachments/assets/cdf0f10e-777d-49d1-b09d-20351c937b6f)
 
-15. 修改密码信息后，快捷搜索页没有更新(完成)
-16. 增加密码时，选择密码类型也增加键盘方向控制(完成)
+14. 修改密码信息后，快捷搜索页没有更新(完成)
+15. 增加密码时，选择密码类型也增加键盘方向控制(完成)
 
     ![20240924211600_rec_](https://github.com/user-attachments/assets/d0e7a197-0ba8-4651-be1e-60d63d39a7e1)
 
-17. 优化软件更新逻辑(完成)
+16. 优化软件更新逻辑(完成)
 
 ### 2024/9/18
 
@@ -228,6 +228,7 @@ npm run dev
    ![img_v3_02et_c913d49f-7e82-4de8-83cc-7845321440eg](https://github.com/user-attachments/assets/c62f2367-aa06-485d-b7d5-7803b8431a5a)
 
 ### 2024/9/24
+
 1. 窗口的大小缩放后可以记住(已完成)
 
    ![20240924211923_rec_](https://github.com/user-attachments/assets/6eca1c22-9f06-4e96-a0ca-4c61a915acd7)
@@ -236,16 +237,15 @@ npm run dev
 3. qq密码无法输入问题（完成）
    原因是: 之前输入密码是使用unicode的方式，qq密码框有限制。
    现在改成虚拟键盘的方式，改了一点robotjs的代码，只支持windows
-   
-   ![20240924215039_rec_](https://github.com/user-attachments/assets/1603bad4-3f62-49b2-ae39-a5cbebd0ea98)
 
+   ![20240924215039_rec_](https://github.com/user-attachments/assets/1603bad4-3f62-49b2-ae39-a5cbebd0ea98)
 
 # 需要修复的bug及功能优化
 
 1. 通过ctrl+左和ctrl+右来控制子窗口间切换
 2. 然后可以通过键盘的上下来控制菜单 的移动
 3. 窗口显示当前拉取的备份信息
-
+4. 软件内链接需要使用系统浏览器打开，现在是在软件内打开(完成)
 
 # 远期的优化
 

@@ -24,9 +24,17 @@ export default function AdminAbout() {
       <div className=" flex flex-col space-y-2">
         <div> {`copyright@${new Date().getFullYear()}`}</div>
         <div> {`author:whyzi@qq.com`}</div>
-        <a href={'https://github.com/ftyszyx/lockpass'}>
-          github:https://github.com/ftyszyx/lockpass
-        </a>
+        <div className=" flex flex-row">
+          <div>github:</div>
+          <a
+            className="text-blue-500 cursor-pointer"
+            onClick={async () => {
+              await ipc_call_normal(webToManMsg.OpenShell, 'https://github.com/ftyszyx/lockpass')
+            }}
+          >
+            https://github.com/ftyszyx/lockpass
+          </a>
+        </div>
       </div>
     </div>
   )
