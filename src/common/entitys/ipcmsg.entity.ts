@@ -39,11 +39,13 @@ export enum webToManMsg {
   UpdateTrayMenu = 'UpdateTrayMenu',
   Backup_local = 'BackupFromLocal',
   Recover_local = 'RestoreFromLocal',
-  Backup_alidrive = 'BackupFromAliDrive',
-  Recover_alidrive = 'RestoreFromAliDrive',
-  Delete_alidrive_file = 'DeleteFromAliDrive',
-  Trash_alidrive_file = 'trashFromAliDrive',
-  GetAllBackups_alidrive = 'GetAllBackupsFromAliDrive',
+  //drive
+  BackupByDrive = 'BackupFromDrive',
+  RecoverByDrive = 'RestoreFromDrive',
+  DeleteByDrive = 'DeleteFromDrive',
+  TrashByDrive = 'trashFromDrive',
+  GetFilelistByDrive = 'GetAllBackupsFromDrive',
+  //app
   QuitAPP = 'QuitAPP',
   ImportCSV = 'ImportCSV',
   ExputCSV = 'ExputCSV',

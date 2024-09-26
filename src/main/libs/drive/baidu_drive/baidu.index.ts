@@ -1,4 +1,5 @@
-import { DriveType, DriveBase, DriveFileItemBase, DriveUserSetBase } from '../drive.base'
+import { DriveBase, DriveFileItemBase, DriveUserSetBase } from '../drive.base'
+import { DriveType } from '@common/entitys/drive.entity'
 export interface BaiduDriveFileItem extends DriveFileItemBase {}
 
 export interface BaiduDriveUserSet extends DriveUserSetBase {}
@@ -9,9 +10,11 @@ export class BaiduDrive extends DriveBase<BaiduDriveFileItem, BaiduDriveUserSet>
   async deeplinkProcess(_params: URLSearchParams) {}
   async Login(): Promise<void> {}
 
-  async upLoadFile(_file: string, _local_path: string): Promise<void> {}
+  async UploadFile(_file: string, _local_path: string): Promise<string> {
+    return ''
+  }
 
-  async downLoadFile(_file: string, _local_path: string): Promise<void> {}
+  async DownLoadFile(_file: string, _local_path: string): Promise<void> {}
 
   async GetFileList(): Promise<BaiduDriveFileItem[]> {
     return []

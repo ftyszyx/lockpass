@@ -1,11 +1,7 @@
 import { SYS_PROTOL_URL } from '@common/gloabl'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
-import { AliyunData } from './ali_drive/def'
 import AppModel from '@main/models/app.model'
-import { AliDrive } from './ali_drive/aliyun.index'
-import { BaiduDrive } from './baidu_drive/baidu.index'
-import { GoogleDrive } from './google_drive/google.index'
-export interface DriveBaseI {}
+import { DriveType } from '@common/entitys/drive.entity'
 export interface DriveUserSetBase {
   access_token: string
   refresh_token: string
@@ -15,19 +11,7 @@ export interface DriveUserSetBase {
 
 export interface DriveFileItemBase {}
 
-export interface DriveUserSet {
-  aliyun?: AliyunData
-}
-
-export enum DriveType {
-  aliyun = 'aliyun',
-  baidu = 'baidu',
-  google = 'google'
-}
-
-export class DriveBase<FileT extends DriveFileItemBase, UserT extends DriveUserSetBase>
-  implements DriveBaseI
-{
+export class DriveBase<FileT extends DriveFileItemBase, UserT extends DriveUserSetBase> {
   private _parent_dir_name: string = 'lockpass_backup'
   private _redirect_url: string = SYS_PROTOL_URL
   private _callback_path: string = 'auth'
@@ -48,16 +32,19 @@ export class DriveBase<FileT extends DriveFileItemBase, UserT extends DriveUserS
   }
 
   public initSet(): void {
-    this._user_set = AppModel.getInstance().set.drive_user_set[this.name]
+    this._user_set = AppModel.getInstance().set.drive_user_set?.[this.name]
   }
 
   get userData(): UserT {
     return this._user_set
   }
 
-  public SaveUserData() {
-    const olddata = AppModel.getInstance().set.drive_user_set
-    AppModel.getInstance().set.setDriveUserSet({ ...olddata, [this.name]: this.userData })
+  public SetUerData(user_set: UserT, save: boolean) {
+    this._user_set = user_set
+    if (save) {
+      const olddata = AppModel.getInstance().set.drive_user_set
+      AppModel.getInstance().set.setDriveUserSet({ ...olddata, [this.name]: user_set })
+    }
   }
 
   get parent_dir_name() {
@@ -68,35 +55,29 @@ export class DriveBase<FileT extends DriveFileItemBase, UserT extends DriveUserS
     return `${this._redirect_url}${this._callback_path}`
   }
 
-  async needLogin(): Promise<boolean> {
-    return false
+  async NeedLogin(): Promise<boolean> {
+    throw new Error('not implement needlogin')
   }
 
-  async Login() {}
+  async Login() {
+    throw new Error('not implement login')
+  }
 
-  async upLoadFile(_file: string, _local_path: string) {}
+  async UploadFile(_file: string, _local_path: string): Promise<string> {
+    throw new Error('not implement upload')
+  }
 
-  async downLoadFile(_file: string, _local_path: string) {}
+  async DownLoadFile(_file: string, _local_path: string) {
+    throw new Error('not implement download')
+  }
   async GetFileList(): Promise<FileT[]> {
-    return []
+    throw new Error('not implement getfilelist')
   }
 
-  async DeleteFile(_file_id: string) {}
-  async TrashFile(_file_id: string) {}
-}
-
-export class DriveManger {
-  drives: { [key: string]: DriveBase<DriveFileItemBase, DriveUserSetBase> } = {}
-  AddDrive(drive: DriveBase<DriveFileItemBase, DriveUserSetBase>) {
-    this.drives[drive.name] = drive
+  async DeleteFile(_file_id: string) {
+    throw new Error('not implement deletefile')
   }
-
-  GetDrive(name: DriveType) {
-    return this.drives[name]
+  async TrashFile(_file_id: string) {
+    throw new Error('not implement trashfile')
   }
 }
-
-export const DriveMangerInstance = new DriveManger()
-DriveMangerInstance.AddDrive(new AliDrive())
-DriveMangerInstance.AddDrive(new BaiduDrive())
-DriveMangerInstance.AddDrive(new GoogleDrive())

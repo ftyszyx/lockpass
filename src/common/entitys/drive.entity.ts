@@ -14,3 +14,9 @@ export interface BackupFileItem {
 
 export type FileCateGory = 'video' | 'doc' | 'audio' | 'zip' | 'others' | 'image'
 export type FileType = 'file' | 'folder' | 'all'
+
+export enum DriveType {
+  aliyun = 'aliyun',
+  baidu = 'baidu',
+  google = 'google'
+}

@@ -5,7 +5,7 @@
  */
 import { shell } from 'electron'
 import { Log } from '../../log'
-import { downloadFileFromUrl, SendRequest, uploadFileToUrl } from '../../net_help'
+import { downloadFileFromUrl, RequestType, SendRequest, uploadFileToUrl } from '../../net_help'
 import {
   AliyunCreateFileResp,
   AliyunData,
@@ -20,7 +20,8 @@ import {
 import fs from 'fs'
 import { ShowErrToMain, ShowInfoToMain } from '../../other.help'
 import { LangHelper } from '@common/lang'
-import { DriveBase, DriveType } from '../drive.base'
+import { DriveBase } from '../drive.base'
+import { DriveType } from '@common/entitys/drive.entity'
 
 export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   private _host: string = 'https://openapi.alipan.com'
@@ -64,18 +65,22 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
     }
     const res = await SendRequest<AliyunData>(
       url.toString(),
-      'POST',
+      RequestType.Post,
       {
         'Content-Type': 'application/json'
       },
       senddata
     )
-    this.userData.access_token = res.access_token
-    this.userData.refresh_token = res.refresh_token
-    this.userData.expires_in = Math.floor(Date.now() / 1000) + this.userData.expires_in
-    this.userData.refresh_token_expire_time = Math.floor(Date.now() / 1000) + 90 * 24 * 60 * 60
-    this.userData.drive_info = await this.getDriveInfo()
-    this.SaveUserData()
+    let user_set: AliyunData = {
+      token_type: res.token_type,
+      access_token: res.access_token,
+      refresh_token: res.refresh_token,
+      expires_in: Math.floor(Date.now() / 1000) + res.expires_in,
+      refresh_token_expire_time: Math.floor(Date.now() / 1000) + 90 * 24 * 60 * 60
+    }
+    this.SetUerData(user_set, false)
+    user_set.drive_info = await this.getDriveInfo()
+    this.SetUerData(user_set, true)
     Log.info('get authData ok', JSON.stringify(this.userData))
     if (code) {
       ShowInfoToMain(LangHelper.getString('mydropmenu.aliyunauthok'))
@@ -91,7 +96,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
 
   private async getDriveInfo(): Promise<AliyunDriveInfo> {
     const url = `${this._host}/adrive/v1.0/user/getDriveInfo`
-    return await SendRequest<AliyunDriveInfo>(url, 'POST', this.getHeaders(), null)
+    return await SendRequest<AliyunDriveInfo>(url, RequestType.Post, this.getHeaders(), null)
   }
 
   private async createFolderInRoot(folder_name: string): Promise<AliyunCreateFileResp> {
@@ -111,7 +116,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
     type: string
   ): Promise<AliyunCreateFileResp> {
     const url = `${this._host}/adrive/v1.0/openFile/create`
-    const res = await SendRequest<AliyunCreateFileResp>(url, 'POST', this.getHeaders(), {
+    const res = await SendRequest<AliyunCreateFileResp>(url, RequestType.Post, this.getHeaders(), {
       drive_id: this.userData.drive_info.default_drive_id,
       parent_file_id: parentfile_id,
       name: file_name,
@@ -123,7 +128,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
 
   async TrashFile(file_id: string) {
     const url = `${this._host}/adrive/v1.0/openFile/recyclebin/trash`
-    await SendRequest<any>(url, 'POST', this.getHeaders(), {
+    await SendRequest<any>(url, RequestType.Post, this.getHeaders(), {
       drive_id: this.userData.drive_info.default_drive_id,
       file_id: file_id
     })
@@ -131,7 +136,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
 
   async DeleteFile(file_id: string) {
     const url = `${this._host}/adrive/v1.0/openFile/delete`
-    await SendRequest<any>(url, 'POST', this.getHeaders(), {
+    await SendRequest<any>(url, RequestType.Post, this.getHeaders(), {
       drive_id: this.userData.drive_info.default_drive_id,
       file_id: file_id
     })
@@ -169,7 +174,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
     }
     const fileinfo = await SendRequest<AliyunFileInfo>(
       `${this._host}/adrive/v1.0/openFile/complete`,
-      'POST',
+      RequestType.Post,
       this.getHeaders(),
       {
         drive_id: this.userData.drive_info.default_drive_id,
@@ -178,9 +183,10 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
       }
     )
     Log.info('upload file ok', JSON.stringify(fileinfo))
+    return `${this.parent_dir_name}/${file_name}`
   }
 
-  async downloadFile(file_name: string, local_path: string) {
+  async DownLoadFile(file_name: string, local_path: string) {
     const res1 = await this.createFolderInRoot(this.parent_dir_name)
     const res = await this._createFile(res1.file_id, file_name)
     if (!res.exist) {
@@ -188,11 +194,16 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
       throw new Error(`file not exit:${file_name}`)
     }
     const url = `${this._host}/adrive/v1.0/openFile/getDownloadUrl`
-    const downloadInfo = await SendRequest<AliyunFileDownloadInfo>(url, 'POST', this.getHeaders(), {
-      drive_id: this.userData.drive_info.default_drive_id,
-      file_id: res.file_id,
-      expire_sec: 900
-    })
+    const downloadInfo = await SendRequest<AliyunFileDownloadInfo>(
+      url,
+      RequestType.Post,
+      this.getHeaders(),
+      {
+        drive_id: this.userData.drive_info.default_drive_id,
+        file_id: res.file_id,
+        expire_sec: 900
+      }
+    )
     await downloadFileFromUrl(downloadInfo.url, local_path)
   }
 
@@ -202,7 +213,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   ): Promise<AliyunFileListItem[]> {
     const parent_info = await this.createFolderInRoot(this.parent_dir_name)
     const url = `${this._host}/adrive/v1.0/openFile/list`
-    const res = await SendRequest<AliyunFilelistResp>(url, 'POST', this.getHeaders(), {
+    const res = await SendRequest<AliyunFilelistResp>(url, RequestType.Post, this.getHeaders(), {
       drive_id: this.userData.drive_info.default_drive_id,
       parent_file_id: parent_info.file_id,
       file_cateGory: filetype,
@@ -214,11 +225,12 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
     return res.items
   }
 
-  async getFileList() {
+  async GetFileList() {
+    console.log('getFileList aliyun')
     return await this._getLatestFiliList('zip', 'file')
   }
 
-  async needLogin() {
+  async NeedLogin() {
     const timenow = Math.floor(Date.now() / 1000)
     if (!this.userData) return true
     if (this.userData.expires_in > timenow) return false

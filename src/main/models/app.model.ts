@@ -31,14 +31,19 @@ import {
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
-import { AliDrive } from '@main/libs/drive/ali_drive/aliyun.index'
 import { ShowErrToMain } from '@main/libs/other.help'
 import { GetImportVaultName, str2csv } from '@common/help'
 import { ParseCsvFile } from '@main/libs/csv_parser'
 import { AppSetModel } from './app.set'
 import { BaseEntity, SearchField } from '@common/entitys/db.entity'
 import { AutoUpdateHelper } from './auto.update'
-
+import {
+  checkAlidriveAuth,
+  DownloadFileByDrive,
+  updateFileByDrive
+} from '@main/libs/drive/drive.manger'
+import { DriveType } from '@common/entitys/drive.entity'
+import { initDrive } from '@main/libs/drive/drive.manger'
 class AppModel {
   public mainwin: MainWindow | null = null
   public quickwin: QuickSearchWindow | null = null
@@ -48,7 +53,6 @@ class AppModel {
   public vaultItem: VaultItemService | null = null
   public appInfo: AppService | null = null
   private _lock: boolean = false
-  public ali_drive: AliDrive | null = null
   private _lock_timeout: number = 0
   private _logined: boolean = false
   public user: UserService | null = null
@@ -119,6 +123,7 @@ class AppModel {
     this.vaultItem = new VaultItemService()
     this.user = new UserService()
     this.appInfo = new AppService()
+    initDrive()
     Log.info('begin open db')
     await this.db_helper.OpenDb()
     Log.info('init tables')
@@ -136,7 +141,6 @@ class AppModel {
     if (this.set.sql_ver != SQL_VER_CODE) {
       this.set.changeSqlVer(SQL_VER_CODE)
     }
-    this.ali_drive = new AliDrive()
     app.setPath('crashDumps', path.join(PathHelper.getHomeDir(), 'crashs'))
     crashReporter.start({
       productName: 'MyElectron',
@@ -404,28 +408,16 @@ class AppModel {
     return res
   }
   //aliyun drive
-  private async checkAlidriveAuth(): Promise<boolean> {
-    const needauth = await this.ali_drive?.needLogin()
-    if (needauth) {
-      this.ali_drive.Login()
-      AppEvent.emit(
-        AppEventType.Message,
-        'error',
-        LangHelper.getString('mydropmenu.aliyunneedauth')
-      )
-      return false
-    }
-    return true
-  }
 
-  async BackupByAliyun(custom_name: string): Promise<string | null> {
-    if ((await this.checkAlidriveAuth()) == false) return null
+  async BackupByDrive(drive_type: DriveType, custom_name: string): Promise<string | null> {
+    if ((await checkAlidriveAuth(drive_type)) == false) return null
     const zip_file = await this.BackupSystem()
     if (zip_file == null) return null
     const filename = custom_name || path.basename(zip_file)
     Log.info(`begin upload file ${zip_file} to aliyun:${filename}`)
+    let res = ''
     try {
-      await this.ali_drive.UploadFile(filename, zip_file)
+      res = await updateFileByDrive(drive_type, filename, zip_file)
     } catch (e: any) {
       Log.Exception(e, 'upload file error:', e.message)
       fs.unlinkSync(zip_file)
@@ -435,27 +427,22 @@ class AppModel {
     fs.unlinkSync(zip_file)
     Log.info('upload file ok')
     this.set.set_vault_change_not_backup(false)
-    return `${this.ali_drive.parent_dir_name}/${filename}`
+    return res
   }
 
-  async RecoverByAliyun(backup_file_name: string) {
+  async RecoverByDrive(drive_type: DriveType, backup_file_name: string) {
     Log.info(`begin download file ${backup_file_name} from aliyun:`)
-    if ((await this.checkAlidriveAuth()) == false) return null
+    if ((await checkAlidriveAuth(drive_type)) == false) return null
     const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup_aliyun')
     if (fs.existsSync(backup_path_dir) == false) {
       fs.mkdirSync(backup_path_dir)
     }
     const backup_file_path = path.join(backup_path_dir, backup_file_name)
-    await this.ali_drive.downloadFile(backup_file_name, backup_file_path)
+    await DownloadFileByDrive(drive_type, backup_file_name, backup_file_path)
     const res = await this.RecoverSystemFromBackupFile(backup_file_path)
     fs.unlinkSync(backup_file_path)
     if (res) Log.info('recover system from aliyun ok')
     return res
-  }
-
-  async GetAliyunBackupList() {
-    if ((await this.checkAlidriveAuth()) == false) return []
-    return await this.ali_drive.GetFileList()
   }
 
   //导入

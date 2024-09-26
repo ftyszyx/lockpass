@@ -1,4 +1,4 @@
-import { BackupFileItem } from '@common/entitys/backup.entity'
+import { BackupFileItem } from '@common/entitys/drive.entity'
 import { FormatTime, getFileSize } from '@common/help'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, Modal } from 'antd'

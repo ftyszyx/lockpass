@@ -2,10 +2,14 @@ import { net } from 'electron'
 import { Log } from './log'
 import https, { RequestOptions } from 'https'
 import fs from 'fs'
+export enum RequestType {
+  Get = 'GET',
+  Post = 'POST'
+}
 
 export async function SendRequest<T>(
   url: string,
-  method: string,
+  method: RequestType,
   headers: Record<string, any>,
   data: any
 ): Promise<T> {

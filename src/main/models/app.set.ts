@@ -7,7 +7,7 @@ import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { app } from 'electron'
-import { DriveUserSet } from '@main/libs/drive/drive.base'
+import { DriveUserSet } from '@main/libs/drive/drive.manger'
 
 export type AppSetInfo = {
   lang?: string

@@ -7,8 +7,37 @@ import { VaultImportType, VaultItem } from '@common/entitys/vault_item.entity'
 import { renderViewType } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
+import { DriveType } from '@common/entitys/drive.entity'
+import {
+  deleteFileByDrive,
+  GetFileListByDrive,
+  TrashFileByDrive
+} from '@main/libs/drive/drive.manger'
+
+export function initDriveApi() {
+  ipcMain.handle(webToManMsg.BackupByDrive, (_, drive_type: DriveType, custom_name: string) => {
+    return AppModel.getInstance().BackupByDrive(drive_type, custom_name)
+  })
+
+  ipcMain.handle(webToManMsg.RecoverByDrive, (_, drive_type, filename) => {
+    return AppModel.getInstance().RecoverByDrive(drive_type, filename)
+  })
+
+  ipcMain.handle(webToManMsg.GetFilelistByDrive, async (_, drive_type: DriveType) => {
+    return await GetFileListByDrive(drive_type)
+  })
+
+  ipcMain.handle(webToManMsg.DeleteByDrive, async (_, drive_type: DriveType, file_id) => {
+    return await deleteFileByDrive(drive_type, file_id)
+  })
+
+  ipcMain.handle(webToManMsg.TrashByDrive, async (_, drive_type: DriveType, file_id) => {
+    return await TrashFileByDrive(drive_type, file_id)
+  })
+}
 
 export function initAllApi() {
+  initDriveApi()
   //system
   ipcMain.handle(webToManMsg.SetLang, (_, lang) => {
     AppModel.getInstance().set.changeLang(lang)
@@ -68,32 +97,12 @@ export function initAllApi() {
       AppModel.getInstance().quickwin?.showOrHide(showorHide)
   })
 
-  ipcMain.handle(webToManMsg.Backup_alidrive, (_, custom_name: string) => {
-    return AppModel.getInstance().BackupByAliyun(custom_name)
-  })
-
-  ipcMain.handle(webToManMsg.Recover_alidrive, (_, filename) => {
-    return AppModel.getInstance().RecoverByAliyun(filename)
-  })
-
-  ipcMain.handle(webToManMsg.GetAllBackups_alidrive, async () => {
-    return await AppModel.getInstance().GetAliyunBackupList()
-  })
-
   ipcMain.handle(webToManMsg.IsVaultChangeNotBackup, () => {
     return AppModel.getInstance().set.vault_change_not_backup
   })
 
   ipcMain.handle(webToManMsg.ImportCSV, (_, type: VaultImportType) => {
     return AppModel.getInstance().ImportCsv(type)
-  })
-
-  ipcMain.handle(webToManMsg.Delete_alidrive_file, async (_, file_id) => {
-    return await AppModel.getInstance().ali_drive.DeleteFile(file_id)
-  })
-
-  ipcMain.handle(webToManMsg.Trash_alidrive_file, async (_, file_id) => {
-    return await AppModel.getInstance().ali_drive.TrashFile(file_id)
   })
 
   ipcMain.handle(webToManMsg.ExputCSV, () => {
