@@ -1,10 +1,7 @@
 import { BackupFileItem } from '@common/entitys/backup.entity'
+import { DriveUserSetBase } from '@main/libs/drive/drive.base'
 
-export interface AliyunData {
-  access_token: string
-  refresh_token: string
-  refresh_token_expire_time: number
-  expires_in: number
+export interface AliyunData extends DriveUserSetBase {
   token_type: string
   drive_info: AliyunDriveInfo
 }

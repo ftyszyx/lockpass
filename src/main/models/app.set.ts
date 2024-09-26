@@ -1,5 +1,4 @@
 import { APP_VER_CODE, SQL_VER_CODE } from '@common/gloabl'
-import { AliyunData } from '@main/libs/ali_drive/def'
 import fs from 'fs'
 import path from 'path'
 import { PathHelper } from '@main/libs/path'
@@ -8,8 +7,9 @@ import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { app } from 'electron'
+import { DriveUserSet } from '@main/libs/drive/drive.base'
 
-export interface AppSetInfo {
+export type AppSetInfo = {
   lang?: string
   sql_ver: number
   app_ver: number
@@ -18,7 +18,7 @@ export interface AppSetInfo {
   window_width: number
   window_height: number
   open_dev?: boolean
-  aliyun_data?: AliyunData
+  drive_user_set?: DriveUserSet
 }
 
 export interface TempSetInfo {
@@ -102,6 +102,15 @@ export class AppSetModel {
     fs.writeFileSync(this._temp_set_path, JSON.stringify(this._temp_set))
   }
 
+  get drive_user_set() {
+    return this.set.drive_user_set
+  }
+
+  setDriveUserSet(info: DriveUserSet) {
+    this.set.drive_user_set = info
+    this.saveSet()
+  }
+
   public set_vault_change_not_backup(flag: boolean) {
     this._temp_set.vault_change_not_backup = flag
     AppEvent.emit(AppEventType.VaultChangeNotBackup, flag)
@@ -123,15 +132,6 @@ export class AppSetModel {
 
   get sql_ver() {
     return this.set.sql_ver
-  }
-
-  public get aliyunData() {
-    return this.set.aliyun_data
-  }
-
-  public setAliyunData(data: AliyunData) {
-    this.set.aliyun_data = data
-    this.saveSet()
   }
 
   public GetLastUserId() {

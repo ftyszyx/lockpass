@@ -31,7 +31,7 @@ import {
 import zl from 'zip-lib'
 import { SqliteHelper } from '@main/libs/sqlite_help'
 import { AppService } from '@main/services/app.service'
-import { AliDrive } from '@main/libs/ali_drive'
+import { AliDrive } from '@main/libs/drive/ali_drive/aliyun.index'
 import { ShowErrToMain } from '@main/libs/other.help'
 import { GetImportVaultName, str2csv } from '@common/help'
 import { ParseCsvFile } from '@main/libs/csv_parser'
@@ -405,9 +405,9 @@ class AppModel {
   }
   //aliyun drive
   private async checkAlidriveAuth(): Promise<boolean> {
-    const needauth = await this.ali_drive?.needAuth()
+    const needauth = await this.ali_drive?.needLogin()
     if (needauth) {
-      this.ali_drive.auth()
+      this.ali_drive.Login()
       AppEvent.emit(
         AppEventType.Message,
         'error',
@@ -455,7 +455,7 @@ class AppModel {
 
   async GetAliyunBackupList() {
     if ((await this.checkAlidriveAuth()) == false) return []
-    return await this.ali_drive.getLatestFiliList('zip', 'file')
+    return await this.ali_drive.GetFileList()
   }
 
   //导入
