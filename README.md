@@ -252,32 +252,28 @@ npm run dev
 ```
 npm install googelapis
 
-``
+```
 然后写了点代码，准备测试下，发现npm run dev变慢好多。
 我还以为我电脑出问题了，把进程清了，再试，还是好慢，看了下输出
 好家伙
 ```
-
 ✓ 2845 modules transformed.
 out/main/index.js 18,416.85 kB │ map: 32,444.83 kB
 ✓ built in 19.16s
-
 ```
 vite 编译花了19s，这个main脚本有18M，好吓人。
 我回看了一下修改记录，觉得除了加了一个google api的库，没有其它的。
 我把google api这个库删除
-```
 
+```
 npm uninstall goolgeapi
-
 ```
+
 再运行一下，果然，编译只用时1s,大小只有700k
 ```
-
 ✓ 444 modules transformed.
 out/main/index.js 741.03 kB │ map: 1,421.00 kB
 ✓ built in 1.16s
-
 ```
 google你就不能把代码分几个模块啊，真是服了。
 
