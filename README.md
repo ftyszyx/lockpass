@@ -240,16 +240,66 @@ npm run dev
 
    ![20240924215039_rec_](https://github.com/user-attachments/assets/1603bad4-3f62-49b2-ae39-a5cbebd0ea98)
 
+## 2024/9/29
+
+### google drive 接入奇葩经历
+
+#### 加了google api库后，脚本增加0.5M->17M，打包时间由1s->19s
+
+找到了官方的库：https://github.com/googleapis/google-api-nodejs-client
+按照要求安装
+
+```
+npm install googelapis
+
+``
+然后写了点代码，准备测试下，发现npm run dev变慢好多。
+我还以为我电脑出问题了，把进程清了，再试，还是好慢，看了下输出
+好家伙
+```
+
+✓ 2845 modules transformed.
+out/main/index.js 18,416.85 kB │ map: 32,444.83 kB
+✓ built in 19.16s
+
+```
+vite 编译花了19s，这个main脚本有18M，好吓人。
+我回看了一下修改记录，觉得除了加了一个google api的库，没有其它的。
+我把google api这个库删除
+```
+
+npm uninstall goolgeapi
+
+```
+再运行一下，果然，编译只用时1s,大小只有700k
+```
+
+✓ 444 modules transformed.
+out/main/index.js 741.03 kB │ map: 1,421.00 kB
+✓ built in 1.16s
+
+```
+google你就不能把代码分几个模块啊，真是服了。
+
+
+
+
 # 需要修复的bug及功能优化
 
 1. 通过ctrl+左和ctrl+右来控制子窗口间切换
 2. 然后可以通过键盘的上下来控制菜单 的移动
 3. 窗口显示当前拉取的备份信息
 4. 软件内链接需要使用系统浏览器打开，现在是在软件内打开(完成)
-5. 百度和goolge网盘备份功能
+5. 百度和goolge网盘备份功能(放弃)
+   百度网盘创建应用需要企业，放弃
+   google api库太大了，不搞了,另外redirect url不支持deeplink
+
+
+
 
 # 远期的优化
 
 1. 自己上传图片更换
 1. 增加一个常用密码列表的设置
 1. 加密图片信息
+```

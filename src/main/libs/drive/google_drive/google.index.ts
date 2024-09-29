@@ -1,10 +1,10 @@
 // https://developers.google.com/drive/api/quickstart/nodejs?hl=zh-cn
 import { DriveBase, DriveFileItemBase, DriveUserSetBase } from '../drive.base'
 import { DriveType } from '@common/entitys/drive.entity'
-import { google } from 'googleapis'
+// import { google } from 'googleapis'
 import { shell } from 'electron'
 import { RequestType, SendRequest } from '@main/libs/net_help'
-const OAuth2 = google.auth.OAuth2
+// const OAuth2 = google.auth.OAuth2
 
 export interface GoogleDriveFileItem extends DriveFileItemBase {}
 
@@ -63,12 +63,15 @@ export class GoogleDrive extends DriveBase<GoogleDriveFileItem, GoogleDriveUserS
 
   getAuthenticationUrl() {
     console.log('RedirectUrl', this.RedirectUrl)
+    /*
     const oauth2Client = new OAuth2(this.client_id, this.client_secret, this.RedirectUrl)
     const url = oauth2Client.generateAuthUrl({
       access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
       scope: this.SCOPES // If you only need one scope you can pass it as string
     })
     return url
+    */
+    return ''
   }
 
   async Login(): Promise<void> {
