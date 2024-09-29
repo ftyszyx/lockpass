@@ -10,6 +10,7 @@ import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { DriveType } from '@common/entitys/drive.entity'
 import {
   deleteFileByDrive,
+  DriveMangerInstance,
   GetFileListByDrive,
   TrashFileByDrive
 } from '@main/libs/drive/drive.manger'
@@ -33,6 +34,10 @@ export function initDriveApi() {
 
   ipcMain.handle(webToManMsg.TrashByDrive, async (_, drive_type: DriveType, file_id) => {
     return await TrashFileByDrive(drive_type, file_id)
+  })
+
+  ipcMain.handle(webToManMsg.LoginGoogledrive, async (_) => {
+    return await DriveMangerInstance.GetDrive(DriveType.google).Login()
   })
 }
 

@@ -63,7 +63,10 @@ export enum webToManMsg {
   InstallUpdate = 'InstallUpdate',
   CheckUpdateStatus = 'CheckUpdateStatus',
   IsVaultChangeNotBackup = 'IsVaultChangeNotBackup',
-  OpenShell = 'OpenShell'
+  OpenShell = 'OpenShell',
+
+  //test
+  LoginGoogledrive = 'LoginGoogledrive'
 }
 
 export enum MainToWebMsg {

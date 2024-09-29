@@ -7,6 +7,9 @@ import { useHistory } from '@renderer/libs/router'
 import { PagePath } from '@common/entitys/page.entity'
 import { MenuParamNull } from '@renderer/entitys/menu.entity'
 import { useShallow } from 'zustand/react/shallow'
+// import { Button } from 'antd'
+// import { ipc_call_normal } from '@renderer/libs/tools/other'
+// import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 
 function AdminLayout(props: ChildProps): JSX.Element {
   const [getUserSet, getVaults, setQuickInput] = use_appstore(
@@ -66,6 +69,13 @@ function AdminLayout(props: ChildProps): JSX.Element {
   return (
     <div className="flex flex-row h-screen">
       <MyMenu />
+      {/* <Button
+        onClick={async () => {
+          await ipc_call_normal(webToManMsg.LoginGoogledrive)
+        }}
+      >
+        goole login
+      </Button> */}
       {/* right side */}
       <div className=" flex-grow ">
         <div className=" min-h-[280px] h-full">{props.children}</div>
