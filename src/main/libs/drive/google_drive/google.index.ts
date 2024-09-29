@@ -62,6 +62,7 @@ export class GoogleDrive extends DriveBase<GoogleDriveFileItem, GoogleDriveUserS
   }
 
   getAuthenticationUrl() {
+    console.log('RedirectUrl', this.RedirectUrl)
     const oauth2Client = new OAuth2(this.client_id, this.client_secret, this.RedirectUrl)
     const url = oauth2Client.generateAuthUrl({
       access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
