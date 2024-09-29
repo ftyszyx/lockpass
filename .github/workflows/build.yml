@@ -44,4 +44,6 @@ jobs:
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          ALIYUN_CLIENT_SECRET: ${{ secrets.ALIYUN_CLIENT_SECRET }}
         run: npm run release

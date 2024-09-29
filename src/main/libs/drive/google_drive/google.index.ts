@@ -12,7 +12,7 @@ export interface GoogleDriveUserSet extends DriveUserSetBase {}
 export class GoogleDrive extends DriveBase<GoogleDriveFileItem, GoogleDriveUserSet> {
   SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
   client_id = '122282570207-79ebmbqii93rjkecu3jvfq3e6k108ef0.apps.googleusercontent.com'
-  client_secret = ''
+  client_secret = import.meta.env.GOOGLE_CLIENT_SECRET
   _host = 'https://accounts.google.com/'
   token_uri = 'https://oauth2.googleapis.com/token'
   auth_provider_x509_cert_url = 'https://www.googleapis.com/oauth2/v1/certs'
@@ -37,6 +37,7 @@ export class GoogleDrive extends DriveBase<GoogleDriveFileItem, GoogleDriveUserS
 
   private async _getToken(code: string, refresh_token: string) {
     const url = new URL(`${this._host}//oauth/access_token`)
+    console.log('secret', this.client_secret)
     const senddata = {
       client_id: this.client_id,
       client_secret: this.client_secret

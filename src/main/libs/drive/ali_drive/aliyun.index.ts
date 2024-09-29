@@ -27,7 +27,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   private _host: string = 'https://openapi.alipan.com'
   private _clientid: string = '34cb815617784156a4504565d8c55bd0'
   private _scope: string = 'user:base,file:all:read,file:all:write'
-  private _sceret: string = 'b4dda1481a4e45d28a8372df93a5f475'
+  private _sceret: string = import.meta.env.ALIYUN_CLIENT_SECRET
   private _partsize: number = 1024 * 1024 * 1024 * 4
 
   constructor() {
