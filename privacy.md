@@ -1,20 +1,3 @@
-App Privacy Policy Generator
-
-While App Privacy Policy Generator is completely FREE, it takes money to keep it running and updated. If you are able to, then consider contributing by:
-
-Sponsoring me on Github 👨🏻‍💻
-Buying me a cup of ☕
-If you are unable to contribute with funds, consider sharing it with your friends: Twitter, Linkedin, Facebook, Reddit
-
-...or adding a review/comment in the project's GuestBook 🤗
-
-Now sit back and choose the type of document you want to generate.
-Read FAQ
-
-The accuracy of the generated privacy policy and terms & conditions on this website is not legally binding. Use at your own risk.
-
-Read the full Disclaimer here
-
 Previous
 Privacy Policy
 Terms & Conditions
