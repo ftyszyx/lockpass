@@ -65,9 +65,9 @@ function AdminLayout(props: ChildProps): JSX.Element {
   }, [getUserSet().shortcut_local_add])
 
   return (
-    <div className=" flex flex-col">
+    <div className=" flex flex-col ">
       <Header />
-      <div className="flex flex-row ">
+      <div className="flex flex-row h-[calc(100vh-var(--view-height))]">
         <MyMenu />
         {/* right side */}
         <div className=" flex-grow ">
