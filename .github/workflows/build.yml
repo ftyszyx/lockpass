@@ -5,6 +5,7 @@ permissions:
   contents: write
 jobs:
   build:
+    environment: myblog
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
