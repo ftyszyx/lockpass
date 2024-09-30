@@ -1,4 +1,12 @@
 @charset "UTF-8";
+:root {
+  --header-height: 20px;
+  --footer-height: 0px;
+  --search-height: 50px;
+  --content-height: calc(
+    100vh - var(--search-height) - var(--header-height) - var(--footer-height)
+  );
+}
 /*css 初始化 */
 html,
 body,
@@ -137,14 +145,6 @@ em {
   /* width: 400px; */
   height: 30px;
   border: 0px;
-}
-
-.vault-sider {
-  height: calc(100vh - 90px);
-}
-
-.vault-conent {
-  height: calc(100vh - 90px);
 }
 
 .update_content ol {

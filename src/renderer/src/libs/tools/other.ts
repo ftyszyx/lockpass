@@ -9,6 +9,7 @@ import { VaultItem } from '@common/entitys/vault_item.entity'
 import { User } from '@common/entitys/user.entity'
 import { AppsetStore } from '@renderer/models/appset.model'
 import { getLabelStr } from './string'
+import { useState, useCallback } from 'react'
 
 export async function ipc_call<T>(api: string, ...args: any[]): Promise<T> {
   try {
@@ -39,6 +40,26 @@ export async function ipc_call_normal<T>(api: string, ...args: any[]): Promise<T
     ConsoleLog.error('ipc_call_noraml res err', api, e.message)
     return Promise.reject(e)
   }
+}
+
+export function useIpcInvoke<T>() {
+  const [loading, setLoading] = useState(false)
+  const invoke = useCallback(async (api: string, ...args: any[]): Promise<T> => {
+    setLoading(true)
+    try {
+      ConsoleLog.info('ipc_call req', api, args)
+      const res = (await window.electron.ipcRenderer.invoke(api, ...args)) as T
+      ConsoleLog.info('ipc_call_normal res', api, res)
+      return res
+    } catch (e: any) {
+      ConsoleLog.error(e)
+      ConsoleLog.error('ipc_call res err', api, e.message)
+      return Promise.reject(e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+  return { loading, invoke }
 }
 
 export async function GetAllUsers(

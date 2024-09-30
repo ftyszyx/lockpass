@@ -57,7 +57,7 @@ export default function Vault() {
       <div className="flex flex-col bg-gray-100">
         {contextHolder}
         {/* header */}
-        <div className="flex flex-row h-12 items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
+        <div className=" flex flex-row h-[var(--search-height)] items-center px-4 space-x-2 border-gray-300 border-b-[1px] border-solid">
           <Icon
             type={Icon_type.icon_fold}
             className={`cursor-pointer ${fold_menu ? ' rotate-180' : 'rotate-0'} font-[40px]`}
@@ -102,7 +102,7 @@ export default function Vault() {
             }}
           ></VaultSide>
           {/*  right side content*/}
-          <div className="flex flex-grow  overflow-auto h-[calc(100vh-100px)] ">
+          <div className="flex flex-grow  overflow-auto h-[var(--content-height)] ">
             {select_vault_item && (
               <div className=" flex flex-col w-full">
                 <div className="flex flex-row-reverse   p-4 border-b-2 border-solid border-gray-200">

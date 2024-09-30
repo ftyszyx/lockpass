@@ -20,3 +20,32 @@ export enum DriveType {
   baidu = 'baidu',
   google = 'google'
 }
+
+export interface CurUseBackupInfo {
+  drive_type: DriveType
+  file_name: string
+  time: string
+}
+
+export interface DriveUserSet {
+  aliyun?: AliyunData
+}
+
+export interface AliyunData extends DriveUserSetBase {
+  token_type: string
+  drive_info?: AliyunDriveInfo
+}
+
+export interface DriveUserSetBase {
+  access_token: string
+  refresh_token: string
+  refresh_token_expire_time: number
+  expires_in: number
+}
+
+export interface AliyunDriveInfo {
+  user_id: string
+  name: string
+  avatar: string
+  default_drive_id: string
+}

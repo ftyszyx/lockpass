@@ -2,12 +2,6 @@ import { SYS_PROTOL_URL } from '@common/gloabl'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import AppModel from '@main/models/app.model'
 import { DriveType } from '@common/entitys/drive.entity'
-export interface DriveUserSetBase {
-  access_token: string
-  refresh_token: string
-  refresh_token_expire_time: number
-  expires_in: number
-}
 
 export interface DriveFileItemBase {}
 
@@ -18,7 +12,6 @@ export class DriveBase<FileT extends DriveFileItemBase, UserT extends DriveUserS
   private _user_set: UserT
   constructor(public name: DriveType) {
     AppEvent.on(AppEventType.DeepLink, async (url: string) => {
-      console.log('url', url)
       const start_url = `${this.RedirectUrl}/?`
       if (!url.startsWith(start_url)) return
       const params = new URLSearchParams(url.replace(start_url, ''))

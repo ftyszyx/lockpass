@@ -15,18 +15,16 @@ import {
   MyReleaseNoteInfo,
   MyUpdateProgress
 } from '@common/entitys/update.entity'
+import { AppSetInfo } from '@common/entitys/set.entity'
+import { Header } from '@renderer/components/Header'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()
   const history = useHistory()
   const getText = use_appset((state) => state.getText)
-  const isVaultChangeNotBackup = use_appset(
-    (state) => state.IsVaultChangeNotBackup
-  ) as AppsetStore['IsVaultChangeNotBackup']
-  const setVaultChangeNotBackup = use_appset(
-    (state) => state.SetVaultChangeNotBackup
-  ) as AppsetStore['SetVaultChangeNotBackup']
+  const setVaultChangeNotBackup = use_appset((state) => state.SetVaultChangeNotBackup)
   const getLang = use_appset((state) => state.getLang)
+  const setAppSet = use_appset((state) => state.setAppSet)
   const [showProgress, setShowProgress] = useState(false)
   const [progressInfo, setProgress_info] = useState<MyUpdateProgress>(null)
   const appstore = use_appstore() as AppStore
@@ -142,19 +140,30 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
       ConsoleLog.info('VaultChangeNotBackup event', flag)
       setVaultChangeNotBackup(flag)
     })
+    window.electron.ipcRenderer.on(MainToWebMsg.AppSetChange, (_, setinfo: AppSetInfo) => {
+      ConsoleLog.info('AppSetChange event', setinfo)
+      setAppSet(setinfo)
+    })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LockApp)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.ShowVaulteItem)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.LoginOut)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.AppUpdateEvent)
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.VaultChangeNotBackup)
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.AppSetChange)
     }
   }, [])
 
   useEffect(() => {
+    getAppset()
     checkStatus()
     checkVaultChangeNotBackup()
   }, [])
+
+  async function getAppset() {
+    const setinfo = await ipc_call_normal<AppSetInfo>(webToManMsg.getAppSet)
+    setAppSet(setinfo)
+  }
 
   async function checkVaultChangeNotBackup() {
     const isVaultChangeNotBackup = await ipc_call_normal<boolean>(
@@ -211,22 +220,10 @@ export default function BaseLayout(props: ChildProps): JSX.Element {
 
   return (
     <div>
-      {/* <div className=" update_content">
-        <ol>
-          <li>test1</li>
-          <li>test2</li>
-          <li>test3</li>
-        </ol>
-      </div> */}
       <div>
         {messageContex}
         {props.children}
       </div>
-      {isVaultChangeNotBackup() && (
-        <div className="bg-black fixed bottom-0 w-full  text-center text-red-500 font-sans font-bold text-[16px]">
-          <p>{getText('admin_about.vault_change_not_backup')}</p>
-        </div>
-      )}
       {showProgress && (
         <Modal
           title={getText('update.title')}

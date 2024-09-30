@@ -104,7 +104,7 @@ export default function VaultSide(props: VaultSideProps) {
 
   return (
     <div
-      className={`${isVaultChangeNotBackup() ? ' pb-[20px]' : ''} h-[calc(100vh-50px)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative `}
+      className={` h-[var(--content-height)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative `}
     >
       {/* first line */}
       <div className="flex flex-row justify-between items-center p-2">

@@ -1,3 +1,4 @@
+import { AppSetInfo } from '@common/entitys/set.entity'
 import { LangHelper, LangItem } from '@common/lang'
 import { create } from 'zustand'
 
@@ -10,6 +11,9 @@ export interface AppsetStore {
   getText: (str: string, ...args: any[]) => string
   ChangeLang: (lang: string) => void
   version: string
+  app_set: AppSetInfo
+  setAppSet: (set: AppSetInfo) => void
+  getAppSet: () => AppSetInfo
   SetVersion: (version: string) => void
   //menu
   fold_menu: boolean
@@ -24,6 +28,7 @@ export const use_appset = create<AppsetStore>((set, get) => {
   return {
     fold_menu: false,
     lang: null,
+    app_set: {},
     vault_change_not_backup: false,
     initOK: false,
     version: '',
@@ -65,6 +70,14 @@ export const use_appset = create<AppsetStore>((set, get) => {
     },
     getText(str, ...args) {
       return get().lang?.getText(str, ...args)
+    },
+    setAppSet(setinfo: AppSetInfo) {
+      set((state) => {
+        return { ...state, app_set: { ...state.app_set, ...setinfo } }
+      })
+    },
+    getAppSet() {
+      return get().app_set
     }
   }
 })

@@ -293,5 +293,7 @@
   "shortcut.title": "shortcut:{0}",
   "home.title": "Vault",
   "home.add.title": "Add vault",
-  "home.add.button": "Add"
+  "home.add.button": "Add",
+  "footer.curbackup": "Current backup information:{0}",
+  "footer.normalinfo": "Current time:{0}"
 }

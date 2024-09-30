@@ -18,6 +18,9 @@ export enum AppEventType {
   LangChange = 'LangChange',
   UpdateEvent = 'UpdateEvent',
   SystemLock = 'SystemLock',
-  VaultChangeNotBackup = 'VaultChangeNotBackup'
+  VaultChangeNotBackup = 'VaultChangeNotBackup',
+  DriveLoginOk = 'DriveLoginOk',
+  DriveLoginErr = 'DriveLoginErr',
+  AppSetChange = 'AppSetChange'
 }
 export const AppEvent = new EventEmitter()

@@ -8,6 +8,7 @@ import { EntityType, renderViewType } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import AppModel from '@main/models/app.model'
 import { APP_NAME } from '@common/gloabl'
+import { AppSetInfo } from '@common/entitys/set.entity'
 export class WindowBase {
   protected witdth: number = 900
   protected height: number = 670
@@ -78,6 +79,9 @@ export class WindowBase {
         if (viewtype == this.windowType) this.setSize(width, height)
       }
     )
+    AppEvent.on(AppEventType.AppSetChange, (set: AppSetInfo) => {
+      this.win.webContents.send(MainToWebMsg.AppSetChange, set)
+    })
   }
 
   lockapp() {

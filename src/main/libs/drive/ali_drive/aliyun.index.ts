@@ -22,12 +22,13 @@ import { ShowErrToMain, ShowInfoToMain } from '../../other.help'
 import { LangHelper } from '@common/lang'
 import { DriveBase } from '../drive.base'
 import { DriveType } from '@common/entitys/drive.entity'
+import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   private _host: string = 'https://openapi.alipan.com'
   private _clientid: string = '34cb815617784156a4504565d8c55bd0'
   private _scope: string = 'user:base,file:all:read,file:all:write'
-  private _sceret: string = import.meta.env.ALIYUN_CLIENT_SECRET
+  private _sceret: string = import.meta.env.MAIN_VITE_ALIYUN_CLIENT_SECRET
   private _partsize: number = 1024 * 1024 * 1024 * 4
 
   constructor() {
@@ -37,8 +38,15 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   async deeplinkProcess(params: URLSearchParams) {
     const code = params.get('code')
     if (!code) return
-    console.log('code', code)
-    await this._getTokenByCode(code)
+    Log.info('aliyun login code', code)
+    try {
+      await this._getTokenByCode(code)
+      Log.info('aliyun login ok')
+      AppEvent.emit(AppEventType.DriveLoginOk)
+    } catch (e: any) {
+      Log.error('aliyun login err', e.message)
+      AppEvent.emit(AppEventType.DriveLoginErr, e.message)
+    }
   }
 
   private async _getTokenByCode(code: string) {
@@ -226,7 +234,6 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   }
 
   async GetFileList() {
-    console.log('getFileList aliyun')
     return await this._getLatestFiliList('zip', 'file')
   }
 
@@ -240,9 +247,13 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
   }
 
   async Login() {
-    const redirect_url = encodeURIComponent(this.RedirectUrl)
-    const url = `${this._host}/oauth/authorize?client_id=${this._clientid}&scope=${this._scope}&response_type=code&redirect_uri=${redirect_url}`
-    console.log('url', url)
-    shell.openExternal(url)
+    try {
+      const redirect_url = encodeURIComponent(this.RedirectUrl)
+      const url = `${this._host}/oauth/authorize?client_id=${this._clientid}&scope=${this._scope}&response_type=code&redirect_uri=${redirect_url}`
+      console.log('url', url)
+      await shell.openExternal(url)
+    } catch (e: any) {
+      AppEvent.emit(AppEventType.DriveLoginErr, e.message)
+    }
   }
 }

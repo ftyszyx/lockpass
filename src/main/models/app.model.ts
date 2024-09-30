@@ -42,7 +42,7 @@ import {
   DownloadFileByDrive,
   updateFileByDrive
 } from '@main/libs/drive/drive.manger'
-import { DriveType } from '@common/entitys/drive.entity'
+import { BackupFileItem, DriveType } from '@common/entitys/drive.entity'
 import { initDrive } from '@main/libs/drive/drive.manger'
 class AppModel {
   public mainwin: MainWindow | null = null
@@ -324,6 +324,7 @@ class AppModel {
       AppEvent.emit(AppEventType.Message, 'error', LangHelper.getString('main.backup.error'))
     }
     await this.db_helper.OpenDb()
+    this.set.set_vault_change_not_backup(false)
     return res
   }
 
@@ -410,7 +411,7 @@ class AppModel {
   //aliyun drive
 
   async BackupByDrive(drive_type: DriveType, custom_name: string): Promise<string | null> {
-    if ((await checkAlidriveAuth(drive_type)) == false) return null
+    await checkAlidriveAuth(drive_type)
     const zip_file = await this.BackupSystem()
     if (zip_file == null) return null
     const filename = custom_name || path.basename(zip_file)
@@ -430,18 +431,23 @@ class AppModel {
     return res
   }
 
-  async RecoverByDrive(drive_type: DriveType, backup_file_name: string) {
-    Log.info(`begin download file ${backup_file_name} from aliyun:`)
-    if ((await checkAlidriveAuth(drive_type)) == false) return null
+  async RecoverByDrive(drive_type: DriveType, fileinfo: BackupFileItem) {
+    Log.info(`begin download file ${fileinfo.name} from aliyun:`)
+    await checkAlidriveAuth(drive_type)
     const backup_path_dir = path.join(PathHelper.getHomeDir(), 'backup_aliyun')
     if (fs.existsSync(backup_path_dir) == false) {
       fs.mkdirSync(backup_path_dir)
     }
-    const backup_file_path = path.join(backup_path_dir, backup_file_name)
-    await DownloadFileByDrive(drive_type, backup_file_name, backup_file_path)
+    const backup_file_path = path.join(backup_path_dir, fileinfo.name)
+    await DownloadFileByDrive(drive_type, fileinfo.name, backup_file_path)
     const res = await this.RecoverSystemFromBackupFile(backup_file_path)
     fs.unlinkSync(backup_file_path)
     if (res) Log.info('recover system from aliyun ok')
+    this.set.setCurUseBackupInfo({
+      drive_type,
+      file_name: fileinfo.name,
+      time: fileinfo.updated_at
+    })
     return res
   }
 

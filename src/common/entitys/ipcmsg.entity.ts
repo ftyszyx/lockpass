@@ -63,6 +63,7 @@ export enum webToManMsg {
   InstallUpdate = 'InstallUpdate',
   CheckUpdateStatus = 'CheckUpdateStatus',
   IsVaultChangeNotBackup = 'IsVaultChangeNotBackup',
+  getAppSet = 'getAppSet',
   OpenShell = 'OpenShell',
 
   //test
@@ -84,5 +85,6 @@ export enum MainToWebMsg {
   LangChange = 'LangChange',
   AppUpdateEvent = 'UpdateEvent',
   VaultChangeNotBackup = 'VaultChangeNotBackup',
-  WindowsHide = 'windosHide'
+  WindowsHide = 'windosHide',
+  AppSetChange = 'AppSetChange'
 }

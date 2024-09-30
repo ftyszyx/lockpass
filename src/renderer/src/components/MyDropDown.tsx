@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Dropdown, message, Modal } from 'antd'
+import { Dropdown, message, Modal, Spin } from 'antd'
 import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import PasswordGenPanel from '@renderer/pages/Vault/PasswordGenPanel'
-import { GetAllVaultData, ipc_call_normal } from '@renderer/libs/tools/other'
+import { GetAllVaultData, ipc_call_normal, useIpcInvoke } from '@renderer/libs/tools/other'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
 import FileListSelectDialog from './FileListSelectDialog'
 import { BackupFileItem } from '@common/entitys/drive.entity'
@@ -26,17 +26,16 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
   const [showChangeMainPass, setShowChangeMainPass] = useState(false)
   const [showInputDialog, setShowInputDialog] = useState(false)
   const [BackupList, SetBackupList] = useState<BackupFileItem[]>([])
+  const { loading, invoke } = useIpcInvoke<any>()
   const [messageApi, contextHolder] = message.useMessage()
   const history = useHistory()
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
-  const appstore = use_appstore() as AppStore
+  const getText = use_appset((state) => state.getText)
+  const appstore = use_appstore()
   const getAllBackups = async () => {
-    await ipc_call_normal<BackupFileItem[]>(webToManMsg.GetFilelistByDrive, DriveType.aliyun).then(
-      (res) => {
-        if (res == null || res.length <= 0) return
-        SetBackupList(res)
-      }
-    )
+    await invoke(webToManMsg.GetFilelistByDrive, DriveType.aliyun).then((res: BackupFileItem[]) => {
+      if (res == null || res.length <= 0) return
+      SetBackupList(res)
+    })
   }
   return (
     <>
@@ -191,10 +190,10 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               key: 'app_set',
               label: getText('mydropmenu.set')
             },
-            {
-              key: 'app_restart',
-              label: 'app_restart'
-            },
+            // {
+            //   key: 'app_restart',
+            //   label: 'app_restart'
+            // },
             {
               key: 'check_update',
               label: getText('mydropmenu.checkupdate')
@@ -223,12 +222,12 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           filelist={BackupList}
           className="w-[80%]"
           onDelete={async (item) => {
-            await ipc_call_normal(webToManMsg.DeleteByDrive, DriveType.aliyun, item.file_id)
+            await invoke(webToManMsg.DeleteByDrive, DriveType.aliyun, item.file_id)
             await getAllBackups()
             message.success(getText('success'))
           }}
           onTrash={async (item) => {
-            await ipc_call_normal(webToManMsg.TrashByDrive, DriveType.aliyun, item.file_id)
+            await invoke(webToManMsg.TrashByDrive, DriveType.aliyun, item.file_id)
             await getAllBackups()
             message.success(getText('success'))
           }}
@@ -244,11 +243,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
               okText: getText('ok'),
               cancelText: getText('cancel'),
               onOk: () => {
-                ipc_call_normal<boolean>(
-                  webToManMsg.RecoverByDrive,
-                  DriveType.aliyun,
-                  item.name
-                ).then((res) => {
+                invoke(webToManMsg.RecoverByDrive, DriveType.aliyun, item).then((res: boolean) => {
                   if (res) {
                     confirm({
                       title: getText('menu.recover.ok.title'),
@@ -308,8 +303,8 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           input_text={`backup_${Math.ceil(new Date().getTime() / 1000)}`}
           onOk={async (value) => {
             setShowInputDialog(false)
-            await ipc_call_normal<boolean>(webToManMsg.BackupByDrive, DriveType.aliyun, value).then(
-              (res) => {
+            await invoke(webToManMsg.BackupByDrive, DriveType.aliyun, value).then(
+              (res: boolean) => {
                 if (res) {
                   confirm({
                     title: getText('menu.backup.ok.title'),
@@ -327,6 +322,7 @@ export default function MyDropDown(props: MyDropDownProps): JSX.Element {
           }}
         ></InputDialog>
       )}
+      {loading && <Spin size="large" fullscreen />}
     </>
   )
 }

@@ -1,6 +1,6 @@
 // https://developers.google.com/drive/api/quickstart/nodejs?hl=zh-cn
-import { DriveBase, DriveFileItemBase, DriveUserSetBase } from '../drive.base'
-import { DriveType } from '@common/entitys/drive.entity'
+import { DriveBase, DriveFileItemBase } from '../drive.base'
+import { DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
 // import { google } from 'googleapis'
 import { shell } from 'electron'
 import { RequestType, SendRequest } from '@main/libs/net_help'
@@ -23,7 +23,6 @@ export class GoogleDrive extends DriveBase<GoogleDriveFileItem, GoogleDriveUserS
     console.log('deeplinkProcess', _params)
     const code = _params.get('code')
     if (!code) return
-    console.log('code', code)
     await this._getTokenByCode(code)
   }
 

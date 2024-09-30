@@ -1,5 +1,5 @@
-import { DriveBase, DriveFileItemBase, DriveUserSetBase } from '../drive.base'
-import { DriveType } from '@common/entitys/drive.entity'
+import { DriveBase, DriveFileItemBase } from '../drive.base'
+import { DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
 export interface BaiduDriveFileItem extends DriveFileItemBase {}
 
 export interface BaiduDriveUserSet extends DriveUserSetBase {}

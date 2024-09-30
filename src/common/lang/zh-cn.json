@@ -297,5 +297,8 @@
 
   "home.add.title": "新增密码库",
   "home.add.button": "新增",
-  "home.title": "密码库"
+  "home.title": "密码库",
+
+  "footer.curbackup": "当前备份信息:{0}",
+  "footer.normalinfo": "当前时间:{0}"
 }

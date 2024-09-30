@@ -7,19 +7,8 @@ import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { app } from 'electron'
-import { DriveUserSet } from '@main/libs/drive/drive.manger'
-
-export type AppSetInfo = {
-  lang?: string
-  sql_ver: number
-  app_ver: number
-  cur_user_uid?: number
-  log_level?: LogLevel
-  window_width: number
-  window_height: number
-  open_dev?: boolean
-  drive_user_set?: DriveUserSet
-}
+import { CurUseBackupInfo, DriveType, DriveUserSet } from '@common/entitys/drive.entity'
+import { AppSetInfo } from '@common/entitys/set.entity'
 
 export interface TempSetInfo {
   vault_change_not_backup?: boolean
@@ -95,6 +84,7 @@ export class AppSetModel {
   }
 
   public saveSet() {
+    AppEvent.emit(AppEventType.AppSetChange, this.set)
     fs.writeFileSync(this._set_path, JSON.stringify(this.set))
   }
 
@@ -166,5 +156,14 @@ export class AppSetModel {
     this.set.window_width = width
     this.set.window_height = height
     this.saveSet()
+  }
+
+  public setCurUseBackupInfo(info: CurUseBackupInfo) {
+    this.set.cur_use_backup_info = info
+    this.saveSet()
+  }
+
+  public getCurUseBackupInfo() {
+    return this.set.cur_use_backup_info
   }
 }
