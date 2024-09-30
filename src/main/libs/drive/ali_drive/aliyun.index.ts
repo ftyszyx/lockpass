@@ -31,6 +31,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
 
   constructor() {
     super(DriveType.aliyun)
+    Log.info(`aliyun drive init secret:${this._sceret}`)
   }
 
   async deeplinkProcess(params: URLSearchParams) {
