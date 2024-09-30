@@ -5,7 +5,7 @@ permissions:
   contents: write
 jobs:
   build:
-    environment: myblog
+    environment: lockpass
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
