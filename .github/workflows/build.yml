@@ -7,25 +7,25 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      # matrix:
-      #   os: [ubuntu-latest]
-      #   host: [x64]
-      #   target: [x64]
-      #   node: [20]
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         host: [x64]
         target: [x64]
         node: [20]
-        include:
-          - os: windows-latest
-            host: x86
-            target: x86
-            node: 20
-          - os: macos-latest
-            host: arm64
-            target: arm64
-            node: 20
+      # matrix:
+      #   os: [ubuntu-latest, windows-latest, macos-latest]
+      #   host: [x64]
+      #   target: [x64]
+      #   node: [20]
+      #   include:
+      #     - os: windows-latest
+      #       host: x86
+      #       target: x86
+      #       node: 20
+      #     - os: macos-latest
+      #       host: arm64
+      #       target: arm64
+      #       node: 20
     name: os=${{ matrix.os }}  host=${{ matrix.host }}, target=${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
@@ -41,8 +41,7 @@ jobs:
           sudo snap install snapcraft --classic
       - name: Build
         env:
-          MAIN_VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          MAIN_VITE_ALIYUN_CLIENT_SECRET: ${{ secrets.ALIYUN_CLIENT_SECRET }}
+          MAIN_VITE_ALIYUN_CLIENT_SECRET: ${{ secrets.MAIN_VITE_ALIYUN_CLIENT_SECRET }}
         run: |
           npm run build
 
