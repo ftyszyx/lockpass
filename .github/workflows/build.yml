@@ -40,10 +40,11 @@ jobs:
         run: |
           sudo snap install snapcraft --classic
       - name: Build
+        env:
+          MAIN_VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.MAIN_VITE_GOOGLE_CLIENT_SECRET }}
+          MAIN_VITE_ALIYUN_CLIENT_SECRET: ${{ secrets.MAIN_VITE_ALIYUN_CLIENT_SECRET }}
         run: npm run build
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAIN_VITE_GOOGLE_CLIENT_SECRET: ${{ secrets.MAIN_VITE_GOOGLE_CLIENT_SECRET }}
-          MAIN_VITE_ALIYUN_CLIENT_SECRET: ${{ secrets.MAIN_VITE_ALIYUN_CLIENT_SECRET }}
         run: npm run release
