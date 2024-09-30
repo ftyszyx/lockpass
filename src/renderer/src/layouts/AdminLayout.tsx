@@ -67,7 +67,7 @@ function AdminLayout(props: ChildProps): JSX.Element {
   return (
     <div className=" flex flex-col ">
       <Header />
-      <div className="flex flex-row h-[calc(100vh-var(--view-height))]">
+      <div className="flex flex-row h-[calc(var(--view-height))]">
         <MyMenu />
         {/* right side */}
         <div className=" flex-grow ">

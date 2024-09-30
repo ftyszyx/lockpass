@@ -746,6 +746,10 @@ video {
   height: 100vh !important;
 }
 
+.h-\[calc\(var\(--view-height\)\)\] {
+  height: calc(var(--view-height)) !important;
+}
+
 .min-h-\[280px\] {
   min-height: 280px !important;
 }
