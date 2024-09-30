@@ -1,7 +1,7 @@
 import { SYS_PROTOL_URL } from '@common/gloabl'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import AppModel from '@main/models/app.model'
-import { DriveType } from '@common/entitys/drive.entity'
+import { DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
 
 export interface DriveFileItemBase {}
 

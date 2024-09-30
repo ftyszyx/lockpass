@@ -1,5 +1,4 @@
 import { BackupFileItem } from '@common/entitys/drive.entity'
-import { DriveUserSetBase } from '@main/libs/drive/drive.base'
 
 export interface AliyunPartInfo {
   part_number: number

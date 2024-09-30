@@ -7,7 +7,7 @@ import { LangHelper } from '@common/lang'
 import { Log } from '@main/libs/log'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { app } from 'electron'
-import { CurUseBackupInfo, DriveType, DriveUserSet } from '@common/entitys/drive.entity'
+import { CurUseBackupInfo, DriveUserSet } from '@common/entitys/drive.entity'
 import { AppSetInfo } from '@common/entitys/set.entity'
 
 export interface TempSetInfo {

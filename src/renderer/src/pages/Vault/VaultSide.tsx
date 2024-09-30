@@ -11,8 +11,8 @@ import { MenuParamNull } from '@renderer/entitys/menu.entity'
 import { IsVaultItemMatchSearch } from '@renderer/entitys/Vault_item.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory, useRouterStore } from '@renderer/libs/router'
-import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appstore } from '@renderer/models/app.model'
+import { use_appset } from '@renderer/models/appset.model'
 import { Select } from 'antd'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -26,11 +26,8 @@ export default function VaultSide(props: VaultSideProps) {
   const SelectAll = 'ALL'
   const [search_Password_type, set_Search_password_type] = useState(SelectAll)
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
-  const isVaultChangeNotBackup = use_appset(
-    (state) => state.IsVaultChangeNotBackup
-  ) as AppsetStore['IsVaultChangeNotBackup']
-  const appstore = use_appstore() as AppStore
-  const appset = use_appset() as AppsetStore
+  const appstore = use_appstore()
+  const appset = use_appset()
   const route_data = useRouterStore()
   const history = useHistory()
   const cur_vault_id = parseInt(route_data.match?.params['vault_id'])

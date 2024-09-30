@@ -7,7 +7,7 @@ import { PagePath } from '@common/entitys/page.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { message, Modal, Progress } from 'antd'
 import { GetAllVaultData, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appset } from '@renderer/models/appset.model'
 import { User } from '@common/entitys/user.entity'
 import {
   UpdateEventType,
@@ -16,7 +16,6 @@ import {
   MyUpdateProgress
 } from '@common/entitys/update.entity'
 import { AppSetInfo } from '@common/entitys/set.entity'
-import { Header } from '@renderer/components/Header'
 
 export default function BaseLayout(props: ChildProps): JSX.Element {
   const [messageApi, messageContex] = message.useMessage()

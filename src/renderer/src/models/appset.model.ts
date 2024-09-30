@@ -11,7 +11,7 @@ export interface AppsetStore {
   getText: (str: string, ...args: any[]) => string
   ChangeLang: (lang: string) => void
   version: string
-  app_set: AppSetInfo
+  app_set: AppSetInfo | null
   setAppSet: (set: AppSetInfo) => void
   getAppSet: () => AppSetInfo
   SetVersion: (version: string) => void
@@ -24,11 +24,10 @@ export interface AppsetStore {
 }
 
 export const use_appset = create<AppsetStore>((set, get) => {
-  // ConsoleLog.LogInfo('use_appset create')
   return {
     fold_menu: false,
     lang: null,
-    app_set: {},
+    app_set: null,
     vault_change_not_backup: false,
     initOK: false,
     version: '',

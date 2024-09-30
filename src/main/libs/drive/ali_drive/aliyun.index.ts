@@ -8,8 +8,6 @@ import { Log } from '../../log'
 import { downloadFileFromUrl, RequestType, SendRequest, uploadFileToUrl } from '../../net_help'
 import {
   AliyunCreateFileResp,
-  AliyunData,
-  AliyunDriveInfo,
   AliyunFileCateGory,
   AliyunFileDownloadInfo,
   AliyunFileInfo,
@@ -21,7 +19,7 @@ import fs from 'fs'
 import { ShowErrToMain, ShowInfoToMain } from '../../other.help'
 import { LangHelper } from '@common/lang'
 import { DriveBase } from '../drive.base'
-import { DriveType } from '@common/entitys/drive.entity'
+import { AliyunData, AliyunDriveInfo, DriveType } from '@common/entitys/drive.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
