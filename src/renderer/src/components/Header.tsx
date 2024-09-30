@@ -7,7 +7,7 @@ export function Header() {
   const nobackupwarn = isVaultChangeNotBackup()
   const getFooterText = () => {
     const appset = getappset()
-    if (appset.cur_use_backup_info) {
+    if (appset?.cur_use_backup_info) {
       return getText(
         'footer.curbackup',
         `drive:${appset.cur_use_backup_info.drive_type} file:${appset.cur_use_backup_info.file_name} time:${appset.cur_use_backup_info.time}`

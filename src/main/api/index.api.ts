@@ -237,4 +237,8 @@ export function initAllApi() {
   ipcMain.handle(webToManMsg.OpenShell, (_, url) => {
     shell.openExternal(url)
   })
+
+  ipcMain.handle(webToManMsg.getAppSet, () => {
+    return AppModel.getInstance().set.set
+  })
 }
