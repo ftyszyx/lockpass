@@ -89,12 +89,20 @@ class ShortKeyHelp {
   isEventValid(e: KeyboardEvent): boolean {
     const ele = e.target as HTMLElement
     const tagname = ele.tagName
-    ConsoleLog.info('handleKey', e.key, tagname, ele.className)
+    // ConsoleLog.info('handleKey', e.key, tagname, ele.className)
     if ((' ' + ele.className + ' ').indexOf(' mousetrap ') > -1) {
       return false
     }
+    if (e.key == 'Escape') {
+      const ele = e.target as HTMLElement
+      ele.blur()
+      this.handleBlur()
+      return false
+    }
+
     if (tagname == 'INPUT' || tagname == 'SELECT' || tagname == 'TEXTAREA' || ele.isContentEditable)
       return false
+
     return true
   }
 
