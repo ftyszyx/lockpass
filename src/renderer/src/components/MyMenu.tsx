@@ -136,7 +136,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
 
   return (
     <>
-      <div className={`${props.className} bg-slate-800 ${fold_menu ? 'hidden' : 'w-60'}`}>
+      <div className={`${props.className} bg-slate-800 ${fold_menu ? 'hidden' : 'w-60'} relative`}>
         <div className="flex flex-row justify-between p-1 items-center">
           <div className="flex flex-row items-center text-white">
             <Link to={PagePath.Home}>
@@ -162,6 +162,9 @@ export default function MyMenu(props: MenuProps): JSX.Element {
             }
           }}
         />
+        <div className="border-2 text-white border-green-500 border-solid absolute bottom-0 left-[50%] translate-x-[-50%]">
+          Ctrl+1
+        </div>
       </div>
       {show_addvalut && (
         <AddValutPanel

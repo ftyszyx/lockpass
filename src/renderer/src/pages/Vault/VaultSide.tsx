@@ -152,7 +152,7 @@ export default function VaultSide(props: VaultSideProps) {
 
   return (
     <div
-      className={` h-[var(--content-height)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative ${
+      className={` h-[var(--content-height)] flex w-[250px] flex-col bg-white border-r-2 border-solid  relative ${
         side_select_focus ? 'border-blue-500 border-solid border-4' : ''
       }`}
     >
@@ -210,8 +210,9 @@ export default function VaultSide(props: VaultSideProps) {
           </div>
         ))}
       </div>
-      <div className=" h-[25px]  font-bold text-sm flex flex-col items-center bg-gray-100 ">
+      <div className="  font-bold text-sm flex flex-row items-center justify-between  bg-gray-100 ">
         <p className="">{appset.getText('vault.sider.total', show_items.length)}</p>
+        <p className=" border-2 border-solid border-green-500">ctrl+2</p>
       </div>
     </div>
   )
