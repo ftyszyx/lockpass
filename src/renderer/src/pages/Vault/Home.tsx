@@ -37,7 +37,13 @@ export default function Home() {
     showItemsRef.current = items
     return items
   }, [appstore.vaults, cur_page, page_size])
-  const { selectedIndex } = useKeyboardNavigation(showitems.length)
+  const { selectedIndex, setTotalCount, setIsFocus } = useKeyboardNavigation()
+  useEffect(() => {
+    setTotalCount(showitems.length)
+  }, [showitems.length])
+  useEffect(() => {
+    setIsFocus(true)
+  }, [])
   useEffect(() => {
     if (showitems.length > 0) {
       setSelectVault(showitems[selectedIndex])

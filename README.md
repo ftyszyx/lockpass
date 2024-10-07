@@ -297,14 +297,13 @@ google你就不能把代码分几个模块啊，真是服了。
 
    google api库太大了，不搞了,另外redirect url不支持deeplink
 
-6. ctrl+f 后就不能ctrl+j了
+## 2024/10/7
+
+1. ctrl+f 后就不能ctrl+j了
    原因：ctrl+f后焦点在input,导致快捷键不生效
    处理：增加esc键的处理，当焦点在input时，esc可以取消input的foucus
-
-# 需要修复的bug及功能优化
-
-1. 通过ctrl+左和ctrl+右来控制子窗口间切换
-2. 然后可以通过键盘的上下来控制菜单 的移动
+2. 通过ctrl+1和ctrl+2来控制子窗口间切换
+3. 然后可以通过键盘的上下来控制菜单 的移动
 
 # 远期的优化
 

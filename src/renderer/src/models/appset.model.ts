@@ -1,5 +1,6 @@
 import { AppSetInfo } from '@common/entitys/set.entity'
 import { LangHelper, LangItem } from '@common/lang'
+import { ViewFocusType } from '@renderer/entitys/other.entity'
 import { create } from 'zustand'
 
 export interface AppsetStore {
@@ -15,6 +16,10 @@ export interface AppsetStore {
   setAppSet: (set: AppSetInfo) => void
   getAppSet: () => AppSetInfo
   SetVersion: (version: string) => void
+  view_focus: ViewFocusType
+  SetViewFoucs: (view_focus: ViewFocusType) => void
+  GetViewFoucs: () => ViewFocusType
+
   //menu
   fold_menu: boolean
   ToggleFoldMenu: () => void
@@ -29,6 +34,7 @@ export const use_appset = create<AppsetStore>((set, get) => {
     lang: null,
     app_set: null,
     vault_change_not_backup: false,
+    view_focus: ViewFocusType.None,
     initOK: false,
     version: '',
     SetVaultChangeNotBackup(flag: boolean) {
@@ -77,6 +83,14 @@ export const use_appset = create<AppsetStore>((set, get) => {
     },
     getAppSet() {
       return get().app_set
+    },
+    SetViewFoucs(view_focus: ViewFocusType) {
+      set((state) => {
+        return { ...state, view_focus }
+      })
+    },
+    GetViewFoucs() {
+      return get().view_focus
     }
   }
 })

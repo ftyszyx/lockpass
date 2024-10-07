@@ -8,6 +8,7 @@ export enum KEY_MAP {
   space = 'space',
   capsLock = 'capslock',
   esc = 'esc',
+  escape = 'esc',
   backspace = 'backspace',
   enter = 'enter',
   arrowleft = 'left',

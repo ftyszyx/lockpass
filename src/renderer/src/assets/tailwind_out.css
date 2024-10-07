@@ -722,8 +722,8 @@ video {
   height: 50px !important;
 }
 
-.h-\[calc\(100vh-var\(--view-height\)\)\] {
-  height: calc(100vh - var(--view-height)) !important;
+.h-\[calc\(var\(--view-height\)\)\] {
+  height: calc(var(--view-height)) !important;
 }
 
 .h-\[var\(--content-height\)\] {
@@ -744,10 +744,6 @@ video {
 
 .h-screen {
   height: 100vh !important;
-}
-
-.h-\[calc\(var\(--view-height\)\)\] {
-  height: calc(var(--view-height)) !important;
 }
 
 .min-h-\[280px\] {
@@ -976,6 +972,10 @@ video {
   border-width: 1px !important;
 }
 
+.border-4 {
+  border-width: 4px !important;
+}
+
 .border-b-2 {
   border-bottom-width: 2px !important;
 }
@@ -1013,6 +1013,11 @@ video {
 .border-purple-400 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(192 132 252 / var(--tw-border-opacity)) !important;
+}
+
+.border-blue-500 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity)) !important;
 }
 
 .border-b-gray-200 {
@@ -1262,4 +1267,9 @@ video {
 .hover\:bg-green-400:hover {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(74 222 128 / var(--tw-bg-opacity)) !important;
+}
+
+.focus\:bg-black:focus {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity)) !important;
 }

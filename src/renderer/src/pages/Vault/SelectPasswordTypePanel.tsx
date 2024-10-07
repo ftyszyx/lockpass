@@ -12,7 +12,7 @@ interface SelectPasswordTypeProps {
   onClose: () => void
 }
 export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps): JSX.Element {
-  const { selectedIndex } = useKeyboardNavigation(Object.keys(VaultItemType).length)
+  const { selectedIndex, setTotalCount, setIsFocus } = useKeyboardNavigation()
   const [select_type, setSelectType] = useState(VaultItemType.Login)
   const select_type_ref = useRef(VaultItemType.Login)
   useEffect(() => {
@@ -20,6 +20,10 @@ export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps):
     const value = VaultItemType[key]
     setSelectType(value)
   }, [selectedIndex])
+  useEffect(() => {
+    setTotalCount(Object.keys(VaultItemType).length)
+    setIsFocus(true)
+  }, [])
 
   useEffect(() => {
     select_type_ref.current = select_type

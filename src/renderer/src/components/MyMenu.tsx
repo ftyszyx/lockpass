@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from 'react'
-import { Menu as MenuAntd } from 'antd'
+import { useState, useMemo, useEffect, useRef } from 'react'
+import { Menu as MenuAntd, MenuRef } from 'antd'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import Icon from '@renderer/components/Icon'
 import { pathToRegexp } from 'path-to-regexp'
@@ -18,8 +18,11 @@ import { PagePath } from '@common/entitys/page.entity'
 import { Icon_type, ModalType } from '@common/gloabl'
 import AddValutPanel from '@renderer/pages/Vault/AddVaultPanel'
 import { ConsoleLog } from '@renderer/libs/Console'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appset } from '@renderer/models/appset.model'
 import MyDropDown from './MyDropDown'
+import { shortKeys } from '@renderer/libs/tools/shortKeys'
+import { KEY_MAP } from '@common/keycode'
+import { ViewFocusType } from '@renderer/entitys/other.entity'
 
 interface MenuProps {
   className?: string
@@ -28,12 +31,44 @@ interface MenuProps {
 export default function MyMenu(props: MenuProps): JSX.Element {
   const location = useHistory()
   const appstore = use_appstore() as AppStore
-  const lang = use_appset((state) => state.lang) as AppsetStore['lang']
-  const fold_menu = use_appset((state) => state.fold_menu) as AppsetStore['fold_menu']
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const lang = use_appset((state) => state.lang)
+  const fold_menu = use_appset((state) => state.fold_menu)
+  const getText = use_appset((state) => state.getText)
+  const getViewFoucs = use_appset((state) => state.GetViewFoucs)
+  const setViewFoucs = use_appset((state) => state.SetViewFoucs)
   const [chosedKey, setChosedKey] = useState<string[]>([]) // 当前选中
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 当前需要被展开的项
   const [show_addvalut, setShowAddValut] = useState(false)
+  const menu_ref = useRef<MenuRef>(null)
+  useEffect(() => {
+    const keycomba = KEY_MAP.ctrl + '+1'
+    shortKeys.bindShortKey(keycomba, () => {
+      handleFocus()
+      return false
+    })
+    return () => {
+      shortKeys.unbindShortKey(keycomba)
+    }
+  }, [menu_ref.current])
+
+  useEffect(() => {
+    const view_focus = getViewFoucs()
+    const active_ele = document.activeElement
+    // console.log('view_focus change', view_focus, active_ele)
+    if (view_focus !== ViewFocusType.Menu) {
+      if (active_ele) {
+        const ele = active_ele as HTMLElement
+        ele.blur()
+      }
+    }
+  }, [getViewFoucs()])
+
+  const handleFocus = () => {
+    if (menu_ref.current) {
+      setViewFoucs(ViewFocusType.Menu)
+      menu_ref.current.focus()
+    }
+  }
 
   const menutree_info = useMemo(() => {
     const menulist = getAllMenus({
@@ -72,6 +107,11 @@ export default function MyMenu(props: MenuProps): JSX.Element {
     return menutree_info.trees as ItemType<MenuItemType>[]
   }, [menutree_info])
 
+  useEffect(() => {
+    // console.log('change menu foucs')
+    handleFocus()
+  }, [treeDom, openKeys])
+
   // 当页面路由跳转时，即location发生改变，则更新选中项
   useEffect(() => {
     for (let i = 0; i < menutree_info.datalist.length; i++) {
@@ -109,6 +149,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
         <MenuAntd
           theme="dark"
           mode="inline"
+          ref={menu_ref}
           items={treeDom}
           selectedKeys={chosedKey}
           {...(fold_menu ? {} : { openKeys })}

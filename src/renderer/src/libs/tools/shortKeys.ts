@@ -1,4 +1,4 @@
-import { GetTrueKey } from '@common/keycode'
+import { GetTrueKey, KEY_MAP } from '@common/keycode'
 import { ConsoleLog } from '../Console'
 
 type ShortKeyCallback = (key: string) => boolean
@@ -18,6 +18,7 @@ class ShortKeyItems {
 }
 
 class ShortKeyHelp {
+  logflag = true
   constructor() {
     ConsoleLog.info('ShortKeyHelp constructor')
   }
@@ -34,7 +35,7 @@ class ShortKeyHelp {
 
   public bindShortKey(keyCombo: string, callback: ShortKeyCallback) {
     keyCombo = this.getKeyComboFromStr(keyCombo)
-    ConsoleLog.info('bind key', keyCombo)
+    // ConsoleLog.info('bind key', keyCombo)
     if (!this.listeners[keyCombo]) {
       this.listeners[keyCombo] = new ShortKeyItems()
     }
@@ -49,13 +50,13 @@ class ShortKeyHelp {
   }
 
   private handleBlur = () => {
-    ConsoleLog.info('Window lost focus, clearing pressed keys')
+    if (this.logflag) ConsoleLog.info('Window lost focus, clearing pressed keys')
     this.pressedKeys.clear()
   }
 
   public unbindShortKey(keyCombo: string, callback?: ShortKeyCallback) {
     keyCombo = this.getKeyComboFromStr(keyCombo)
-    ConsoleLog.info('unbindShortKey', keyCombo)
+    if (this.logflag) ConsoleLog.info('unbindShortKey', keyCombo)
     if (!this.listeners[keyCombo]) return
     if (callback) {
       this.listeners[keyCombo].Remove(callback)
@@ -93,7 +94,8 @@ class ShortKeyHelp {
     if ((' ' + ele.className + ' ').indexOf(' mousetrap ') > -1) {
       return false
     }
-    if (e.key == 'Escape') {
+    const key = GetTrueKey(e)
+    if (key == KEY_MAP.esc) {
       const ele = e.target as HTMLElement
       ele.blur()
       this.handleBlur()
@@ -109,10 +111,10 @@ class ShortKeyHelp {
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.isEventValid(e)) return
     const key = GetTrueKey(e)
-    ConsoleLog.info('handleKeyDown', key)
+    if (this.logflag) ConsoleLog.info('handleKeyDown', key)
     this.pressedKeys.add(key)
     const combo = this.getKeyCombo()
-    ConsoleLog.info('handlecombo', combo)
+    if (this.logflag) ConsoleLog.info('handlecombo', combo)
     if (this.listeners[combo]) {
       // e.preventDefault()
       const callbacks = this.listeners[combo].callbacks
@@ -130,7 +132,7 @@ class ShortKeyHelp {
   private handleKeyUp = (e: KeyboardEvent) => {
     if (!this.isEventValid(e)) return
     const key = GetTrueKey(e)
-    ConsoleLog.info('handleKeyUp', key)
+    // ConsoleLog.info('handleKeyUp', key)
     this.pressedKeys.delete(key)
   }
 }

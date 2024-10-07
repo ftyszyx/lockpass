@@ -6,11 +6,15 @@ date:2024/07/31 17:08:51
 
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Icon_type, VaultItemType } from '@common/gloabl'
+import { KEY_MAP } from '@common/keycode'
 import Icon from '@renderer/components/Icon'
 import { MenuParamNull } from '@renderer/entitys/menu.entity'
+import { ViewFocusType } from '@renderer/entitys/other.entity'
 import { IsVaultItemMatchSearch } from '@renderer/entitys/Vault_item.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { useHistory, useRouterStore } from '@renderer/libs/router'
+import { useKeyboardNavigation } from '@renderer/libs/tools/keyboardNavigation'
+import { shortKeys } from '@renderer/libs/tools/shortKeys'
 import { use_appstore } from '@renderer/models/app.model'
 import { use_appset } from '@renderer/models/appset.model'
 import { Select } from 'antd'
@@ -33,6 +37,10 @@ export default function VaultSide(props: VaultSideProps) {
   const cur_vault_id = parseInt(route_data.match?.params['vault_id'])
   const selectedItemRef = useRef<HTMLDivElement>(null)
   const cur_vault_item_id = parseInt(route_data.match?.params['vault_item_id'])
+  const [side_select_focus, set_side_select_focus] = useState(false)
+  const getViewFoucs = use_appset((state) => state.GetViewFoucs)
+  const setViewFoucs = use_appset((state) => state.SetViewFoucs)
+
   const show_items = useMemo(() => {
     let items = []
     if (props.global_search_keyword && props.global_search_keyword.length > 0) {
@@ -57,6 +65,44 @@ export default function VaultSide(props: VaultSideProps) {
     cur_vault_id,
     props.global_search_keyword
   ])
+
+  const { selectedIndex, setSelectedIndex, setTotalCount, setIsFocus } = useKeyboardNavigation()
+
+  useEffect(() => {
+    setTotalCount(show_items.length)
+  }, [show_items.length])
+
+  useEffect(() => {
+    setIsFocus(side_select_focus)
+    // console.log('side_select_focus', side_select_focus)
+  }, [side_select_focus])
+
+  useEffect(() => {
+    const keycomba = KEY_MAP.ctrl + '+2'
+    shortKeys.bindShortKey(keycomba, () => {
+      // console.log('bindShortKey', keycomba)
+      set_side_select_focus(true)
+      setViewFoucs(ViewFocusType.VaultItem)
+      return false
+    })
+    return () => {
+      shortKeys.unbindShortKey(keycomba)
+    }
+  }, [])
+
+  useEffect(() => {
+    const view_focus = getViewFoucs()
+    if (view_focus !== ViewFocusType.VaultItem) {
+      set_side_select_focus(false)
+    }
+  }, [getViewFoucs()])
+
+  useEffect(() => {
+    // console.log('selectedIndex', selectedIndex)
+    if (show_items.length > 0) {
+      doSelectItem2(show_items[selectedIndex])
+    }
+  }, [selectedIndex])
   ConsoleLog.info(`render VaultSide `)
   useEffect(() => {
     if (show_items.length > 0) {
@@ -81,6 +127,11 @@ export default function VaultSide(props: VaultSideProps) {
   }, [history.PathName])
 
   const DoSelectItem = (vault_item: VaultItem) => {
+    setSelectedIndex(show_items.findIndex((item) => item.id == vault_item.id))
+    doSelectItem2(vault_item)
+  }
+
+  const doSelectItem2 = (vault_item: VaultItem) => {
     set_select_vault_item(vault_item)
     props.onSelect(vault_item)
   }
@@ -101,7 +152,9 @@ export default function VaultSide(props: VaultSideProps) {
 
   return (
     <div
-      className={` h-[var(--content-height)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative `}
+      className={` h-[var(--content-height)] flex w-[250px] flex-col bg-white border-r-2 border-solid border-gray-200 relative ${
+        side_select_focus ? 'border-blue-500 border-solid border-4' : ''
+      }`}
     >
       {/* first line */}
       <div className="flex flex-row justify-between items-center p-2">
@@ -135,7 +188,7 @@ export default function VaultSide(props: VaultSideProps) {
         <Icon type={Icon_type.icon_rank} />
       </div>
       {/* item list */}
-      <div className=" flex flex-col flex-1 overflow-auto  ">
+      <div className=" flex flex-col flex-1 overflow-auto focus:bg-black ">
         {show_items.map((vault_item) => (
           <div
             onClick={() => {
