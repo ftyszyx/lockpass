@@ -86,5 +86,6 @@ export enum MainToWebMsg {
   AppUpdateEvent = 'UpdateEvent',
   VaultChangeNotBackup = 'VaultChangeNotBackup',
   WindowsHide = 'windosHide',
+  WindowsShow = 'windosShow',
   AppSetChange = 'AppSetChange'
 }

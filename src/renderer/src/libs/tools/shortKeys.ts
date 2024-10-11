@@ -87,18 +87,27 @@ class ShortKeyHelp {
     this.clean()
   }
 
-  isEventValid(e: KeyboardEvent): boolean {
+  isEventValid(e: KeyboardEvent, down: boolean = true): boolean {
     const ele = e.target as HTMLElement
     const tagname = ele.tagName
-    // ConsoleLog.info('handleKey', e.key, tagname, ele.className)
+    if (this.logflag)
+      ConsoleLog.info(
+        `handleKey ${down ? 'down' : 'up'} key:${e.key} tagname:${tagname} class:${ele.className}`
+      )
     if ((' ' + ele.className + ' ').indexOf(' mousetrap ') > -1) {
       return false
     }
     const key = GetTrueKey(e)
     if (key == KEY_MAP.esc) {
       const ele = e.target as HTMLElement
-      ele.blur()
-      this.handleBlur()
+      if (tagname == 'BODY') {
+        return true
+      }
+      if (down) {
+        if (this.logflag) ConsoleLog.info('esc blur')
+        ele.blur()
+        this.pressedKeys.clear()
+      }
       return false
     }
 
@@ -109,7 +118,7 @@ class ShortKeyHelp {
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
-    if (!this.isEventValid(e)) return
+    if (!this.isEventValid(e, true)) return
     const key = GetTrueKey(e)
     if (this.logflag) ConsoleLog.info('handleKeyDown', key)
     this.pressedKeys.add(key)
@@ -130,9 +139,9 @@ class ShortKeyHelp {
   }
 
   private handleKeyUp = (e: KeyboardEvent) => {
-    if (!this.isEventValid(e)) return
+    if (!this.isEventValid(e, false)) return
     const key = GetTrueKey(e)
-    // ConsoleLog.info('handleKeyUp', key)
+    if (this.logflag) ConsoleLog.info('handleKeyUp', key)
     this.pressedKeys.delete(key)
   }
 }

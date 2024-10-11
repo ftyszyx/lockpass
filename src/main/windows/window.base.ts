@@ -136,6 +136,7 @@ export class WindowBase {
     Log.info('show window', this.url)
     AppModel.getInstance().setLastPoint(screen.getCursorScreenPoint())
     this.win.show()
+    this.win.webContents.send(MainToWebMsg.WindowsShow)
   }
 
   hide() {
@@ -170,6 +171,7 @@ export class WindowBase {
   }
 
   CheckBlurClick(windows: BrowserWindow) {
+    // console.log('winblur', this.url)
     if (!this.click_outsize_close || this.window.isVisible() == false) return
     if (this.window != windows) return
     // console.log('checkblurclick', windows, this.window == windows, this.window.isVisible())

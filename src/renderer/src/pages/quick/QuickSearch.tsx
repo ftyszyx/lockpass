@@ -2,6 +2,7 @@ import { renderViewType } from '@common/entitys/app.entity'
 import { MainToWebMsg, webToManMsg } from '@common/entitys/ipcmsg.entity'
 import { VaultItem } from '@common/entitys/vault_item.entity'
 import { Icon_type, VaultItemType } from '@common/gloabl'
+import { GetTrueKey, KEY_MAP } from '@common/keycode'
 import Icon from '@renderer/components/Icon'
 import {
   GetPasswordInfoString,
@@ -11,6 +12,7 @@ import {
 } from '@renderer/entitys/Vault_item.entity'
 import { ConsoleLog } from '@renderer/libs/Console'
 import { ipc_call_normal } from '@renderer/libs/tools/other'
+import { shortKeys } from '@renderer/libs/tools/shortKeys'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { AppsetStore, use_appset } from '@renderer/models/appset.model'
 import { Button, Input, InputRef, message } from 'antd'
@@ -52,8 +54,19 @@ export default function QuickSearch() {
   }
 
   useEffect(() => {
+    window.electron.ipcRenderer.on(MainToWebMsg.WindowsShow, () => {
+      foucsInput()
+    })
+    return () => {
+      window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.WindowsShow)
+    }
+  }, [])
+
+  useEffect(() => {
     window.electron.ipcRenderer.on(MainToWebMsg.WindowsHide, () => {
       setSearch('')
+      setShowDetail(false)
+      setSelectItem(null)
     })
     return () => {
       window.electron.ipcRenderer.removeAllListeners(MainToWebMsg.WindowsHide)
@@ -148,6 +161,16 @@ export default function QuickSearch() {
     }, 300)
   }
 
+  useEffect(() => {
+    shortKeys.bindShortKey(KEY_MAP.esc, () => {
+      HideWin()
+      return true
+    })
+    return () => {
+      shortKeys.unbindShortKey(KEY_MAP.esc)
+    }
+  }, [])
+
   function handlerCopy(keytype: PasswordRenderDetailKey) {
     ConsoleLog.info(`handlerCopy ${keytype}`)
     const selectItem = selectItemRef.current
@@ -178,23 +201,26 @@ export default function QuickSearch() {
         handlerCopy(PasswordRenderDetailKey.ctrl_shift_C)
         return
       }
-      switch (event.key) {
-        case 'ArrowUp':
+      const truekey = GetTrueKey(event)
+      switch (truekey) {
+        case KEY_MAP.up:
           // 处理向上箭头键
           moveSelectPos('up')
           break
-        case 'ArrowDown':
+        case KEY_MAP.down:
           // 处理向下箭头键
           moveSelectPos('down')
           break
-        case 'ArrowRight':
+        case KEY_MAP.right:
           if (selectItem) setShowDetail(true)
           break
-        case 'ArrowLeft':
+        case KEY_MAP.left:
           setShowDetail(false)
           setSelectItem(null)
           break
-        case 'Enter':
+        case KEY_MAP.esc:
+          break
+        case KEY_MAP.enter:
           ConsoleLog.info(`enter show_detail:${show_detail} selectItemDetail:${selectItemDetail}`)
           if (show_detail) {
             if (selectItemDetail == SELECT_ITEM_STR) {

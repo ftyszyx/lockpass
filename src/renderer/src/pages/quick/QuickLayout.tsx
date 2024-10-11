@@ -62,7 +62,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   return (
-    <div>
+    <div tabIndex={0}>
       {contextHolder}
       {props.children}
     </div>
