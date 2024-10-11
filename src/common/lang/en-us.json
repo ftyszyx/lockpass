@@ -294,6 +294,6 @@
   "home.title": "Vault",
   "home.add.title": "Add vault",
   "home.add.button": "Add",
-  "footer.curbackup": "Current backup information:{0}",
+  "footer.curbackup": "Current backup information: drive:{0} file:【{1}】 back time:{2}",
   "footer.normalinfo": "Current time:{0}"
 }

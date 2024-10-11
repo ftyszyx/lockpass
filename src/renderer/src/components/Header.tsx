@@ -8,9 +8,12 @@ export function Header() {
   const getFooterText = () => {
     const appset = getappset()
     if (appset?.cur_use_backup_info) {
+      const time = new Date(appset.cur_use_backup_info.time)
       return getText(
         'footer.curbackup',
-        `drive:${appset.cur_use_backup_info.drive_type} file:${appset.cur_use_backup_info.file_name} time:${appset.cur_use_backup_info.time}`
+        appset.cur_use_backup_info.drive_type,
+        appset.cur_use_backup_info.file_name,
+        time.toLocaleString()
       )
     }
     return getText('footer.normalinfo', new Date().toLocaleDateString())
@@ -23,8 +26,11 @@ export function Header() {
         </div>
       )}
       {!nobackupwarn && (
-        <div className="w-full bg-green-500 text-white ">
-          <p>{getFooterText()}</p>
+        <div className="w-full text-green-500 bg-green-100 ">
+          <div
+            className="text-blue-400"
+            dangerouslySetInnerHTML={{ __html: getFooterText() }}
+          ></div>
         </div>
       )}
     </div>

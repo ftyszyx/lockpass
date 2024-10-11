@@ -299,6 +299,6 @@
   "home.add.button": "新增",
   "home.title": "密码库",
 
-  "footer.curbackup": "当前备份信息:{0}",
+  "footer.curbackup": "当前备份信息: 网盘:<b>{0}</b> 文件名:【<b>{1}</b>】 备份时间:<b>{2}</b>",
   "footer.normalinfo": "当前时间:{0}"
 }

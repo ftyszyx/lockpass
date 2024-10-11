@@ -702,10 +702,6 @@ video {
   height: 20px !important;
 }
 
-.h-\[25px\] {
-  height: 25px !important;
-}
-
 .h-\[300px\] {
   height: 300px !important;
 }
@@ -1015,29 +1011,14 @@ video {
   border-color: rgb(209 213 219 / var(--tw-border-opacity)) !important;
 }
 
-.border-purple-400 {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(192 132 252 / var(--tw-border-opacity)) !important;
-}
-
-.border-red-500 {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity)) !important;
-}
-
-.border-white {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity)) !important;
-}
-
 .border-green-500 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(34 197 94 / var(--tw-border-opacity)) !important;
 }
 
-.border-gray-500 {
+.border-purple-400 {
   --tw-border-opacity: 1 !important;
-  border-color: rgb(107 114 128 / var(--tw-border-opacity)) !important;
+  border-color: rgb(192 132 252 / var(--tw-border-opacity)) !important;
 }
 
 .border-b-gray-200 {
@@ -1108,6 +1089,21 @@ video {
 .bg-white {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
+}
+
+.bg-green-50 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(240 253 244 / var(--tw-bg-opacity)) !important;
+}
+
+.bg-green-200 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(187 247 208 / var(--tw-bg-opacity)) !important;
+}
+
+.bg-green-100 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(220 252 231 / var(--tw-bg-opacity)) !important;
 }
 
 .fill-green-300 {
@@ -1248,6 +1244,31 @@ video {
 .text-white {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+}
+
+.text-green-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(34 197 94 / var(--tw-text-opacity)) !important;
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(239 68 68 / var(--tw-text-opacity)) !important;
+}
+
+.text-green-300 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(134 239 172 / var(--tw-text-opacity)) !important;
+}
+
+.text-green-400 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(74 222 128 / var(--tw-text-opacity)) !important;
+}
+
+.text-blue-400 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(96 165 250 / var(--tw-text-opacity)) !important;
 }
 
 .shadow-md {
