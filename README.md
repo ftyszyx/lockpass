@@ -2,9 +2,6 @@
 
 · 中文· [English](./README-en.md)
 
-# 欢迎关注我的公众号
-
-![b5ede8e277a48aef57be1412d1ce63f](https://github.com/user-attachments/assets/f64dc734-394d-4230-b9b0-c430b054c820)
 
 # 详细文档
 
@@ -125,6 +122,10 @@ npm install
 ```text
 npm run dev
 ```
+
+# 欢迎关注我的公众号
+
+![b5ede8e277a48aef57be1412d1ce63f](https://github.com/user-attachments/assets/f64dc734-394d-4230-b9b0-c430b054c820)
 
 ## **使用的库**
 
