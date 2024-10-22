@@ -14,10 +14,20 @@ import {
   GetFileListByDrive,
   TrashFileByDrive
 } from '@main/libs/drive/drive.manger'
+import { LogLevel } from '@common/entitys/log.entity'
 
 export function initDriveApi() {
   ipcMain.handle(webToManMsg.BackupByDrive, (_, drive_type: DriveType, custom_name: string) => {
     return AppModel.getInstance().BackupByDrive(drive_type, custom_name)
+  })
+
+  ipcMain.handle(webToManMsg.OpenDev, (_, value: boolean) => {
+    AppEvent.emit(AppEventType.OpenDev, value)
+  })
+
+  ipcMain.handle(webToManMsg.OpenLog, (_, value: boolean) => {
+    if (value) Log.log_level = LogLevel.Info
+    else Log.log_level = LogLevel.Error
   })
 
   ipcMain.handle(webToManMsg.RecoverByDrive, (_, drive_type, filename) => {

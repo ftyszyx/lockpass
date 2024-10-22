@@ -1,7 +1,7 @@
 import { SYS_PROTOL_URL } from '@common/gloabl'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import AppModel from '@main/models/app.model'
-import { DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
+import { BackupFileItem, DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
 
 export interface DriveFileItemBase {}
 
@@ -56,7 +56,7 @@ export class DriveBase<FileT extends DriveFileItemBase, UserT extends DriveUserS
     throw new Error('not implement login')
   }
 
-  async UploadFile(_file: string, _local_path: string): Promise<string> {
+  async UploadFile(_file: string, _local_path: string): Promise<BackupFileItem> {
     throw new Error('not implement upload')
   }
 

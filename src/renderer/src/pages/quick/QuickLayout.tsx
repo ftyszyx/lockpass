@@ -10,13 +10,13 @@ import {
   ipc_call_normal
 } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
-import { AppsetStore, use_appset } from '@renderer/models/appset.model'
+import { use_appset } from '@renderer/models/appset.model'
 import { message } from 'antd'
 import { useEffect } from 'react'
 
 export default function QucickLayout(props: ChildProps): JSX.Element {
   const appstore = use_appstore() as AppStore
-  const getText = use_appset((state) => state.getText) as AppsetStore['getText']
+  const getText = use_appset((state) => state.getText)
   const [messageApi, contextHolder] = message.useMessage()
   useEffect(() => {
     const timer = setInterval(() => {
@@ -62,7 +62,7 @@ export default function QucickLayout(props: ChildProps): JSX.Element {
   }, [appstore.cur_user])
 
   return (
-    <div tabIndex={0}>
+    <div tabIndex={0} className=" overflow-auto">
       {contextHolder}
       {props.children}
     </div>

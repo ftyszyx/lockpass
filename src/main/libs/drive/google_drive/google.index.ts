@@ -1,6 +1,6 @@
 // https://developers.google.com/drive/api/quickstart/nodejs?hl=zh-cn
 import { DriveBase, DriveFileItemBase } from '../drive.base'
-import { DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
+import { BackupFileItem, DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
 // import { google } from 'googleapis'
 import { shell } from 'electron'
 import { RequestType, SendRequest } from '@main/libs/net_help'
@@ -79,8 +79,21 @@ export class GoogleDrive extends DriveBase<GoogleDriveFileItem, GoogleDriveUserS
     shell.openExternal(url)
   }
 
-  async UploadFile(_file: string, _local_path: string): Promise<string> {
-    return ''
+  async UploadFile(_file: string, _local_path: string): Promise<BackupFileItem> {
+    return {
+      drive_id: '',
+      file_id: '',
+      parent_file_id: '',
+      name: '',
+      type: '',
+      size: 0,
+      category: '',
+      file_extension: '',
+      content_hash: '',
+      created_at: '',
+      updated_at: '',
+      full_path: ''
+    }
   }
 
   async DownLoadFile(_file: string, _local_path: string): Promise<void> {}

@@ -82,6 +82,10 @@ export class WindowBase {
     AppEvent.on(AppEventType.AppSetChange, (set: AppSetInfo) => {
       this.win.webContents.send(MainToWebMsg.AppSetChange, set)
     })
+    AppEvent.on(AppEventType.OpenDev, (value: boolean) => {
+      if (value) this.window.webContents.openDevTools()
+      else this.window.webContents.closeDevTools()
+    })
   }
 
   lockapp() {

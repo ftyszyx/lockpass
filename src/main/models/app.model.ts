@@ -416,7 +416,7 @@ class AppModel {
     if (zip_file == null) return null
     const filename = custom_name || path.basename(zip_file)
     Log.info(`begin upload file ${zip_file} to aliyun:${filename}`)
-    let res = ''
+    let res: BackupFileItem | null = null
     try {
       res = await updateFileByDrive(drive_type, filename, zip_file)
     } catch (e: any) {
@@ -428,7 +428,12 @@ class AppModel {
     fs.unlinkSync(zip_file)
     Log.info('upload file ok')
     this.set.set_vault_change_not_backup(false)
-    return res
+    this.set.setCurUseBackupInfo({
+      drive_type,
+      file_name: filename,
+      time: res.updated_at
+    })
+    return res.full_path
   }
 
   async RecoverByDrive(drive_type: DriveType, fileinfo: BackupFileItem) {

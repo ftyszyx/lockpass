@@ -44,6 +44,7 @@ export default function SelectPasswordTypePanel(props: SelectPasswordTypeProps):
         className="w-[500px]"
         title="选择密码类型"
         open={props.show}
+        footer={null}
         onCancel={() => props.onClose()}
         onClose={() => props.onClose}
       >

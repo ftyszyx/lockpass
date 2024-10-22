@@ -21,6 +21,8 @@ export enum AppEventType {
   VaultChangeNotBackup = 'VaultChangeNotBackup',
   DriveLoginOk = 'DriveLoginOk',
   DriveLoginErr = 'DriveLoginErr',
-  AppSetChange = 'AppSetChange'
+  AppSetChange = 'AppSetChange',
+  OpenDev = 'OpenDev',
+  OpenLog = 'OpenLog'
 }
 export const AppEvent = new EventEmitter()

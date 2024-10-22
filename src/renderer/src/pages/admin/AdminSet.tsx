@@ -1,5 +1,6 @@
 import { defaultUserSetInfo, UserSetInfo } from '@common/entitys/app.entity'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { LogLevel } from '@common/entitys/log.entity'
 import { Icon_type } from '@common/gloabl'
 import Icon from '@renderer/components/Icon'
 import ShortKeyInput from '@renderer/components/ShortKeyInput'
@@ -8,7 +9,7 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { ChangeAppset, ipc_call_normal, UpdateMenu } from '@renderer/libs/tools/other'
 import { AppStore, use_appstore } from '@renderer/models/app.model'
 import { use_appset } from '@renderer/models/appset.model'
-import { Form, Button, message } from 'antd'
+import { Form, Button, message, Switch } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useState } from 'react'
 
@@ -16,6 +17,10 @@ export default function AdminSet() {
   const [form] = useForm<UserSetInfo>(null)
   const appstore = use_appstore() as AppStore
   const getText = use_appset((state) => state.getText)
+  const open_dev = use_appset((state) => state.GetOpenDev)
+  const show_log = use_appset((state) => state.GetShowLog)
+  const set_open_dev = use_appset((state) => state.SetOpenDev)
+  const set_show_log = use_appset((state) => state.SetShowLog)
   const [messageApi, messageContext] = message.useMessage()
   const [select_item, set_select_item] = useState<string>(SetMenuItem.normal)
   const onSave = () => {
@@ -79,18 +84,44 @@ export default function AdminSet() {
                 }
               }}
             >
-              {select_item == SetMenuItem.normal &&
-                NormalSetFiledList.map((item) => {
-                  return (
-                    <Form.Item
-                      key={item.field_name}
-                      label={getText(`set.menu.${item.field_name}`)}
-                      name={item.field_name}
-                    >
-                      <item.render></item.render>
-                    </Form.Item>
-                  )
-                })}
+              {select_item == SetMenuItem.normal && (
+                <div>
+                  {NormalSetFiledList.map((item) => {
+                    return (
+                      <Form.Item
+                        key={item.field_name}
+                        label={getText(`set.menu.${item.field_name}`)}
+                        name={item.field_name}
+                      >
+                        <item.render></item.render>
+                      </Form.Item>
+                    )
+                  })}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-row gap-2">
+                      <label>{getText('set.menu.normal_open_dev')}</label>
+                      <Switch
+                        checked={open_dev()}
+                        onChange={(value) => {
+                          ipc_call_normal(webToManMsg.OpenDev, value)
+                          set_open_dev(value)
+                        }}
+                      ></Switch>
+                    </div>
+                    <div className="flex flex-row gap-2">
+                      <label>{getText('set.menu.open_log')}</label>
+                      <Switch
+                        checked={show_log()}
+                        onChange={(value) => {
+                          ConsoleLog.log_level = value ? LogLevel.Info : LogLevel.Error
+                          ipc_call_normal(webToManMsg.OpenLog, value)
+                          set_show_log(value)
+                        }}
+                      ></Switch>
+                    </div>
+                  </div>
+                </div>
+              )}
               {(select_item == SetMenuItem.shortcut_global ||
                 select_item == SetMenuItem.shortcut_local) &&
                 Object.keys(defaultUserSetInfo).map((key) => {

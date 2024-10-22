@@ -295,5 +295,7 @@
   "home.add.title": "Add vault",
   "home.add.button": "Add",
   "footer.curbackup": "Current backup information: drive:{0} file:【{1}】 back time:{2}",
-  "footer.normalinfo": "Current time:{0}"
+  "footer.normalinfo": "Current time:{0}",
+  "set.menu.normal_open_dev": "Development debugging switch",
+  "set.menu.open_log": "Log switch"
 }

@@ -67,7 +67,10 @@ export enum webToManMsg {
   OpenShell = 'OpenShell',
 
   //test
-  LoginGoogledrive = 'LoginGoogledrive'
+  LoginGoogledrive = 'LoginGoogledrive',
+  //admin
+  OpenDev = 'OpenDev',
+  OpenLog = 'OpenLog'
 }
 
 export enum MainToWebMsg {

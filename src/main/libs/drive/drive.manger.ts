@@ -3,7 +3,7 @@ import { BaiduDrive } from './baidu_drive/baidu.index'
 import { GoogleDrive } from './google_drive/google.index'
 import { DriveBase, DriveFileItemBase } from './drive.base'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
-import { DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
+import { BackupFileItem, DriveType, DriveUserSetBase } from '@common/entitys/drive.entity'
 import { Log } from '../log'
 export class DriveManger {
   drives: { [key: string]: DriveBase<DriveFileItemBase, DriveUserSetBase> } = {}
@@ -49,7 +49,7 @@ export async function updateFileByDrive(
   drivetyp: DriveType,
   file: string,
   local_path: string
-): Promise<string> {
+): Promise<BackupFileItem> {
   return await DriveMangerInstance.GetDrive(drivetyp).UploadFile(file, local_path)
 }
 

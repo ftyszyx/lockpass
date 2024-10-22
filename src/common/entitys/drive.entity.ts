@@ -10,6 +10,7 @@ export interface BackupFileItem {
   content_hash: string
   created_at: string
   updated_at: string
+  full_path: string
 }
 
 export type FileCateGory = 'video' | 'doc' | 'audio' | 'zip' | 'others' | 'image'

@@ -20,6 +20,14 @@ export interface AppsetStore {
   SetViewFoucs: (view_focus: ViewFocusType) => void
   GetViewFoucs: () => ViewFocusType
 
+  open_dev: boolean
+  SetOpenDev: (value: boolean) => void
+  GetOpenDev: () => boolean
+
+  show_log: boolean
+  SetShowLog: (value: boolean) => void
+  GetShowLog: () => boolean
+
   //menu
   fold_menu: boolean
   ToggleFoldMenu: () => void
@@ -37,6 +45,8 @@ export const use_appset = create<AppsetStore>((set, get) => {
     view_focus: ViewFocusType.None,
     initOK: false,
     version: '',
+    open_dev: false,
+    show_log: false,
     SetVaultChangeNotBackup(flag: boolean) {
       set((state) => {
         return { ...state, vault_change_not_backup: flag }
@@ -91,6 +101,22 @@ export const use_appset = create<AppsetStore>((set, get) => {
     },
     GetViewFoucs() {
       return get().view_focus
+    },
+    SetOpenDev(value: boolean) {
+      set((state) => {
+        return { ...state, open_dev: value }
+      })
+    },
+    GetOpenDev() {
+      return get().open_dev
+    },
+    SetShowLog(value: boolean) {
+      set((state) => {
+        return { ...state, show_log: value }
+      })
+    },
+    GetShowLog() {
+      return get().show_log
     }
   }
 })

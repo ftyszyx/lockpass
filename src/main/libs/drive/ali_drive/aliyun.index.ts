@@ -19,7 +19,12 @@ import fs from 'fs'
 import { ShowErrToMain, ShowInfoToMain } from '../../other.help'
 import { LangHelper } from '@common/lang'
 import { DriveBase } from '../drive.base'
-import { AliyunData, AliyunDriveInfo, DriveType } from '@common/entitys/drive.entity'
+import {
+  AliyunData,
+  AliyunDriveInfo,
+  BackupFileItem,
+  DriveType
+} from '@common/entitys/drive.entity'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 
 export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
@@ -149,7 +154,7 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
     })
   }
 
-  async UploadFile(file_name: string, local_path: string) {
+  async UploadFile(file_name: string, local_path: string): Promise<BackupFileItem> {
     let res = await this.createFolderInRoot(this.parent_dir_name)
     res = await this._createFile(res.file_id, file_name)
     if (res.exist) {
@@ -190,7 +195,20 @@ export class AliDrive extends DriveBase<AliyunFileListItem, AliyunData> {
       }
     )
     Log.info('upload file ok', JSON.stringify(fileinfo))
-    return `${this.parent_dir_name}/${file_name}`
+    return {
+      drive_id: fileinfo.drive_id,
+      name: fileinfo.name,
+      file_id: fileinfo.file_id,
+      parent_file_id: res.file_id,
+      type: fileinfo.type,
+      size: file.length,
+      category: fileinfo.category,
+      file_extension: fileinfo.file_extension,
+      content_hash: fileinfo.content_hash,
+      created_at: fileinfo.created_at,
+      updated_at: fileinfo.updated_at,
+      full_path: `${this.parent_dir_name}/${file_name}`
+    }
   }
 
   async DownLoadFile(file_name: string, local_path: string) {
