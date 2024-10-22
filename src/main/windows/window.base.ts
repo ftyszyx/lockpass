@@ -83,7 +83,7 @@ export class WindowBase {
       this.win.webContents.send(MainToWebMsg.AppSetChange, set)
     })
     AppEvent.on(AppEventType.OpenDev, (value: boolean) => {
-      if (value) this.window.webContents.openDevTools()
+      if (value) this.window.webContents.openDevTools({ mode: 'detach' })
       else this.window.webContents.closeDevTools()
     })
   }
