@@ -317,7 +317,13 @@ google你就不能把代码分几个模块啊，真是服了。
 ## 2024/10/22
 
 1. 设置页面增加打开调试窗口功能
+   
+  ![20241022220000_rec_](https://github.com/user-attachments/assets/a359adb8-04d7-4354-967d-9a85d76d0003)
+   
 2. 设置页面增加开启日志功能
+
+   ![20241022220029_rec_](https://github.com/user-attachments/assets/98b1b303-7d6a-4801-841f-df82908e24a8)
+
 3. 备份网盘后，自动将还原点信息改成备份的信息
 
 ## 需要处理
