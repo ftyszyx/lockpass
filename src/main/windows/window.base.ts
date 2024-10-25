@@ -168,6 +168,8 @@ export class WindowBase {
     const oldsize = this.win.getSize()
     if (width <= 0) width = oldsize[0]
     if (height <= 0) height = oldsize[1]
+    width = Math.floor(width)
+    height = Math.floor(height)
     this.win.setMinimumSize(width, height)
     // const [minWidth, minHeight] = this.win.getMinimumSize()
     // console.log('change size', width, height, this.url, oldsize)
