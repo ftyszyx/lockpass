@@ -3,14 +3,8 @@
 · 中文· [English](./README-en.md)
 
 # 详细文档
-
-国内
-
-https://blog.bytefuse.cn/feishu__2024_8_6_product_onepassword_3doc
-
-国外
-
-https://ftyszyx.github.io/feishu-vitepress/feishu__2024_8_7_product_onepassword_4doc
+ 
+[给自己做一个1password：序言](https://ftyszyx.github.io/feishu-vitepress/RaTxdReWnoRe3nxDrtnccdSznNb)
 
 ## **背景**
 
