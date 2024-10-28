@@ -212,7 +212,7 @@ export default function VaultSide(props: VaultSideProps) {
       </div>
       <div className="  font-bold text-sm flex flex-row items-center justify-between  bg-gray-100 ">
         <p className="">{appset.getText('vault.sider.total', show_items.length)}</p>
-        <p className=" border-2 border-solid border-green-500">ctrl+2</p>
+        <p className=" kbd bg-gray-100 text-black">ctrl+2</p>
       </div>
     </div>
   )

@@ -162,7 +162,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
             }
           }}
         />
-        <div className="border-2 text-white border-green-500 border-solid absolute bottom-0 left-[50%] translate-x-[-50%]">
+        <div className="  text-white kbd bottom-0 absolute left-[50%] translate-x-[-50%]">
           Ctrl+1
         </div>
       </div>
