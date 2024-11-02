@@ -7,6 +7,7 @@ import { MainToWebMsg } from '@common/entitys/ipcmsg.entity'
 import { EntityType, renderViewType } from '@common/entitys/app.entity'
 import { Log } from '@main/libs/log'
 import AppModel from '@main/models/app.model'
+import robot from 'robotjs_addon'
 import { APP_NAME } from '@common/gloabl'
 import { AppSetInfo } from '@common/entitys/set.entity'
 export class WindowBase {
@@ -138,7 +139,8 @@ export class WindowBase {
 
   show() {
     Log.info('show window', this.url)
-    AppModel.getInstance().setLastPoint(screen.getCursorScreenPoint())
+    console.log('last pos', robot.getMousePos())
+    AppModel.getInstance().setLastPoint(robot.getMousePos())
     this.win.show()
     this.win.webContents.send(MainToWebMsg.WindowsShow)
   }

@@ -267,8 +267,9 @@ class AppModel {
     this.quickwin.hide()
     if (info.vault_item_type == VaultItemType.Login) {
       const logininfo = info.info as LoginPasswordInfo
-      robot.keyTap('space', 'control') //切换成英文
+      // console.log('move to ', this.last_point.x, this.last_point.y)
       robot.moveMouse(this.last_point.x, this.last_point.y)
+      robot.keyTap('space', 'control') //切换成英文
       robot.mouseClick()
       robot.typeString(logininfo.username)
       robot.keyTap('tab')
