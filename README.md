@@ -330,7 +330,10 @@ google你就不能把代码分几个模块啊，真是服了。
 
 ## 2024/11/7
 
-1. 增加图片上传和加密功能
+1. 增加图片上传和加密功能(完成)
+   
+   ![8bffe2b92b26f42fbf71b57bfaa07e2a](https://github.com/user-attachments/assets/4f24233f-0def-4bee-8af8-01334f7016b1)
+
 
 ## 需要处理
 
