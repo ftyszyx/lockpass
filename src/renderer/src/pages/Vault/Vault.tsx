@@ -17,6 +17,7 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { useForm } from 'antd/es/form/Form'
 import VaultSide from './VaultSide'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
+import { GetPics } from '@common/help'
 
 export default function Vault() {
   ConsoleLog.info('Vault render')
@@ -125,10 +126,6 @@ export default function Vault() {
                     <PaswordDetail
                       passwordType={select_vault_item.vault_item_type as VaultItemType}
                       modal_type={show_edit ? ModalType.Edit : ModalType.View}
-                      pics={form.getFieldValue('pics')}
-                      onPicsChange={(pics) => {
-                        form.setFieldValue('pics', pics)
-                      }}
                     ></PaswordDetail>
                     <div className=" flex flex-row-reverse mt-2">
                       {show_edit && (
@@ -140,6 +137,7 @@ export default function Vault() {
                             cancelText={getText('cancel')}
                             onConfirm={async () => {
                               const values = await form.validateFields()
+                              console.log('values', values)
                               values.id = select_vault_item.id
                               await ipc_call(webToManMsg.updateValutItem, values)
                                 .then(async () => {

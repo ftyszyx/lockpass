@@ -152,9 +152,9 @@ export async function UpdateMenu(appsotre: AppStore, getText: AppsetStore['getTe
 
 export async function FixWindowSize(viewtype: renderViewType) {
   const rect = document.body.getBoundingClientRect()
-  ConsoleLog.info(
-    `FixWindowSize: rect.height:${rect.height} window.innerHeight: ${window.innerHeight}`
-  )
+  // ConsoleLog.info(
+  //   `FixWindowSize: rect.height:${rect.height} window.innerHeight: ${window.innerHeight}`
+  // )
   if (rect.height == window.innerHeight) return
   await window.electron.ipcRenderer.invoke(webToManMsg.ResizeWindow, viewtype, 0, rect.height)
 }
