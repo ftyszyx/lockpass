@@ -10,6 +10,7 @@ export type ColumnType =
   | 'TIMESTAMP'
   | 'TINYINT'
   | 'INTEGER'
+  | 'TEXT'
   | 'VARCHAR'
   | 'VARCHAR[]'
 

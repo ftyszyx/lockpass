@@ -297,5 +297,6 @@
   "footer.curbackup": "Current backup information: drive:{0} file:【{1}】 back time:{2}",
   "footer.normalinfo": "Current time:{0}",
   "set.menu.normal_open_dev": "Development debugging switch",
-  "set.menu.open_log": "Log switch"
+  "set.menu.open_log": "Log switch",
+  "vault.item.pics": "pics"
 }

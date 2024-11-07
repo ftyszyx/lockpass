@@ -41,6 +41,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.3.1",
     "antd": "^5.17.4",
+    "antd-img-crop": "^4.23.0",
     "cross-env": "^7.0.3",
     "electron": "^31.0.2",
     "electron-builder": "^24.13.3",

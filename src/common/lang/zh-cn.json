@@ -302,5 +302,7 @@
   "footer.curbackup": "当前备份信息: 网盘:<b>{0}</b> 文件名:【<b>{1}</b>】 备份时间:<b>{2}</b>",
   "footer.normalinfo": "当前时间:{0}",
   "set.menu.normal_open_dev": "开发调试开关",
-  "set.menu.open_log": "日志开关"
+  "set.menu.open_log": "日志开关",
+
+  "vault.item.pics": "图片"
 }

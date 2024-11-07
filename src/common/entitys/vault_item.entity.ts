@@ -33,6 +33,9 @@ export class VaultItem extends BaseEntity {
   @Column({ type: 'INTEGER', default: 0 })
   last_use_time: number
 
+  @Column({ type: 'TEXT', encode: true, default: '' })
+  pics: string
+
   @Column({ type: 'INTEGER', default: 0 })
   create_time: number
 }

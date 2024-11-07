@@ -125,6 +125,10 @@ export default function Vault() {
                     <PaswordDetail
                       passwordType={select_vault_item.vault_item_type as VaultItemType}
                       modal_type={show_edit ? ModalType.Edit : ModalType.View}
+                      pics={form.getFieldValue('pics')}
+                      onPicsChange={(pics) => {
+                        form.setFieldValue('pics', pics)
+                      }}
                     ></PaswordDetail>
                     <div className=" flex flex-row-reverse mt-2">
                       {show_edit && (

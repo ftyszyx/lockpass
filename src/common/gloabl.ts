@@ -1,5 +1,5 @@
 export const APP_VER_CODE = 1
-export const SQL_VER_CODE = 2
+export const SQL_VER_CODE = 3
 export const SECRET_VER_CODE = 1
 //duckdb key
 export const Table_Desc_KEY = 'table_desc'
