@@ -17,7 +17,6 @@ import { ConsoleLog } from '@renderer/libs/Console'
 import { useForm } from 'antd/es/form/Form'
 import VaultSide from './VaultSide'
 import { webToManMsg } from '@common/entitys/ipcmsg.entity'
-import { GetPics } from '@common/help'
 
 export default function Vault() {
   ConsoleLog.info('Vault render')

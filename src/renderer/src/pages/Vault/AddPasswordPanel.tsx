@@ -107,14 +107,7 @@ export default function AddPasswordPanel(props: AdminAddPasswordProps): JSX.Elem
             }
           >
             <div className=" overflow-auto " style={{ height: 'calc(60vh)' }}>
-              <PaswordDetail
-                passwordType={select_type}
-                modal_type={ModalType.Add}
-                pics={form.getFieldValue('pics')}
-                onPicsChange={(pics) => {
-                  form.setFieldValue('pics', pics)
-                }}
-              ></PaswordDetail>
+              <PaswordDetail passwordType={select_type} modal_type={ModalType.Add}></PaswordDetail>
             </div>
           </Form>
         </Modal>
