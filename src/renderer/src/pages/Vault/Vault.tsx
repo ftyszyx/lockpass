@@ -102,7 +102,7 @@ export default function Vault() {
             }}
           ></VaultSide>
           {/*  right side content*/}
-          <div className="flex flex-grow  overflow-auto h-[var(--content-height)] ">
+          <div className="flex flex-grow  overflow-y-auto scroll_enabled h-[var(--content-height)] ">
             {select_vault_item && (
               <div className=" flex flex-col w-full">
                 <div className="flex flex-row-reverse   p-4 border-b-2 border-solid border-gray-200">

@@ -149,6 +149,7 @@ export default function MyMenu(props: MenuProps): JSX.Element {
         <MenuAntd
           theme="dark"
           mode="inline"
+          className=" overflow-y-auto max-h-[var(--content-height)] scroll_enabled"
           ref={menu_ref}
           items={treeDom}
           selectedKeys={chosedKey}

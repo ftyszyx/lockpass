@@ -167,3 +167,21 @@ em {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 #d1d9e0b3;
 }
+
+.scroll_enabled::-webkit-scrollbar {
+  width: 15px;
+}
+.scroll_enabled::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0);
+}
+.scroll_enabled::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 6px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: content-box;
+  min-width: 32px;
+  min-height: 32px;
+}
+.scroll_enabled::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
+}

@@ -335,10 +335,13 @@ google你就不能把代码分几个模块啊，真是服了。
 
    ![8bffe2b92b26f42fbf71b57bfaa07e2a](https://github.com/user-attachments/assets/4f24233f-0def-4bee-8af8-01334f7016b1)
 
+##　2024/11/21
+
+1. 保险库增加滚动区
+
 ## 需要处理
 
 1. 支持头像图标的自定义上传
-2. 支持备份压缩文件zip。（微信聊天记录的备份文件）
 
 # 远期的优化
 

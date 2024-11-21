@@ -25,7 +25,7 @@ export default function Home() {
   const [show_del, setShowDel] = useState(false)
   const [edit_panel_title, setEditPanelTitle] = useState('')
   const [show_type, setShowType] = useState(ModalType.Add)
-  const [page_size, setPageNum] = useState(10)
+  const [page_size, setPageNum] = useState(9)
   const [cur_page, setCurPage] = useState(1)
   const [cur_info, setCurInfo] = useState<Vault>({} as Vault)
   const appstore = use_appstore()
@@ -90,7 +90,7 @@ export default function Home() {
   }, [appstore.quick_input])
 
   return (
-    <div className="  bg-gray-100 p-8 h-screen">
+    <div className="  bg-gray-100 p-8 h-[100vh] overflow-scroll ">
       <div className="">
         <div className="">
           <div className=" flex flex-row space-x-1 items-center mb-4">
@@ -149,18 +149,20 @@ export default function Home() {
               )
             })}
           </div>
-          <Pagination
-            style={{ textAlign: 'center' }}
-            defaultCurrent={cur_page}
-            defaultPageSize={page_size}
-            total={appstore.vaults.length}
-            onChange={(page) => {
-              setCurPage(page)
-            }}
-            onShowSizeChange={(_, size) => {
-              setPageNum(size)
-            }}
-          />
+          <div className=" flex justify-center">
+            <Pagination
+              style={{ textAlign: 'center' }}
+              defaultCurrent={cur_page}
+              defaultPageSize={page_size}
+              total={appstore.vaults.length}
+              onChange={(page) => {
+                setCurPage(page)
+              }}
+              onShowSizeChange={(_, size) => {
+                setPageNum(size)
+              }}
+            />
+          </div>
         </div>
       </div>
       {show_edit && (

@@ -188,7 +188,7 @@ export default function VaultSide(props: VaultSideProps) {
         <Icon type={Icon_type.icon_rank} />
       </div>
       {/* item list */}
-      <div className=" flex flex-col flex-1 overflow-auto focus:bg-black ">
+      <div className=" flex flex-col flex-1 overflow-y-auto scroll_enabled focus:bg-black ">
         {show_items.map((vault_item) => (
           <div
             onClick={() => {
