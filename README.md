@@ -339,6 +339,14 @@ google你就不能把代码分几个模块啊，真是服了。
 
 1. 保险库增加滚动区
 
+   ![image](https://github.com/user-attachments/assets/eb891409-5c99-4e56-a896-9ff852ba2b4e)
+   
+1. 优化滚动条样式
+
+   ![image](https://github.com/user-attachments/assets/224228b2-a103-4fdd-ba8f-e438cbc0807e)
+
+
+
 ## 需要处理
 
 1. 支持头像图标的自定义上传
