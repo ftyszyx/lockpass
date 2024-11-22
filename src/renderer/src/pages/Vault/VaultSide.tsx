@@ -30,6 +30,7 @@ export default function VaultSide(props: VaultSideProps) {
   const SelectAll = 'ALL'
   const [search_Password_type, set_Search_password_type] = useState(SelectAll)
   const [select_vault_item, set_select_vault_item] = useState<VaultItem>(null)
+  const [rank_time_desc, set_rank_time_desc] = useState(true)
   const appstore = use_appstore()
   const appset = use_appset()
   const route_data = useRouterStore()
@@ -57,12 +58,14 @@ export default function VaultSide(props: VaultSideProps) {
         )
       }
     }
-    return items.sort((a, b) => b.create_time - a.create_time)
+    if (rank_time_desc) return items.sort((a, b) => b.create_time - a.create_time)
+    return items.sort((a, b) => a.create_time - b.create_time)
   }, [
     appstore.vaults,
     search_Password_type,
     appstore.vault_items,
     cur_vault_id,
+    rank_time_desc,
     props.global_search_keyword
   ])
 
@@ -185,17 +188,23 @@ export default function VaultSide(props: VaultSideProps) {
             )
           })}
         </Select>
-        <Icon type={Icon_type.icon_rank} />
+        <Icon
+          type={Icon_type.icon_rank}
+          className={` cursor-pointer ${rank_time_desc ? '' : 'rotate-180'}`}
+          onClick={() => {
+            set_rank_time_desc(!rank_time_desc)
+          }}
+        />
       </div>
       {/* item list */}
-      <div className=" flex flex-col flex-1 overflow-y-auto scroll_enabled focus:bg-black ">
+      <div className=" flex flex-col flex-1  overflow-y-auto scroll_enabled focus:bg-black ">
         {show_items.map((vault_item) => (
           <div
             onClick={() => {
               DoSelectItem(vault_item)
             }}
             ref={select_vault_item?.id == vault_item.id ? selectedItemRef : null}
-            className={`relative flex flex-row items-center  space-x-2 p-2 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
+            className={`relative flex flex-row items-center  space-x-2 py-2 px-1 m-2  ${select_vault_item?.id == vault_item.id ? 'bg-gray-200' : ''} hover:bg-gray-200`}
             key={vault_item.id}
           >
             <Icon type={`${vault_item.icon}`} svg className=" w-[40px] h-[40px]" />
