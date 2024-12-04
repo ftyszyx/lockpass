@@ -1,4 +1,4 @@
-import { Input } from 'antd'
+import { Checkbox, Input } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
 import { ModalType, VaultItemType } from '@common/gloabl'
@@ -63,6 +63,18 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
       edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.username') }]
     },
     {
+      field_name: 'username_auto_fill',
+      hide_placeholder: true,
+      hide_label: true,
+      render: (props) => {
+        return (
+          <Checkbox {...props} defaultChecked>
+            {lang?.getText('vaultitem.label.username_auto_fill')}
+          </Checkbox>
+        )
+      }
+    },
+    {
       field_name: 'password',
       render: (props) => {
         return (
@@ -75,6 +87,18 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
         )
       },
       edit_rules: [{ required: true, message: lang?.getText('vaultitem.rule.password') }]
+    },
+    {
+      field_name: 'password_auto_fill',
+      hide_placeholder: true,
+      hide_label: true,
+      render: (props) => {
+        return (
+          <Checkbox {...props} defaultChecked>
+            {lang?.getText('vaultitem.label.password_auto_fill')}
+          </Checkbox>
+        )
+      }
     },
     {
       field_name: 'urls',

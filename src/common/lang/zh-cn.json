@@ -304,5 +304,8 @@
   "set.menu.normal_open_dev": "开发调试开关",
   "set.menu.open_log": "日志开关",
 
-  "vault.item.pics": "图片"
+  "vault.item.pics": "图片",
+
+  "vaultitem.label.username_auto_fill": "自动填充",
+  "vaultitem.label.password_auto_fill": "自动填充"
 }

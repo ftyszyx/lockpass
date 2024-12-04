@@ -20,6 +20,7 @@ export class FieldInfo {
   render: (pros: FiledProps) => React.ReactElement //React.ElementType
   label?: string = ''
   hide_label?: boolean = false
+  hide_placeholder?: boolean = false
   //edit 相关
   edit_rules?: Rule[] = []
   edit_props?: prop_field = {}

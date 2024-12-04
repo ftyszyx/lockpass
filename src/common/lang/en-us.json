@@ -298,5 +298,8 @@
   "footer.normalinfo": "Current time:{0}",
   "set.menu.normal_open_dev": "Development debugging switch",
   "set.menu.open_log": "Log switch",
-  "vault.item.pics": "pics"
+  "vault.item.pics": "pics",
+
+  "vaultitem.label.username_auto_fill": "Auto fill username",
+  "vaultitem.label.password_auto_fill": "Auto fill password"
 }

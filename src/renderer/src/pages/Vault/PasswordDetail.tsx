@@ -68,7 +68,9 @@ export default function PaswordDetail(props: props) {
             >
               <item.render
                 show_type={props.modal_type}
-                placeholder={getText(`vaultitem.placeholder.${item.field_name}`)}
+                placeholder={
+                  item.hide_placeholder ? '' : getText(`vaultitem.placeholder.${item.field_name}`)
+                }
               ></item.render>
             </Form.Item>
           )
