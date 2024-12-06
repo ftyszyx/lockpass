@@ -350,6 +350,10 @@ google你就不能把代码分几个模块啊，真是服了。
 ## 2024/12/4
 
 1. 自动输入项目可配置
+   默认是账号密码全自动输入
+
+   ![image](https://github.com/user-attachments/assets/9ea57d24-e6b0-40ae-b694-7d6d770454c7)
+
 
 ## 需要处理
 
