@@ -1,4 +1,4 @@
-import { Checkbox, Input } from 'antd'
+import { Input, Switch } from 'antd'
 import { FieldInfo, FiledProps } from './form.entity'
 import InputArr from '@renderer/components/InputArr'
 import { ModalType, VaultItemType } from '@common/gloabl'
@@ -68,9 +68,12 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
       hide_label: true,
       render: (props) => {
         return (
-          <Checkbox {...props} defaultChecked>
-            {lang?.getText('vaultitem.label.username_auto_fill')}
-          </Checkbox>
+          <Switch
+            {...props}
+            disabled={props.show_type == ModalType.View}
+            checkedChildren={lang?.getText('vaultitem.label.auto_fill_open')}
+            unCheckedChildren={lang?.getText('vaultitem.label.auto_fill_close')}
+          />
         )
       }
     },
@@ -94,9 +97,12 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
       hide_label: true,
       render: (props) => {
         return (
-          <Checkbox {...props} defaultChecked>
-            {lang?.getText('vaultitem.label.password_auto_fill')}
-          </Checkbox>
+          <Switch
+            {...props}
+            disabled={props.show_type == ModalType.View}
+            checkedChildren={lang?.getText('vaultitem.label.auto_fill_open')}
+            unCheckedChildren={lang?.getText('vaultitem.label.auto_fill_close')}
+          ></Switch>
         )
       }
     },

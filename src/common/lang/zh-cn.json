@@ -306,6 +306,6 @@
 
   "vault.item.pics": "图片",
 
-  "vaultitem.label.username_auto_fill": "自动填充",
-  "vaultitem.label.password_auto_fill": "自动填充"
+  "vaultitem.label.auto_fill_open": "自动填充开启",
+  "vaultitem.label.auto_fill_close": "自动填充关闭"
 }

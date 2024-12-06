@@ -1,8 +1,9 @@
-import { VaultItem } from '@common/entitys/vault_item.entity'
+import { LoginPasswordInfo, VaultItem } from '@common/entitys/vault_item.entity'
 import { BaseService } from './base.service'
 import { AppEvent, AppEventType } from '@main/entitys/appmain.entity'
 import { EntityType } from '@common/entitys/app.entity'
 import AppModel from '@main/models/app.model'
+import { VaultItemType } from '@common/gloabl'
 
 export class VaultItemService extends BaseService<VaultItem> {
   constructor() {
@@ -20,6 +21,15 @@ export class VaultItemService extends BaseService<VaultItem> {
 
   fixEntityOut(info: VaultItem): void {
     info.info = JSON.parse((info.info as string) || '{}')
+    if (info.vault_item_type == VaultItemType.Login) {
+      var info_obj = info.info as LoginPasswordInfo
+      if (info_obj.password_auto_fill === undefined) {
+        info_obj.password_auto_fill = true
+      }
+      if (info_obj.username_auto_fill === undefined) {
+        info_obj.username_auto_fill = true
+      }
+    }
   }
 
   AfterChange(): void {

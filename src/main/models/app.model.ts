@@ -267,14 +267,20 @@ class AppModel {
     this.quickwin.hide()
     if (info.vault_item_type == VaultItemType.Login) {
       const logininfo = info.info as LoginPasswordInfo
-      // console.log('move to ', this.last_point.x, this.last_point.y)
+      if (!logininfo.username_auto_fill && !logininfo.password_auto_fill) {
+        AppEvent.emit(AppEventType.Message, 'error', 'not autoinput config')
+      }
       robot.moveMouse(this.last_point.x, this.last_point.y)
       robot.keyTap('space', 'control') //切换成英文
       robot.mouseClick()
-      robot.typeString(logininfo.username)
-      robot.keyTap('tab')
-      if (this.isWin) robot.typeKeyCodeStringInWin(logininfo.password)
-      else robot.typeString(logininfo.password)
+      if (logininfo.username_auto_fill) {
+        robot.typeString(logininfo.username)
+        robot.keyTap('tab')
+      }
+      if (logininfo.password_auto_fill) {
+        if (this.isWin) robot.typeKeyCodeStringInWin(logininfo.password)
+        else robot.typeString(logininfo.password)
+      }
       robot.keyTap('enter')
     }
   }
