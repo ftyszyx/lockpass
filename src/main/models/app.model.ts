@@ -281,7 +281,9 @@ class AppModel {
         if (this.isWin) robot.typeKeyCodeStringInWin(logininfo.password)
         else robot.typeString(logininfo.password)
       }
-      robot.keyTap('enter')
+      if (logininfo.auto_submit) {
+        robot.keyTap('enter')
+      }
     }
   }
 

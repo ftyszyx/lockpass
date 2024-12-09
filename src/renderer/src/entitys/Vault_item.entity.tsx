@@ -107,6 +107,13 @@ export function LoginPasswordFieldList(lang: LangItem): FieldInfo[] {
       }
     },
     {
+      field_name: 'auto_submit',
+      hide_placeholder: true,
+      render: (props) => {
+        return <Switch {...props} disabled={props.show_type == ModalType.View} />
+      }
+    },
+    {
       field_name: 'urls',
       hide_label: true,
       render: (props) => {

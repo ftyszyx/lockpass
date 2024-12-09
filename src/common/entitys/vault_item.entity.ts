@@ -51,6 +51,8 @@ export class LoginPasswordInfo extends VaultItemInfoBase {
   password: string
   @Column({ type: 'BOOLEAN', default: true })
   password_auto_fill: boolean
+  @Column({ type: 'BOOLEAN', default: true })
+  auto_submit: boolean
   @Column({ type: 'VARCHAR[]' })
   urls: string[]
 }

@@ -301,5 +301,6 @@
   "vault.item.pics": "pics",
 
   "vaultitem.label.username_auto_fill": "Auto fill username",
-  "vaultitem.label.password_auto_fill": "Auto fill password"
+  "vaultitem.label.password_auto_fill": "Auto fill password",
+  "vaultitem.label.auto_submit": "Auto submit(ENTER)"
 }

@@ -307,5 +307,6 @@
   "vault.item.pics": "图片",
 
   "vaultitem.label.auto_fill_open": "自动填充开启",
-  "vaultitem.label.auto_fill_close": "自动填充关闭"
+  "vaultitem.label.auto_fill_close": "自动填充关闭",
+  "vaultitem.label.auto_submit": "自动输入时自动提交(ENTER)"
 }

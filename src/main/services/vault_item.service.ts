@@ -29,6 +29,9 @@ export class VaultItemService extends BaseService<VaultItem> {
       if (info_obj.username_auto_fill === undefined) {
         info_obj.username_auto_fill = true
       }
+      if (info_obj.auto_submit === undefined) {
+        info_obj.auto_submit = true
+      }
     }
   }
 
