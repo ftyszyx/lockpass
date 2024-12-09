@@ -275,6 +275,8 @@ class AppModel {
       robot.mouseClick()
       if (logininfo.username_auto_fill) {
         robot.typeString(logininfo.username)
+      }
+      if (logininfo.username_auto_fill && logininfo.password_auto_fill) {
         robot.keyTap('tab')
       }
       if (logininfo.password_auto_fill) {
