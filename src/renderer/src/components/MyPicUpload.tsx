@@ -45,7 +45,7 @@ export default function MyPicUpload(props: MyPicUploadProps) {
   )
   return (
     <>
-      <ImgCrop rotationSlider>
+      <ImgCrop rotationSlider zoomSlider aspectSlider>
         <Upload
           listType="picture-card"
           fileList={imglist}
