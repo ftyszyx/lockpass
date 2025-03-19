@@ -79,6 +79,8 @@
 
 ### **自动输入**
 
+前提是要将鼠标移动到输入框上，再触发自动输入即可
+
 ![image]![image](https://ftyszyx.github.io/feishu-vitepress/assets/ARvUbClubozD6txiiN9cneAJnRh.gif)
 
 ### ** csv导入**
